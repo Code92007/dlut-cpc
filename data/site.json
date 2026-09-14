@@ -58,7 +58,11 @@
       "date": "2026-02-02",
       "location": "杭州",
       "team": "奶龙跳舞的传奇故事",
-      "members": [],
+      "members": [
+        "汪瀚声",
+        "吴胤祺",
+        "孟家祺"
+      ],
       "medal": "铜牌",
       "rank": "144 / 280",
       "overallRank": "164 / 306",
@@ -66,7 +70,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "d611e25ff50f21"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 34274,
+      "cpcfinderContestId": 77,
+      "cpcfinderTeamId": 36332,
+      "id": "d611e25ff50f21",
+      "memberDetails": [
+        {
+          "name": "汪瀚声",
+          "provider": "cpcfinder",
+          "externalId": "6131a1fd-f640-4c25-a3f5-002255009eac"
+        },
+        {
+          "name": "吴胤祺",
+          "provider": "cpcfinder",
+          "externalId": "18dcd3e3-d573-4408-8bdf-3810b1e35a6e"
+        },
+        {
+          "name": "孟家祺",
+          "provider": "cpcfinder",
+          "externalId": "4c1453e9-6b86-41fd-909b-3e4a7596f0cf"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/77"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛香港站",
@@ -74,7 +108,11 @@
       "date": "2025-11-30",
       "location": "香港",
       "team": "Back Seaing",
-      "members": [],
+      "members": [
+        "冯子祥",
+        "吴习哲",
+        "Fangyu Bu"
+      ],
       "medal": "铜牌",
       "rank": "50 / 126",
       "overallRank": "55 / 136",
@@ -82,7 +120,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "584edf1e694cbd"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 34486,
+      "cpcfinderContestId": 75,
+      "cpcfinderTeamId": 36544,
+      "id": "584edf1e694cbd",
+      "memberDetails": [
+        {
+          "name": "冯子祥",
+          "provider": "cpcfinder",
+          "externalId": "08c16c96-c456-4144-af51-494a33c6bde0"
+        },
+        {
+          "name": "吴习哲",
+          "provider": "cpcfinder",
+          "externalId": "7f98f771-502c-4afa-890b-53790b41761b"
+        },
+        {
+          "name": "Fangyu Bu",
+          "provider": "cpcfinder",
+          "externalId": "6330da69-2f64-475a-93f2-a8e50225f3df"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/75"
+      }
     },
     {
       "event": "第 11 届 CCPC 中国大学生程序设计竞赛重庆站",
@@ -90,7 +158,11 @@
       "date": "2025-11-30",
       "location": "重庆",
       "team": "逆元",
-      "members": [],
+      "members": [
+        "刘博文",
+        "刘兆洲",
+        "连茗暄"
+      ],
       "medal": "银牌",
       "rank": "51 / 260",
       "overallRank": "59 / 324",
@@ -98,7 +170,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "d95a0e91200a55"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 33857,
+      "cpcfinderContestId": 76,
+      "cpcfinderTeamId": 35915,
+      "id": "d95a0e91200a55",
+      "memberDetails": [
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/76"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
@@ -106,7 +208,11 @@
       "date": "2025-11-23",
       "location": "上海",
       "team": "逆元",
-      "members": [],
+      "members": [
+        "刘博文",
+        "刘兆洲",
+        "连茗暄"
+      ],
       "medal": "铜牌",
       "rank": "124 / 331",
       "overallRank": "138 / 356",
@@ -114,7 +220,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b8959e79a87d96"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 33263,
+      "cpcfinderContestId": 73,
+      "cpcfinderTeamId": 35164,
+      "id": "b8959e79a87d96",
+      "memberDetails": [
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/73"
+      }
     },
     {
       "event": "第 11 届 CCPC 中国大学生程序设计竞赛郑州站",
@@ -122,7 +258,11 @@
       "date": "2025-11-23",
       "location": "郑州",
       "team": "这么六!",
-      "members": [],
+      "members": [
+        "钟剑辉",
+        "毛祥宇",
+        "刘泽轩"
+      ],
       "medal": "铜牌",
       "rank": "79 / 260",
       "overallRank": "88 / 311",
@@ -130,7 +270,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "68955bd0512fd6"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 33574,
+      "cpcfinderContestId": 74,
+      "cpcfinderTeamId": 35632,
+      "id": "68955bd0512fd6",
+      "memberDetails": [
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        },
+        {
+          "name": "毛祥宇",
+          "provider": "cpcfinder",
+          "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c"
+        },
+        {
+          "name": "刘泽轩",
+          "provider": "cpcfinder",
+          "externalId": "222551d4-8db8-4414-ba37-cd116822e4c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/74"
+      }
     },
     {
       "event": "第 11 届 CCPC 中国大学生程序设计竞赛郑州站",
@@ -138,7 +308,11 @@
       "date": "2025-11-23",
       "location": "郑州",
       "team": "大连理工四队",
-      "members": [],
+      "members": [
+        "汪瀚声",
+        "吴胤祺",
+        "孟家祺"
+      ],
       "medal": "铜牌",
       "rank": "86 / 260",
       "overallRank": "97 / 311",
@@ -146,7 +320,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "598b9a0346d79a"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 33581,
+      "cpcfinderContestId": 74,
+      "cpcfinderTeamId": 35639,
+      "id": "598b9a0346d79a",
+      "memberDetails": [
+        {
+          "name": "汪瀚声",
+          "provider": "cpcfinder",
+          "externalId": "6131a1fd-f640-4c25-a3f5-002255009eac"
+        },
+        {
+          "name": "吴胤祺",
+          "provider": "cpcfinder",
+          "externalId": "18dcd3e3-d573-4408-8bdf-3810b1e35a6e"
+        },
+        {
+          "name": "孟家祺",
+          "provider": "cpcfinder",
+          "externalId": "4c1453e9-6b86-41fd-909b-3e4a7596f0cf"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/74"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -154,7 +358,11 @@
       "date": "2025-11-16",
       "location": "沈阳",
       "team": "青雨归潮",
-      "members": [],
+      "members": [
+        "冯子祥",
+        "刘炜",
+        "张轶哲"
+      ],
       "medal": "银牌",
       "rank": "99 / 400",
       "overallRank": "105 / 411",
@@ -162,7 +370,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "c7dda55b886ea8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 31987,
+      "cpcfinderContestId": 71,
+      "cpcfinderTeamId": 33731,
+      "id": "c7dda55b886ea8",
+      "memberDetails": [
+        {
+          "name": "冯子祥",
+          "provider": "cpcfinder",
+          "externalId": "08c16c96-c456-4144-af51-494a33c6bde0"
+        },
+        {
+          "name": "刘炜",
+          "provider": "cpcfinder",
+          "externalId": "fc2b91db-d98e-41fa-b0d9-abb388b377e3"
+        },
+        {
+          "name": "张轶哲",
+          "provider": "cpcfinder",
+          "externalId": "c7bbec66-85d5-4247-87cc-24655e13130e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/71"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -170,7 +408,11 @@
       "date": "2025-11-16",
       "location": "沈阳",
       "team": "大连理工四队",
-      "members": [],
+      "members": [
+        "汪瀚声",
+        "吴胤祺",
+        "孟家祺"
+      ],
       "medal": "铜牌",
       "rank": "128 / 400",
       "overallRank": "136 / 411",
@@ -178,7 +420,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "9c7da6e1e18fcb"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 32016,
+      "cpcfinderContestId": 71,
+      "cpcfinderTeamId": 33760,
+      "id": "9c7da6e1e18fcb",
+      "memberDetails": [
+        {
+          "name": "汪瀚声",
+          "provider": "cpcfinder",
+          "externalId": "6131a1fd-f640-4c25-a3f5-002255009eac"
+        },
+        {
+          "name": "吴胤祺",
+          "provider": "cpcfinder",
+          "externalId": "18dcd3e3-d573-4408-8bdf-3810b1e35a6e"
+        },
+        {
+          "name": "孟家祺",
+          "provider": "cpcfinder",
+          "externalId": "4c1453e9-6b86-41fd-909b-3e4a7596f0cf"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/71"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -186,7 +458,11 @@
       "date": "2025-11-16",
       "location": "沈阳",
       "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
-      "members": [],
+      "members": [
+        "徐昊天",
+        "毛谦韵",
+        "李泽与"
+      ],
       "medal": "银牌",
       "rank": "56 / 400",
       "overallRank": "61 / 411",
@@ -194,7 +470,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "0d8cc19d10a3f8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 31944,
+      "cpcfinderContestId": 71,
+      "cpcfinderTeamId": 33688,
+      "id": "0d8cc19d10a3f8",
+      "memberDetails": [
+        {
+          "name": "徐昊天",
+          "provider": "cpcfinder",
+          "externalId": "123b31ee-fe82-4308-a286-c8622534e0be"
+        },
+        {
+          "name": "毛谦韵",
+          "provider": "cpcfinder",
+          "externalId": "14739e75-38eb-45cf-b463-19bc407628c0"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/71"
+      }
     },
     {
       "event": "第 11 届 CCPC 中国大学生程序设计竞赛济南站",
@@ -202,7 +508,11 @@
       "date": "2025-11-16",
       "location": "济南",
       "team": "Z形管道猫猫虫",
-      "members": [],
+      "members": [
+        "钟剑辉",
+        "时佳骏",
+        "刘兆洲"
+      ],
       "medal": "铜牌",
       "rank": "96 / 260",
       "overallRank": "111 / 320",
@@ -210,7 +520,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "20dffb30d2c39b"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 32395,
+      "cpcfinderContestId": 72,
+      "cpcfinderTeamId": 34139,
+      "id": "20dffb30d2c39b",
+      "memberDetails": [
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        },
+        {
+          "name": "时佳骏",
+          "provider": "cpcfinder",
+          "externalId": "cee139fd-e1e1-4139-9e19-bfe65cf85c22"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/72"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -218,7 +558,11 @@
       "date": "2025-11-09",
       "location": "南京",
       "team": "这么六！",
-      "members": [],
+      "members": [
+        "钟剑辉",
+        "毛祥宇",
+        "刘泽轩"
+      ],
       "medal": "银牌",
       "rank": "48 / 335",
       "overallRank": "63 / 359",
@@ -226,7 +570,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "2fc3143ab77879"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 30361,
+      "cpcfinderContestId": 69,
+      "cpcfinderTeamId": 32105,
+      "id": "2fc3143ab77879",
+      "memberDetails": [
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        },
+        {
+          "name": "毛祥宇",
+          "provider": "cpcfinder",
+          "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c"
+        },
+        {
+          "name": "刘泽轩",
+          "provider": "cpcfinder",
+          "externalId": "222551d4-8db8-4414-ba37-cd116822e4c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/69"
+      }
     },
     {
       "event": "第 11 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
@@ -234,7 +608,11 @@
       "date": "2025-11-09",
       "location": "哈尔滨",
       "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
-      "members": [],
+      "members": [
+        "徐昊天",
+        "毛谦韵",
+        "李泽与"
+      ],
       "medal": "银牌",
       "rank": "59 / 260",
       "overallRank": "60 / 278",
@@ -242,7 +620,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "ef16a318f71ab5"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 30731,
+      "cpcfinderContestId": 70,
+      "cpcfinderTeamId": 32475,
+      "id": "ef16a318f71ab5",
+      "memberDetails": [
+        {
+          "name": "徐昊天",
+          "provider": "cpcfinder",
+          "externalId": "123b31ee-fe82-4308-a286-c8622534e0be"
+        },
+        {
+          "name": "毛谦韵",
+          "provider": "cpcfinder",
+          "externalId": "14739e75-38eb-45cf-b463-19bc407628c0"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/70"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛武汉站",
@@ -262,7 +670,41 @@
         "name": "QOJ 镜像榜",
         "url": "https://contest.ucup.ac/results/QOJ2609?v=1"
       },
-      "id": "0ff42f278172f1"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "QOJ 镜像榜",
+          "url": "https://contest.ucup.ac/results/QOJ2609?v=1"
+        }
+      ],
+      "cpcfinderAwardId": 32720,
+      "cpcfinderContestId": 68,
+      "cpcfinderTeamId": 34464,
+      "id": "0ff42f278172f1",
+      "memberDetails": [
+        {
+          "name": "金晟",
+          "provider": "cpcfinder",
+          "externalId": "02b9a144-ebb6-4342-bbbe-6e0352096937"
+        },
+        {
+          "name": "蒋佳炀",
+          "provider": "cpcfinder",
+          "externalId": "64ee840d-cc18-4b46-a85d-4cf7f86035d6"
+        },
+        {
+          "name": "时佳骏",
+          "provider": "cpcfinder",
+          "externalId": "cee139fd-e1e1-4139-9e19-bfe65cf85c22"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/68"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛武汉站",
@@ -270,7 +712,11 @@
       "date": "2025-11-02",
       "location": "武汉",
       "team": "关注带工喵，关注带工谢谢喵 (≧^.^≦)",
-      "members": [],
+      "members": [
+        "徐昊天",
+        "毛谦韵",
+        "李泽与"
+      ],
       "medal": "金牌",
       "rank": "37 / 446",
       "overallRank": "49 / 520",
@@ -278,7 +724,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "fda1f95694e12c"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 32656,
+      "cpcfinderContestId": 68,
+      "cpcfinderTeamId": 34400,
+      "id": "fda1f95694e12c",
+      "memberDetails": [
+        {
+          "name": "徐昊天",
+          "provider": "cpcfinder",
+          "externalId": "123b31ee-fe82-4308-a286-c8622534e0be"
+        },
+        {
+          "name": "毛谦韵",
+          "provider": "cpcfinder",
+          "externalId": "14739e75-38eb-45cf-b463-19bc407628c0"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/68"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
@@ -286,7 +762,11 @@
       "date": "2025-10-26",
       "location": "成都",
       "team": "我将点燃大海",
-      "members": [],
+      "members": [
+        "金晟",
+        "蒋佳炀",
+        "时佳骏"
+      ],
       "medal": "铜牌",
       "rank": "142 / 320",
       "overallRank": "149 / 328",
@@ -294,7 +774,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "a2f7c7d6716bf2"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 29087,
+      "cpcfinderContestId": 67,
+      "cpcfinderTeamId": 30831,
+      "id": "a2f7c7d6716bf2",
+      "memberDetails": [
+        {
+          "name": "金晟",
+          "provider": "cpcfinder",
+          "externalId": "02b9a144-ebb6-4342-bbbe-6e0352096937"
+        },
+        {
+          "name": "蒋佳炀",
+          "provider": "cpcfinder",
+          "externalId": "64ee840d-cc18-4b46-a85d-4cf7f86035d6"
+        },
+        {
+          "name": "时佳骏",
+          "provider": "cpcfinder",
+          "externalId": "cee139fd-e1e1-4139-9e19-bfe65cf85c22"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/67"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
@@ -302,7 +812,11 @@
       "date": "2025-10-26",
       "location": "成都",
       "team": "大连理工四队",
-      "members": [],
+      "members": [
+        "汪瀚声",
+        "吴胤祺",
+        "孟家祺"
+      ],
       "medal": "银牌",
       "rank": "81 / 320",
       "overallRank": "87 / 328",
@@ -310,7 +824,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "a63b06409ff0f7"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 29026,
+      "cpcfinderContestId": 67,
+      "cpcfinderTeamId": 30770,
+      "id": "a63b06409ff0f7",
+      "memberDetails": [
+        {
+          "name": "汪瀚声",
+          "provider": "cpcfinder",
+          "externalId": "6131a1fd-f640-4c25-a3f5-002255009eac"
+        },
+        {
+          "name": "吴胤祺",
+          "provider": "cpcfinder",
+          "externalId": "18dcd3e3-d573-4408-8bdf-3810b1e35a6e"
+        },
+        {
+          "name": "孟家祺",
+          "provider": "cpcfinder",
+          "externalId": "4c1453e9-6b86-41fd-909b-3e4a7596f0cf"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/67"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
@@ -318,7 +862,11 @@
       "date": "2025-10-19",
       "location": "西安",
       "team": "逆元",
-      "members": [],
+      "members": [
+        "连茗暄",
+        "刘博文",
+        "刘兆洲"
+      ],
       "medal": "银牌",
       "rank": "83 / 399",
       "overallRank": "93 / 418",
@@ -326,7 +874,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "599c63504c50c8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 34797,
+      "cpcfinderContestId": 66,
+      "cpcfinderTeamId": 36855,
+      "id": "599c63504c50c8",
+      "memberDetails": [
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        },
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/66"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
@@ -334,7 +912,11 @@
       "date": "2025-10-19",
       "location": "西安",
       "team": "这么六！",
-      "members": [],
+      "members": [
+        "毛祥宇",
+        "刘泽轩",
+        "钟剑辉"
+      ],
       "medal": "铜牌",
       "rank": "221 / 399",
       "overallRank": "234 / 418",
@@ -342,7 +924,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "fd2a77af7de138"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 34938,
+      "cpcfinderContestId": 66,
+      "cpcfinderTeamId": 36996,
+      "id": "fd2a77af7de138",
+      "memberDetails": [
+        {
+          "name": "毛祥宇",
+          "provider": "cpcfinder",
+          "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c"
+        },
+        {
+          "name": "刘泽轩",
+          "provider": "cpcfinder",
+          "externalId": "222551d4-8db8-4414-ba37-cd116822e4c3"
+        },
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/66"
+      }
     },
     {
       "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
@@ -350,7 +962,11 @@
       "date": "2025-10-19",
       "location": "西安",
       "team": "回答我，xcpc怎么打才队",
-      "members": [],
+      "members": [
+        "蒋承峻",
+        "蔡卓轩",
+        "潘逸涵"
+      ],
       "medal": "铜牌",
       "rank": "166 / 399",
       "overallRank": "178 / 418",
@@ -358,7 +974,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "dce2f48191021e"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 34882,
+      "cpcfinderContestId": 66,
+      "cpcfinderTeamId": 36940,
+      "id": "dce2f48191021e",
+      "memberDetails": [
+        {
+          "name": "蒋承峻",
+          "provider": "cpcfinder",
+          "externalId": "8518506a-c569-4761-8137-c93db0ebe80d"
+        },
+        {
+          "name": "蔡卓轩",
+          "provider": "cpcfinder",
+          "externalId": "0f1bd69d-0ca6-4d6d-84a6-e109913a4523"
+        },
+        {
+          "name": "潘逸涵",
+          "provider": "cpcfinder",
+          "externalId": "28d69a09-0dff-4f5f-b177-acf77c7672ea"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/66"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
@@ -366,7 +1012,11 @@
       "date": "2024-12-28",
       "location": "西安",
       "team": "这么六！",
-      "members": [],
+      "members": [
+        "毛祥宇",
+        "刘泽轩",
+        "钟剑辉"
+      ],
       "medal": "铜牌",
       "rank": "98 / 280",
       "overallRank": "134 / 403",
@@ -374,7 +1024,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "e95172f39fb557"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 21722,
+      "cpcfinderContestId": 64,
+      "cpcfinderTeamId": 23222,
+      "id": "e95172f39fb557",
+      "memberDetails": [
+        {
+          "name": "毛祥宇",
+          "provider": "cpcfinder",
+          "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c"
+        },
+        {
+          "name": "刘泽轩",
+          "provider": "cpcfinder",
+          "externalId": "222551d4-8db8-4414-ba37-cd116822e4c3"
+        },
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/64"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -382,7 +1062,11 @@
       "date": "2024-12-01",
       "location": "昆明",
       "team": "点铁成金",
-      "members": [],
+      "members": [
+        "徐昊天",
+        "毛谦韵",
+        "孟家祺"
+      ],
       "medal": "银牌",
       "rank": "99 / 449",
       "overallRank": "110 / 486",
@@ -390,7 +1074,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "2c458eb1d3fd82"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 21237,
+      "cpcfinderContestId": 62,
+      "cpcfinderTeamId": 22737,
+      "id": "2c458eb1d3fd82",
+      "memberDetails": [
+        {
+          "name": "徐昊天",
+          "provider": "cpcfinder",
+          "externalId": "123b31ee-fe82-4308-a286-c8622534e0be"
+        },
+        {
+          "name": "毛谦韵",
+          "provider": "cpcfinder",
+          "externalId": "14739e75-38eb-45cf-b463-19bc407628c0"
+        },
+        {
+          "name": "孟家祺",
+          "provider": "cpcfinder",
+          "externalId": "4c1453e9-6b86-41fd-909b-3e4a7596f0cf"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/62"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -398,7 +1112,11 @@
       "date": "2024-11-24",
       "location": "沈阳",
       "team": "这么六！",
-      "members": [],
+      "members": [
+        "钟剑辉",
+        "毛祥宇",
+        "刘泽轩"
+      ],
       "medal": "银牌",
       "rank": "52 / 300",
       "overallRank": "56 / 320",
@@ -406,7 +1124,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "805e491507d7b3"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 20874,
+      "cpcfinderContestId": 61,
+      "cpcfinderTeamId": 22374,
+      "id": "805e491507d7b3",
+      "memberDetails": [
+        {
+          "name": "钟剑辉",
+          "provider": "cpcfinder",
+          "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f"
+        },
+        {
+          "name": "毛祥宇",
+          "provider": "cpcfinder",
+          "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c"
+        },
+        {
+          "name": "刘泽轩",
+          "provider": "cpcfinder",
+          "externalId": "222551d4-8db8-4414-ba37-cd116822e4c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/61"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -414,7 +1162,11 @@
       "date": "2024-11-24",
       "location": "沈阳",
       "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
-      "members": [],
+      "members": [
+        "赵一鹏",
+        "李泽与",
+        "李雁志"
+      ],
       "medal": "铜牌",
       "rank": "95 / 300",
       "overallRank": "100 / 320",
@@ -422,7 +1174,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "fb6d5d2209dea4"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 20918,
+      "cpcfinderContestId": 61,
+      "cpcfinderTeamId": 22418,
+      "id": "fb6d5d2209dea4",
+      "memberDetails": [
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        },
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/61"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -442,7 +1224,41 @@
         "name": "ICPC 官方名单",
         "url": "https://icpc.pku.edu.cn/docs/20250313164156411954.pdf"
       },
-      "id": "e0d52332837b46"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "ICPC 官方名单",
+          "url": "https://icpc.pku.edu.cn/docs/20250313164156411954.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 20926,
+      "cpcfinderContestId": 61,
+      "cpcfinderTeamId": 22426,
+      "id": "e0d52332837b46",
+      "memberDetails": [
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/61"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
@@ -462,7 +1278,41 @@
         "name": "ICPC 官方名单",
         "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
       },
-      "id": "0202b79e36ec61"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "ICPC 官方名单",
+          "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 35175,
+      "cpcfinderContestId": 59,
+      "cpcfinderTeamId": 37233,
+      "id": "0202b79e36ec61",
+      "memberDetails": [
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/59"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
@@ -470,7 +1320,11 @@
       "date": "2024-11-10",
       "location": "杭州",
       "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
-      "members": [],
+      "members": [
+        "李泽与",
+        "谭傲",
+        "赵一鹏"
+      ],
       "medal": "银牌",
       "rank": "79 / 366",
       "overallRank": "99 / 391",
@@ -478,7 +1332,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "980f86e2f55be3"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 19854,
+      "cpcfinderContestId": 57,
+      "cpcfinderTeamId": 21354,
+      "id": "980f86e2f55be3",
+      "memberDetails": [
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        },
+        {
+          "name": "谭傲",
+          "provider": "cpcfinder",
+          "externalId": "d7a9a7b4-d731-45ab-80d4-84e07131ae9b"
+        },
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/57"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
@@ -486,7 +1370,11 @@
       "date": "2024-11-10",
       "location": "杭州",
       "team": "dlut 06",
-      "members": [],
+      "members": [
+        "刘杰",
+        "吴胤祺",
+        "梁蛟源"
+      ],
       "medal": "铜牌",
       "rank": "189 / 366",
       "overallRank": "211 / 391",
@@ -494,7 +1382,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "bc2a8e9d3902ca"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 19966,
+      "cpcfinderContestId": 57,
+      "cpcfinderTeamId": 21466,
+      "id": "bc2a8e9d3902ca",
+      "memberDetails": [
+        {
+          "name": "刘杰",
+          "provider": "cpcfinder",
+          "externalId": "a4aa75ce-ad21-46a5-b971-9d887aa2b4da"
+        },
+        {
+          "name": "吴胤祺",
+          "provider": "cpcfinder",
+          "externalId": "18dcd3e3-d573-4408-8bdf-3810b1e35a6e"
+        },
+        {
+          "name": "梁蛟源",
+          "provider": "cpcfinder",
+          "externalId": "329d3577-b1c1-4cd3-a6e7-002a6b6c278c"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/57"
+      }
     },
     {
       "event": "第 10 届 CCPC 中国大学生程序设计竞赛重庆站",
@@ -514,7 +1432,39 @@
         "name": "QOJ 镜像榜",
         "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
       },
-      "id": "566f92def98037"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "QOJ 镜像榜",
+          "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+        }
+      ],
+      "cpcfinderAwardId": 19519,
+      "cpcfinderContestId": 58,
+      "cpcfinderTeamId": 21019,
+      "id": "566f92def98037",
+      "memberDetails": [
+        {
+          "name": "刘博文"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/58"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -534,7 +1484,41 @@
         "name": "QOJ 镜像榜",
         "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
       },
-      "id": "49926721481c66"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "QOJ 镜像榜",
+          "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+        }
+      ],
+      "cpcfinderAwardId": 19191,
+      "cpcfinderContestId": 56,
+      "cpcfinderTeamId": 20691,
+      "id": "49926721481c66",
+      "memberDetails": [
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/56"
+      }
     },
     {
       "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
@@ -554,7 +1538,41 @@
         "name": "QOJ 镜像榜",
         "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
       },
-      "id": "19a51e84041ae3"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "QOJ 镜像榜",
+          "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+        }
+      ],
+      "cpcfinderAwardId": 18488,
+      "cpcfinderContestId": 54,
+      "cpcfinderTeamId": 19988,
+      "id": "19a51e84041ae3",
+      "memberDetails": [
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        },
+        {
+          "name": "刘兆洲",
+          "provider": "cpcfinder",
+          "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/54"
+      }
     },
     {
       "event": "第 10 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
@@ -562,7 +1580,11 @@
       "date": "2024-10-20",
       "location": "哈尔滨",
       "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
-      "members": [],
+      "members": [
+        "赵一鹏",
+        "李泽与",
+        "陈常杰"
+      ],
       "medal": "银牌",
       "rank": "54 / 280",
       "overallRank": "57 / 302",
@@ -570,7 +1592,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "6e2e27241e019a"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 17784,
+      "cpcfinderContestId": 53,
+      "cpcfinderTeamId": 19284,
+      "id": "6e2e27241e019a",
+      "memberDetails": [
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/53"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
@@ -590,7 +1642,41 @@
         "name": "ICPC 官方名单",
         "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
       },
-      "id": "c20d05d18a0474"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "ICPC 官方名单",
+          "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 288,
+      "cpcfinderContestId": 2,
+      "cpcfinderTeamId": 288,
+      "id": "c20d05d18a0474",
+      "memberDetails": [
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/2"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
@@ -598,7 +1684,11 @@
       "date": "2023-12-10",
       "location": "杭州",
       "team": "灼灼韶华",
-      "members": [],
+      "members": [
+        "李泽与",
+        "谭傲",
+        "赵一鹏"
+      ],
       "medal": "铜牌",
       "rank": "182 / 442",
       "overallRank": "213 / 483",
@@ -606,7 +1696,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "6f18894991f1a5"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 663,
+      "cpcfinderContestId": 3,
+      "cpcfinderTeamId": 663,
+      "id": "6f18894991f1a5",
+      "memberDetails": [
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        },
+        {
+          "name": "谭傲",
+          "provider": "cpcfinder",
+          "externalId": "d7a9a7b4-d731-45ab-80d4-84e07131ae9b"
+        },
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/3"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -626,7 +1746,41 @@
         "name": "ICPC 报名公示",
         "url": "https://icpc.pku.edu.cn/docs/20230907095701223660.pdf"
       },
-      "id": "80519c39fed02e"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "ICPC 报名公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230907095701223660.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 1031,
+      "cpcfinderContestId": 4,
+      "cpcfinderTeamId": 1031,
+      "id": "80519c39fed02e",
+      "memberDetails": [
+        {
+          "name": "侯硕伟",
+          "provider": "cpcfinder",
+          "externalId": "32471008-8f3e-4209-b0b9-cd03e575d733"
+        },
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        },
+        {
+          "name": "葛俊辰",
+          "provider": "cpcfinder",
+          "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/4"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛合肥站",
@@ -634,7 +1788,11 @@
       "date": "2023-11-26",
       "location": "合肥",
       "team": "共跳最后一支舞",
-      "members": [],
+      "members": [
+        "赵一鹏",
+        "谭傲",
+        "李泽与"
+      ],
       "medal": "铜牌",
       "rank": "189 / 344",
       "overallRank": "191 / 347",
@@ -642,7 +1800,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "8bcd802e52d9aa"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 1470,
+      "cpcfinderContestId": 5,
+      "cpcfinderTeamId": 1470,
+      "id": "8bcd802e52d9aa",
+      "memberDetails": [
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        },
+        {
+          "name": "谭傲",
+          "provider": "cpcfinder",
+          "externalId": "d7a9a7b4-d731-45ab-80d4-84e07131ae9b"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/5"
+      }
     },
     {
       "event": "第 9 届 CCPC 中国大学生程序设计竞赛深圳站",
@@ -650,7 +1838,11 @@
       "date": "2023-11-12",
       "location": "深圳",
       "team": "遇见彩虹，吃定彩虹",
-      "members": [],
+      "members": [
+        "赵一鹏",
+        "李泽与",
+        "谭傲"
+      ],
       "medal": "铜牌",
       "rank": "84 / 240",
       "overallRank": "106 / 288",
@@ -658,7 +1850,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "a7d3eb8dbb91d9"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 2032,
+      "cpcfinderContestId": 7,
+      "cpcfinderTeamId": 2032,
+      "id": "a7d3eb8dbb91d9",
+      "memberDetails": [
+        {
+          "name": "赵一鹏",
+          "provider": "cpcfinder",
+          "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f"
+        },
+        {
+          "name": "李泽与",
+          "provider": "cpcfinder",
+          "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3"
+        },
+        {
+          "name": "谭傲",
+          "provider": "cpcfinder",
+          "externalId": "d7a9a7b4-d731-45ab-80d4-84e07131ae9b"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/7"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -678,7 +1900,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "cd6b1f30b96db8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 1663,
+      "cpcfinderContestId": 6,
+      "cpcfinderTeamId": 1663,
+      "id": "cd6b1f30b96db8",
+      "memberDetails": [
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/6"
+      }
     },
     {
       "event": "第 9 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
@@ -686,7 +1938,11 @@
       "date": "2023-11-05",
       "location": "哈尔滨",
       "team": "今天午饭吃了吗",
-      "members": [],
+      "members": [
+        "徐立",
+        "何立吾",
+        "谢喻荃"
+      ],
       "medal": "铜牌",
       "rank": "99 / 240",
       "overallRank": "100 / 253",
@@ -694,7 +1950,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "e5edf330fe9e80"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 2656,
+      "cpcfinderContestId": 9,
+      "cpcfinderTeamId": 2656,
+      "id": "e5edf330fe9e80",
+      "memberDetails": [
+        {
+          "name": "徐立",
+          "provider": "cpcfinder",
+          "externalId": "610c5a9d-13ef-45a0-965f-0c8c13e3ebbc"
+        },
+        {
+          "name": "何立吾",
+          "provider": "cpcfinder",
+          "externalId": "2aba8133-7923-4c7c-b444-e03024dec35b"
+        },
+        {
+          "name": "谢喻荃",
+          "provider": "cpcfinder",
+          "externalId": "84e59a5a-6e1f-4959-a4ef-f4e44c32ad9b"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/9"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -702,7 +1988,11 @@
       "date": "2023-11-05",
       "location": "南京",
       "team": "爱喝果粒橙",
-      "members": [],
+      "members": [
+        "都天翔",
+        "刘博文",
+        "连茗暄"
+      ],
       "medal": "铜牌",
       "rank": "162 / 331",
       "overallRank": "171 / 342",
@@ -710,7 +2000,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b297aca0d25c35"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 2385,
+      "cpcfinderContestId": 8,
+      "cpcfinderTeamId": 2385,
+      "id": "b297aca0d25c35",
+      "memberDetails": [
+        {
+          "name": "都天翔",
+          "provider": "cpcfinder",
+          "externalId": "6e6613d1-e482-46ed-ac2a-dc6634cc5bea"
+        },
+        {
+          "name": "刘博文",
+          "provider": "cpcfinder",
+          "externalId": "b67ba76b-b7f8-431e-9607-c89242d84302"
+        },
+        {
+          "name": "连茗暄",
+          "provider": "cpcfinder",
+          "externalId": "a5f7bd73-a2d0-4d75-8354-1fd29717a700"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/8"
+      }
     },
     {
       "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -718,7 +2038,11 @@
       "date": "2023-11-05",
       "location": "南京",
       "team": "一带三",
-      "members": [],
+      "members": [
+        "侯硕伟",
+        "李雁志",
+        "葛俊辰"
+      ],
       "medal": "铜牌",
       "rank": "132 / 331",
       "overallRank": "141 / 342",
@@ -726,7 +2050,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "fc707eeb3fa9d0"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 2355,
+      "cpcfinderContestId": 8,
+      "cpcfinderTeamId": 2355,
+      "id": "fc707eeb3fa9d0",
+      "memberDetails": [
+        {
+          "name": "侯硕伟",
+          "provider": "cpcfinder",
+          "externalId": "32471008-8f3e-4209-b0b9-cd03e575d733"
+        },
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        },
+        {
+          "name": "葛俊辰",
+          "provider": "cpcfinder",
+          "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/8"
+      }
     },
     {
       "event": "第 9 届 CCPC 中国大学生程序设计竞赛桂林站",
@@ -734,7 +2088,11 @@
       "date": "2023-10-29",
       "location": "桂林",
       "team": "新二保一",
-      "members": [],
+      "members": [
+        "袁振",
+        "陈常杰",
+        "高盛轩"
+      ],
       "medal": "银牌",
       "rank": "39 / 240",
       "overallRank": "41 / 269",
@@ -742,7 +2100,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "2c7e7dc8ba3221"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 2850,
+      "cpcfinderContestId": 10,
+      "cpcfinderTeamId": 2850,
+      "id": "2c7e7dc8ba3221",
+      "memberDetails": [
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "高盛轩",
+          "provider": "cpcfinder",
+          "externalId": "dbeac081-aa11-4b26-b352-7591d0a0db07"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/10"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
@@ -762,7 +2150,41 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "2955cd18a790c2"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 3563,
+      "cpcfinderContestId": 14,
+      "cpcfinderTeamId": 3563,
+      "id": "2955cd18a790c2",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/14"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -770,7 +2192,11 @@
       "date": "2022-12-18",
       "location": "南京",
       "team": "一带三",
-      "members": [],
+      "members": [
+        "侯硕伟",
+        "李雁志",
+        "葛俊辰"
+      ],
       "medal": "铜牌",
       "rank": "127 / 438",
       "overallRank": "135 / 501",
@@ -778,7 +2204,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "3e0b6546401da5"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 3919,
+      "cpcfinderContestId": 15,
+      "cpcfinderTeamId": 3919,
+      "id": "3e0b6546401da5",
+      "memberDetails": [
+        {
+          "name": "侯硕伟",
+          "provider": "cpcfinder",
+          "externalId": "32471008-8f3e-4209-b0b9-cd03e575d733"
+        },
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        },
+        {
+          "name": "葛俊辰",
+          "provider": "cpcfinder",
+          "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/15"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -786,7 +2242,11 @@
       "date": "2022-11-27",
       "location": "济南",
       "team": "鹏鹏今天吃什么",
-      "members": [],
+      "members": [
+        "赵钧鹏",
+        "邓思航",
+        "高金鹏"
+      ],
       "medal": "铜牌",
       "rank": "132 / 511",
       "overallRank": "139 / 580",
@@ -794,7 +2254,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b0f819ec454514"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 5083,
+      "cpcfinderContestId": 17,
+      "cpcfinderTeamId": 5083,
+      "id": "b0f819ec454514",
+      "memberDetails": [
+        {
+          "name": "赵钧鹏",
+          "provider": "cpcfinder",
+          "externalId": "946928bd-8b40-4321-9339-809b6f853162"
+        },
+        {
+          "name": "邓思航",
+          "provider": "cpcfinder",
+          "externalId": "ca52ab53-9287-4ad6-84c6-51e0a49a4778"
+        },
+        {
+          "name": "高金鹏",
+          "provider": "cpcfinder",
+          "externalId": "81cfc771-f78b-40c5-9d51-72e8199842f9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/17"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -814,7 +2304,41 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "5c1d97a1954dc6"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 5008,
+      "cpcfinderContestId": 17,
+      "cpcfinderTeamId": 5008,
+      "id": "5c1d97a1954dc6",
+      "memberDetails": [
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "蔡廷漳",
+          "provider": "cpcfinder",
+          "externalId": "378e8b34-58e9-49c7-b6ec-9e420fcfb2c9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/17"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛合肥站",
@@ -834,7 +2358,39 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "bc3982a75424b8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 22235,
+      "cpcfinderContestId": 18,
+      "cpcfinderTeamId": 23735,
+      "id": "bc3982a75424b8",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "夏鸿康"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/18"
+      }
     },
     {
       "event": "第 8 届 CCPC 中国大学生程序设计竞赛广州站",
@@ -842,7 +2398,11 @@
       "date": "2022-11-13",
       "location": "广州",
       "team": "秋招没人要",
-      "members": [],
+      "members": [
+        "李冠霖",
+        "江雨桐",
+        "蔡廷漳"
+      ],
       "medal": "银牌",
       "rank": "28 / 240",
       "overallRank": "36 / 285",
@@ -850,7 +2410,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "34b4343e7261fd"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 6868,
+      "cpcfinderContestId": 21,
+      "cpcfinderTeamId": 6868,
+      "id": "34b4343e7261fd",
+      "memberDetails": [
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        },
+        {
+          "name": "蔡廷漳",
+          "provider": "cpcfinder",
+          "externalId": "378e8b34-58e9-49c7-b6ec-9e420fcfb2c9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/21"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
@@ -870,7 +2460,41 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "558b0363814318"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 6327,
+      "cpcfinderContestId": 20,
+      "cpcfinderTeamId": 6327,
+      "id": "558b0363814318",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/20"
+      }
     },
     {
       "event": "第 8 届 CCPC 中国大学生程序设计竞赛威海站",
@@ -890,7 +2514,41 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "22eaa13a0333b4"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 7877,
+      "cpcfinderContestId": 23,
+      "cpcfinderTeamId": 7877,
+      "id": "22eaa13a0333b4",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "陈常杰",
+          "provider": "cpcfinder",
+          "externalId": "f5a55a8d-03dc-4db8-b4d4-dc25d46ea74f"
+        },
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/23"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -898,7 +2556,11 @@
       "date": "2022-11-06",
       "location": "沈阳",
       "team": "给个 AC 吧",
-      "members": [],
+      "members": [
+        "张正礼",
+        "石炎东",
+        "韦品桓"
+      ],
       "medal": "银牌",
       "rank": "85 / 708",
       "overallRank": "85 / 738",
@@ -906,7 +2568,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "7bf3d15da42821"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 7202,
+      "cpcfinderContestId": 22,
+      "cpcfinderTeamId": 7202,
+      "id": "7bf3d15da42821",
+      "memberDetails": [
+        {
+          "name": "张正礼",
+          "provider": "cpcfinder",
+          "externalId": "5d815e11-ff31-4e5a-be28-595ef79013d0"
+        },
+        {
+          "name": "石炎东",
+          "provider": "cpcfinder",
+          "externalId": "f4107b04-c91f-4910-9857-063517bed305"
+        },
+        {
+          "name": "韦品桓",
+          "provider": "cpcfinder",
+          "externalId": "5147d162-82cd-4ff1-af1d-a20aceadddc4"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/22"
+      }
     },
     {
       "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -926,7 +2618,41 @@
         "name": "EC Final 公示",
         "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
       },
-      "id": "09a71ceca22e79"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "EC Final 公示",
+          "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+        }
+      ],
+      "cpcfinderAwardId": 7180,
+      "cpcfinderContestId": 22,
+      "cpcfinderTeamId": 7180,
+      "id": "09a71ceca22e79",
+      "memberDetails": [
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        },
+        {
+          "name": "张思凡",
+          "provider": "cpcfinder",
+          "externalId": "d8d36605-9984-48f9-9e95-64c4784fd859"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/22"
+      }
     },
     {
       "event": "第 8 届 CCPC 中国大学生程序设计竞赛桂林",
@@ -934,7 +2660,11 @@
       "date": "2022-10-30",
       "location": "桂林",
       "team": "鹏鹏今天吃什么",
-      "members": [],
+      "members": [
+        "赵钧鹏",
+        "邓思航",
+        "高金鹏"
+      ],
       "medal": "铜牌",
       "rank": "126 / 240",
       "overallRank": "152 / 323",
@@ -942,7 +2672,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b94d7996cd9d7a"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 8294,
+      "cpcfinderContestId": 24,
+      "cpcfinderTeamId": 8294,
+      "id": "b94d7996cd9d7a",
+      "memberDetails": [
+        {
+          "name": "赵钧鹏",
+          "provider": "cpcfinder",
+          "externalId": "946928bd-8b40-4321-9339-809b6f853162"
+        },
+        {
+          "name": "邓思航",
+          "provider": "cpcfinder",
+          "externalId": "ca52ab53-9287-4ad6-84c6-51e0a49a4778"
+        },
+        {
+          "name": "高金鹏",
+          "provider": "cpcfinder",
+          "externalId": "81cfc771-f78b-40c5-9d51-72e8199842f9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/24"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛总决赛",
@@ -950,7 +2710,11 @@
       "date": "2022-07-27",
       "location": "南京",
       "team": "多多跳",
-      "members": [],
+      "members": [
+        "夏鸿康",
+        "李冠霖",
+        "江雨桐"
+      ],
       "medal": "铜牌",
       "rank": "35 / 115",
       "overallRank": "35 / 116",
@@ -958,7 +2722,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "26dfebed95b74b"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 15351,
+      "cpcfinderContestId": 25,
+      "cpcfinderTeamId": 15351,
+      "id": "26dfebed95b74b",
+      "memberDetails": [
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/25"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -966,7 +2760,11 @@
       "date": "2022-04-17",
       "location": "昆明",
       "team": "梦觉流莺时一声",
-      "members": [],
+      "members": [
+        "李胤驰",
+        "高盛轩",
+        "袁振"
+      ],
       "medal": "银牌",
       "rank": "90 / 210",
       "overallRank": "90 / 210",
@@ -974,7 +2772,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "d29a987b8d803f"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 18962,
+      "cpcfinderContestId": 27,
+      "cpcfinderTeamId": 20462,
+      "id": "d29a987b8d803f",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "高盛轩",
+          "provider": "cpcfinder",
+          "externalId": "dbeac081-aa11-4b26-b352-7591d0a0db07"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/27"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -982,7 +2810,11 @@
       "date": "2022-04-17",
       "location": "昆明",
       "team": "三带一",
-      "members": [],
+      "members": [
+        "濮凡轶",
+        "江雨桐",
+        "李冠霖"
+      ],
       "medal": "金牌",
       "rank": "34 / 210",
       "overallRank": "34 / 210",
@@ -990,7 +2822,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "ba0ca4800c82c6"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 18906,
+      "cpcfinderContestId": 27,
+      "cpcfinderTeamId": 20406,
+      "id": "ba0ca4800c82c6",
+      "memberDetails": [
+        {
+          "name": "濮凡轶",
+          "provider": "cpcfinder",
+          "externalId": "824e66a7-df5d-46f7-a279-9cf9ae9ca4d1"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/27"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -998,7 +2860,11 @@
       "date": "2021-12-04",
       "location": "南京",
       "team": "我们队没有GF",
-      "members": [],
+      "members": [
+        "李雁志",
+        "濮凡轶",
+        "葛俊辰"
+      ],
       "medal": "银牌",
       "rank": "54 / 641",
       "overallRank": "57 / 684",
@@ -1006,7 +2872,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b07c4862f2539d"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 8655,
+      "cpcfinderContestId": 28,
+      "cpcfinderTeamId": 8655,
+      "id": "b07c4862f2539d",
+      "memberDetails": [
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        },
+        {
+          "name": "濮凡轶",
+          "provider": "cpcfinder",
+          "externalId": "824e66a7-df5d-46f7-a279-9cf9ae9ca4d1"
+        },
+        {
+          "name": "葛俊辰",
+          "provider": "cpcfinder",
+          "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/28"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -1014,7 +2910,11 @@
       "date": "2021-12-04",
       "location": "南京",
       "team": "三带一",
-      "members": [],
+      "members": [
+        "夏鸿康",
+        "李冠霖",
+        "江雨桐"
+      ],
       "medal": "银牌",
       "rank": "52 / 641",
       "overallRank": "55 / 684",
@@ -1022,7 +2922,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "a5c575a488a1c9"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 8653,
+      "cpcfinderContestId": 28,
+      "cpcfinderTeamId": 8653,
+      "id": "a5c575a488a1c9",
+      "memberDetails": [
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/28"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
@@ -1030,7 +2960,11 @@
       "date": "2021-11-28",
       "location": "哈尔滨",
       "team": "三带一",
-      "members": [],
+      "members": [
+        "夏鸿康",
+        "李冠霖",
+        "江雨桐"
+      ],
       "medal": "银牌",
       "rank": "36 / 240",
       "overallRank": "39 / 317",
@@ -1038,7 +2972,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "e946050f540890"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 9896,
+      "cpcfinderContestId": 29,
+      "cpcfinderTeamId": 9896,
+      "id": "e946050f540890",
+      "memberDetails": [
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/29"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
@@ -1046,7 +3010,11 @@
       "date": "2021-11-28",
       "location": "哈尔滨",
       "team": "dlut01",
-      "members": [],
+      "members": [
+        "李雁志",
+        "葛俊辰",
+        "钱坤"
+      ],
       "medal": "铜牌",
       "rank": "81 / 240",
       "overallRank": "89 / 317",
@@ -1054,7 +3022,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "64410b155a5ed1"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 9947,
+      "cpcfinderContestId": 29,
+      "cpcfinderTeamId": 9947,
+      "id": "64410b155a5ed1",
+      "memberDetails": [
+        {
+          "name": "李雁志",
+          "provider": "cpcfinder",
+          "externalId": "1dd1c584-61d7-4a2e-afec-6513ede0e6a6"
+        },
+        {
+          "name": "葛俊辰",
+          "provider": "cpcfinder",
+          "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1"
+        },
+        {
+          "name": "钱坤",
+          "provider": "cpcfinder",
+          "externalId": "8de18304-18ed-4fb2-b127-a68521bc3cf1"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/29"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
@@ -1062,7 +3060,11 @@
       "date": "2021-11-28",
       "location": "上海",
       "team": "梦觉流莺时一声",
-      "members": [],
+      "members": [
+        "李胤驰",
+        "高盛轩",
+        "袁振"
+      ],
       "medal": "铜牌",
       "rank": "114 / 632",
       "overallRank": "120 / 682",
@@ -1070,7 +3072,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "0607aaa695d0a4"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 17165,
+      "cpcfinderContestId": 48,
+      "cpcfinderTeamId": 18665,
+      "id": "0607aaa695d0a4",
+      "memberDetails": [
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "高盛轩",
+          "provider": "cpcfinder",
+          "externalId": "dbeac081-aa11-4b26-b352-7591d0a0db07"
+        },
+        {
+          "name": "袁振",
+          "provider": "cpcfinder",
+          "externalId": "4eff7cb2-32ea-4da2-b6e4-b5078f21e664"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/48"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
@@ -1078,7 +3110,11 @@
       "date": "2021-11-28",
       "location": "上海",
       "team": "优哉游哉",
-      "members": [],
+      "members": [
+        "余澍莘",
+        "杨朗",
+        "卢品仁"
+      ],
       "medal": "银牌",
       "rank": "77 / 632",
       "overallRank": "82 / 682",
@@ -1086,7 +3122,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "49c1a4be4bf048"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 17127,
+      "cpcfinderContestId": 48,
+      "cpcfinderTeamId": 18627,
+      "id": "49c1a4be4bf048",
+      "memberDetails": [
+        {
+          "name": "余澍莘",
+          "provider": "cpcfinder",
+          "externalId": "041a7ba6-9c7d-4f44-bc48-d46382ae258b"
+        },
+        {
+          "name": "杨朗",
+          "provider": "cpcfinder",
+          "externalId": "5fe1d3d6-8d9f-45b9-bc3a-263b9b3c3a0e"
+        },
+        {
+          "name": "卢品仁",
+          "provider": "cpcfinder",
+          "externalId": "40467107-4557-4087-a2da-586d51f29413"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/48"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛威海站",
@@ -1094,7 +3160,11 @@
       "date": "2021-11-21",
       "location": "威海",
       "team": "优哉游哉",
-      "members": [],
+      "members": [
+        "余澍莘",
+        "卢品仁",
+        "杨朗"
+      ],
       "medal": "铜牌",
       "rank": "118 / 240",
       "overallRank": "130 / 329",
@@ -1102,7 +3172,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "8a4129c738b861"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 10304,
+      "cpcfinderContestId": 31,
+      "cpcfinderTeamId": 10304,
+      "id": "8a4129c738b861",
+      "memberDetails": [
+        {
+          "name": "余澍莘",
+          "provider": "cpcfinder",
+          "externalId": "041a7ba6-9c7d-4f44-bc48-d46382ae258b"
+        },
+        {
+          "name": "卢品仁",
+          "provider": "cpcfinder",
+          "externalId": "40467107-4557-4087-a2da-586d51f29413"
+        },
+        {
+          "name": "杨朗",
+          "provider": "cpcfinder",
+          "externalId": "5fe1d3d6-8d9f-45b9-bc3a-263b9b3c3a0e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/31"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛威海站",
@@ -1110,7 +3210,11 @@
       "date": "2021-11-21",
       "location": "威海",
       "team": "东北三小只",
-      "members": [],
+      "members": [
+        "侯嘉贺",
+        "都天翔",
+        "闫希良"
+      ],
       "medal": "铜牌",
       "rank": "75 / 240",
       "overallRank": "81 / 329",
@@ -1118,7 +3222,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "fafbf374cde794"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 10255,
+      "cpcfinderContestId": 31,
+      "cpcfinderTeamId": 10255,
+      "id": "fafbf374cde794",
+      "memberDetails": [
+        {
+          "name": "侯嘉贺",
+          "provider": "cpcfinder",
+          "externalId": "038d9304-537e-4467-844a-76ec4789dfef"
+        },
+        {
+          "name": "都天翔",
+          "provider": "cpcfinder",
+          "externalId": "6e6613d1-e482-46ed-ac2a-dc6634cc5bea"
+        },
+        {
+          "name": "闫希良",
+          "provider": "cpcfinder",
+          "externalId": "4cbab1a5-165a-4211-9b74-8700f2bfddf6"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/31"
+      }
     },
     {
       "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -1126,7 +3260,11 @@
       "date": "2021-11-14",
       "location": "济南",
       "team": "优哉游哉",
-      "members": [],
+      "members": [
+        "余澍莘",
+        "卢品仁",
+        "杨朗"
+      ],
       "medal": "银牌",
       "rank": "101 / 726",
       "overallRank": "117 / 800",
@@ -1134,7 +3272,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b798f27c645a44"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 15550,
+      "cpcfinderContestId": 32,
+      "cpcfinderTeamId": 15550,
+      "id": "b798f27c645a44",
+      "memberDetails": [
+        {
+          "name": "余澍莘",
+          "provider": "cpcfinder",
+          "externalId": "041a7ba6-9c7d-4f44-bc48-d46382ae258b"
+        },
+        {
+          "name": "卢品仁",
+          "provider": "cpcfinder",
+          "externalId": "40467107-4557-4087-a2da-586d51f29413"
+        },
+        {
+          "name": "杨朗",
+          "provider": "cpcfinder",
+          "externalId": "5fe1d3d6-8d9f-45b9-bc3a-263b9b3c3a0e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/32"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛桂林站",
@@ -1142,7 +3310,11 @@
       "date": "2021-11-07",
       "location": "桂林",
       "team": "梦觉流莺时一声",
-      "members": [],
+      "members": [
+        "余毅航",
+        "李胤驰",
+        "高盛轩"
+      ],
       "medal": "铜牌",
       "rank": "130 / 239",
       "overallRank": "162 / 338",
@@ -1150,7 +3322,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "79802118b215af"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 10919,
+      "cpcfinderContestId": 34,
+      "cpcfinderTeamId": 10919,
+      "id": "79802118b215af",
+      "memberDetails": [
+        {
+          "name": "余毅航",
+          "provider": "cpcfinder",
+          "externalId": "f6fba896-cb75-4a4e-bfd6-f209f451b7e5"
+        },
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        },
+        {
+          "name": "高盛轩",
+          "provider": "cpcfinder",
+          "externalId": "dbeac081-aa11-4b26-b352-7591d0a0db07"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/34"
+      }
     },
     {
       "event": "第 7 届 CCPC 中国大学生程序设计竞赛桂林站",
@@ -1158,7 +3360,11 @@
       "date": "2021-11-07",
       "location": "桂林",
       "team": "异军突起",
-      "members": [],
+      "members": [
+        "张思凡",
+        "陈一帆",
+        "陈荣波"
+      ],
       "medal": "铜牌",
       "rank": "101 / 239",
       "overallRank": "123 / 338",
@@ -1166,7 +3372,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "edb0209cad821c"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 10880,
+      "cpcfinderContestId": 34,
+      "cpcfinderTeamId": 10880,
+      "id": "edb0209cad821c",
+      "memberDetails": [
+        {
+          "name": "张思凡",
+          "provider": "cpcfinder",
+          "externalId": "d8d36605-9984-48f9-9e95-64c4784fd859"
+        },
+        {
+          "name": "陈一帆",
+          "provider": "cpcfinder",
+          "externalId": "b5819109-c345-4d34-8743-5c21702567e6"
+        },
+        {
+          "name": "陈荣波",
+          "provider": "cpcfinder",
+          "externalId": "5c9cfa82-7598-4392-8f33-828bc8a315d8"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/34"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -1186,7 +3422,41 @@
         "name": "ICPC 沈阳站榜单",
         "url": "https://acm.sdut.edu.cn/acmss/icpc/2021/shenyang/index.html"
       },
-      "id": "a5e07f0e3686a5"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        },
+        {
+          "name": "ICPC 沈阳站榜单",
+          "url": "https://acm.sdut.edu.cn/acmss/icpc/2021/shenyang/index.html"
+        }
+      ],
+      "cpcfinderAwardId": 23025,
+      "cpcfinderContestId": 49,
+      "cpcfinderTeamId": 24525,
+      "id": "a5e07f0e3686a5",
+      "memberDetails": [
+        {
+          "name": "吕嘉庆",
+          "provider": "cpcfinder",
+          "externalId": "a0b74372-3d15-4e50-82d4-2eedc6e9af25"
+        },
+        {
+          "name": "陈英奇",
+          "provider": "cpcfinder",
+          "externalId": "af38a535-d301-41da-af95-e59963bdef4b"
+        },
+        {
+          "name": "李胤驰",
+          "provider": "cpcfinder",
+          "externalId": "1157e2c3-1ff9-4553-a67e-d3c0e0d2fda4"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/49"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
@@ -1194,7 +3464,11 @@
       "date": "2021-07-18",
       "location": "沈阳",
       "team": "一只非常非常孤单的小狗",
-      "members": [],
+      "members": [
+        "黄展搏",
+        "黄承诺",
+        "蔡廷漳"
+      ],
       "medal": "银牌",
       "rank": "63 / 269",
       "overallRank": "65 / 285",
@@ -1202,7 +3476,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "5004f694fdcd85"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 22991,
+      "cpcfinderContestId": 49,
+      "cpcfinderTeamId": 24491,
+      "id": "5004f694fdcd85",
+      "memberDetails": [
+        {
+          "name": "黄展搏",
+          "provider": "cpcfinder",
+          "externalId": "459cc2f1-08e7-4de1-b00d-99d7a63d42f7"
+        },
+        {
+          "name": "黄承诺",
+          "provider": "cpcfinder",
+          "externalId": "c09115b2-959e-441b-bd56-7b21a43cdd42"
+        },
+        {
+          "name": "蔡廷漳",
+          "provider": "cpcfinder",
+          "externalId": "378e8b34-58e9-49c7-b6ec-9e420fcfb2c9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/49"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛总决赛",
@@ -1210,7 +3514,11 @@
       "date": "2021-05-30",
       "location": "北京",
       "team": "三带一",
-      "members": [],
+      "members": [
+        "夏鸿康",
+        "李冠霖",
+        "江雨桐"
+      ],
       "medal": "银牌",
       "rank": "22 / 115",
       "overallRank": "24 / 118",
@@ -1218,7 +3526,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "44c0971b0409e9"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 15222,
+      "cpcfinderContestId": 35,
+      "cpcfinderTeamId": 15222,
+      "id": "44c0971b0409e9",
+      "memberDetails": [
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/35"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -1226,7 +3564,11 @@
       "date": "2021-04-03",
       "location": "昆明",
       "team": "线性时间的支配者",
-      "members": [],
+      "members": [
+        "刘易铖",
+        "梁家豪",
+        "何泾"
+      ],
       "medal": "金牌",
       "rank": "25 / 763",
       "overallRank": "27 / 813",
@@ -1234,7 +3576,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "965e9ccc4550e3"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 25829,
+      "cpcfinderContestId": 36,
+      "cpcfinderTeamId": 27573,
+      "id": "965e9ccc4550e3",
+      "memberDetails": [
+        {
+          "name": "刘易铖",
+          "provider": "cpcfinder",
+          "externalId": "e5e2a816-f001-47f2-aaaf-eb96a3e21666"
+        },
+        {
+          "name": "梁家豪",
+          "provider": "cpcfinder",
+          "externalId": "4a4c7b9f-308b-4176-8786-855f5673001f"
+        },
+        {
+          "name": "何泾",
+          "provider": "cpcfinder",
+          "externalId": "83cacab3-3963-4ab8-807b-9818f23bb3fe"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/36"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -1242,7 +3614,11 @@
       "date": "2021-04-03",
       "location": "昆明",
       "team": "dlut11",
-      "members": [],
+      "members": [
+        "衣泽民",
+        "夏鸿康",
+        "李冠霖"
+      ],
       "medal": "银牌",
       "rank": "67 / 763",
       "overallRank": "70 / 813",
@@ -1250,7 +3626,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "5d0e39ca8fe6ba"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 25872,
+      "cpcfinderContestId": 36,
+      "cpcfinderTeamId": 27616,
+      "id": "5d0e39ca8fe6ba",
+      "memberDetails": [
+        {
+          "name": "衣泽民",
+          "provider": "cpcfinder",
+          "externalId": "36c41230-5793-49d3-ae6b-c054e48361d2"
+        },
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/36"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
@@ -1258,7 +3664,11 @@
       "date": "2021-04-03",
       "location": "昆明",
       "team": "big black mountain",
-      "members": [],
+      "members": [
+        "蔡廷漳",
+        "钱坤",
+        "陈英奇"
+      ],
       "medal": "铜牌",
       "rank": "114 / 763",
       "overallRank": "120 / 813",
@@ -1266,7 +3676,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "cfc9cd71667799"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 25922,
+      "cpcfinderContestId": 36,
+      "cpcfinderTeamId": 27666,
+      "id": "cfc9cd71667799",
+      "memberDetails": [
+        {
+          "name": "蔡廷漳",
+          "provider": "cpcfinder",
+          "externalId": "378e8b34-58e9-49c7-b6ec-9e420fcfb2c9"
+        },
+        {
+          "name": "钱坤",
+          "provider": "cpcfinder",
+          "externalId": "8de18304-18ed-4fb2-b127-a68521bc3cf1"
+        },
+        {
+          "name": "陈英奇",
+          "provider": "cpcfinder",
+          "externalId": "af38a535-d301-41da-af95-e59963bdef4b"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/36"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -1274,7 +3714,11 @@
       "date": "2020-12-27",
       "location": "济南",
       "team": "dlut11",
-      "members": [],
+      "members": [
+        "吴励宁",
+        "李冠霖",
+        "江雨桐"
+      ],
       "medal": "金牌",
       "rank": "32 / 496",
       "overallRank": "34 / 545",
@@ -1282,7 +3726,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "191e81d61278c8"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 25291,
+      "cpcfinderContestId": 37,
+      "cpcfinderTeamId": 27035,
+      "id": "191e81d61278c8",
+      "memberDetails": [
+        {
+          "name": "吴励宁",
+          "provider": "cpcfinder",
+          "externalId": "05466c05-ad25-4124-a85f-5a64513b5065"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/37"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
@@ -1290,7 +3764,11 @@
       "date": "2020-12-27",
       "location": "济南",
       "team": "L",
-      "members": [],
+      "members": [
+        "刘易铖",
+        "吕嘉庆",
+        "梁家豪"
+      ],
       "medal": "银牌",
       "rank": "102 / 496",
       "overallRank": "112 / 545",
@@ -1298,7 +3776,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "d705d9b191f9fb"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 25369,
+      "cpcfinderContestId": 37,
+      "cpcfinderTeamId": 27113,
+      "id": "d705d9b191f9fb",
+      "memberDetails": [
+        {
+          "name": "刘易铖",
+          "provider": "cpcfinder",
+          "externalId": "e5e2a816-f001-47f2-aaaf-eb96a3e21666"
+        },
+        {
+          "name": "吕嘉庆",
+          "provider": "cpcfinder",
+          "externalId": "a0b74372-3d15-4e50-82d4-2eedc6e9af25"
+        },
+        {
+          "name": "梁家豪",
+          "provider": "cpcfinder",
+          "externalId": "4a4c7b9f-308b-4176-8786-855f5673001f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/37"
+      }
     },
     {
       "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
@@ -1306,7 +3814,11 @@
       "date": "2020-12-20",
       "location": "南京",
       "team": "优哉游哉",
-      "members": [],
+      "members": [
+        "余澍莘",
+        "卢品仁",
+        "杨朗"
+      ],
       "medal": "铜牌",
       "rank": "199 / 555",
       "overallRank": "200 / 556",
@@ -1314,7 +3826,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "469addaaccc207"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 24901,
+      "cpcfinderContestId": 38,
+      "cpcfinderTeamId": 26645,
+      "id": "469addaaccc207",
+      "memberDetails": [
+        {
+          "name": "余澍莘",
+          "provider": "cpcfinder",
+          "externalId": "041a7ba6-9c7d-4f44-bc48-d46382ae258b"
+        },
+        {
+          "name": "卢品仁",
+          "provider": "cpcfinder",
+          "externalId": "40467107-4557-4087-a2da-586d51f29413"
+        },
+        {
+          "name": "杨朗",
+          "provider": "cpcfinder",
+          "externalId": "5fe1d3d6-8d9f-45b9-bc3a-263b9b3c3a0e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/38"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
@@ -1322,7 +3864,11 @@
       "date": "2020-11-08",
       "location": "长春",
       "team": "追星成功",
-      "members": [],
+      "members": [
+        "归宇通",
+        "衣泽民",
+        "陈英奇"
+      ],
       "medal": "银牌",
       "rank": "57 / 267",
       "overallRank": "63 / 324",
@@ -1330,7 +3876,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "b8d4e180dc3c15"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 13865,
+      "cpcfinderContestId": 40,
+      "cpcfinderTeamId": 13865,
+      "id": "b8d4e180dc3c15",
+      "memberDetails": [
+        {
+          "name": "归宇通",
+          "provider": "cpcfinder",
+          "externalId": "65f567c5-41be-49f3-8942-33aa0177a62e"
+        },
+        {
+          "name": "衣泽民",
+          "provider": "cpcfinder",
+          "externalId": "36c41230-5793-49d3-ae6b-c054e48361d2"
+        },
+        {
+          "name": "陈英奇",
+          "provider": "cpcfinder",
+          "externalId": "af38a535-d301-41da-af95-e59963bdef4b"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/40"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
@@ -1338,7 +3914,11 @@
       "date": "2020-11-08",
       "location": "长春",
       "team": "寒雨连江夜入吴",
-      "members": [],
+      "members": [
+        "吴励宁",
+        "吴耀宗",
+        "黄承诺"
+      ],
       "medal": "银牌",
       "rank": "62 / 267",
       "overallRank": "68 / 324",
@@ -1346,7 +3926,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "73d0fea3ae0d4c"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 13870,
+      "cpcfinderContestId": 40,
+      "cpcfinderTeamId": 13870,
+      "id": "73d0fea3ae0d4c",
+      "memberDetails": [
+        {
+          "name": "吴励宁",
+          "provider": "cpcfinder",
+          "externalId": "05466c05-ad25-4124-a85f-5a64513b5065"
+        },
+        {
+          "name": "吴耀宗",
+          "provider": "cpcfinder",
+          "externalId": "df7dacca-e329-43d7-beb5-f123a0c3e169"
+        },
+        {
+          "name": "黄承诺",
+          "provider": "cpcfinder",
+          "externalId": "c09115b2-959e-441b-bd56-7b21a43cdd42"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/40"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
@@ -1354,7 +3964,11 @@
       "date": "2020-11-08",
       "location": "长春",
       "team": "L",
-      "members": [],
+      "members": [
+        "刘易铖",
+        "吕嘉庆",
+        "梁家豪"
+      ],
       "medal": "铜牌",
       "rank": "93 / 267",
       "overallRank": "105 / 324",
@@ -1362,7 +3976,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "40fd6cc61480ac"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 13907,
+      "cpcfinderContestId": 40,
+      "cpcfinderTeamId": 13907,
+      "id": "40fd6cc61480ac",
+      "memberDetails": [
+        {
+          "name": "刘易铖",
+          "provider": "cpcfinder",
+          "externalId": "e5e2a816-f001-47f2-aaaf-eb96a3e21666"
+        },
+        {
+          "name": "吕嘉庆",
+          "provider": "cpcfinder",
+          "externalId": "a0b74372-3d15-4e50-82d4-2eedc6e9af25"
+        },
+        {
+          "name": "梁家豪",
+          "provider": "cpcfinder",
+          "externalId": "4a4c7b9f-308b-4176-8786-855f5673001f"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/40"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛绵阳站",
@@ -1370,7 +4014,11 @@
       "date": "2020-11-01",
       "location": "绵阳",
       "team": "惜年",
-      "members": [],
+      "members": [
+        "夏鸿康",
+        "李冠霖",
+        "衣泽民"
+      ],
       "medal": "银牌",
       "rank": "63 / 268",
       "overallRank": "76 / 340",
@@ -1378,7 +4026,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "aa61b6d9b7a8cb"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 14202,
+      "cpcfinderContestId": 41,
+      "cpcfinderTeamId": 14202,
+      "id": "aa61b6d9b7a8cb",
+      "memberDetails": [
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "李冠霖",
+          "provider": "cpcfinder",
+          "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c"
+        },
+        {
+          "name": "衣泽民",
+          "provider": "cpcfinder",
+          "externalId": "36c41230-5793-49d3-ae6b-c054e48361d2"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/41"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛绵阳站",
@@ -1386,7 +4064,11 @@
       "date": "2020-11-01",
       "location": "绵阳",
       "team": "优哉游哉",
-      "members": [],
+      "members": [
+        "余澍莘",
+        "卢品仁",
+        "杨朗"
+      ],
       "medal": "银牌",
       "rank": "49 / 268",
       "overallRank": "61 / 340",
@@ -1394,7 +4076,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "22570fdc3e6c6a"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 14187,
+      "cpcfinderContestId": 41,
+      "cpcfinderTeamId": 14187,
+      "id": "22570fdc3e6c6a",
+      "memberDetails": [
+        {
+          "name": "余澍莘",
+          "provider": "cpcfinder",
+          "externalId": "041a7ba6-9c7d-4f44-bc48-d46382ae258b"
+        },
+        {
+          "name": "卢品仁",
+          "provider": "cpcfinder",
+          "externalId": "40467107-4557-4087-a2da-586d51f29413"
+        },
+        {
+          "name": "杨朗",
+          "provider": "cpcfinder",
+          "externalId": "5fe1d3d6-8d9f-45b9-bc3a-263b9b3c3a0e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/41"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛威海站",
@@ -1402,7 +4114,11 @@
       "date": "2020-10-25",
       "location": "威海",
       "team": "暴力写挂乱搞AC",
-      "members": [],
+      "members": [
+        "唐振宇",
+        "江雨桐",
+        "陈英奇"
+      ],
       "medal": "银牌",
       "rank": "38 / 267",
       "overallRank": "41 / 386",
@@ -1410,7 +4126,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "8491ec8de105bb"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 14507,
+      "cpcfinderContestId": 42,
+      "cpcfinderTeamId": 14507,
+      "id": "8491ec8de105bb",
+      "memberDetails": [
+        {
+          "name": "唐振宇",
+          "provider": "cpcfinder",
+          "externalId": "df2491a6-5ae1-4d5c-af32-517f8ba9df93"
+        },
+        {
+          "name": "江雨桐",
+          "provider": "cpcfinder",
+          "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9"
+        },
+        {
+          "name": "陈英奇",
+          "provider": "cpcfinder",
+          "externalId": "af38a535-d301-41da-af95-e59963bdef4b"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/42"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛威海站",
@@ -1418,7 +4164,11 @@
       "date": "2020-10-25",
       "location": "威海",
       "team": "很有精神",
-      "members": [],
+      "members": [
+        "何泾",
+        "夏鸿康",
+        "马凯"
+      ],
       "medal": "银牌",
       "rank": "46 / 267",
       "overallRank": "49 / 386",
@@ -1426,7 +4176,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "3835cdf43ba617"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 14515,
+      "cpcfinderContestId": 42,
+      "cpcfinderTeamId": 14515,
+      "id": "3835cdf43ba617",
+      "memberDetails": [
+        {
+          "name": "何泾",
+          "provider": "cpcfinder",
+          "externalId": "83cacab3-3963-4ab8-807b-9818f23bb3fe"
+        },
+        {
+          "name": "夏鸿康",
+          "provider": "cpcfinder",
+          "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e"
+        },
+        {
+          "name": "马凯",
+          "provider": "cpcfinder",
+          "externalId": "fdce08f4-c1a7-43ea-9022-b800dfc10d9e"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/42"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
@@ -1434,7 +4214,11 @@
       "date": "2020-10-18",
       "location": "秦皇岛",
       "team": "泥栽柑葚馍",
-      "members": [],
+      "members": [
+        "刘政",
+        "宋安洋",
+        "林海洋"
+      ],
       "medal": "铜牌",
       "rank": "110 / 243",
       "overallRank": "132 / 346",
@@ -1442,7 +4226,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "9873e1f5dc91dd"
+      "sources": [
+        {
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+        }
+      ],
+      "cpcfinderAwardId": 14984,
+      "cpcfinderContestId": 43,
+      "cpcfinderTeamId": 14984,
+      "id": "9873e1f5dc91dd",
+      "memberDetails": [
+        {
+          "name": "刘政",
+          "provider": "cpcfinder",
+          "externalId": "7c5e08b9-7401-471a-841e-a4ee948475f0"
+        },
+        {
+          "name": "宋安洋",
+          "provider": "cpcfinder",
+          "externalId": "48e46ace-94e7-4ed4-85ec-1b4ba7af08a9"
+        },
+        {
+          "name": "林海洋",
+          "provider": "cpcfinder",
+          "externalId": "d8ff5546-7065-4d70-8720-8e16f3eba75a"
+        }
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/43"
+      }
     },
     {
       "event": "第 6 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
@@ -1450,7 +4264,11 @@
       "date": "2020-10-18",
       "location": "秦皇岛",
       "team": "寒雨连江夜入吴",
-      "members": [],
+      "members": [
+        "吴励宁",
+        "吴耀宗",
+        "黄承诺"
+      ],
       "medal": "铜牌",
       "rank": "122 / 243",
       "overallRank": "146 / 346",
@@ -1458,135 +4276,37 @@
         "name": "CPC Finder",
         "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
       },
-      "id": "06c049fa52789d"
-    }
-  ],
-  "ratingGroups": [
-    {
-      "name": "关注带工喵，关注带工谢谢喵",
-      "teamScore": 0,
-      "members": [
+      "sources": [
         {
-          "name": "申永琦",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "欧阳东进",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "潘健",
-          "handle": null,
-          "rating": null
+          "name": "CPC Finder",
+          "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
         }
-      ]
-    },
-    {
-      "name": "暂无名",
-      "teamScore": 29,
-      "members": [
+      ],
+      "cpcfinderAwardId": 14998,
+      "cpcfinderContestId": 43,
+      "cpcfinderTeamId": 14998,
+      "id": "06c049fa52789d",
+      "memberDetails": [
         {
-          "name": "李胤驰",
-          "handle": null,
-          "rating": null
+          "name": "吴励宁",
+          "provider": "cpcfinder",
+          "externalId": "05466c05-ad25-4124-a85f-5a64513b5065"
         },
         {
-          "name": "陈常杰",
-          "handle": null,
-          "rating": null
+          "name": "吴耀宗",
+          "provider": "cpcfinder",
+          "externalId": "df7dacca-e329-43d7-beb5-f123a0c3e169"
         },
         {
-          "name": "夏鸿康",
-          "handle": null,
-          "rating": null
+          "name": "黄承诺",
+          "provider": "cpcfinder",
+          "externalId": "c09115b2-959e-441b-bd56-7b21a43cdd42"
         }
-      ]
-    },
-    {
-      "name": "二保一",
-      "teamScore": 18,
-      "members": [
-        {
-          "name": "陈常杰",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "袁振",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "闫希良",
-          "handle": null,
-          "rating": null
-        }
-      ]
-    },
-    {
-      "name": "可持久化猫猫虫自动机",
-      "teamScore": 15,
-      "members": [
-        {
-          "name": "刘博文",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "连茗暄",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "刘兆洲",
-          "handle": null,
-          "rating": null
-        }
-      ]
-    },
-    {
-      "name": "我将点燃大海",
-      "teamScore": 9,
-      "members": [
-        {
-          "name": "金晟",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "蒋佳炀",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "时佳骏",
-          "handle": null,
-          "rating": null
-        }
-      ]
-    },
-    {
-      "name": "秋招没人要",
-      "teamScore": 12,
-      "members": [
-        {
-          "name": "江雨桐",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "李冠霖",
-          "handle": null,
-          "rating": null
-        },
-        {
-          "name": "蔡廷漳",
-          "handle": null,
-          "rating": null
-        }
-      ]
+      ],
+      "memberSource": {
+        "name": "CPC Finder 赛事榜单",
+        "url": "https://cpcfinder.com/contest/43"
+      }
     }
   ],
   "training": [

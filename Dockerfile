@@ -6,11 +6,16 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     HOST=0.0.0.0 \
     PORT=8000 \
-    SITE_DATA_PATH=/app/data/site.json
+    SITE_DATA_PATH=/app/data/site.json \
+    DATABASE_PATH=/app/runtime/dlut_cpc.sqlite3
 
 COPY app.py /app/app.py
+COPY database.py /app/database.py
+COPY tools /app/tools
 COPY web /app/web
 COPY data /app/data
+
+RUN mkdir -p /app/runtime
 
 EXPOSE 8000
 

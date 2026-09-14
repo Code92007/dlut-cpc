@@ -2,7 +2,16 @@ const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
 const routes = new Set(["home", "honor", "rating", "training"]);
-const state = { data: null, honorYear: "all", honorMedal: "all", honorQuery: "", trainingId: null };
+const state = {
+  data: null,
+  honorYear: "all",
+  honorMedal: "all",
+  honorQuery: "",
+  memberQuery: "",
+  memberStatus: "all",
+  memberSort: "recent",
+  trainingId: null,
+};
 
 const escapeHtml = (value) => String(value ?? "")
   .replaceAll("&", "&amp;")
@@ -19,7 +28,7 @@ const routeFromPath = () => {
 const medalClass = (medal) => ({ 金牌: "gold", 银牌: "silver", 铜牌: "bronze" }[medal] || "");
 
 const renderMembers = (members) => {
-  if (!members?.length) return '<span class="unknown">成员待核验</span>';
+  if (!members?.length) return '<span class="unknown">暂无成员记录</span>';
   return members.map(escapeHtml).map((name) => `<span>${name}</span>`).join("");
 };
 
@@ -102,7 +111,7 @@ function homePage(data) {
       <div class="metric"><strong>${total}</strong><span>2020 年以来奖牌</span></div>
       <div class="metric"><strong>${gold}</strong><span>金牌</span></div>
       <div class="metric"><strong>${escapeHtml(data.meta.bestRank)}</strong><span>区域赛最高正式排名</span></div>
-      <div class="metric"><strong>${escapeHtml(data.meta.verifiedTeams)}</strong><span>已核验成员队伍</span></div>
+      <div class="metric"><strong>${escapeHtml(data.meta.memberCoverage)}%</strong><span>获奖成员覆盖率</span></div>
     </section>
     <div class="home-content">
       <section class="section-block">
@@ -138,7 +147,7 @@ function honorPage(data) {
       </table></div>
     </section>`).join("");
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Honor Archive</span><h1>获奖记录</h1><p>公开榜单经学校、赛事、日期与队名归一化去重；成员仅展示已找到官方名单或可信榜单交叉验证的记录。</p></div><div class="source-status"><i></i><span>${filtered.length} 条记录</span></div></div>
+      <div class="page-heading"><div><span class="eyebrow">Honor Archive</span><h1>获奖记录</h1><p>公开榜单按学校、赛事、日期与队名归一化去重，队员名单来自对应赛事榜单及补充来源。</p></div><div class="source-status"><i></i><span>${filtered.length} 条记录</span></div></div>
       <div class="filters">
         <label class="filter-group"><span>奖项</span><select id="honorMedal"><option value="all">全部奖项</option>${["金牌", "银牌", "铜牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
         <label class="filter-group grow"><span>搜索</span><input id="honorQuery" type="search" value="${escapeHtml(state.honorQuery)}" placeholder="比赛、赛区、队伍或成员"></label>
@@ -159,21 +168,57 @@ function ratingColor(rating) {
 }
 
 function ratingPage(data) {
-  const groupRows = data.ratingGroups.map((group) => {
-    const members = Array.from({ length: 3 }, (_, index) => group.members[index] || {});
-    return `<tr><td class="rating-team">${escapeHtml(group.name)}</td>${members.map((member) => `<td class="handle ${ratingColor(member.rating)}">${escapeHtml(member.handle || member.name || "待关联")}</td><td class="handle ${ratingColor(member.rating)}">${member.rating ? escapeHtml(member.rating) : "—"}</td>`).join("")}</tr>`;
+  const statusLabel = { current: "近年成员", alumni: "往届成员", unknown: "年代待补", manual: "人工补录" };
+  const query = state.memberQuery.trim().toLowerCase();
+  let members = (data.members || []).filter((member) => {
+    if (state.memberStatus === "manual" && !member.manual) return false;
+    if (state.memberStatus !== "all" && state.memberStatus !== "manual" && member.status !== state.memberStatus) return false;
+    if (!query) return true;
+    return [member.name, ...(member.teams || []), member.handles?.codeforces?.handle || ""].join(" ").toLowerCase().includes(query);
+  });
+  if (state.memberSort === "honors") members.sort((a, b) => b.honorCount - a.honorCount || a.name.localeCompare(b.name, "zh-CN"));
+  if (state.memberSort === "rating") members.sort((a, b) => (b.handles?.codeforces?.rating || -1) - (a.handles?.codeforces?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
+  const handleCount = (data.members || []).filter((member) => member.handles?.codeforces?.handle).length;
+  const currentCount = (data.members || []).filter((member) => member.status === "current").length;
+  const rows = members.map((member) => {
+    const account = member.handles?.codeforces;
+    const years = member.firstYear && member.lastYear
+      ? (member.firstYear === member.lastYear ? member.firstYear : `${member.firstYear}–${member.lastYear}`)
+      : (member.firstYear || member.lastYear || "—");
+    const teams = member.teams?.length
+      ? `<span class="member-teams" title="${escapeHtml(member.teams.join(" / "))}">${escapeHtml(member.teams.slice(0, 2).join(" / "))}${member.teams.length > 2 ? ` 等 ${member.teams.length} 支` : ""}</span>`
+      : '<span class="unknown">待补充</span>';
+    const medals = member.medals || {};
+    const accountCell = account
+      ? `<a class="handle ${ratingColor(account.rating)}" href="https://codeforces.com/profile/${encodeURIComponent(account.handle)}" target="_blank" rel="noreferrer">${escapeHtml(account.handle)}</a>`
+      : '<span class="unknown">待补充</span>';
+    return `<tr>
+      <td><strong>${escapeHtml(member.name)}</strong>${member.manual ? '<span class="manual-tag">人工</span>' : ""}</td>
+      <td>${escapeHtml(statusLabel[member.status] || "成员")}</td>
+      <td>${escapeHtml(years)}</td>
+      <td>${teams}</td>
+      <td><div class="member-medals"><span class="gold">金 ${medals.gold || 0}</span><span class="silver">银 ${medals.silver || 0}</span><span class="bronze">铜 ${medals.bronze || 0}</span></div></td>
+      <td>${accountCell}</td>
+      <td class="handle ${ratingColor(account?.rating)}">${account?.rating ? escapeHtml(account.rating) : "—"}</td>
+    </tr>`;
   }).join("");
-  const maxScore = Math.max(...data.ratingGroups.map((group) => group.teamScore), 1);
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Rating</span><h1>Codeforces Rating</h1><p>成员名单来自公开赛事材料；Codeforces 账号仅在能够可靠关联时展示。</p></div><div class="source-status"><i></i><span>账号核验中</span></div></div>
-      <div class="notice-band">Codeforces 账号待队员本人确认。</div>
-      <div class="data-table-wrap"><table class="data-table rating-table">
-        <thead><tr><th class="rating-team">队伍</th><th colspan="6">成员</th></tr></thead>
-        <tbody>${groupRows}</tbody>
-      </table></div>
-      <section class="score-chart"><div><span class="eyebrow">Team Score</span><h2>队伍累计积分</h2></div>
-        <div class="bar-list">${[...data.ratingGroups].sort((a, b) => b.teamScore - a.teamScore).map((group) => `<div class="bar-row"><span class="bar-label" title="${escapeHtml(group.name)}">${escapeHtml(group.name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(2, group.teamScore / maxScore * 100)}%"></div></div><span class="bar-value">${escapeHtml(group.teamScore)}</span></div>`).join("")}</div>
+      <div class="page-heading"><div><span class="eyebrow">Members & Rating</span><h1>成员与 Rating</h1><p>成员名册由公开赛事名单与队内补录合并，Codeforces 账号仅展示已确认的关联。</p></div><div class="source-status"><i></i><span>${members.length} 位成员</span></div></div>
+      <section class="directory-stats" aria-label="成员数据概览">
+        <div><strong>${escapeHtml(data.meta.memberCount)}</strong><span>已收录成员</span></div>
+        <div><strong>${currentCount}</strong><span>近三赛季成员</span></div>
+        <div><strong>${handleCount}</strong><span>已关联 CF 账号</span></div>
+        <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含完整成员的奖项</span></div>
       </section>
+      <div class="filters member-filters">
+        <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
+        <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>Codeforces Rating</option></select></label>
+        <label class="filter-group grow"><span>搜索</span><input id="memberQuery" type="search" value="${escapeHtml(state.memberQuery)}" placeholder="成员、队伍或 Codeforces 账号"></label>
+      </div>
+      <div class="data-table-wrap"><table class="data-table member-directory-table">
+        <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>Codeforces</th><th>Rating</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="7" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
+      </table></div>
     </div>`;
 }
 
@@ -242,6 +287,21 @@ function bindPageEvents(route) {
       state.honorQuery = event.target.value;
       window.clearTimeout(state.searchTimer);
       state.searchTimer = window.setTimeout(() => renderRoute("honor"), 180);
+    });
+  }
+  if (route === "rating") {
+    document.querySelector("#memberStatus")?.addEventListener("change", (event) => {
+      state.memberStatus = event.target.value;
+      renderRoute("rating");
+    });
+    document.querySelector("#memberSort")?.addEventListener("change", (event) => {
+      state.memberSort = event.target.value;
+      renderRoute("rating");
+    });
+    document.querySelector("#memberQuery")?.addEventListener("input", (event) => {
+      state.memberQuery = event.target.value;
+      window.clearTimeout(state.searchTimer);
+      state.searchTimer = window.setTimeout(() => renderRoute("rating"), 180);
     });
   }
   if (route === "training") {

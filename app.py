@@ -5,28 +5,40 @@ import argparse
 import json
 import mimetypes
 import os
+import sqlite3
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from database import Database
+
 
 ROOT = Path(__file__).resolve().parent
 WEB_ROOT = ROOT / "web"
 DATA_PATH = Path(os.environ.get("SITE_DATA_PATH", ROOT / "data" / "site.json"))
+DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cpc.sqlite3"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
 SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training"}
 
 
-def load_site_data() -> dict:
+def load_seed_data() -> dict:
     with DATA_PATH.open(encoding="utf-8") as handle:
         data = json.load(handle)
-    required = {"meta", "medalSummary", "honors", "ratingGroups", "training"}
+    required = {"meta", "honors", "training"}
     missing = sorted(required.difference(data))
     if missing:
         raise ValueError(f"site data missing keys: {', '.join(missing)}")
     return data
+
+
+def load_site_data() -> dict:
+    seed = load_seed_data()
+    database = Database(DATABASE_PATH)
+    if not DATABASE_PATH.exists():
+        database.initialize(seed)
+    return database.payload(seed)
 
 
 class SiteHandler(BaseHTTPRequestHandler):
@@ -44,7 +56,7 @@ class SiteHandler(BaseHTTPRequestHandler):
         if path == "/api/site":
             try:
                 self._send_json(load_site_data())
-            except (OSError, ValueError, json.JSONDecodeError) as exc:
+            except (OSError, ValueError, json.JSONDecodeError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             return
 
@@ -97,9 +109,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="DLUT CPC team website")
     parser.add_argument("--check", action="store_true", help="validate data and exit")
     args = parser.parse_args()
+    seed = load_seed_data()
+    Database(DATABASE_PATH).initialize(seed)
     data = load_site_data()
     if args.check:
-        print(f"ok: {len(data['honors'])} honors, {len(data['ratingGroups'])} rating groups")
+        print(
+            f"ok: {len(data['honors'])} honors, {len(data['members'])} members, "
+            f"{data['meta']['memberCoverage']}% roster coverage"
+        )
         return
     server = ThreadingHTTPServer((HOST, PORT), SiteHandler)
     print(f"DLUT CPC listening on http://{HOST}:{PORT}")

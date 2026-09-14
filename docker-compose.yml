@@ -9,3 +9,6 @@ services:
       HOST: 0.0.0.0
       PORT: 8000
       SITE_DATA_PATH: ${SITE_DATA_PATH:-/app/data/site.json}
+      DATABASE_PATH: ${DATABASE_PATH:-/app/runtime/dlut_cpc.sqlite3}
+    volumes:
+      - ./runtime:/app/runtime
