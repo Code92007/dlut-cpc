@@ -11,6 +11,7 @@ const state = {
   memberStatus: "all",
   memberSort: "recent",
   trainingId: null,
+  trainingSeries: "all",
 };
 
 const escapeHtml = (value) => String(value ?? "")
@@ -177,9 +178,19 @@ function ratingPage(data) {
     return [member.name, ...(member.teams || []), member.handles?.codeforces?.handle || ""].join(" ").toLowerCase().includes(query);
   });
   if (state.memberSort === "honors") members.sort((a, b) => b.honorCount - a.honorCount || a.name.localeCompare(b.name, "zh-CN"));
+  if (state.memberSort === "medals") members.sort((a, b) => {
+    const aMedals = a.medals || {};
+    const bMedals = b.medals || {};
+    return (bMedals.gold || 0) - (aMedals.gold || 0)
+      || (bMedals.silver || 0) - (aMedals.silver || 0)
+      || (bMedals.bronze || 0) - (aMedals.bronze || 0)
+      || b.honorCount - a.honorCount
+      || a.name.localeCompare(b.name, "zh-CN");
+  });
   if (state.memberSort === "rating") members.sort((a, b) => (b.handles?.codeforces?.rating || -1) - (a.handles?.codeforces?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
+  if (state.memberSort === "cpcfinder") members.sort((a, b) => (b.cpcfinder?.rating || -1) - (a.cpcfinder?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
   const handleCount = (data.members || []).filter((member) => member.handles?.codeforces?.handle).length;
-  const currentCount = (data.members || []).filter((member) => member.status === "current").length;
+  const publicMemberCount = (data.members || []).filter((member) => member.cpcfinder).length;
   const rows = members.map((member) => {
     const account = member.handles?.codeforces;
     const years = member.firstYear && member.lastYear
@@ -189,52 +200,61 @@ function ratingPage(data) {
       ? `<span class="member-teams" title="${escapeHtml(member.teams.join(" / "))}">${escapeHtml(member.teams.slice(0, 2).join(" / "))}${member.teams.length > 2 ? ` 等 ${member.teams.length} 支` : ""}</span>`
       : '<span class="unknown">待补充</span>';
     const medals = member.medals || {};
+    const profile = member.cpcfinder;
+    const memberName = profile?.url
+      ? `<a class="member-profile-link" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer">${escapeHtml(member.name)}</a>`
+      : `<strong>${escapeHtml(member.name)}</strong>`;
+    const publicRating = profile?.rating == null
+      ? "—"
+      : `<a class="public-rating" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer" title="CPC Finder 校内榜第 ${escapeHtml(profile.rank || "—")} 名">${escapeHtml(Math.round(profile.rating))}</a>`;
     const accountCell = account
       ? `<a class="handle ${ratingColor(account.rating)}" href="https://codeforces.com/profile/${encodeURIComponent(account.handle)}" target="_blank" rel="noreferrer">${escapeHtml(account.handle)}</a>`
       : '<span class="unknown">待补充</span>';
     return `<tr>
-      <td><strong>${escapeHtml(member.name)}</strong>${member.manual ? '<span class="manual-tag">人工</span>' : ""}</td>
+      <td>${memberName}${member.manual ? '<span class="manual-tag">人工</span>' : ""}</td>
       <td>${escapeHtml(statusLabel[member.status] || "成员")}</td>
       <td>${escapeHtml(years)}</td>
       <td>${teams}</td>
       <td><div class="member-medals"><span class="gold">金 ${medals.gold || 0}</span><span class="silver">银 ${medals.silver || 0}</span><span class="bronze">铜 ${medals.bronze || 0}</span></div></td>
+      <td>${publicRating}</td>
       <td>${accountCell}</td>
       <td class="handle ${ratingColor(account?.rating)}">${account?.rating ? escapeHtml(account.rating) : "—"}</td>
     </tr>`;
   }).join("");
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Members & Rating</span><h1>成员与 Rating</h1><p>成员名册由公开赛事名单与队内补录合并，Codeforces 账号仅展示已确认的关联。</p></div><div class="source-status"><i></i><span>${members.length} 位成员</span></div></div>
+      <div class="page-heading"><div><span class="eyebrow">Members & Rating</span><h1>成员与 Rating</h1><p>成员名册以 CPC Finder 的稳定选手编号为主，并与赛事名单、队内补录合并。</p></div><div class="source-status"><i></i><span>${members.length} 位成员</span></div></div>
       <section class="directory-stats" aria-label="成员数据概览">
         <div><strong>${escapeHtml(data.meta.memberCount)}</strong><span>已收录成员</span></div>
-        <div><strong>${currentCount}</strong><span>近三赛季成员</span></div>
+        <div><strong>${publicMemberCount}</strong><span>CPC Finder 名册</span></div>
         <div><strong>${handleCount}</strong><span>已关联 CF 账号</span></div>
         <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含完整成员的奖项</span></div>
       </section>
       <div class="filters member-filters">
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
-        <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>Codeforces Rating</option></select></label>
+        <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="medals" ${state.memberSort === "medals" ? "selected" : ""}>奖牌榜顺序</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="cpcfinder" ${state.memberSort === "cpcfinder" ? "selected" : ""}>CPC Finder Rating</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>Codeforces Rating</option></select></label>
         <label class="filter-group grow"><span>搜索</span><input id="memberQuery" type="search" value="${escapeHtml(state.memberQuery)}" placeholder="成员、队伍或 Codeforces 账号"></label>
       </div>
       <div class="data-table-wrap"><table class="data-table member-directory-table">
-        <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>Codeforces</th><th>Rating</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="7" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
+        <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>CPC Finder</th><th>Codeforces</th><th>CF Rating</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="8" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
       </table></div>
     </div>`;
 }
 
 function standingsTable(contest) {
-  const problemHeaders = contest.problems.map((problem) => `<th>${escapeHtml(problem)}</th>`).join("");
+  const showProblems = contest.problemDetailsAvailable !== false;
+  const problemHeaders = showProblems ? contest.problems.map((problem) => `<th>${escapeHtml(problem)}</th>`).join("") : "";
   const rows = contest.teams.map((team, index) => `<tr class="${team.highlight ? "highlight" : ""}">
-      <td class="rank-cell">${index + 1}</td><td class="who-cell">${escapeHtml(team.name)}</td><td class="solved-cell">${team.solved}</td><td class="penalty-cell">${team.penalty}</td>
-      ${contest.problems.map((problem) => {
+      <td class="rank-cell">${escapeHtml(team.rank || index + 1)}</td><td class="who-cell">${escapeHtml(team.name)}</td><td class="solved-cell">${team.solved}</td><td class="penalty-cell">${team.penalty}</td>
+      ${showProblems ? contest.problems.map((problem) => {
         const result = team.problems[problem];
         if (!result) return "<td></td>";
         if (!result.solved) return `<td class="problem-cell failed"><strong>-${result.tries || 1}</strong></td>`;
         const tries = result.tries > 1 ? `+${result.tries - 1}` : "+";
         return `<td class="problem-cell ${result.first ? "first" : ""}"><strong>${tries}</strong><small>${escapeHtml(result.time)}</small></td>`;
-      }).join("")}
+      }).join("") : ""}
     </tr>`).join("");
-  return `<div class="standings-wrap"><div class="standings-caption">Standings</div><table class="standings"><thead><tr><th class="rank-cell">#</th><th class="who-cell">Who</th><th class="solved-cell">=</th><th class="penalty-cell">Penalty</th>${problemHeaders}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  return `<div class="standings-wrap ${showProblems ? "" : "compact"}"><div class="standings-caption"><span>Standings</span><span>大连理工大学队伍 · ${escapeHtml(contest.rankScope || "榜内名次")}</span></div><table class="standings"><thead><tr><th class="rank-cell">#</th><th class="who-cell">Who</th><th class="solved-cell">=</th><th class="penalty-cell">Penalty</th>${problemHeaders}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function rankChart(contest) {
@@ -260,15 +280,28 @@ function rankChart(contest) {
 }
 
 function trainingPage(data) {
-  const contests = data.training;
+  const allContests = data.training || [];
+  const series = [...new Set(allContests.map((item) => item.series).filter(Boolean))];
+  const contests = allContests.filter((item) => state.trainingSeries === "all" || item.series === state.trainingSeries);
   if (!state.trainingId || !contests.some((item) => item.id === state.trainingId)) state.trainingId = contests[0]?.id;
   const contest = contests.find((item) => item.id === state.trainingId);
   if (!contest) return '<div class="page-shell"><div class="empty-state">暂无训练记录</div></div>';
+  const bestRank = Math.min(...contest.teams.map((team) => team.rank || Number.MAX_SAFE_INTEGER));
+  const totalSolved = contest.teams.reduce((sum, team) => sum + (team.solved || 0), 0);
+  const source = contest.source || {};
+  const chart = contest.rankHistoryAvailable ? rankChart(contest) : `<div class="training-data-note"><strong>最终榜数据</strong><span>${contest.problemDetailsAvailable === false ? "公开镜像仅保留最终名次、过题数和罚时。" : "公开接口未提供全场排名变化，不生成推测曲线。"}</span></div>`;
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Training</span><h1>训练记录</h1><p>暑期集训与校内训练赛记录。</p></div><div class="source-status"><i></i><span>${contest.demo ? "演示数据" : "公开榜单"}</span></div></div>
+      <div class="page-heading"><div><span class="eyebrow">Training</span><h1>训练记录</h1><p>牛客暑期多校、杭电多校与队内训练赛档案。</p></div><div class="source-status"><i></i>${sourceLink(source)}</div></div>
+      <div class="training-series" role="group" aria-label="训练系列">${["all", ...series].map((item) => `<button type="button" data-training-series="${escapeHtml(item)}" class="${state.trainingSeries === item ? "active" : ""}">${item === "all" ? "全部" : escapeHtml(item)}</button>`).join("")}</div>
       <div class="training-layout">
-        <aside class="training-dates" aria-label="训练日期">${contests.map((item) => `<button type="button" data-training-id="${escapeHtml(item.id)}" class="${item.id === contest.id ? "active" : ""}"><span>${escapeHtml(item.year)}</span><span>${escapeHtml(item.date.slice(5))}</span></button>`).join("")}</aside>
-        <div><div class="training-title"><h1>${escapeHtml(contest.title)}</h1><p>${escapeHtml(contest.date)}</p></div>${standingsTable(contest)}${rankChart(contest)}</div>
+        <aside class="training-dates" aria-label="训练日期">${contests.map((item) => {
+          const round = item.title?.match(/Round\s*0?(\d+)/i)?.[1];
+          const label = item.date?.length >= 10 ? item.date.slice(5) : (round ? `R${round}` : item.series?.slice(0, 2) || "记录");
+          return `<button type="button" data-training-id="${escapeHtml(item.id)}" class="${item.id === contest.id ? "active" : ""}"><span>${escapeHtml(item.year)}</span><span>${escapeHtml(label)}</span></button>`;
+        }).join("")}</aside>
+        <div><div class="training-title"><span>${escapeHtml(contest.series || "训练赛")}</span><h1>${escapeHtml(contest.title)}</h1><p>${escapeHtml(contest.dateLabel || contest.date)}</p></div>
+          <section class="training-summary" aria-label="本场概览"><div><strong>${contest.teams.length}</strong><span>DLUT 队伍</span></div><div><strong>${bestRank === Number.MAX_SAFE_INTEGER ? "—" : bestRank}</strong><span>全榜最佳名次</span></div><div><strong>${totalSolved}</strong><span>合计过题</span></div><div><strong>${escapeHtml(contest.resultType || "最终榜")}</strong><span>数据粒度</span></div></section>
+          ${standingsTable(contest)}${chart}</div>
       </div>
     </div>`;
 }
@@ -305,6 +338,11 @@ function bindPageEvents(route) {
     });
   }
   if (route === "training") {
+    document.querySelectorAll("[data-training-series]").forEach((button) => button.addEventListener("click", () => {
+      state.trainingSeries = button.dataset.trainingSeries;
+      state.trainingId = null;
+      renderRoute("training");
+    }));
     document.querySelectorAll("[data-training-id]").forEach((button) => button.addEventListener("click", () => {
       state.trainingId = button.dataset.trainingId;
       renderRoute("training");

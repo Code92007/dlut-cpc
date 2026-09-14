@@ -1,0 +1,99 @@
+{
+  "note": "QOJ 2023 杭电多校公开镜像中可检索到的大连理工大学有效参赛记录；原榜未提供可核验日期与队名。",
+  "training": [
+    {
+      "id": "qoj-hdu-1307",
+      "providerId": "QOJ1307",
+      "year": "2023",
+      "date": "2023",
+      "dateLabel": "2023 · 原榜未标日期",
+      "sortKey": "2023-02",
+      "title": "2023 杭电多校 · Round 02",
+      "series": "杭电多校",
+      "platform": "QOJ",
+      "duration": 300,
+      "problems": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"],
+      "teams": [
+        {"rank": 112, "name": "team1079", "school": "大连理工大学", "solved": 7, "penalty": 933, "problems": {}},
+        {"rank": 136, "name": "team867", "school": "大连理工大学", "solved": 7, "penalty": 1227, "problems": {}},
+        {"rank": 537, "name": "team1078", "school": "大连理工大学", "solved": 3, "penalty": 197, "problems": {}},
+        {"rank": 646, "name": "team1077", "school": "大连理工大学", "solved": 3, "penalty": 331, "problems": {}},
+        {"rank": 792, "name": "team1080", "school": "大连理工大学", "solved": 3, "penalty": 738, "problems": {}}
+      ],
+      "rankScope": "全榜名次",
+      "resultType": "最终汇总榜",
+      "rankHistoryAvailable": false,
+      "problemDetailsAvailable": false,
+      "source": {"name": "QOJ 公开镜像榜", "url": "https://qoj.ac/results/QOJ1307", "provider": "qoj-hdu"}
+    },
+    {
+      "id": "qoj-hdu-1308",
+      "providerId": "QOJ1308",
+      "year": "2023",
+      "date": "2023",
+      "dateLabel": "2023 · 原榜未标日期",
+      "sortKey": "2023-03",
+      "title": "2023 杭电多校 · Round 03",
+      "series": "杭电多校",
+      "platform": "QOJ",
+      "duration": 300,
+      "problems": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "teams": [
+        {"rank": 635, "name": "team1080", "school": "大连理工大学", "solved": 1, "penalty": 37, "problems": {}},
+        {"rank": 637, "name": "team1077", "school": "大连理工大学", "solved": 1, "penalty": 41, "problems": {}},
+        {"rank": 670, "name": "team1078", "school": "大连理工大学", "solved": 1, "penalty": 75, "problems": {}}
+      ],
+      "rankScope": "全榜名次",
+      "resultType": "最终汇总榜",
+      "rankHistoryAvailable": false,
+      "problemDetailsAvailable": false,
+      "source": {"name": "QOJ 公开镜像榜", "url": "https://qoj.ac/results/QOJ1308", "provider": "qoj-hdu"}
+    },
+    {
+      "id": "qoj-hdu-1309",
+      "providerId": "QOJ1309",
+      "year": "2023",
+      "date": "2023",
+      "dateLabel": "2023 · 原榜未标日期",
+      "sortKey": "2023-04",
+      "title": "2023 杭电多校 · Round 04",
+      "series": "杭电多校",
+      "platform": "QOJ",
+      "duration": 300,
+      "problems": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "teams": [
+        {"rank": 115, "name": "team1079", "school": "大连理工大学", "solved": 7, "penalty": 1343, "problems": {}},
+        {"rank": 452, "name": "team1077", "school": "大连理工大学", "solved": 4, "penalty": 631, "problems": {}},
+        {"rank": 568, "name": "team1080", "school": "大连理工大学", "solved": 3, "penalty": 231, "problems": {}},
+        {"rank": 574, "name": "team867", "school": "大连理工大学", "solved": 3, "penalty": 256, "problems": {}},
+        {"rank": 759, "name": "team1078", "school": "大连理工大学", "solved": 2, "penalty": 156, "problems": {}}
+      ],
+      "rankScope": "全榜名次",
+      "resultType": "最终汇总榜",
+      "rankHistoryAvailable": false,
+      "problemDetailsAvailable": false,
+      "source": {"name": "QOJ 公开镜像榜", "url": "https://qoj.ac/results/QOJ1309", "provider": "qoj-hdu"}
+    },
+    {
+      "id": "qoj-hdu-1315",
+      "providerId": "QOJ1315",
+      "year": "2023",
+      "date": "2023",
+      "dateLabel": "2023 · 原榜未标日期",
+      "sortKey": "2023-10",
+      "title": "2023 杭电多校 · Round 10",
+      "series": "杭电多校",
+      "platform": "QOJ",
+      "duration": 300,
+      "problems": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "teams": [
+        {"rank": 672, "name": "team1080", "school": "大连理工大学", "solved": 1, "penalty": 15, "problems": {}}
+      ],
+      "rankScope": "全榜名次",
+      "resultType": "最终汇总榜",
+      "rankHistoryAvailable": false,
+      "problemDetailsAvailable": false,
+      "source": {"name": "QOJ 公开镜像榜", "url": "https://qoj.ac/results/QOJ1315", "provider": "qoj-hdu"}
+    }
+  ]
+}

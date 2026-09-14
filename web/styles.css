@@ -642,7 +642,7 @@ a:hover {
 }
 
 .member-directory-table {
-  min-width: 1040px;
+  min-width: 1160px;
 }
 
 .member-directory-table th:nth-child(1) {
@@ -659,11 +659,26 @@ a:hover {
 }
 
 .member-directory-table th:nth-child(6) {
-  width: 150px;
+  width: 110px;
 }
 
 .member-directory-table th:nth-child(7) {
+  width: 150px;
+}
+
+.member-directory-table th:nth-child(8) {
   width: 80px;
+}
+
+.member-profile-link,
+.public-rating {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.member-profile-link:hover,
+.public-rating:hover {
+  text-decoration: underline;
 }
 
 .member-teams {
@@ -727,6 +742,32 @@ a:hover {
   gap: 38px;
 }
 
+.training-series {
+  display: flex;
+  margin: -16px 0 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  gap: 4px;
+}
+
+.training-series button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  color: var(--muted);
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.training-series button.active {
+  border-color: var(--blue);
+  color: #fff;
+  background: var(--blue);
+}
+
 .training-dates {
   align-self: start;
   overflow: hidden;
@@ -763,6 +804,14 @@ a:hover {
   text-align: center;
 }
 
+.training-title > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 750;
+}
+
 .training-title h1 {
   margin: 0;
   font-size: 28px;
@@ -775,17 +824,61 @@ a:hover {
   font-size: 13px;
 }
 
+.training-summary {
+  display: grid;
+  margin-bottom: 18px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.training-summary div {
+  min-width: 0;
+  padding: 12px 14px;
+  border-right: 1px solid var(--line);
+}
+
+.training-summary div:last-child {
+  border-right: 0;
+}
+
+.training-summary strong,
+.training-summary span {
+  display: block;
+}
+
+.training-summary strong {
+  overflow: hidden;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.training-summary span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .standings-wrap {
   overflow-x: auto;
   border: 1px solid var(--line-strong);
 }
 
 .standings-caption {
+  display: flex;
   padding: 7px 9px;
   color: #5b6570;
   background: #e8eaed;
   font-size: 12px;
   font-weight: 700;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.standings-caption span:last-child {
+  color: #747d87;
+  font-weight: 600;
 }
 
 .standings {
@@ -794,6 +887,14 @@ a:hover {
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 11px;
+}
+
+.standings-wrap.compact .standings {
+  min-width: 520px;
+}
+
+.standings-wrap.compact .standings .who-cell {
+  width: auto;
 }
 
 .standings th,
@@ -865,6 +966,26 @@ a:hover {
   width: 100%;
   min-width: 820px;
   height: auto;
+}
+
+.training-data-note {
+  display: flex;
+  margin-top: 24px;
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+  gap: 14px;
+}
+
+.training-data-note strong {
+  flex: 0 0 auto;
+  font-size: 12px;
+}
+
+.training-data-note span {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .empty-state {
@@ -1024,6 +1145,10 @@ a:hover {
     gap: 26px;
   }
 
+  .training-series {
+    overflow-x: auto;
+  }
+
   .season-nav,
   .training-dates {
     display: flex;
@@ -1043,9 +1168,27 @@ a:hover {
     border-bottom: 0;
   }
 
+  .training-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .training-summary div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .training-summary div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+
   .filters {
     align-items: stretch;
     flex-wrap: wrap;
+  }
+
+  .training-data-note {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
   }
 
   .filter-group,

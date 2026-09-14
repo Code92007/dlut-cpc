@@ -11,7 +11,7 @@ from typing import Iterable
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3}
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def normalize_name(value: str) -> str:
@@ -89,6 +89,23 @@ CREATE TABLE IF NOT EXISTS member_sources (
     role TEXT NOT NULL DEFAULT 'roster',
     is_manual INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY(member_id, source_id, role)
+);
+
+CREATE TABLE IF NOT EXISTS member_public_stats (
+    member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    provider TEXT NOT NULL,
+    rating REAL,
+    provider_rank INTEGER,
+    champion_count INTEGER NOT NULL DEFAULT 0,
+    second_count INTEGER NOT NULL DEFAULT 0,
+    third_count INTEGER NOT NULL DEFAULT 0,
+    gold_count INTEGER NOT NULL DEFAULT 0,
+    silver_count INTEGER NOT NULL DEFAULT 0,
+    bronze_count INTEGER NOT NULL DEFAULT 0,
+    latest_event_date TEXT NOT NULL DEFAULT '',
+    source_id INTEGER REFERENCES sources(id),
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(member_id, provider)
 );
 
 CREATE TABLE IF NOT EXISTS honors (
@@ -329,6 +346,12 @@ class Database:
                 "primary_source_id=?, is_manual=MAX(is_manual, ?), updated_at=CURRENT_TIMESTAMP WHERE id=?",
                 (*values, honor_id),
             )
+        # A public sync is an authoritative snapshot of the currently verified
+        # links. Drop stale imported mirrors while retaining human-curated links.
+        connection.execute(
+            "DELETE FROM honor_sources WHERE honor_id=? AND is_manual=0",
+            (honor_id,),
+        )
         for source_id, _ in source_ids:
             connection.execute(
                 "INSERT OR IGNORE INTO honor_sources(honor_id, source_id, role, is_manual) VALUES (?, ?, 'result', ?)",
@@ -351,6 +374,36 @@ class Database:
         return honor_id
 
     def _sync_site_data(self, connection: sqlite3.Connection, site: dict) -> None:
+        connection.execute("DELETE FROM member_public_stats WHERE provider='cpcfinder'")
+        for detail in site.get("publicMembers", []):
+            source_id = self._source(connection, detail.get("source"), manual=False)
+            member_id = self._upsert_member(connection, detail, source_id, manual=False)
+            stats = detail.get("cpcfinder") or {}
+            if stats:
+                connection.execute(
+                    "INSERT INTO member_public_stats(member_id, provider, rating, provider_rank, champion_count, "
+                    "second_count, third_count, gold_count, silver_count, bronze_count, latest_event_date, source_id) "
+                    "VALUES (?, 'cpcfinder', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                    "ON CONFLICT(member_id, provider) DO UPDATE SET rating=excluded.rating, "
+                    "provider_rank=excluded.provider_rank, champion_count=excluded.champion_count, "
+                    "second_count=excluded.second_count, third_count=excluded.third_count, "
+                    "gold_count=excluded.gold_count, silver_count=excluded.silver_count, "
+                    "bronze_count=excluded.bronze_count, latest_event_date=excluded.latest_event_date, "
+                    "source_id=excluded.source_id, updated_at=CURRENT_TIMESTAMP",
+                    (
+                        member_id,
+                        stats.get("rating"),
+                        stats.get("rank"),
+                        int(stats.get("championCount") or 0),
+                        int(stats.get("secondCount") or 0),
+                        int(stats.get("thirdCount") or 0),
+                        int(stats.get("goldCount") or 0),
+                        int(stats.get("silverCount") or 0),
+                        int(stats.get("bronzeCount") or 0),
+                        str(stats.get("latestEventDate") or ""),
+                        source_id,
+                    ),
+                )
         for record in site.get("honors", []):
             self._upsert_honor(connection, record, manual=bool(record.get("manual")))
         for member in site.get("manualMembers", []):
@@ -524,6 +577,10 @@ class Database:
                 "WHERE ms.member_id=? ORDER BY s.priority DESC, s.name",
                 (row["id"],),
             ).fetchall()
+            public_stats = connection.execute(
+                "SELECT * FROM member_public_stats WHERE member_id=? AND provider='cpcfinder'",
+                (row["id"],),
+            ).fetchone()
             years = [int(item["date"][:4]) for item in honors if item["date"][:4].isdigit()]
             medals = {"gold": 0, "silver": 0, "bronze": 0}
             medal_fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze"}
@@ -531,9 +588,19 @@ class Database:
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
+            if public_stats:
+                medals = {
+                    "gold": int(public_stats["gold_count"]),
+                    "silver": int(public_stats["silver_count"]),
+                    "bronze": int(public_stats["bronze_count"]),
+                }
+            latest_public_year = None
+            if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():
+                latest_public_year = int(str(public_stats["latest_event_date"])[:4])
+            activity_years = [*years, *([latest_public_year] if latest_public_year else [])]
             status = row["status"]
             if status == "auto":
-                status = "current" if years and max(years) >= current_year - 2 else "alumni"
+                status = "current" if activity_years and max(activity_years) >= current_year - 2 else "alumni"
             account_map = {
                 item["platform"]: {
                     "handle": item["handle"],
@@ -542,7 +609,10 @@ class Database:
                 }
                 for item in handles
             }
-            teams = list(dict.fromkeys(item["team"] for item in honors))
+            teams_by_key: dict[str, str] = {}
+            for honor in honors:
+                teams_by_key.setdefault(self._normalize_team(honor["team"]), honor["team"])
+            teams = list(teams_by_key.values())
             result.append(
                 {
                     "id": row["id"],
@@ -552,11 +622,20 @@ class Database:
                     "status": status,
                     "manual": bool(row["is_manual"]),
                     "firstYear": min(years) if years else row["entry_year"],
-                    "lastYear": max(years) if years else row["graduation_year"],
+                    "lastYear": max(activity_years) if activity_years else row["graduation_year"],
                     "teams": teams,
-                    "honorCount": len(honors),
+                    "honorCount": sum(medals.values()) if public_stats else len(honors),
                     "medals": medals,
                     "handles": account_map,
+                    "cpcfinder": (
+                        {
+                            "rating": public_stats["rating"],
+                            "rank": public_stats["provider_rank"],
+                            "latestEventDate": public_stats["latest_event_date"],
+                            "url": next((item["url"] for item in sources if "CPC Finder 选手库" in item["name"]), ""),
+                        }
+                        if public_stats else None
+                    ),
                     "sources": [{"name": item["name"], "url": item["url"]} for item in sources],
                 }
             )

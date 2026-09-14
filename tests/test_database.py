@@ -92,6 +92,73 @@ class DatabaseTests(unittest.TestCase):
         same_name = [item for item in other_database.payload(second_seed)["members"] if item["name"] == "张三"]
         self.assertEqual(len(same_name), 2)
 
+    def test_public_directory_adds_all_students_and_uses_provider_medal_totals(self):
+        enriched_seed = seed_data()
+        enriched_seed["publicMembers"] = [
+            {
+                "name": "张三",
+                "provider": "cpcfinder",
+                "externalId": "student-1",
+                "cpcfinder": {
+                    "rating": 1182.0127,
+                    "rank": 1,
+                    "goldCount": 2,
+                    "silverCount": 6,
+                    "bronzeCount": 2,
+                    "latestEventDate": "2023-03-25",
+                },
+                "source": source("CPC Finder 选手库", "https://cpcfinder.com/student/student-1"),
+            },
+            {
+                "name": "未获奖成员",
+                "provider": "cpcfinder",
+                "externalId": "student-4",
+                "cpcfinder": {
+                    "rating": 321.5,
+                    "rank": 154,
+                    "goldCount": 0,
+                    "silverCount": 0,
+                    "bronzeCount": 0,
+                    "latestEventDate": "2025-07-01",
+                },
+                "source": source("CPC Finder 选手库", "https://cpcfinder.com/student/student-4"),
+            },
+        ]
+
+        self.database.initialize(enriched_seed)
+        payload = self.database.payload(enriched_seed)
+        zhang = next(item for item in payload["members"] if item["name"] == "张三")
+        unawarded = next(item for item in payload["members"] if item["name"] == "未获奖成员")
+
+        self.assertEqual(len(payload["members"]), 4)
+        self.assertEqual(zhang["medals"], {"gold": 2, "silver": 6, "bronze": 2})
+        self.assertEqual(zhang["cpcfinder"]["rank"], 1)
+        self.assertEqual(unawarded["honorCount"], 0)
+
+    def test_resync_removes_stale_public_result_link_but_keeps_manual_source(self):
+        stale_seed = seed_data()
+        stale_seed["honors"][0]["source"] = source("QOJ 镜像榜", "https://qoj.ac/results/wrong")
+        stale_seed["honors"][0]["sources"] = [stale_seed["honors"][0]["source"]]
+        self.database.initialize(stale_seed)
+        with self.database.connect() as connection:
+            manual_source_id = self.database._source(
+                connection,
+                source("队史人工核验", "https://example.com/manual"),
+                manual=True,
+            )
+            connection.execute(
+                "INSERT INTO honor_sources(honor_id, source_id, role, is_manual) VALUES (?, ?, 'result', 1)",
+                ("award-1", manual_source_id),
+            )
+
+        self.database.initialize(self.seed)
+        honor = self.database.payload(self.seed)["honors"][0]
+        source_names = {item["name"] for item in honor["sources"]}
+
+        self.assertEqual(honor["source"]["name"], "CPC Finder")
+        self.assertNotIn("QOJ 镜像榜", source_names)
+        self.assertIn("队史人工核验", source_names)
+
     def test_manual_honor_can_link_existing_and_manual_members(self):
         member_id = self.database.add_manual_member("老队员", entry_year=2005)
         honor_id = self.database.add_manual_honor(

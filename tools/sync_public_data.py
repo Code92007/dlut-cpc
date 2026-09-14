@@ -10,6 +10,7 @@ import json
 import re
 import sys
 import tempfile
+import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
@@ -25,6 +26,13 @@ from database import Database  # noqa: E402
 DEFAULT_SITE_DATA = ROOT / "data" / "site.json"
 DEFAULT_DATABASE = ROOT / "runtime" / "dlut_cpc.sqlite3"
 DEFAULT_SOURCE_URL = "https://cpcfinder.com/api/school/9c417252-c487-4eae-8822-fcd1e74b9329/awards"
+DEFAULT_SCHOOL_NAME = "大连理工大学"
+SCHOOL_ALIASES = {
+    "大连理工大学",
+    "大连理工大学盘锦校区",
+    "大连理工大学（盘锦校区）",
+    "大连理工大学(盘锦校区)",
+}
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3}
 
 
@@ -75,6 +83,50 @@ def record_key(record: dict) -> str:
 def public_source_url(source_url: str) -> str:
     match = re.fullmatch(r"(https?://[^/]+)/api/school/([^/]+)/awards/?", source_url)
     return f"{match.group(1)}/school/{match.group(2)}" if match else source_url
+
+
+def student_list_api_url(source_url: str, school_name: str = DEFAULT_SCHOOL_NAME) -> str:
+    query = urllib.parse.urlencode({"school": school_name, "sort": "rating", "current": 1, "pageSize": 500})
+    return f"{cpcfinder_origin(source_url)}/api/student?{query}"
+
+
+def parse_cpcfinder_students(
+    document: str,
+    source_url: str = DEFAULT_SOURCE_URL,
+    school_name: str = DEFAULT_SCHOOL_NAME,
+) -> list[dict]:
+    payload = json.loads(document)
+    rows = payload.get("data", []) if isinstance(payload, dict) else []
+    result = []
+    for row in rows if isinstance(rows, list) else []:
+        student_id = str(row.get("studentId") or "")
+        name = normalize_space(str(row.get("name") or ""))
+        school = normalize_space(str(row.get("schoolName") or ""))
+        accepted_schools = SCHOOL_ALIASES if school_name == DEFAULT_SCHOOL_NAME else {school_name}
+        if not student_id or not name or school not in accepted_schools:
+            continue
+        result.append({
+            "name": name,
+            "provider": "cpcfinder",
+            "externalId": student_id,
+            "status": "auto",
+            "cpcfinder": {
+                "rating": row.get("rating"),
+                "rank": row.get("rank"),
+                "championCount": int(row.get("championCount") or 0),
+                "secondCount": int(row.get("secCount") or 0),
+                "thirdCount": int(row.get("thiCount") or 0),
+                "goldCount": int(row.get("goldCount") or 0),
+                "silverCount": int(row.get("silverCount") or 0),
+                "bronzeCount": int(row.get("bronzeCount") or 0),
+                "latestEventDate": str(row.get("latestEventDate") or ""),
+            },
+            "source": {
+                "name": "CPC Finder 选手库",
+                "url": f"{cpcfinder_origin(source_url)}/student/{student_id}",
+            },
+        })
+    return sorted(result, key=lambda item: (item["cpcfinder"].get("rank") or 10**9, item["name"]))
 
 
 def parse_cpcfinder_api(document: str, source_url: str, min_year: int = 2020) -> list[dict]:
@@ -273,20 +325,29 @@ def load_supplements(paths: list[Path]) -> list[dict]:
 
 def merge_with_existing(fetched: list[dict], existing: list[dict], supplements: list[dict]) -> list[dict]:
     enrichments: dict[str, dict] = {record_key(item): item for item in [*existing, *supplements]}
+    supplement_keys = {record_key(item) for item in supplements}
     merged = []
     for record in fetched:
         enrichment = enrichments.get(record_key(record))
         if enrichment:
-            if enrichment.get("members") and enrichment.get("source", {}).get("name") != "CPC Finder":
+            # CPC Finder rosters are bound to a stable awardId. A higher-priority
+            # result mirror must not replace that roster merely because it is the
+            # preferred source for rank data. Only an explicit manual correction
+            # may override an exact public roster.
+            manual_roster = bool(enrichment.get("manual") or enrichment.get("memberRosterManual"))
+            verified_supplement = record_key(enrichment) in supplement_keys
+            if enrichment.get("members") and (manual_roster or not record.get("members")):
                 record["members"] = enrichment["members"]
                 details_by_name = {item["name"]: item for item in record.get("memberDetails", [])}
                 record["memberDetails"] = [details_by_name.get(name, {"name": name}) for name in enrichment["members"]]
                 if enrichment.get("memberSource"):
                     record["memberSource"] = enrichment["memberSource"]
             for field in ("coach", "source"):
-                if enrichment.get(field):
+                if enrichment.get(field) and (manual_roster or verified_supplement):
                     record[field] = enrichment[field]
-            record["sources"] = merge_sources(record, enrichment)
+            if manual_roster or verified_supplement:
+                record["sources"] = merge_sources(record, enrichment)
+        record["sources"] = merge_sources(record)
         merged.append(record)
     fetched_keys = {record_key(item) for item in fetched}
     merged.extend(item for item in supplements if record_key(item) not in fetched_keys)
@@ -329,6 +390,8 @@ def main() -> None:
     parser.add_argument("--supplement", type=Path, action="append", default=[], help="JSON exported from XCPCIO/Gym/QOJ or an official list")
     parser.add_argument("--html-file", type=Path, help="parse a saved CPC Finder HTML or JSON response instead of fetching")
     parser.add_argument("--skip-members", action="store_true", help="skip per-contest roster enrichment")
+    parser.add_argument("--skip-students", action="store_true", help="skip the CPC Finder school-wide student directory")
+    parser.add_argument("--students-file", type=Path, help="use a saved CPC Finder student API response")
     parser.add_argument("--workers", type=int, default=6, help="concurrent CPC Finder contest requests")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -343,6 +406,18 @@ def main() -> None:
     supplements = load_supplements(args.supplement)
     honors = merge_with_existing(fetched, site.get("honors", []), supplements)
     site["honors"] = honors
+    public_members = site.get("publicMembers", [])
+    if not args.skip_students:
+        try:
+            student_document = (
+                args.students_file.read_text(encoding="utf-8")
+                if args.students_file
+                else fetch_text(student_list_api_url(args.source_url))
+            )
+            public_members = parse_cpcfinder_students(student_document, args.source_url)
+            site["publicMembers"] = public_members
+        except Exception as exc:
+            print(f"warning: student directory fetch failed, preserving existing data: {exc}", file=sys.stderr)
     site["medalSummary"] = medal_summary(honors)
     site["meta"]["updatedAt"] = dt.date.today().isoformat()
     site.pop("ratingGroups", None)
@@ -350,7 +425,8 @@ def main() -> None:
     missing = sum(not item.get("members") for item in honors)
     print(
         f"records={len(honors)} rosters={len(honors) - missing} missing={missing} "
-        f"enriched={enriched} supplements={len(supplements)} failed_contests={len(failed)}"
+        f"enriched={enriched} public_members={len(public_members)} supplements={len(supplements)} "
+        f"failed_contests={len(failed)}"
     )
     if not args.dry_run:
         write_json_atomic(args.site_data, site)

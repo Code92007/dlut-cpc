@@ -9,7 +9,7 @@
 - `/home`：2020 年以来奖牌趋势与最近获奖。
 - `/honor`：按年份、奖项、关键词检索获奖记录。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
-- `/training`：ICPC 风格训练榜单与排名变化图。
+- `/training`：牛客暑期多校、杭电多校和队内训练榜单。
 
 页面不依赖前端构建工具，图表使用原生 SVG 渲染。
 
@@ -32,7 +32,9 @@ python3 -m unittest discover -s tests -v
 
 `data/site.json` 是可版本控制的公开数据快照，`runtime/dlut_cpc.sqlite3` 是运行时主数据库。首次启动会将快照导入 SQLite，之后自动同步只更新公开数据，不会删除人工录入的成员、账号关联或历史奖项。数据库支持同一奖项和成员关联多个来源，并用 CPC Finder 学生 UUID 区分同名成员。
 
-当前奖牌与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API 和各赛事榜单 API，仅保留 2020 年及以后的金、银、铜牌记录。同步脚本会逐项关联 `awardId`、`contestId` 与 `teamId`，再导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或 [QOJ/UCup 镜像榜](https://contest.ucup.ac/results/QOJ1821?v=1)补充或覆盖。
+当前奖牌与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API、选手目录 API 和各赛事榜单 API，仅保留 2020 年及以后的金、银、铜牌记录。同步脚本会逐项关联 `awardId`、`contestId`、`teamId` 与稳定的 `studentId`，再导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或经过核验的 QOJ 镜像榜补充或覆盖。
+
+选手目录收录大连理工大学主校区及盘锦校区，显式排除查询结果中名称相似但并非本校 CPC 队的“大连理工大学城市学院”。CPC Finder 的校内奖牌汇总作为成员页奖牌数的公开基准，队内数据库仍可补录更早成员、账号和历史赛事。
 
 同步 CPC Finder 并执行归一化去重：
 
@@ -49,7 +51,16 @@ python3 tools/sync_public_data.py \
   --supplement data/qoj.json
 ```
 
-补充记录字段与 `site.json` 中的 `honors` 项一致。来源冲突时，包含成员的补充记录优先，官方或其他独立榜单优先于 CPC Finder，并保留全部来源用于追溯。
+补充记录字段与 `site.json` 中的 `honors` 项一致。比赛名次等结果字段可优先采用官方或经过核验的独立榜单，但 CPC Finder 按 `awardId` 返回的成员名单不会被普通补充来源覆盖；只有显式标记 `memberRosterManual: true` 的人工修订可覆盖。每次公开同步会清除已失效的非人工来源链接，人工补录来源始终保留。
+
+同步牛客 2025 暑期多校公开榜单，并合并 QOJ 上可核验的 2023 杭电多校 DLUT 记录：
+
+```bash
+python3 tools/sync_training_data.py --dry-run
+python3 tools/sync_training_data.py
+```
+
+牛客记录按学校筛选并保留全榜名次、题目结果、通过时间与罚时；`data/hdu_training_2023.json` 保存 QOJ 公开镜像中的最终汇总记录。公开来源没有排名过程时，页面不会生成推测的排名变化曲线。
 
 ### 人工补录
 
@@ -87,7 +98,7 @@ python3 tools/manage_data.py backup --output backups/dlut-cpc-$(date +%F).sqlite
 python3 tools/manage_data.py export --output backups/site-merged.json
 ```
 
-训练页当前包含明确标记的演示数据，用于确定首版界面；后续可从 DOMjudge、Codeforces Gym 或 QOJ 的公开榜单导入真实训练记录。
+训练页不再包含演示场次。后续可继续从 DOMjudge、Codeforces Gym 或 QOJ 的公开榜单导入真实训练记录。
 
 ## Docker 部署
 
