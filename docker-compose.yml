@@ -1,0 +1,11 @@
+services:
+  dlut-cpc:
+    build: .
+    container_name: dlut-cpc
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-8021}:8000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      SITE_DATA_PATH: ${SITE_DATA_PATH:-/app/data/site.json}

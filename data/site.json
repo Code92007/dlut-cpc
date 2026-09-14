@@ -1,0 +1,2369 @@
+{
+  "meta": {
+    "school": "大连理工大学",
+    "updatedAt": "2026-09-14",
+    "bestRank": 11,
+    "verifiedTeams": 8,
+    "scoreFormula": "金牌 10 分，银牌 6 分，铜牌 3 分",
+    "sourceSchoolId": "9c417252-c487-4eae-8822-fcd1e74b9329"
+  },
+  "medalSummary": [
+    {
+      "year": "2020",
+      "gold": 1,
+      "silver": 7,
+      "bronze": 4
+    },
+    {
+      "year": "2021",
+      "gold": 1,
+      "silver": 8,
+      "bronze": 8
+    },
+    {
+      "year": "2022",
+      "gold": 3,
+      "silver": 6,
+      "bronze": 4
+    },
+    {
+      "year": "2023",
+      "gold": 0,
+      "silver": 3,
+      "bronze": 7
+    },
+    {
+      "year": "2024",
+      "gold": 0,
+      "silver": 7,
+      "bronze": 6
+    },
+    {
+      "year": "2025",
+      "gold": 1,
+      "silver": 8,
+      "bronze": 9
+    },
+    {
+      "year": "2026",
+      "gold": 0,
+      "silver": 0,
+      "bronze": 1
+    }
+  ],
+  "honors": [
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
+      "series": "ICPC",
+      "date": "2026-02-02",
+      "location": "杭州",
+      "team": "奶龙跳舞的传奇故事",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "144 / 280",
+      "overallRank": "164 / 306",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "d611e25ff50f21"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛香港站",
+      "series": "ICPC",
+      "date": "2025-11-30",
+      "location": "香港",
+      "team": "Back Seaing",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "50 / 126",
+      "overallRank": "55 / 136",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "584edf1e694cbd"
+    },
+    {
+      "event": "第 11 届 CCPC 中国大学生程序设计竞赛重庆站",
+      "series": "CCPC",
+      "date": "2025-11-30",
+      "location": "重庆",
+      "team": "逆元",
+      "members": [],
+      "medal": "银牌",
+      "rank": "51 / 260",
+      "overallRank": "59 / 324",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "d95a0e91200a55"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
+      "series": "ICPC",
+      "date": "2025-11-23",
+      "location": "上海",
+      "team": "逆元",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "124 / 331",
+      "overallRank": "138 / 356",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b8959e79a87d96"
+    },
+    {
+      "event": "第 11 届 CCPC 中国大学生程序设计竞赛郑州站",
+      "series": "CCPC",
+      "date": "2025-11-23",
+      "location": "郑州",
+      "team": "这么六!",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "79 / 260",
+      "overallRank": "88 / 311",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "68955bd0512fd6"
+    },
+    {
+      "event": "第 11 届 CCPC 中国大学生程序设计竞赛郑州站",
+      "series": "CCPC",
+      "date": "2025-11-23",
+      "location": "郑州",
+      "team": "大连理工四队",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "86 / 260",
+      "overallRank": "97 / 311",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "598b9a0346d79a"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2025-11-16",
+      "location": "沈阳",
+      "team": "青雨归潮",
+      "members": [],
+      "medal": "银牌",
+      "rank": "99 / 400",
+      "overallRank": "105 / 411",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "c7dda55b886ea8"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2025-11-16",
+      "location": "沈阳",
+      "team": "大连理工四队",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "128 / 400",
+      "overallRank": "136 / 411",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "9c7da6e1e18fcb"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2025-11-16",
+      "location": "沈阳",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "members": [],
+      "medal": "银牌",
+      "rank": "56 / 400",
+      "overallRank": "61 / 411",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "0d8cc19d10a3f8"
+    },
+    {
+      "event": "第 11 届 CCPC 中国大学生程序设计竞赛济南站",
+      "series": "CCPC",
+      "date": "2025-11-16",
+      "location": "济南",
+      "team": "Z形管道猫猫虫",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "96 / 260",
+      "overallRank": "111 / 320",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "20dffb30d2c39b"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2025-11-09",
+      "location": "南京",
+      "team": "这么六！",
+      "members": [],
+      "medal": "银牌",
+      "rank": "48 / 335",
+      "overallRank": "63 / 359",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "2fc3143ab77879"
+    },
+    {
+      "event": "第 11 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "series": "CCPC",
+      "date": "2025-11-09",
+      "location": "哈尔滨",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "members": [],
+      "medal": "银牌",
+      "rank": "59 / 260",
+      "overallRank": "60 / 278",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "ef16a318f71ab5"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛武汉站",
+      "series": "ICPC",
+      "date": "2025-11-02",
+      "location": "武汉",
+      "team": "我将点燃大海",
+      "members": [
+        "金晟",
+        "蒋佳炀",
+        "时佳骏"
+      ],
+      "medal": "银牌",
+      "rank": "101 / 446",
+      "overallRank": "123 / 520",
+      "source": {
+        "name": "QOJ 镜像榜",
+        "url": "https://contest.ucup.ac/results/QOJ2609?v=1"
+      },
+      "id": "0ff42f278172f1"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛武汉站",
+      "series": "ICPC",
+      "date": "2025-11-02",
+      "location": "武汉",
+      "team": "关注带工喵，关注带工谢谢喵 (≧^.^≦)",
+      "members": [],
+      "medal": "金牌",
+      "rank": "37 / 446",
+      "overallRank": "49 / 520",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "fda1f95694e12c"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
+      "series": "ICPC",
+      "date": "2025-10-26",
+      "location": "成都",
+      "team": "我将点燃大海",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "142 / 320",
+      "overallRank": "149 / 328",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "a2f7c7d6716bf2"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
+      "series": "ICPC",
+      "date": "2025-10-26",
+      "location": "成都",
+      "team": "大连理工四队",
+      "members": [],
+      "medal": "银牌",
+      "rank": "81 / 320",
+      "overallRank": "87 / 328",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "a63b06409ff0f7"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
+      "series": "ICPC",
+      "date": "2025-10-19",
+      "location": "西安",
+      "team": "逆元",
+      "members": [],
+      "medal": "银牌",
+      "rank": "83 / 399",
+      "overallRank": "93 / 418",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "599c63504c50c8"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
+      "series": "ICPC",
+      "date": "2025-10-19",
+      "location": "西安",
+      "team": "这么六！",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "221 / 399",
+      "overallRank": "234 / 418",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "fd2a77af7de138"
+    },
+    {
+      "event": "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
+      "series": "ICPC",
+      "date": "2025-10-19",
+      "location": "西安",
+      "team": "回答我，xcpc怎么打才队",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "166 / 399",
+      "overallRank": "178 / 418",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "dce2f48191021e"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
+      "series": "ICPC",
+      "date": "2024-12-28",
+      "location": "西安",
+      "team": "这么六！",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "98 / 280",
+      "overallRank": "134 / 403",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "e95172f39fb557"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2024-12-01",
+      "location": "昆明",
+      "team": "点铁成金",
+      "members": [],
+      "medal": "银牌",
+      "rank": "99 / 449",
+      "overallRank": "110 / 486",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "2c458eb1d3fd82"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2024-11-24",
+      "location": "沈阳",
+      "team": "这么六！",
+      "members": [],
+      "medal": "银牌",
+      "rank": "52 / 300",
+      "overallRank": "56 / 320",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "805e491507d7b3"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2024-11-24",
+      "location": "沈阳",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "95 / 300",
+      "overallRank": "100 / 320",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "fb6d5d2209dea4"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2024-11-24",
+      "location": "沈阳",
+      "team": "二保一",
+      "members": [
+        "陈常杰",
+        "袁振",
+        "闫希良"
+      ],
+      "medal": "铜牌",
+      "rank": "103 / 300",
+      "overallRank": "108 / 320",
+      "source": {
+        "name": "ICPC 官方名单",
+        "url": "https://icpc.pku.edu.cn/docs/20250313164156411954.pdf"
+      },
+      "id": "e0d52332837b46"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
+      "series": "ICPC",
+      "date": "2024-11-17",
+      "location": "上海",
+      "team": "二保一",
+      "members": [
+        "陈常杰",
+        "袁振",
+        "闫希良"
+      ],
+      "medal": "银牌",
+      "rank": "40 / 336",
+      "overallRank": "53 / 352",
+      "source": {
+        "name": "ICPC 官方名单",
+        "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
+      },
+      "id": "0202b79e36ec61"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
+      "series": "ICPC",
+      "date": "2024-11-10",
+      "location": "杭州",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "members": [],
+      "medal": "银牌",
+      "rank": "79 / 366",
+      "overallRank": "99 / 391",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "980f86e2f55be3"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
+      "series": "ICPC",
+      "date": "2024-11-10",
+      "location": "杭州",
+      "team": "dlut 06",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "189 / 366",
+      "overallRank": "211 / 391",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "bc2a8e9d3902ca"
+    },
+    {
+      "event": "第 10 届 CCPC 中国大学生程序设计竞赛重庆站",
+      "series": "CCPC",
+      "date": "2024-11-10",
+      "location": "重庆",
+      "team": "可持久化猫猫虫自动机",
+      "members": [
+        "刘博文",
+        "连茗暄",
+        "刘兆洲"
+      ],
+      "medal": "银牌",
+      "rank": "71 / 278",
+      "overallRank": "77 / 313",
+      "source": {
+        "name": "QOJ 镜像榜",
+        "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+      },
+      "id": "566f92def98037"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2024-11-03",
+      "location": "南京",
+      "team": "可持久化猫猫虫自动机",
+      "members": [
+        "刘博文",
+        "连茗暄",
+        "刘兆洲"
+      ],
+      "medal": "银牌",
+      "rank": "89 / 336",
+      "overallRank": "109 / 360",
+      "source": {
+        "name": "QOJ 镜像榜",
+        "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+      },
+      "id": "49926721481c66"
+    },
+    {
+      "event": "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
+      "series": "ICPC",
+      "date": "2024-10-27",
+      "location": "成都",
+      "team": "可持久化猫猫虫自动机",
+      "members": [
+        "刘博文",
+        "连茗暄",
+        "刘兆洲"
+      ],
+      "medal": "铜牌",
+      "rank": "133 / 307",
+      "overallRank": "135 / 309",
+      "source": {
+        "name": "QOJ 镜像榜",
+        "url": "https://contest.ucup.ac/results/QOJ1821?v=1"
+      },
+      "id": "19a51e84041ae3"
+    },
+    {
+      "event": "第 10 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "series": "CCPC",
+      "date": "2024-10-20",
+      "location": "哈尔滨",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "members": [],
+      "medal": "银牌",
+      "rank": "54 / 280",
+      "overallRank": "57 / 302",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "6e2e27241e019a"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
+      "series": "ICPC",
+      "date": "2024-01-13",
+      "location": "上海",
+      "team": "二保一",
+      "members": [
+        "陈常杰",
+        "袁振",
+        "闫希良"
+      ],
+      "medal": "铜牌",
+      "rank": "140 / 280",
+      "overallRank": "159 / 320",
+      "source": {
+        "name": "ICPC 官方名单",
+        "url": "https://icpc.pku.edu.cn/docs/20250313164218706132.pdf"
+      },
+      "id": "c20d05d18a0474"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛杭州站",
+      "series": "ICPC",
+      "date": "2023-12-10",
+      "location": "杭州",
+      "team": "灼灼韶华",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "182 / 442",
+      "overallRank": "213 / 483",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "6f18894991f1a5"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2023-12-03",
+      "location": "济南",
+      "team": "一带三",
+      "members": [
+        "侯硕伟",
+        "李雁志",
+        "葛俊辰"
+      ],
+      "medal": "银牌",
+      "rank": "95 / 334",
+      "overallRank": "99 / 347",
+      "source": {
+        "name": "ICPC 报名公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230907095701223660.pdf"
+      },
+      "id": "80519c39fed02e"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛合肥站",
+      "series": "ICPC",
+      "date": "2023-11-26",
+      "location": "合肥",
+      "team": "共跳最后一支舞",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "189 / 344",
+      "overallRank": "191 / 347",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "8bcd802e52d9aa"
+    },
+    {
+      "event": "第 9 届 CCPC 中国大学生程序设计竞赛深圳站",
+      "series": "CCPC",
+      "date": "2023-11-12",
+      "location": "深圳",
+      "team": "遇见彩虹，吃定彩虹",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "84 / 240",
+      "overallRank": "106 / 288",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "a7d3eb8dbb91d9"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2023-11-12",
+      "location": "沈阳",
+      "team": "二保一",
+      "members": [
+        "陈常杰",
+        "袁振",
+        "闫希良"
+      ],
+      "medal": "银牌",
+      "rank": "37 / 291",
+      "overallRank": "37 / 300",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "cd6b1f30b96db8"
+    },
+    {
+      "event": "第 9 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "series": "CCPC",
+      "date": "2023-11-05",
+      "location": "哈尔滨",
+      "team": "今天午饭吃了吗",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "99 / 240",
+      "overallRank": "100 / 253",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "e5edf330fe9e80"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2023-11-05",
+      "location": "南京",
+      "team": "爱喝果粒橙",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "162 / 331",
+      "overallRank": "171 / 342",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b297aca0d25c35"
+    },
+    {
+      "event": "第 48 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2023-11-05",
+      "location": "南京",
+      "team": "一带三",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "132 / 331",
+      "overallRank": "141 / 342",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "fc707eeb3fa9d0"
+    },
+    {
+      "event": "第 9 届 CCPC 中国大学生程序设计竞赛桂林站",
+      "series": "CCPC",
+      "date": "2023-10-29",
+      "location": "桂林",
+      "team": "新二保一",
+      "members": [],
+      "medal": "银牌",
+      "rank": "39 / 240",
+      "overallRank": "41 / 269",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "2c7e7dc8ba3221"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛东亚区决赛",
+      "series": "ICPC",
+      "date": "2023-03-25",
+      "location": "上海",
+      "team": "暂无名",
+      "members": [
+        "李胤驰",
+        "陈常杰",
+        "夏鸿康"
+      ],
+      "medal": "铜牌",
+      "rank": "85 / 281",
+      "overallRank": "93 / 314",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "2955cd18a790c2"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2022-12-18",
+      "location": "南京",
+      "team": "一带三",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "127 / 438",
+      "overallRank": "135 / 501",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "3e0b6546401da5"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2022-11-27",
+      "location": "济南",
+      "team": "鹏鹏今天吃什么",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "132 / 511",
+      "overallRank": "139 / 580",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b0f819ec454514"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2022-11-27",
+      "location": "济南",
+      "team": "秋招没人要",
+      "members": [
+        "江雨桐",
+        "李冠霖",
+        "蔡廷漳"
+      ],
+      "medal": "银牌",
+      "rank": "60 / 511",
+      "overallRank": "64 / 580",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "5c1d97a1954dc6"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛合肥站",
+      "series": "ICPC",
+      "date": "2022-11-20",
+      "location": "合肥",
+      "team": "暂无名",
+      "members": [
+        "李胤驰",
+        "陈常杰",
+        "夏鸿康"
+      ],
+      "medal": "银牌",
+      "rank": "58 / 454",
+      "overallRank": "59 / 502",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "bc3982a75424b8"
+    },
+    {
+      "event": "第 8 届 CCPC 中国大学生程序设计竞赛广州站",
+      "series": "CCPC",
+      "date": "2022-11-13",
+      "location": "广州",
+      "team": "秋招没人要",
+      "members": [],
+      "medal": "银牌",
+      "rank": "28 / 240",
+      "overallRank": "36 / 285",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "34b4343e7261fd"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
+      "series": "ICPC",
+      "date": "2022-11-13",
+      "location": "西安",
+      "team": "暂无名",
+      "members": [
+        "李胤驰",
+        "陈常杰",
+        "夏鸿康"
+      ],
+      "medal": "金牌",
+      "rank": "17 / 476",
+      "overallRank": "17 / 522",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "558b0363814318"
+    },
+    {
+      "event": "第 8 届 CCPC 中国大学生程序设计竞赛威海站",
+      "series": "CCPC",
+      "date": "2022-11-06",
+      "location": "威海",
+      "team": "暂无名",
+      "members": [
+        "李胤驰",
+        "陈常杰",
+        "夏鸿康"
+      ],
+      "medal": "金牌",
+      "rank": "22 / 240",
+      "overallRank": "23 / 287",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "22eaa13a0333b4"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2022-11-06",
+      "location": "沈阳",
+      "team": "给个 AC 吧",
+      "members": [],
+      "medal": "银牌",
+      "rank": "85 / 708",
+      "overallRank": "85 / 738",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "7bf3d15da42821"
+    },
+    {
+      "event": "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2022-11-06",
+      "location": "沈阳",
+      "team": "我要做纳西妲的编译器",
+      "members": [
+        "袁振",
+        "闫希良",
+        "张思凡"
+      ],
+      "medal": "银牌",
+      "rank": "63 / 708",
+      "overallRank": "63 / 738",
+      "source": {
+        "name": "EC Final 公示",
+        "url": "https://icpc.pku.edu.cn/docs/20230202164632701013.pdf"
+      },
+      "id": "09a71ceca22e79"
+    },
+    {
+      "event": "第 8 届 CCPC 中国大学生程序设计竞赛桂林",
+      "series": "CCPC",
+      "date": "2022-10-30",
+      "location": "桂林",
+      "team": "鹏鹏今天吃什么",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "126 / 240",
+      "overallRank": "152 / 323",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b94d7996cd9d7a"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛总决赛",
+      "series": "CCPC",
+      "date": "2022-07-27",
+      "location": "南京",
+      "team": "多多跳",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "35 / 115",
+      "overallRank": "35 / 116",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "26dfebed95b74b"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2022-04-17",
+      "location": "昆明",
+      "team": "梦觉流莺时一声",
+      "members": [],
+      "medal": "银牌",
+      "rank": "90 / 210",
+      "overallRank": "90 / 210",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "d29a987b8d803f"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2022-04-17",
+      "location": "昆明",
+      "team": "三带一",
+      "members": [],
+      "medal": "金牌",
+      "rank": "34 / 210",
+      "overallRank": "34 / 210",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "ba0ca4800c82c6"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2021-12-04",
+      "location": "南京",
+      "team": "我们队没有GF",
+      "members": [],
+      "medal": "银牌",
+      "rank": "54 / 641",
+      "overallRank": "57 / 684",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b07c4862f2539d"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2021-12-04",
+      "location": "南京",
+      "team": "三带一",
+      "members": [],
+      "medal": "银牌",
+      "rank": "52 / 641",
+      "overallRank": "55 / 684",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "a5c575a488a1c9"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "series": "CCPC",
+      "date": "2021-11-28",
+      "location": "哈尔滨",
+      "team": "三带一",
+      "members": [],
+      "medal": "银牌",
+      "rank": "36 / 240",
+      "overallRank": "39 / 317",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "e946050f540890"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "series": "CCPC",
+      "date": "2021-11-28",
+      "location": "哈尔滨",
+      "team": "dlut01",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "81 / 240",
+      "overallRank": "89 / 317",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "64410b155a5ed1"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
+      "series": "ICPC",
+      "date": "2021-11-28",
+      "location": "上海",
+      "team": "梦觉流莺时一声",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "114 / 632",
+      "overallRank": "120 / 682",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "0607aaa695d0a4"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
+      "series": "ICPC",
+      "date": "2021-11-28",
+      "location": "上海",
+      "team": "优哉游哉",
+      "members": [],
+      "medal": "银牌",
+      "rank": "77 / 632",
+      "overallRank": "82 / 682",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "49c1a4be4bf048"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛威海站",
+      "series": "CCPC",
+      "date": "2021-11-21",
+      "location": "威海",
+      "team": "优哉游哉",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "118 / 240",
+      "overallRank": "130 / 329",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "8a4129c738b861"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛威海站",
+      "series": "CCPC",
+      "date": "2021-11-21",
+      "location": "威海",
+      "team": "东北三小只",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "75 / 240",
+      "overallRank": "81 / 329",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "fafbf374cde794"
+    },
+    {
+      "event": "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2021-11-14",
+      "location": "济南",
+      "team": "优哉游哉",
+      "members": [],
+      "medal": "银牌",
+      "rank": "101 / 726",
+      "overallRank": "117 / 800",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b798f27c645a44"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛桂林站",
+      "series": "CCPC",
+      "date": "2021-11-07",
+      "location": "桂林",
+      "team": "梦觉流莺时一声",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "130 / 239",
+      "overallRank": "162 / 338",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "79802118b215af"
+    },
+    {
+      "event": "第 7 届 CCPC 中国大学生程序设计竞赛桂林站",
+      "series": "CCPC",
+      "date": "2021-11-07",
+      "location": "桂林",
+      "team": "异军突起",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "101 / 239",
+      "overallRank": "123 / 338",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "edb0209cad821c"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2021-07-18",
+      "location": "沈阳",
+      "team": "老年追梦团",
+      "members": [
+        "吕嘉庆",
+        "陈英奇",
+        "李胤驰"
+      ],
+      "medal": "铜牌",
+      "rank": "97 / 269",
+      "overallRank": "99 / 285",
+      "source": {
+        "name": "ICPC 沈阳站榜单",
+        "url": "https://acm.sdut.edu.cn/acmss/icpc/2021/shenyang/index.html"
+      },
+      "id": "a5e07f0e3686a5"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站",
+      "series": "ICPC",
+      "date": "2021-07-18",
+      "location": "沈阳",
+      "team": "一只非常非常孤单的小狗",
+      "members": [],
+      "medal": "银牌",
+      "rank": "63 / 269",
+      "overallRank": "65 / 285",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "5004f694fdcd85"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛总决赛",
+      "series": "CCPC",
+      "date": "2021-05-30",
+      "location": "北京",
+      "team": "三带一",
+      "members": [],
+      "medal": "银牌",
+      "rank": "22 / 115",
+      "overallRank": "24 / 118",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "44c0971b0409e9"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2021-04-03",
+      "location": "昆明",
+      "team": "线性时间的支配者",
+      "members": [],
+      "medal": "金牌",
+      "rank": "25 / 763",
+      "overallRank": "27 / 813",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "965e9ccc4550e3"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2021-04-03",
+      "location": "昆明",
+      "team": "dlut11",
+      "members": [],
+      "medal": "银牌",
+      "rank": "67 / 763",
+      "overallRank": "70 / 813",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "5d0e39ca8fe6ba"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站",
+      "series": "ICPC",
+      "date": "2021-04-03",
+      "location": "昆明",
+      "team": "big black mountain",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "114 / 763",
+      "overallRank": "120 / 813",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "cfc9cd71667799"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2020-12-27",
+      "location": "济南",
+      "team": "dlut11",
+      "members": [],
+      "medal": "金牌",
+      "rank": "32 / 496",
+      "overallRank": "34 / 545",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "191e81d61278c8"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛济南站",
+      "series": "ICPC",
+      "date": "2020-12-27",
+      "location": "济南",
+      "team": "L",
+      "members": [],
+      "medal": "银牌",
+      "rank": "102 / 496",
+      "overallRank": "112 / 545",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "d705d9b191f9fb"
+    },
+    {
+      "event": "第 45 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站",
+      "series": "ICPC",
+      "date": "2020-12-20",
+      "location": "南京",
+      "team": "优哉游哉",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "199 / 555",
+      "overallRank": "200 / 556",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "469addaaccc207"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "追星成功",
+      "members": [],
+      "medal": "银牌",
+      "rank": "57 / 267",
+      "overallRank": "63 / 324",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "b8d4e180dc3c15"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "寒雨连江夜入吴",
+      "members": [],
+      "medal": "银牌",
+      "rank": "62 / 267",
+      "overallRank": "68 / 324",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "73d0fea3ae0d4c"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "L",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "93 / 267",
+      "overallRank": "105 / 324",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "40fd6cc61480ac"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛绵阳站",
+      "series": "CCPC",
+      "date": "2020-11-01",
+      "location": "绵阳",
+      "team": "惜年",
+      "members": [],
+      "medal": "银牌",
+      "rank": "63 / 268",
+      "overallRank": "76 / 340",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "aa61b6d9b7a8cb"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛绵阳站",
+      "series": "CCPC",
+      "date": "2020-11-01",
+      "location": "绵阳",
+      "team": "优哉游哉",
+      "members": [],
+      "medal": "银牌",
+      "rank": "49 / 268",
+      "overallRank": "61 / 340",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "22570fdc3e6c6a"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛威海站",
+      "series": "CCPC",
+      "date": "2020-10-25",
+      "location": "威海",
+      "team": "暴力写挂乱搞AC",
+      "members": [],
+      "medal": "银牌",
+      "rank": "38 / 267",
+      "overallRank": "41 / 386",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "8491ec8de105bb"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛威海站",
+      "series": "CCPC",
+      "date": "2020-10-25",
+      "location": "威海",
+      "team": "很有精神",
+      "members": [],
+      "medal": "银牌",
+      "rank": "46 / 267",
+      "overallRank": "49 / 386",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "3835cdf43ba617"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "series": "CCPC",
+      "date": "2020-10-18",
+      "location": "秦皇岛",
+      "team": "泥栽柑葚馍",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "110 / 243",
+      "overallRank": "132 / 346",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "9873e1f5dc91dd"
+    },
+    {
+      "event": "第 6 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "series": "CCPC",
+      "date": "2020-10-18",
+      "location": "秦皇岛",
+      "team": "寒雨连江夜入吴",
+      "members": [],
+      "medal": "铜牌",
+      "rank": "122 / 243",
+      "overallRank": "146 / 346",
+      "source": {
+        "name": "CPC Finder",
+        "url": "https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329"
+      },
+      "id": "06c049fa52789d"
+    }
+  ],
+  "ratingGroups": [
+    {
+      "name": "关注带工喵，关注带工谢谢喵",
+      "teamScore": 0,
+      "members": [
+        {
+          "name": "申永琦",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "欧阳东进",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "潘健",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    },
+    {
+      "name": "暂无名",
+      "teamScore": 29,
+      "members": [
+        {
+          "name": "李胤驰",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "陈常杰",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "夏鸿康",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    },
+    {
+      "name": "二保一",
+      "teamScore": 18,
+      "members": [
+        {
+          "name": "陈常杰",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "袁振",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "闫希良",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    },
+    {
+      "name": "可持久化猫猫虫自动机",
+      "teamScore": 15,
+      "members": [
+        {
+          "name": "刘博文",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "连茗暄",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "刘兆洲",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    },
+    {
+      "name": "我将点燃大海",
+      "teamScore": 9,
+      "members": [
+        {
+          "name": "金晟",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "蒋佳炀",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "时佳骏",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    },
+    {
+      "name": "秋招没人要",
+      "teamScore": 12,
+      "members": [
+        {
+          "name": "江雨桐",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "李冠霖",
+          "handle": null,
+          "rating": null
+        },
+        {
+          "name": "蔡廷漳",
+          "handle": null,
+          "rating": null
+        }
+      ]
+    }
+  ],
+  "training": [
+    {
+      "id": "2026-07-18",
+      "year": "2026",
+      "date": "2026-07-18",
+      "title": "2026 暑期训练 · Round 01",
+      "demo": true,
+      "duration": 300,
+      "problems": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J"
+      ],
+      "teams": [
+        {
+          "name": "关注带工喵，关注带工谢谢喵",
+          "solved": 8,
+          "penalty": 973,
+          "highlight": true,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:08",
+              "first": true
+            },
+            "B": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:31"
+            },
+            "C": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:04"
+            },
+            "D": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:13"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:47"
+            },
+            "F": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:29"
+            },
+            "G": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:01"
+            },
+            "I": {
+              "solved": true,
+              "tries": 3,
+              "time": "03:46"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 6
+            },
+            {
+              "time": 18,
+              "rank": 2
+            },
+            {
+              "time": 52,
+              "rank": 3
+            },
+            {
+              "time": 82,
+              "rank": 2
+            },
+            {
+              "time": 124,
+              "rank": 1
+            },
+            {
+              "time": 300,
+              "rank": 1
+            }
+          ]
+        },
+        {
+          "name": "二保一",
+          "solved": 8,
+          "penalty": 1018,
+          "highlight": true,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:11"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:38"
+            },
+            "D": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:20"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:56"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:43"
+            },
+            "G": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:16"
+            },
+            "H": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:11"
+            },
+            "J": {
+              "solved": true,
+              "tries": 2,
+              "time": "04:02"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 3
+            },
+            {
+              "time": 26,
+              "rank": 1
+            },
+            {
+              "time": 71,
+              "rank": 2
+            },
+            {
+              "time": 133,
+              "rank": 3
+            },
+            {
+              "time": 190,
+              "rank": 2
+            },
+            {
+              "time": 300,
+              "rank": 2
+            }
+          ]
+        },
+        {
+          "name": "可持久化猫猫虫自动机",
+          "solved": 7,
+          "penalty": 815,
+          "highlight": true,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:05"
+            },
+            "B": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:15"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:42",
+              "first": true
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:33",
+              "first": true
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:04"
+            },
+            "G": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:37"
+            },
+            "I": {
+              "solved": true,
+              "tries": 2,
+              "time": "03:17"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 8
+            },
+            {
+              "time": 12,
+              "rank": 3
+            },
+            {
+              "time": 49,
+              "rank": 1
+            },
+            {
+              "time": 103,
+              "rank": 2
+            },
+            {
+              "time": 167,
+              "rank": 3
+            },
+            {
+              "time": 300,
+              "rank": 3
+            }
+          ]
+        },
+        {
+          "name": "我将点燃大海",
+          "solved": 7,
+          "penalty": 896,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:14"
+            },
+            "B": {
+              "solved": false,
+              "tries": 3
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:58"
+            },
+            "D": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:39"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:51",
+              "first": true
+            },
+            "G": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:28"
+            },
+            "H": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:20"
+            },
+            "I": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:47"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 5
+            },
+            {
+              "time": 33,
+              "rank": 4
+            },
+            {
+              "time": 76,
+              "rank": 5
+            },
+            {
+              "time": 142,
+              "rank": 4
+            },
+            {
+              "time": 300,
+              "rank": 4
+            }
+          ]
+        },
+        {
+          "name": "暂无名",
+          "solved": 6,
+          "penalty": 621,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:06"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:45"
+            },
+            "D": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:04"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:52"
+            },
+            "G": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:51"
+            },
+            "I": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:19"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 2
+            },
+            {
+              "time": 18,
+              "rank": 5
+            },
+            {
+              "time": 64,
+              "rank": 4
+            },
+            {
+              "time": 111,
+              "rank": 6
+            },
+            {
+              "time": 214,
+              "rank": 5
+            },
+            {
+              "time": 300,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "name": "三带一",
+          "solved": 6,
+          "penalty": 704,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:09"
+            },
+            "B": {
+              "solved": true,
+              "tries": 3,
+              "time": "01:44"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:08"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:41"
+            },
+            "F": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:31"
+            },
+            "H": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:02"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 4
+            },
+            {
+              "time": 22,
+              "rank": 6
+            },
+            {
+              "time": 89,
+              "rank": 7
+            },
+            {
+              "time": 156,
+              "rank": 5
+            },
+            {
+              "time": 232,
+              "rank": 6
+            },
+            {
+              "time": 300,
+              "rank": 6
+            }
+          ]
+        },
+        {
+          "name": "秋招没人要",
+          "solved": 5,
+          "penalty": 518,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:17"
+            },
+            "C": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:55"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:59"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:10"
+            },
+            "G": {
+              "solved": true,
+              "tries": 2,
+              "time": "03:12"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 7
+            },
+            {
+              "time": 30,
+              "rank": 7
+            },
+            {
+              "time": 91,
+              "rank": 6
+            },
+            {
+              "time": 148,
+              "rank": 7
+            },
+            {
+              "time": 300,
+              "rank": 7
+            }
+          ]
+        },
+        {
+          "name": "梦觉流莺时一声",
+          "solved": 5,
+          "penalty": 603,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 2,
+              "time": "00:25"
+            },
+            "B": {
+              "solved": false,
+              "tries": 2
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:11"
+            },
+            "D": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:27"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:36"
+            },
+            "I": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:16"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 1
+            },
+            {
+              "time": 24,
+              "rank": 8
+            },
+            {
+              "time": 105,
+              "rank": 8
+            },
+            {
+              "time": 176,
+              "rank": 8
+            },
+            {
+              "time": 300,
+              "rank": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2025-08-03",
+      "year": "2025",
+      "date": "2025-08-03",
+      "title": "2025 暑期训练 · Round 08",
+      "demo": true,
+      "duration": 300,
+      "problems": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+      ],
+      "teams": [
+        {
+          "name": "关注带工喵，关注带工谢谢喵",
+          "solved": 6,
+          "penalty": 688,
+          "highlight": true,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:07"
+            },
+            "B": {
+              "solved": true,
+              "tries": 2,
+              "time": "00:55"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:20"
+            },
+            "E": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:44"
+            },
+            "F": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:39"
+            },
+            "H": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:14"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 4
+            },
+            {
+              "time": 30,
+              "rank": 2
+            },
+            {
+              "time": 120,
+              "rank": 1
+            },
+            {
+              "time": 300,
+              "rank": 1
+            }
+          ]
+        },
+        {
+          "name": "我将点燃大海",
+          "solved": 6,
+          "penalty": 741,
+          "highlight": true,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:09"
+            },
+            "B": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:04"
+            },
+            "C": {
+              "solved": true,
+              "tries": 2,
+              "time": "01:36"
+            },
+            "D": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:01"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:47"
+            },
+            "H": {
+              "solved": true,
+              "tries": 2,
+              "time": "03:31"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 2
+            },
+            {
+              "time": 44,
+              "rank": 1
+            },
+            {
+              "time": 164,
+              "rank": 2
+            },
+            {
+              "time": 300,
+              "rank": 2
+            }
+          ]
+        },
+        {
+          "name": "逆元",
+          "solved": 5,
+          "penalty": 590,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:11"
+            },
+            "C": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:59"
+            },
+            "D": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:27"
+            },
+            "E": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:14"
+            },
+            "G": {
+              "solved": true,
+              "tries": 1,
+              "time": "03:05"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 3
+            },
+            {
+              "time": 70,
+              "rank": 3
+            },
+            {
+              "time": 300,
+              "rank": 3
+            }
+          ]
+        },
+        {
+          "name": "这么六！",
+          "solved": 4,
+          "penalty": 406,
+          "highlight": false,
+          "problems": {
+            "A": {
+              "solved": true,
+              "tries": 1,
+              "time": "00:13"
+            },
+            "B": {
+              "solved": true,
+              "tries": 1,
+              "time": "01:12"
+            },
+            "D": {
+              "solved": true,
+              "tries": 2,
+              "time": "02:07"
+            },
+            "F": {
+              "solved": true,
+              "tries": 1,
+              "time": "02:34"
+            }
+          },
+          "rankHistory": [
+            {
+              "time": 0,
+              "rank": 1
+            },
+            {
+              "time": 41,
+              "rank": 4
+            },
+            {
+              "time": 300,
+              "rank": 4
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
