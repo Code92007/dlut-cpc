@@ -1325,3 +1325,36 @@ a:hover {
     scroll-behavior: auto;
   }
 }
+
+.pending-table {
+  min-width: 1060px;
+}
+
+.pending-table td:nth-child(2) {
+  min-width: 260px;
+  max-width: 440px;
+  white-space: normal;
+}
+
+.pending-table td:first-child {
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+.pending-table .admin-button {
+  white-space: nowrap;
+}
+
+.pending-count {
+  align-self: center;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.pending-footer {
+  margin-top: 24px;
+}
+
+.admin-tabs {
+  flex-wrap: wrap;
+}

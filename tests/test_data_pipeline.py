@@ -137,12 +137,13 @@ class DataPipelineTests(unittest.TestCase):
 
         result = MODULE.parse_cpcfinder_students(document)
 
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
         self.assertEqual(result[0]["externalId"], "student-xia")
         self.assertEqual(result[0]["cpcfinder"]["silverCount"], 6)
         self.assertEqual(result[0]["cpcfinder"]["rating"], 1182.0127)
         self.assertIn("panjin-student", {item["externalId"] for item in result})
-        self.assertNotIn("city-college-student", {item["externalId"] for item in result})
+        self.assertIn("city-college-student", {item["externalId"] for item in result})
+        self.assertEqual(next(item for item in result if item["externalId"] == "panjin-student")["school"], "大连理工大学盘锦校区")
 
     def test_contest_member_map_matches_award_and_keeps_student_identity(self):
         document = json.dumps({"data": [

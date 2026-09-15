@@ -48,3 +48,25 @@ test("secondary account and registration alias searches retain their member", ()
     assert.ok(html.indexOf('<th>最高 Rating</th>') < html.indexOf('<th>当前 Rating</th>'));
   }
 });
+
+test("independent school filters do not mix same-name members", () => {
+  const data = {meta: {}, members: [{id: 1, name: '本部选手', school: '大连理工大学'},
+    {id: 2, name: '城市选手', school: '大连理工大学城市学院'}]};
+  vm.runInContext("state.memberQuery = ''; state.memberSchool = '大连理工大学城市学院'", context);
+  const html = context.ratingPage(data);
+  assert.ok(html.includes('城市选手'));
+  assert.ok(!html.includes('本部选手'));
+  vm.runInContext("state.memberSchool = 'all'", context);
+});
+
+test("pending awards are read-only for visitors and filter by independent school", () => {
+  const data = {pendingHonors: [{id:'a', date:'2018-01-01', event:'ICPC Regional', team:'本部队', school:'大连理工大学', medal:'金牌'},
+    {id:'b', date:'2018-01-01', event:'ICPC Regional', team:'城市队', school:'大连理工大学城市学院', medal:'银牌'}]};
+  vm.runInContext("state.pendingQuery = ''; state.pendingSchool = '大连理工大学城市学院'", context);
+  const html = context.pendingPage(data);
+  assert.ok(html.includes('城市队'));
+  assert.ok(!html.includes('本部队'));
+  assert.ok(!html.includes('data-pending-id'));
+  assert.ok(context.pendingTable(data, true).includes('data-pending-id="b"'));
+  vm.runInContext("state.pendingSchool = 'all'", context);
+});

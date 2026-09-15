@@ -1,14 +1,20 @@
 const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
-const routes = new Set(["home", "honor", "rating", "training", "admin"]);
+const routes = new Set(["home", "honor", "rating", "training", "admin", "pending"]);
+const schoolGroups = ["大连理工大学", "大连理工大学城市学院", "大连理工大学盘锦校区"];
 const state = {
   data: null,
   honorYear: "all",
   honorMedal: "all",
   honorQuery: "",
+  honorSchool: "all",
+  pendingQuery: "",
+  pendingSchool: "all",
+  pendingId: null,
   memberQuery: "",
   memberStatus: "all",
+  memberSchool: "all",
   memberSort: "recent",
   trainingId: null,
   trainingSeries: "all",
@@ -115,7 +121,7 @@ function homePage(data) {
       </div>
     </section>
     <section class="metric-strip" aria-label="队伍概览">
-      <div class="metric"><strong>${total}</strong><span>2020 年以来奖牌</span></div>
+      <div class="metric"><strong>${total}</strong><span>${escapeHtml(data.meta.firstYear || '2020')} 年以来奖牌</span></div>
       <div class="metric"><strong>${gold}</strong><span>金牌</span></div>
       <div class="metric"><strong>${escapeHtml(data.meta.bestRank)}</strong><span>区域赛最高正式排名</span></div>
       <div class="metric"><strong>${escapeHtml(data.meta.memberCoverage)}%</strong><span>参赛成员覆盖率</span></div>
@@ -140,6 +146,7 @@ function honorPage(data) {
   if (state.honorYear !== "all" && !years.includes(state.honorYear)) state.honorYear = "all";
   let filtered = data.honors.filter((item) => state.honorYear === "all" || item.date.startsWith(state.honorYear));
   filtered = filtered.filter((item) => state.honorMedal === "all" || item.medal === state.honorMedal);
+  filtered = filtered.filter((item) => state.honorSchool === "all" || item.school === state.honorSchool);
   const query = state.honorQuery.trim().toLowerCase();
   if (query) filtered = filtered.filter((item) => [item.event, item.team, item.location, ...(item.members || [])].join(" ").toLowerCase().includes(query));
   const grouped = Object.groupBy
@@ -150,13 +157,14 @@ function honorPage(data) {
       <p class="contest-caption">${escapeHtml(rows[0].date)} · ${escapeHtml(rows[0].location)}</p>
       <div class="data-table-wrap"><table class="data-table honor-table">
         <thead><tr><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
-        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
+        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}<small class="result-status" title="${escapeHtml(honor.originalSchool || honor.school)}">${escapeHtml(honor.school)}</small></td><td><div class="member-list">${renderMembers(honor.members)}</div>${!honor.rosterConfirmed ? '<a href="/pending" data-route="pending" class="result-status">待确认成员</a>' : ''}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
       </table></div>
     </section>`).join("");
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Contest Results</span><h1>参赛成绩</h1><p>2020 年以来 ICPC、CCPC 等赛事的获牌与未获牌记录。</p></div><div class="source-status"><i></i><span>${filtered.length} 条记录</span></div></div>
+      <div class="page-heading"><div><span class="eyebrow">Contest Results</span><h1>参赛成绩</h1><p>ICPC、CCPC 区域赛与总决赛成绩。</p></div><a href="/pending" data-route="pending">待确认成员 · ${(data.pendingHonors || []).length}</a></div>
       <div class="filters">
         <label class="filter-group"><span>成绩</span><select id="honorMedal"><option value="all">全部成绩</option>${["金牌", "银牌", "铜牌", "铁牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
+        <label class="filter-group"><span>所属范围</span><select id="honorSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.honorSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
         <label class="filter-group grow"><span>搜索</span><input id="honorQuery" type="search" value="${escapeHtml(state.honorQuery)}" placeholder="比赛、赛区、队伍或成员"></label>
       </div>
       <div class="season-layout">
@@ -164,6 +172,39 @@ function honorPage(data) {
         <div>${sections || '<div class="empty-state">没有符合筛选条件的记录</div>'}</div>
       </div>
     </div>`;
+}
+
+function pendingTable(data, editable = false) {
+  const query = state.pendingQuery.trim().toLowerCase();
+  const rows = (data.pendingHonors || []).filter(honor =>
+    (state.pendingSchool === 'all' || honor.school === state.pendingSchool)
+    && (!query || [honor.date, honor.event, honor.team, honor.originalSchool, ...(honor.suggestedMembers || [])].join(' ').toLowerCase().includes(query)));
+  return `<div class="filters">
+    <label class="filter-group"><span>所属范围</span><select id="pendingSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.pendingSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
+    <label class="filter-group grow"><span>搜索</span><input id="pendingQuery" type="search" value="${escapeHtml(state.pendingQuery)}" placeholder="年份、比赛、队伍或榜单队员"></label>
+    <span class="pending-count">${rows.length} 条待确认</span></div>
+    <div class="data-table-wrap"><table class="data-table pending-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成绩</th><th>排名</th><th>榜单队员</th><th>${editable ? '操作' : '来源'}</th></tr></thead><tbody>
+    ${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td><td title="${escapeHtml(honor.originalSchool)}">${escapeHtml(honor.school)}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td><div class="member-list">${renderMembers(honor.suggestedMembers)}</div></td><td>${editable ? `<button type="button" class="admin-button secondary" data-pending-id="${escapeHtml(honor.id)}">补齐成员</button>` : sourceLink(honor.source)}</td></tr>`).join('') || '<tr><td colspan="7" class="table-empty">没有待确认的成绩</td></tr>'}
+    </tbody></table></div>`;
+}
+
+function pendingPage(data) {
+  return `<div class="page-shell"><div class="page-heading"><div><span class="eyebrow">Roster Review</span><h1>获奖信息待确认成员</h1></div><a href="/honor" data-route="honor">全部参赛成绩</a></div>${pendingTable(data)}<div class="pending-footer"><a href="/admin" data-route="admin">数据管理</a></div></div>`;
+}
+
+function bindPendingEvents(route) {
+  document.querySelector('#pendingSchool')?.addEventListener('change', event => {
+    state.pendingSchool = event.target.value;
+    renderRoute(route);
+  });
+  document.querySelector('#pendingQuery')?.addEventListener('input', event => {
+    const position = event.target.selectionStart;
+    state.pendingQuery = event.target.value;
+    renderRoute(route);
+    const input = document.querySelector('#pendingQuery');
+    input?.focus();
+    input?.setSelectionRange(position, position);
+  });
 }
 
 function ratingColor(rating) {
@@ -201,6 +242,7 @@ function ratingPage(data) {
   const statusLabel = { current: "近年成员", alumni: "往届成员", unknown: "年代待补", manual: "人工补录" };
   const query = state.memberQuery.trim().toLowerCase();
   let members = (data.members || []).filter((member) => {
+    if (state.memberSchool !== 'all' && (member.school || '大连理工大学') !== state.memberSchool) return false;
     if (state.memberStatus === "manual" && !member.manual) return false;
     if (state.memberStatus !== "all" && state.memberStatus !== "manual" && member.status !== state.memberStatus) return false;
     if (!query) return true;
@@ -234,7 +276,7 @@ function ratingPage(data) {
       ? accountLink(account)
       : '<span class="unknown">待补充</span>';
     return `<tr>
-      <td>${memberName}${member.manual ? '<span class="manual-tag">人工</span>' : ""}</td>
+      <td>${memberName}${member.manual ? '<span class="manual-tag">人工</span>' : ""}<small class="result-status">${escapeHtml(member.school || '大连理工大学')}</small></td>
       <td>${escapeHtml(statusLabel[member.status] || "成员")}</td>
       <td>${escapeHtml(years)}</td>
       <td>${teams}</td>
@@ -255,6 +297,7 @@ function ratingPage(data) {
         <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含成员的参赛成绩</span></div>
       </section>
       <div class="filters member-filters">
+        <label class="filter-group"><span>所属范围</span><select id="memberSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.memberSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
         <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="medals" ${state.memberSort === "medals" ? "selected" : ""}>奖牌榜顺序</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="cpcfinder" ${state.memberSort === "cpcfinder" ? "selected" : ""}>CPC Finder Rating</option><option value="maxrating" ${state.memberSort === "maxrating" ? "selected" : ""}>CF 最高 Rating</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>CF 当前 Rating</option></select></label>
         <label class="filter-group grow"><span>搜索</span><input id="memberQuery" type="search" value="${escapeHtml(state.memberQuery)}" placeholder="成员、队伍或 Codeforces 账号"></label>
@@ -267,7 +310,7 @@ function ratingPage(data) {
 }
 
 function adminMemberLabel(member) {
-  return `${member.name} · #${member.id}`;
+  return `${member.name} · #${member.id}${member.school && member.school !== '大连理工大学' ? ` · ${member.school}` : ''}`;
 }
 
 function adminMemberId(value) {
@@ -294,6 +337,7 @@ function adminPage(data) {
       <h2>补录成员</h2><div class="admin-fields">
       <label>姓名<input name="name" required maxlength="150"></label>
       <label>类别<select name="status"><option value="alumni">往届成员</option><option value="current">近年成员</option><option value="unknown">年代待补</option></select></label>
+      <label>所属范围<select name="school">${schoolGroups.map(school => `<option>${school}</option>`).join('')}</select></label>
       <label>入学年份<input name="entryYear" type="number" min="1900" max="2046"></label>
       <label>毕业年份<input name="graduationYear" type="number" min="1900" max="2046"></label>
       <label class="wide">内部备注<textarea name="notes" rows="3" maxlength="2000"></textarea></label>
@@ -312,10 +356,12 @@ function adminPage(data) {
       <label>队伍<input name="team" required maxlength="200"></label><label>成绩<select name="medal"><option>金牌</option><option>银牌</option><option>铜牌</option><option>铁牌</option></select></label>
       ${memberInput('member1', '成员 1')}${memberInput('member2', '成员 2', false)}${memberInput('member3', '成员 3', false)}
       <label>排名<input name="rank" maxlength="100" placeholder="11 / 200"></label><label class="wide">来源链接<input name="sourceUrl" type="url" maxlength="1500"></label>
-      </div><button class="admin-button">保存成绩</button></form>`,
+    </div><button class="admin-button">保存成绩</button></form>`,
   };
+  const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
+  forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`)).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩']].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
     <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
@@ -348,6 +394,13 @@ async function adminRequest(path, body) {
 }
 
 function bindAdminEvents() {
+  bindPendingEvents('admin');
+  document.querySelectorAll('[data-pending-id]').forEach(button => button.addEventListener('click', () => {
+    state.pendingId = button.dataset.pendingId;
+    state.adminMessage = '';
+    renderRoute('admin');
+    document.querySelector('#adminConfirmMembers')?.scrollIntoView({block: 'start'});
+  }));
   document.querySelectorAll('[data-admin-view]').forEach(button => button.addEventListener('click', () => {
     state.adminView = button.dataset.adminView;
     state.adminMessage = '';
@@ -393,6 +446,8 @@ function bindAdminEvents() {
   bindForm('#adminName', 'name', values => ({memberId: adminMemberId(values.member), displayName: values.displayName,
     aliases: values.aliases.split(/\n/).map(alias => alias.trim()).filter(Boolean)}), () => '姓名映射已保存');
   bindForm('#adminHonor', 'honor', values => ({...values, memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '参赛成绩已保存');
+  bindForm('#adminConfirmMembers', 'confirm-members', values => ({honorId: values.honorId,
+    memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '成员已确认，参赛成绩已保留');
   const bindAction = (id, path, success) => document.querySelector(id)?.addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;
@@ -525,11 +580,22 @@ function bindPageEvents(route) {
 
 function renderRoute(route) {
   if (!state.data) return;
-  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, admin: adminPage };
+  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, admin: adminPage, pending: pendingPage };
   app.innerHTML = renderers[route](state.data);
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);
   if (route === 'admin') bindAdminEvents();
+  if (route === 'pending') bindPendingEvents('pending');
+  document.querySelector('#memberSchool')?.addEventListener('change', event => {
+    state.memberSchool = event.target.value;
+    renderRoute('rating');
+  });
+  document.querySelector('#honorSchool')?.addEventListener('change', event => {
+    state.honorSchool = event.target.value;
+    renderRoute('honor');
+  });
+  const footerStart = document.querySelector('#footerStartYear');
+  if (footerStart) footerStart.textContent = String(state.data.meta.firstYear || '2020');
 }
 
 document.addEventListener("click", (event) => {

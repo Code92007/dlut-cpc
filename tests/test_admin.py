@@ -54,7 +54,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "name", "honor", "refresh-ratings", "logout"):
+        for path in ("member", "account", "name", "honor", "confirm-members", "refresh-ratings", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -109,6 +109,21 @@ class AdminTests(unittest.TestCase):
         with patch.dict("os.environ", {"ADMIN_PASSWORD": "", "ADMIN_PASSWORD_FILE": str(self.root / "missing")}):
             self.auth = AdminAuth(self.root)
         self.assertEqual(self.request("login", {"username": "admin", "password": ""})["status"], 503)
+
+    def test_admin_confirms_existing_award_without_deleting_it(self):
+        cookie, csrf = self.login()
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "series": "ICPC", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-v1", "honors": [record]})
+        ids = [self.database.add_manual_member(name) for name in ("甲", "乙", "丙")]
+        request = {"honorId": "historical", "memberIds": ids}
+        self.assertEqual(self.request("confirm-members", request, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("confirm-members", {**request, "memberIds": ids[:1]}, cookie=cookie, csrf=csrf)["status"], 400)
+        self.assertEqual(self.request("confirm-members", request, cookie=cookie, csrf=csrf)["status"], 200)
+        payload = self.database.payload(self.seed)
+        self.assertEqual(payload["pendingHonors"], [])
+        self.assertEqual(payload["honors"][0]["members"], ["甲", "乙", "丙"])
+        self.assertEqual(payload["honors"][0]["medal"], "金牌")
+        self.assertEqual(self.request("confirm-members", request, cookie=cookie, csrf=csrf)["status"], 400)
 
 
 if __name__ == "__main__":

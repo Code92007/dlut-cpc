@@ -1,0 +1,2 @@
+# Optional: needed only when creating a new historical archive, never by the website.
+algoux-standard-ranklist-utils==0.3.3

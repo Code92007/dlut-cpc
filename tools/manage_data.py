@@ -13,7 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from database import Database  # noqa: E402
+from database import Database, load_seed_file  # noqa: E402
+from schools import MAINTENANCE_GROUPS  # noqa: E402
 
 
 DEFAULT_DATABASE = ROOT / "runtime" / "dlut_cpc.sqlite3"
@@ -21,7 +22,7 @@ DEFAULT_SITE_DATA = ROOT / "data" / "site.json"
 
 
 def load_seed(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_seed_file(path)
 
 
 def source_from_args(args: argparse.Namespace) -> dict:
@@ -39,6 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     add_member = commands.add_parser("add-member", help="add a manually maintained member")
     add_member.add_argument("--name", required=True)
+    add_member.add_argument("--school", choices=MAINTENANCE_GROUPS, default="大连理工大学")
     add_member.add_argument("--entry-year", type=int)
     add_member.add_argument("--graduation-year", type=int)
     add_member.add_argument("--status", choices=("current", "alumni", "unknown"), default="alumni")
@@ -128,6 +130,7 @@ def main() -> None:
     if args.command == "add-member":
         member_id = database.add_manual_member(
             args.name,
+            school=args.school,
             entry_year=args.entry_year,
             graduation_year=args.graduation_year,
             status=args.status,

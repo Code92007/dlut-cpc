@@ -23,18 +23,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from database import Database  # noqa: E402
+from schools import SCHOOL_ALIASES, school_group  # noqa: E402
 
 
 DEFAULT_SITE_DATA = ROOT / "data" / "site.json"
 DEFAULT_DATABASE = ROOT / "runtime" / "dlut_cpc.sqlite3"
 DEFAULT_SOURCE_URL = "https://cpcfinder.com/api/school/9c417252-c487-4eae-8822-fcd1e74b9329/awards"
 DEFAULT_SCHOOL_NAME = "大连理工大学"
-SCHOOL_ALIASES = {
-    "大连理工大学",
-    "大连理工大学盘锦校区",
-    "大连理工大学（盘锦校区）",
-    "大连理工大学(盘锦校区)",
-}
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
 
 
@@ -123,6 +118,7 @@ def parse_cpcfinder_students(
             continue
         result.append({
             "name": name,
+            "school": school_group(school),
             "provider": "cpcfinder",
             "externalId": student_id,
             "status": "auto",
@@ -217,6 +213,7 @@ def contest_member_map(
             members.append(
                 {
                     "name": normalize_space(str(member["name"])),
+                    **({"school": school_group(row["schoolName"])} if school_group(row.get("schoolName", "")) else {}),
                     "provider": "cpcfinder",
                     "externalId": str(member.get("studentId") or ""),
                 }

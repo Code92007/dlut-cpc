@@ -8,10 +8,20 @@ import re
 import sqlite3
 from pathlib import Path
 from typing import Iterable
+from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
+
+
+def load_seed_file(path: Path | str) -> dict:
+    path = Path(path)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    archive = path.parent / "historical_honors.json"
+    if archive.exists():
+        data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]
+    return data
 
 
 def normalize_name(value: str) -> str:
@@ -54,6 +64,7 @@ CREATE TABLE IF NOT EXISTS members (
     name TEXT NOT NULL,
     normalized_name TEXT NOT NULL,
     display_name TEXT,
+    school TEXT NOT NULL DEFAULT '大连理工大学',
     entry_year INTEGER,
     graduation_year INTEGER,
     status TEXT NOT NULL DEFAULT 'auto',
@@ -160,6 +171,18 @@ CREATE TABLE IF NOT EXISTS honor_members (
     is_manual INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY(honor_id, member_id)
 );
+
+CREATE TABLE IF NOT EXISTS honor_roster_reviews (
+    honor_id TEXT PRIMARY KEY REFERENCES honors(id) ON DELETE CASCADE,
+    batch_id TEXT NOT NULL,
+    expected_members INTEGER NOT NULL DEFAULT 3 CHECK(expected_members BETWEEN 1 AND 3),
+    school TEXT NOT NULL DEFAULT '大连理工大学',
+    original_school TEXT NOT NULL DEFAULT '',
+    archive_json TEXT NOT NULL DEFAULT '{}',
+    suggested_members_json TEXT NOT NULL DEFAULT '[]',
+    confirmed_at TEXT,
+    confirmed_source_id INTEGER REFERENCES sources(id)
+);
 """
 
 
@@ -191,6 +214,8 @@ class Database:
         member_columns = {row["name"] for row in connection.execute("PRAGMA table_info(members)")}
         if "display_name" not in member_columns:
             connection.execute("ALTER TABLE members ADD COLUMN display_name TEXT")
+        if "school" not in member_columns:
+            connection.execute("ALTER TABLE members ADD COLUMN school TEXT NOT NULL DEFAULT '大连理工大学'")
         handle_columns = list(connection.execute("PRAGMA table_info(member_handles)"))
         if not any(row["name"] == "handle" and row["pk"] for row in handle_columns):
             # Rebuild the old one-account-per-platform table without losing ownership.
@@ -245,14 +270,15 @@ class Database:
         if provider and external_id:
             rows = connection.execute(
                 "SELECT m.id FROM members m WHERE m.normalized_name=? "
+                "AND m.school=? "
                 "AND NOT EXISTS (SELECT 1 FROM member_identities mi WHERE mi.member_id=m.id) "
                 "ORDER BY m.is_manual DESC, m.id",
-                (normalized,),
+                (normalized, school_group(detail.get("school", "大连理工大学")) or "大连理工大学"),
             ).fetchall()
         else:
             rows = connection.execute(
-                "SELECT id FROM members WHERE normalized_name=? ORDER BY is_manual DESC, id",
-                (normalized,),
+                "SELECT id FROM members WHERE normalized_name=? AND school=? ORDER BY is_manual DESC, id",
+                (normalized, school_group(detail.get("school", "大连理工大学")) or "大连理工大学"),
             ).fetchall()
         return int(rows[0]["id"]) if len(rows) == 1 else None
 
@@ -303,6 +329,9 @@ class Database:
                         member_id,
                     ),
                 )
+        if detail.get("school"):
+            connection.execute("UPDATE members SET school=? WHERE id=? AND (? OR is_manual=0)",
+                               (school_group(detail["school"]) or "大连理工大学", member_id, int(manual)))
         provider = detail.get("provider")
         external_id = detail.get("externalId")
         if provider and external_id:
@@ -518,11 +547,79 @@ class Database:
             display_name = connection.execute("SELECT display_name FROM members WHERE id=?", (member_id,)).fetchone()["display_name"]
             if not display_name or display_name == override["displayName"]:
                 self._set_display_name(connection, member_id, override["displayName"], override.get("aliases", []))
+        for batch in site.get("historicalImports", []):
+            self._import_historical_batch(connection, batch)
         connection.execute(
             "INSERT INTO metadata(key, value) VALUES ('data_updated_at', ?) "
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
             (str(site.get("meta", {}).get("updatedAt") or dt.date.today().isoformat()),),
         )
+
+    def _import_historical_batch(self, connection: sqlite3.Connection, batch: dict) -> int:
+        batch_id = batch.get("batchId")
+        if not isinstance(batch_id, str) or not batch_id or len(batch_id) > 150:
+            raise ValueError("Invalid historical import batch ID")
+        marker = f"historical_import:{batch_id}"
+        if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+            return 0
+        records = batch.get("honors", [])
+        for record in records:
+            expected = record.get("expectedMembers", 3)
+            if type(expected) is not int or not 1 <= expected <= 3:
+                raise ValueError("Invalid historical team size")
+            if (record.get("school") or "大连理工大学") not in MAINTENANCE_GROUPS:
+                raise ValueError("Invalid historical maintenance group")
+            if record.get("date", "") >= "2020-01-01" or record.get("medal") not in {"金牌", "银牌", "铜牌"}:
+                raise ValueError("Historical imports accept only pre-2020 medal results")
+            dt.date.fromisoformat(record["date"])
+            # A repeated team name is not evidence of the same roster. Always
+            # leave historical people unlinked until an admin selects their IDs.
+            honor_id = self._upsert_honor(connection, {**record, "members": [], "memberDetails": []})
+            connection.execute(
+                "INSERT OR IGNORE INTO honor_roster_reviews(honor_id, batch_id, expected_members, school, "
+                "original_school, archive_json, suggested_members_json) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (honor_id, batch_id, expected, record.get("school") or "大连理工大学",
+                 record.get("originalSchool") or "", json.dumps(record.get("archive", {}), ensure_ascii=False),
+                 json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)),
+            )
+        connection.execute("INSERT INTO metadata(key, value) VALUES (?, ?)",
+                           (marker, json.dumps({"fetchedAt": batch.get("fetchedAt"), "count": len(records),
+                                                "source": batch.get("source"), "contests": batch.get("contests", [])}, ensure_ascii=False)))
+        return len(records)
+
+    def import_historical_batch(self, batch: dict) -> int:
+        with self.connect() as connection:
+            self._ensure_schema(connection)
+            return self._import_historical_batch(connection, batch)
+
+    def confirm_honor_members(self, honor_id: str, member_ids: list[int], *, source: dict | None = None) -> None:
+        with self.connect() as connection:
+            honor = connection.execute("SELECT id FROM honors WHERE id=?", (honor_id,)).fetchone()
+            if not honor:
+                raise ValueError("参赛成绩不存在")
+            review = connection.execute("SELECT * FROM honor_roster_reviews WHERE honor_id=?", (honor_id,)).fetchone()
+            if review and review["confirmed_at"]:
+                raise ValueError("该成绩的成员已经确认，请勿重复提交")
+            if not review and connection.execute("SELECT 1 FROM honor_members WHERE honor_id=?", (honor_id,)).fetchone():
+                raise ValueError("该成绩已有成员名单，不能作为待确认项覆盖")
+            expected = review["expected_members"] if review else 3
+            if len(member_ids) != expected or len(set(member_ids)) != expected:
+                raise ValueError(f"请选择 {expected} 位不同的参赛成员")
+            for member_id in member_ids:
+                member = connection.execute("SELECT school FROM members WHERE id=?", (member_id,)).fetchone() if type(member_id) is int else None
+                if not member:
+                    raise ValueError(f"member {member_id} does not exist")
+                if review and member["school"] != review["school"]:
+                    raise ValueError("参赛成员与成绩所属范围不一致；城市学院、盘锦校区须独立维护")
+            source_id = self._source(connection, source, manual=True)
+            connection.execute("DELETE FROM honor_members WHERE honor_id=?", (honor_id,))
+            for position, member_id in enumerate(member_ids):
+                connection.execute("INSERT INTO honor_members(honor_id, member_id, position, source_id, is_manual) VALUES (?, ?, ?, ?, 1)",
+                                   (honor_id, member_id, position, source_id))
+                connection.execute("INSERT OR IGNORE INTO member_sources(member_id, source_id, role, is_manual) VALUES (?, ?, 'roster', 1)",
+                                   (member_id, source_id))
+            connection.execute("UPDATE honor_roster_reviews SET confirmed_at=CURRENT_TIMESTAMP, confirmed_source_id=? WHERE honor_id=?",
+                               (source_id, honor_id))
 
     def sync_site_data(self, site: dict) -> None:
         with self.connect() as connection:
@@ -539,13 +636,17 @@ class Database:
         notes: str = "",
         source: dict | None = None,
         match_existing: bool = False,
+        school: str = "大连理工大学",
     ) -> int:
         with self.connect() as connection:
+            if school not in MAINTENANCE_GROUPS:
+                raise ValueError("成员所属校区无效")
             source_id = self._source(connection, source, manual=True)
             return self._upsert_member(
                 connection,
                 {
                     "name": name,
+                    "school": school,
                     "entryYear": entry_year,
                     "graduationYear": graduation_year,
                     "status": status,
@@ -650,16 +751,25 @@ class Database:
     def payload(self, base: dict) -> dict:
         result = copy.deepcopy(base)
         result.pop("ratingGroups", None)
+        result.pop("historicalImports", None)
         with self.connect() as connection:
             honors = self._honors_payload(connection)
             members = self._members_payload(connection)
             updated = connection.execute("SELECT value FROM metadata WHERE key='data_updated_at'").fetchone()
         result["honors"] = honors
         result["members"] = members
+        result["pendingHonors"] = [item for item in honors if not item["rosterConfirmed"]]
         result["medalSummary"] = self._medal_summary(honors)
         result["meta"]["updatedAt"] = updated["value"] if updated else result["meta"].get("updatedAt")
         result["meta"]["memberCount"] = len(members)
-        result["meta"]["honorsWithMembers"] = sum(bool(item["members"]) for item in honors)
+        result["meta"]["firstYear"] = min((item["date"][:4] for item in honors), default="2020")
+        result["meta"]["pendingHonorCount"] = len(result["pendingHonors"])
+        regional_ranks = [int(match.group(1)) for item in honors
+                          if item["series"] in {"ICPC", "CCPC"} and item["official"] is not False
+                          and item["location"] != "总决赛" and not re.search(r"final|总决赛", item["event"], re.I)
+                          for match in [re.match(r"^([1-9]\d*)(?:\s*/|$)", item["rank"])] if match]
+        result["meta"]["bestRank"] = min(regional_ranks) if regional_ranks else "—"
+        result["meta"]["honorsWithMembers"] = sum(item["rosterConfirmed"] for item in honors)
         result["meta"]["memberCoverage"] = round(
             100 * result["meta"]["honorsWithMembers"] / max(1, len(honors))
         )
@@ -667,13 +777,15 @@ class Database:
 
     def _honors_payload(self, connection: sqlite3.Connection) -> list[dict]:
         rows = connection.execute(
-            "SELECT h.*, s.name AS source_name, s.url AS source_url FROM honors h "
+            "SELECT h.*, s.name AS source_name, s.url AS source_url, r.expected_members, r.school, r.original_school, "
+            "r.confirmed_at, r.batch_id, r.suggested_members_json FROM honors h "
+            "LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
             "LEFT JOIN sources s ON s.id=h.primary_source_id ORDER BY h.date DESC, h.event, h.team"
         ).fetchall()
         result = []
         for row in rows:
             member_rows = connection.execute(
-                "SELECT m.id, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
+                "SELECT m.id, m.school, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
                 "JOIN members m ON m.id=hm.member_id "
                 "LEFT JOIN member_identities mi ON mi.member_id=m.id AND mi.provider='cpcfinder' "
                 "WHERE hm.honor_id=? ORDER BY hm.position, m.id",
@@ -692,6 +804,11 @@ class Database:
                     "date": row["date"],
                     "location": row["location"],
                     "team": row["team"],
+                    "school": row["school"] or (member_rows[0]["school"] if member_rows and len({item["school"] for item in member_rows}) == 1 else "大连理工大学"),
+                    "originalSchool": row["original_school"] or "",
+                    "expectedMembers": row["expected_members"] or len(member_rows) or 3,
+                    "rosterConfirmed": bool(row["confirmed_at"]) if row["batch_id"] else bool(member_rows),
+                    "suggestedMembers": json.loads(row["suggested_members_json"] or "[]"),
                     "members": [item["name"] for item in member_rows],
                     "memberDetails": [
                         {
@@ -723,7 +840,8 @@ class Database:
         for row in rows:
             honors = connection.execute(
                 "SELECT h.id, h.date, h.team, h.medal, h.is_manual, h.external_provider, h.external_award_id FROM honor_members hm "
-                "JOIN honors h ON h.id=hm.honor_id WHERE hm.member_id=? ORDER BY h.date DESC",
+                "JOIN honors h ON h.id=hm.honor_id LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
+                "WHERE hm.member_id=? AND (r.honor_id IS NULL OR r.confirmed_at IS NOT NULL) ORDER BY h.date DESC",
                 (row["id"],),
             ).fetchall()
             handles = connection.execute(
@@ -748,7 +866,7 @@ class Database:
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
-                    if honor["is_manual"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
+                    if (honor["is_manual"] or honor["external_provider"] == "rankland") and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
                         manual_medals[field] += 1
             if public_stats:
                 medals = {
@@ -760,6 +878,10 @@ class Database:
                         if public_stats["iron_count"] is not None else None
                     ),
                 }
+            elif any(honor["external_provider"] == "rankland" for honor in honors):
+                # The archive contains medalists only, not a complete record of
+                # participation. Do not reward unknown iron totals as zero.
+                medals["iron"] = None
             latest_public_year = None
             if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():
                 latest_public_year = int(str(public_stats["latest_event_date"])[:4])
@@ -790,6 +912,7 @@ class Database:
                 {
                     "id": row["id"],
                     "name": row["display_name"] or row["name"],
+                    "school": row["school"],
                     "aliases": aliases,
                     "entryYear": row["entry_year"],
                     "graduationYear": row["graduation_year"],
@@ -825,7 +948,8 @@ class Database:
                 dict(row)
                 for row in connection.execute(
                     "SELECT h.id, h.date, h.event, h.team FROM honors h "
-                    "LEFT JOIN honor_members hm ON hm.honor_id=h.id GROUP BY h.id HAVING COUNT(hm.member_id)=0 "
+                    "LEFT JOIN honor_members hm ON hm.honor_id=h.id LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
+                    "GROUP BY h.id HAVING COUNT(hm.member_id)=0 OR (r.honor_id IS NOT NULL AND r.confirmed_at IS NULL) "
                     "ORDER BY h.date DESC"
                 ).fetchall()
             ]

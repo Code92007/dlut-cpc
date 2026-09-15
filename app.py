@@ -14,7 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from database import Database
+from database import Database, load_seed_file
 from admin_auth import AdminAuth
 
 
@@ -24,12 +24,11 @@ DATA_PATH = Path(os.environ.get("SITE_DATA_PATH", ROOT / "data" / "site.json"))
 DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cpc.sqlite3"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
-SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/admin"}
+SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/admin", "/pending"}
 
 
 def load_seed_data() -> dict:
-    with DATA_PATH.open(encoding="utf-8") as handle:
-        data = json.load(handle)
+    data = load_seed_file(DATA_PATH)
     required = {"meta", "honors", "training"}
     missing = sorted(required.difference(data))
     if missing:
@@ -137,9 +136,10 @@ class SiteHandler(BaseHTTPRequestHandler):
             source = {"name": f"管理员人工补录（{session['username']}）", "kind": "manual"}
             if path == "/api/admin/member":
                 name = self._text(body, "name", 150, required=True)
+                school = self._text(body, "school", 100) or "大连理工大学"
                 from database import normalize_name
                 with database.connect() as connection:
-                    duplicate = connection.execute("SELECT 1 FROM members WHERE normalized_name=? OR display_name=?", (normalize_name(name), name)).fetchone()
+                    duplicate = connection.execute("SELECT 1 FROM members WHERE (normalized_name=? OR display_name=?) AND school=?", (normalize_name(name), name, school)).fetchone()
                 if duplicate and body.get("allowSameName") is not True:
                     raise ValueError("已有同名成员；仅在确认是不同选手时勾选“独立的同名成员”")
                 entry = self._year(body.get("entryYear"))
@@ -150,7 +150,7 @@ class SiteHandler(BaseHTTPRequestHandler):
                 if status not in {"current", "alumni", "unknown"}:
                     raise ValueError("成员类别无效")
                 member_id = database.add_manual_member(name, entry_year=entry, graduation_year=graduation,
-                                                      status=status, notes=self._text(body, "notes", 2000), source=source)
+                                                      status=status, notes=self._text(body, "notes", 2000), source=source, school=school)
                 self._send_json({"ok": True, "memberId": member_id})
             elif path == "/api/admin/account":
                 handle = self._text(body, "handle", 100, required=True)
@@ -193,6 +193,13 @@ class SiteHandler(BaseHTTPRequestHandler):
                           "rank": self._text(body, "rank", 100), "source": {**source, "url": source_url}}
                 honor_id = database.add_manual_honor_with_members(record, member_ids)
                 self._send_json({"ok": True, "honorId": honor_id})
+            elif path == "/api/admin/confirm-members":
+                member_ids = body.get("memberIds")
+                if not isinstance(member_ids, list) or not 1 <= len(member_ids) <= 3:
+                    raise ValueError("参赛成员列表无效")
+                database.confirm_honor_members(self._text(body, "honorId", 150, required=True),
+                                               [self._member_id(value) for value in member_ids], source=source)
+                self._send_json({"ok": True})
             elif path == "/api/admin/refresh-ratings":
                 from tools.sync_codeforces import sync_ratings
                 updates, errors = sync_ratings(database, load_seed_data())
