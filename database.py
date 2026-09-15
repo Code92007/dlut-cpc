@@ -12,7 +12,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -183,6 +183,23 @@ CREATE TABLE IF NOT EXISTS honor_roster_reviews (
     confirmed_at TEXT,
     confirmed_source_id INTEGER REFERENCES sources(id)
 );
+
+CREATE TABLE IF NOT EXISTS roster_submissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    honor_id TEXT NOT NULL REFERENCES honors(id) ON DELETE CASCADE,
+    members_json TEXT NOT NULL,
+    note TEXT NOT NULL DEFAULT '',
+    fingerprint TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'approved', 'rejected', 'superseded')),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TEXT,
+    reviewed_by TEXT,
+    review_note TEXT NOT NULL DEFAULT ''
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_roster_submissions_duplicate
+ON roster_submissions(honor_id, fingerprint) WHERE status='pending';
+CREATE INDEX IF NOT EXISTS idx_roster_submissions_queue ON roster_submissions(status, id);
 """
 
 
@@ -593,7 +610,7 @@ class Database:
             return self._import_historical_batch(connection, batch)
 
     def _resolve_roster_member(self, connection: sqlite3.Connection, value: int | str,
-                               school: str | None, source_id: int) -> int:
+                               school: str | None, source_id: int | None, *, create_missing: bool = True) -> int | str:
         if type(value) is int and value > 0:
             member = connection.execute("SELECT school FROM members WHERE id=?", (value,)).fetchone()
             if not member:
@@ -618,38 +635,139 @@ class Database:
             raise ValueError(f"“{name}”有多个同名或同别名成员，请从名单中选择具体成员 ID")
         if matches:
             return next(iter(matches))
+        if not create_missing:
+            return name
+        assert source_id is not None
         return self._upsert_member(connection, {"name": name, "school": target_school,
                                                "status": "alumni", "_forceNew": True}, source_id, manual=True)
+
+    @staticmethod
+    def _pending_roster(connection: sqlite3.Connection, honor_id: str) -> sqlite3.Row | None:
+        if not connection.execute("SELECT id FROM honors WHERE id=?", (honor_id,)).fetchone():
+            raise ValueError("参赛成绩不存在")
+        review = connection.execute("SELECT * FROM honor_roster_reviews WHERE honor_id=?", (honor_id,)).fetchone()
+        if review and review["confirmed_at"]:
+            raise ValueError("该成绩的成员已经确认，请勿重复提交")
+        if not review and connection.execute("SELECT 1 FROM honor_members WHERE honor_id=?", (honor_id,)).fetchone():
+            raise ValueError("该成绩已有成员名单，不能作为待确认项覆盖")
+        return review
+
+    def _confirm_honor_members(self, connection: sqlite3.Connection, honor_id: str,
+                               members: list[int | str], source: dict | None) -> list[int]:
+        review = self._pending_roster(connection, honor_id)
+        expected = review["expected_members"] if review else 3
+        if not isinstance(members, list) or len(members) != expected:
+            raise ValueError(f"请填写 {expected} 位不同的参赛成员")
+        source_id = self._source(connection, source, manual=True)
+        member_ids = [self._resolve_roster_member(connection, value, review["school"] if review else None, source_id)
+                      for value in members]
+        if len(set(member_ids)) != expected:
+            raise ValueError(f"请填写 {expected} 位不同的参赛成员，同一成员不能重复")
+        connection.execute("DELETE FROM honor_members WHERE honor_id=?", (honor_id,))
+        for position, member_id in enumerate(member_ids):
+            connection.execute("INSERT INTO honor_members(honor_id, member_id, position, source_id, is_manual) VALUES (?, ?, ?, ?, 1)",
+                               (honor_id, member_id, position, source_id))
+            connection.execute("INSERT OR IGNORE INTO member_sources(member_id, source_id, role, is_manual) VALUES (?, ?, 'roster', 1)",
+                               (member_id, source_id))
+        connection.execute("UPDATE honor_roster_reviews SET confirmed_at=CURRENT_TIMESTAMP, confirmed_source_id=? WHERE honor_id=?",
+                           (source_id, honor_id))
+        connection.execute("UPDATE roster_submissions SET status='superseded', reviewed_at=CURRENT_TIMESTAMP, "
+                           "review_note='名单已由其他确认完善' WHERE honor_id=? AND status='pending'", (honor_id,))
+        return member_ids
 
     def confirm_honor_members(self, honor_id: str, member_ids: list[int | str], *, source: dict | None = None) -> None:
         with self.connect() as connection:
             # Serialize creation and confirmation so concurrent requests cannot
             # create duplicate people or overwrite an already confirmed roster.
             connection.execute("BEGIN IMMEDIATE")
-            honor = connection.execute("SELECT id FROM honors WHERE id=?", (honor_id,)).fetchone()
-            if not honor:
-                raise ValueError("参赛成绩不存在")
-            review = connection.execute("SELECT * FROM honor_roster_reviews WHERE honor_id=?", (honor_id,)).fetchone()
-            if review and review["confirmed_at"]:
-                raise ValueError("该成绩的成员已经确认，请勿重复提交")
-            if not review and connection.execute("SELECT 1 FROM honor_members WHERE honor_id=?", (honor_id,)).fetchone():
-                raise ValueError("该成绩已有成员名单，不能作为待确认项覆盖")
+            self._confirm_honor_members(connection, honor_id, member_ids, source)
+
+    def submit_roster(self, honor_id: str, members: list[int | str], *, note: str = "") -> tuple[int, bool]:
+        if not isinstance(note, str) or len(note) > 2000:
+            raise ValueError("补录说明最多 2000 字")
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            review = self._pending_roster(connection, honor_id)
             expected = review["expected_members"] if review else 3
-            if not isinstance(member_ids, list) or len(member_ids) != expected:
+            if not isinstance(members, list) or len(members) != expected:
                 raise ValueError(f"请填写 {expected} 位不同的参赛成员")
-            source_id = self._source(connection, source, manual=True)
-            member_ids = [self._resolve_roster_member(connection, value, review["school"] if review else None, source_id)
-                          for value in member_ids]
-            if len(set(member_ids)) != expected:
+            members = [self._resolve_roster_member(connection, value, review["school"] if review else "大连理工大学",
+                                                   None, create_missing=False) for value in members]
+            keys = [f"id:{value}" if type(value) is int else f"name:{normalize_name(value)}" for value in members]
+            if len(set(keys)) != expected:
                 raise ValueError(f"请填写 {expected} 位不同的参赛成员，同一成员不能重复")
-            connection.execute("DELETE FROM honor_members WHERE honor_id=?", (honor_id,))
-            for position, member_id in enumerate(member_ids):
-                connection.execute("INSERT INTO honor_members(honor_id, member_id, position, source_id, is_manual) VALUES (?, ?, ?, ?, 1)",
-                                   (honor_id, member_id, position, source_id))
-                connection.execute("INSERT OR IGNORE INTO member_sources(member_id, source_id, role, is_manual) VALUES (?, ?, 'roster', 1)",
-                                   (member_id, source_id))
-            connection.execute("UPDATE honor_roster_reviews SET confirmed_at=CURRENT_TIMESTAMP, confirmed_source_id=? WHERE honor_id=?",
-                               (source_id, honor_id))
+            fingerprint = hashlib.sha256(json.dumps(sorted(keys), ensure_ascii=False).encode()).hexdigest()
+            duplicate = connection.execute("SELECT id FROM roster_submissions WHERE honor_id=? AND fingerprint=? AND status='pending'",
+                                           (honor_id, fingerprint)).fetchone()
+            if duplicate:
+                return int(duplicate["id"]), False
+            if connection.execute("SELECT COUNT(*) FROM roster_submissions WHERE honor_id=? AND status='pending'", (honor_id,)).fetchone()[0] >= 5:
+                raise ValueError("这条成绩已有多份名单待审核，请等待管理员处理")
+            if connection.execute("SELECT COUNT(*) FROM roster_submissions WHERE status='pending'").fetchone()[0] >= 1000:
+                raise ValueError("审核队列已满，请稍后提交")
+            cursor = connection.execute("INSERT INTO roster_submissions(honor_id, members_json, note, fingerprint) VALUES (?, ?, ?, ?)",
+                                        (honor_id, json.dumps(members, ensure_ascii=False), note.strip(), fingerprint))
+            return int(cursor.lastrowid), True
+
+    def review_roster_submission(self, submission_id: int, approve: bool, *, reviewer: str, reason: str = "") -> None:
+        if type(submission_id) is not int or submission_id <= 0 or type(approve) is not bool:
+            raise ValueError("审核参数无效")
+        if not isinstance(reviewer, str) or not reviewer.strip() or len(reviewer) > 100:
+            raise ValueError("审核管理员无效")
+        if not isinstance(reason, str) or len(reason) > 2000:
+            raise ValueError("审核说明最多 2000 字")
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            submission = connection.execute("SELECT * FROM roster_submissions WHERE id=?", (submission_id,)).fetchone()
+            if not submission:
+                raise ValueError("补录提案不存在")
+            if submission["status"] != "pending":
+                raise ValueError("该提案已处理或已失效，请刷新审核列表")
+            resolved_members = None
+            if approve:
+                source = {"name": f"游客补录（管理员 {reviewer} 审核 · #{submission_id}）", "kind": "manual", "priority": 100}
+                resolved_members = json.dumps(self._confirm_honor_members(
+                    connection, submission["honor_id"], json.loads(submission["members_json"]), source))
+            connection.execute("UPDATE roster_submissions SET status=?, reviewed_at=CURRENT_TIMESTAMP, reviewed_by=?, "
+                               "review_note=?, members_json=COALESCE(?, members_json) WHERE id=?",
+                               ("approved" if approve else "rejected", reviewer, reason.strip(), resolved_members, submission_id))
+
+    def roster_submissions(self, *, status: str = "pending", page: int = 1, school: str = "all") -> dict:
+        if status not in {"pending", "approved", "rejected", "superseded", "all"}:
+            raise ValueError("审核状态无效")
+        if type(page) is not int or not 1 <= page <= 1_000_000:
+            raise ValueError("审核页码无效")
+        if school not in {*MAINTENANCE_GROUPS, "all"}:
+            raise ValueError("所属范围无效")
+        conditions, parameters = [], []
+        if status != "all":
+            conditions.append("p.status=?")
+            parameters.append(status)
+        if school != "all":
+            conditions.append("COALESCE(r.school, '大连理工大学')=?")
+            parameters.append(school)
+        where = " WHERE " + " AND ".join(conditions) if conditions else ""
+        joined = " FROM roster_submissions p JOIN honors h ON h.id=p.honor_id LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id"
+        with self.connect() as connection:
+            total = connection.execute("SELECT COUNT(*)" + joined + where, parameters).fetchone()[0]
+            pages = max(1, (total + 49) // 50)
+            page = min(page, pages)
+            pending_count = connection.execute("SELECT COUNT(*) FROM roster_submissions WHERE status='pending'").fetchone()[0]
+            order = "p.id ASC" if status == "pending" else "p.id DESC"
+            rows = connection.execute("SELECT p.*, h.team, h.event, h.date, h.medal, h.rank, "
+                                      "COALESCE(r.school, '大连理工大学') AS school" + joined + where
+                                      + " ORDER BY " + order + " LIMIT 50 OFFSET ?", [*parameters, (page - 1) * 50]).fetchall()
+            submissions = []
+            for row in rows:
+                members = []
+                for value in json.loads(row["members_json"]):
+                    member = connection.execute("SELECT COALESCE(display_name, name) AS name FROM members WHERE id=?", (value,)).fetchone() if type(value) is int else None
+                    members.append({"value": value, "name": member["name"] if member else str(value), "newMember": type(value) is str})
+                submissions.append({"id": row["id"], "honorId": row["honor_id"], "team": row["team"], "event": row["event"],
+                                    "date": row["date"], "school": row["school"], "medal": row["medal"], "rank": row["rank"],
+                                    "members": members, "note": row["note"], "status": row["status"], "submittedAt": row["created_at"],
+                                    "reviewedAt": row["reviewed_at"], "reviewer": row["reviewed_by"], "reviewNote": row["review_note"]})
+        return {"submissions": submissions, "total": total, "page": page, "pages": pages, "pendingCount": pending_count}
 
     def sync_site_data(self, site: dict) -> None:
         with self.connect() as connection:
@@ -806,6 +924,8 @@ class Database:
         return result
 
     def _honors_payload(self, connection: sqlite3.Connection) -> list[dict]:
+        submission_counts = {row["honor_id"]: row["count"] for row in connection.execute(
+            "SELECT honor_id, COUNT(*) AS count FROM roster_submissions WHERE status='pending' GROUP BY honor_id")}
         rows = connection.execute(
             "SELECT h.*, s.name AS source_name, s.url AS source_url, r.expected_members, r.school, r.original_school, "
             "r.confirmed_at, r.batch_id, r.suggested_members_json FROM honors h "
@@ -839,6 +959,7 @@ class Database:
                     "expectedMembers": row["expected_members"] or len(member_rows) or 3,
                     "rosterConfirmed": bool(row["confirmed_at"]) if row["batch_id"] else bool(member_rows),
                     "suggestedMembers": json.loads(row["suggested_members_json"] or "[]"),
+                    "pendingSubmissionCount": submission_counts.get(row["id"], 0),
                     "members": [item["name"] for item in member_rows],
                     "memberDetails": [
                         {

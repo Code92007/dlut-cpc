@@ -1358,3 +1358,26 @@ a:hover {
 .admin-tabs {
   flex-wrap: wrap;
 }
+
+.guest-roster-button { display: block; margin-top: 8px; }
+.guest-roster-form { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.review-item { display: grid; grid-template-columns: minmax(0, 2fr) minmax(160px, 1fr) auto; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.review-item h3 { margin: 0 0 10px; font-size: 17px; }
+.review-item p { margin: 6px 0; font-size: 13px; line-height: 1.6; }
+.review-item small { color: var(--muted); font-size: 12px; }
+.review-contest, .review-roster, .review-actions { min-width: 0; overflow-wrap: anywhere; }
+.review-contest details { margin-top: 12px; font-size: 13px; }
+.review-note { white-space: pre-wrap; }
+.review-roster { margin: 0; padding-left: 20px; line-height: 2; font-size: 14px; }
+.review-actions { display: flex; align-items: flex-start; align-content: flex-start; justify-content: flex-end; flex-wrap: wrap; gap: 8px; max-width: 230px; }
+.review-actions .admin-button + .admin-button { margin-left: 0; }
+.review-actions small { flex-basis: 100%; text-align: right; line-height: 1.6; }
+.review-actions .reject { color: #b42318; border-color: #b42318; }
+.review-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 24px; font-size: 13px; }
+.review-pagination span { margin-right: auto; }
+.review-pagination .admin-button + .admin-button { margin-left: 0; }
+@media (max-width: 760px) {
+  .review-item { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .review-actions { justify-content: flex-start; max-width: none; }
+  .review-actions small { text-align: left; }
+}

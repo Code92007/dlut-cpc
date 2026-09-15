@@ -4,15 +4,19 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hmac
+import ipaddress
 import json
 import mimetypes
 import os
 import re
 import sqlite3
+import threading
+import time
+from collections import deque
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 from database import Database, load_seed_file
 from admin_auth import AdminAuth
@@ -25,6 +29,28 @@ DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cp
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
 SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/admin", "/pending"}
+
+
+class SubmissionLimiter:
+    def __init__(self) -> None:
+        self.requests: dict[str, deque] = {}
+        self.lock = threading.Lock()
+
+    def allow(self, address: str, *, now: float | None = None) -> bool:
+        with self.lock:
+            stamp = time.monotonic() if now is None else now
+            self.requests = {ip: times for ip, times in self.requests.items() if times[-1] > stamp - 600}
+            times = self.requests.get(address)
+            if times is None:
+                if len(self.requests) >= 4096:
+                    return False
+                times = self.requests.setdefault(address, deque())
+            while times and times[0] <= stamp - 600:
+                times.popleft()
+            if len(times) >= 20:
+                return False
+            times.append(stamp)
+            return True
 
 
 def load_seed_data() -> dict:
@@ -60,6 +86,18 @@ class SiteHandler(BaseHTTPRequestHandler):
                              "username": session["username"] if session else None,
                              "csrf": session["csrf"] if session else None})
             return
+        if path == "/api/admin/submissions":
+            if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
+                self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
+                return
+            try:
+                query = parse_qs(urlsplit(self.path).query)
+                self._send_json(Database(DATABASE_PATH).roster_submissions(
+                    status=query.get("status", ["pending"])[0], page=int(query.get("page", ["1"])[0]),
+                    school=query.get("school", ["all"])[0]))
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+            return
         if path == "/healthz":
             self._send_json({"ok": True})
             return
@@ -87,6 +125,9 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if path == "/api/roster-submissions":
+            self._submit_roster()
+            return
         if not path.startswith("/api/admin/"):
             self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
             return
@@ -104,14 +145,7 @@ class SiteHandler(BaseHTTPRequestHandler):
             self._send_json({"error": "拒绝跨站修改请求"}, HTTPStatus.FORBIDDEN)
             return
         try:
-            length = int(self.headers.get("Content-Length", "0"))
-            if length <= 0 or length > 32_768:
-                raise ValueError("请求大小无效")
-            if self.headers.get_content_type() != "application/json":
-                raise ValueError("请求必须使用 JSON")
-            body = json.loads(self.rfile.read(length))
-            if not isinstance(body, dict):
-                raise ValueError("请求数据无效")
+            body = self._read_json()
             if path == "/api/admin/login":
                 if not auth.enabled:
                     self._send_json({"error": "管理员账号尚未配置"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -202,6 +236,12 @@ class SiteHandler(BaseHTTPRequestHandler):
                 database.confirm_honor_members(self._text(body, "honorId", 150, required=True),
                                                members, source=source)
                 self._send_json({"ok": True})
+            elif path == "/api/admin/review-submission":
+                if type(body.get("approve")) is not bool:
+                    raise ValueError("审核决定无效")
+                database.review_roster_submission(self._member_id(body.get("submissionId")), body["approve"],
+                                                 reviewer=session["username"], reason=self._text(body, "reason", 2000))
+                self._send_json({"ok": True})
             elif path == "/api/admin/refresh-ratings":
                 from tools.sync_codeforces import sync_ratings
                 updates, errors = sync_ratings(database, load_seed_data())
@@ -210,6 +250,41 @@ class SiteHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
         except (OSError, ValueError, TypeError, sqlite3.Error) as exc:
             self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+
+    def _submit_roster(self) -> None:
+        scheme = "https" if self.headers.get("X-Forwarded-Proto") == "https" else "http"
+        if self.headers.get("Origin") != f"{scheme}://{self.headers.get('Host')}":
+            self._send_json({"error": "拒绝跨站提交请求"}, HTTPStatus.FORBIDDEN)
+            return
+        address = self.client_address[0]
+        if os.environ.get("TRUST_PROXY_HEADERS") == "1":
+            forwarded = self.headers.get("X-Forwarded-For", "").split(",")[-1].strip()
+            try:
+                address = str(ipaddress.ip_address(forwarded))
+            except ValueError:
+                pass
+        if not self.server.submission_limiter.allow(address):
+            self._send_json({"error": "提交过于频繁，请十分钟后再试"}, HTTPStatus.TOO_MANY_REQUESTS)
+            return
+        try:
+            body = self._read_json()
+            submission_id, created = Database(DATABASE_PATH).submit_roster(
+                self._text(body, "honorId", 150, required=True), body.get("members"), note=self._text(body, "note", 2000))
+            self._send_json({"ok": True, "submissionId": submission_id, "duplicate": not created},
+                            HTTPStatus.CREATED if created else HTTPStatus.OK)
+        except (OSError, ValueError, TypeError, sqlite3.Error) as exc:
+            self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+
+    def _read_json(self) -> dict:
+        length = int(self.headers.get("Content-Length", "0"))
+        if length <= 0 or length > 32_768:
+            raise ValueError("请求大小无效")
+        if self.headers.get_content_type() != "application/json":
+            raise ValueError("请求必须使用 JSON")
+        body = json.loads(self.rfile.read(length))
+        if not isinstance(body, dict):
+            raise ValueError("请求数据无效")
+        return body
 
     @staticmethod
     def _text(body: dict, field: str, maximum: int, *, required: bool = False) -> str:
@@ -280,6 +355,7 @@ def main() -> None:
         return
     server = ThreadingHTTPServer((HOST, PORT), SiteHandler)
     server.admin_auth = AdminAuth(ROOT)
+    server.submission_limiter = SubmissionLimiter()
     print(f"DLUT CPC listening on http://{HOST}:{PORT}")
     try:
         server.serve_forever()

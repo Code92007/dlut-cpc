@@ -12,6 +12,9 @@ const state = {
   pendingQuery: "",
   pendingSchool: "all",
   pendingId: null,
+  guestPendingId: null,
+  guestMessage: '',
+  guestError: false,
   memberQuery: "",
   memberStatus: "all",
   memberSchool: "all",
@@ -22,6 +25,12 @@ const state = {
   adminView: "members",
   adminMessage: "",
   adminError: false,
+  adminReviews: null,
+  adminReviewStatus: 'pending',
+  adminReviewSchool: 'all',
+  adminReviewPage: 1,
+  adminReviewRequest: 0,
+  adminReviewsLoading: false,
 };
 
 const escapeHtml = (value) => String(value ?? "")
@@ -174,7 +183,7 @@ function honorPage(data) {
     </div>`;
 }
 
-function pendingTable(data, editable = false) {
+function pendingTable(data, editable = false, guest = false) {
   const query = state.pendingQuery.trim().toLowerCase();
   const rows = (data.pendingHonors || []).filter(honor =>
     (state.pendingSchool === 'all' || honor.school === state.pendingSchool)
@@ -183,13 +192,67 @@ function pendingTable(data, editable = false) {
     <label class="filter-group"><span>所属范围</span><select id="pendingSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.pendingSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
     <label class="filter-group grow"><span>搜索</span><input id="pendingQuery" type="search" value="${escapeHtml(state.pendingQuery)}" placeholder="年份、比赛、队伍或榜单队员"></label>
     <span class="pending-count">${rows.length} 条待确认</span></div>
-    <div class="data-table-wrap"><table class="data-table pending-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成绩</th><th>排名</th><th>榜单队员</th><th>${editable ? '操作' : '来源'}</th></tr></thead><tbody>
-    ${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td><td title="${escapeHtml(honor.originalSchool)}">${escapeHtml(honor.school)}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td><div class="member-list">${renderMembers(honor.suggestedMembers)}</div></td><td>${editable ? `<button type="button" class="admin-button secondary" data-pending-id="${escapeHtml(honor.id)}">补齐成员</button>` : sourceLink(honor.source)}</td></tr>`).join('') || '<tr><td colspan="7" class="table-empty">没有待确认的成绩</td></tr>'}
+    <div class="data-table-wrap"><table class="data-table pending-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成绩</th><th>排名</th><th>榜单队员</th><th>${editable ? '操作' : guest ? '来源 / 补录' : '来源'}</th></tr></thead><tbody>
+    ${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td><td title="${escapeHtml(honor.originalSchool)}">${escapeHtml(honor.school)}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td><div class="member-list">${renderMembers(honor.suggestedMembers)}</div></td><td>${editable ? `<button type="button" class="admin-button secondary" data-pending-id="${escapeHtml(honor.id)}">补齐成员</button>` : `${sourceLink(honor.source)}${guest ? `<button type="button" class="admin-button secondary guest-roster-button" data-guest-honor="${escapeHtml(honor.id)}">补录成员</button>` : ''}`}${honor.pendingSubmissionCount ? `<small class="result-status">待审核 ${honor.pendingSubmissionCount} 份</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="table-empty">没有待确认的成绩</td></tr>'}
     </tbody></table></div>`;
 }
 
 function pendingPage(data) {
-  return `<div class="page-shell"><div class="page-heading"><div><span class="eyebrow">Roster Review</span><h1>获奖信息待确认成员</h1></div><a href="/honor" data-route="honor">全部参赛成绩</a></div>${pendingTable(data)}<div class="pending-footer"><a href="/admin" data-route="admin">数据管理</a></div></div>`;
+  const pending = (data.pendingHonors || []).find(honor => honor.id === state.guestPendingId);
+  const message = state.guestMessage ? `<div class="admin-message ${state.guestError ? 'error' : ''}" role="status">${escapeHtml(state.guestMessage)}</div>` : '';
+  const form = pending ? `<form id="guestRoster" class="admin-form guest-roster-form"><h2>${escapeHtml(pending.team)}</h2>
+    <p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p>
+    <input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">
+    ${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '', 'guestMembers')).join('')}
+    <label class="wide">补录说明 / 依据<textarea name="note" rows="3" maxlength="2000"></textarea></label></div>
+    <datalist id="guestMembers">${data.members.filter(member => member.school === pending.school).map(member => `<option value="${escapeHtml(adminMemberLabel(member))}"></option>`).join('')}</datalist>
+    <button class="admin-button">提交审核</button><button type="button" id="guestCancel" class="admin-button secondary">取消</button></form>` : '';
+  return `<div class="page-shell"><div class="page-heading"><div><span class="eyebrow">Roster Review</span><h1>获奖信息待确认成员</h1></div><a href="/honor" data-route="honor">全部参赛成绩</a></div>${message}${form}${pendingTable(data, false, true)}<div class="pending-footer"><a href="/admin" data-route="admin">数据管理</a></div></div>`;
+}
+
+function bindGuestRosterEvents() {
+  document.querySelectorAll('[data-guest-honor]').forEach(button => button.addEventListener('click', () => {
+    state.guestPendingId = button.dataset.guestHonor;
+    state.guestMessage = '';
+    renderRoute('pending');
+    document.querySelector('#guestRoster')?.scrollIntoView({block: 'start'});
+  }));
+  document.querySelector('#guestCancel')?.addEventListener('click', () => {
+    state.guestPendingId = null;
+    renderRoute('pending');
+  });
+  document.querySelector('#guestRoster')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button');
+    button.disabled = true;
+    try {
+      const values = Object.fromEntries(new FormData(form));
+      const response = await fetch('/api/roster-submissions', {method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({honorId: values.honorId, members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember), note: values.note})});
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+      state.guestPendingId = null;
+      state.guestMessage = `${result.duplicate ? '相同名单已提交' : '已提交'} · #${result.submissionId} · 等待管理员审核`;
+      state.guestError = false;
+      const site = await fetch('/api/site', {cache: 'no-store'});
+      if (!site.ok) throw new Error('数据刷新失败');
+      state.data = await site.json();
+      if (routeFromPath() === 'pending') renderRoute('pending');
+    } catch (error) {
+      state.guestMessage = error.message;
+      state.guestError = true;
+      button.disabled = false;
+      let message = form.querySelector('[role="alert"]');
+      if (!message) {
+        message = document.createElement('div');
+        message.className = 'admin-message error';
+        message.setAttribute('role', 'alert');
+        form.prepend(message);
+      }
+      message.textContent = error.message;
+    }
+  });
 }
 
 function bindPendingEvents(route) {
@@ -325,6 +388,58 @@ function adminRosterMember(value) {
   return member ? member.id : name;
 }
 
+function memberInput(name, label, required = true, value = '', listId = 'adminMembers') {
+  return `<label>${label}<input name="${name}" list="${listId}" autocomplete="off" ${required ? 'required' : ''} value="${escapeHtml(value)}" placeholder="姓名或成员 ID"></label>`;
+}
+
+function adminReviewPage() {
+  const data = state.adminReviews;
+  const statuses = [['pending', '待审核'], ['approved', '已通过'], ['rejected', '不通过'], ['superseded', '已失效'], ['all', '全部状态']];
+  const filters = `<div class="filters"><label class="filter-group"><span>审核状态</span><select id="reviewStatus">${statuses.map(([value, label]) => `<option value="${value}" ${state.adminReviewStatus === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+    <label class="filter-group"><span>所属范围</span><select id="reviewSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.adminReviewSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
+    <button type="button" id="reviewRefresh" class="admin-button secondary" ${state.adminReviewsLoading ? 'disabled' : ''}>刷新</button></div>`;
+  if (state.adminReviewsLoading || !data) return `${filters}<div class="empty-state">${state.adminReviewsLoading ? '正在加载审核队列' : '暂无审核数据'}</div>`;
+  const rows = data.submissions.map(proposal => `<article class="review-item">
+    <div class="review-contest"><h3>${escapeHtml(proposal.team)}</h3><p>${escapeHtml(proposal.date)} · ${escapeHtml(proposal.event)}</p>
+      <p>${escapeHtml(proposal.school)} · <span class="medal ${medalClass(proposal.medal)}">${escapeHtml(proposal.medal)}</span> · ${escapeHtml(proposal.rank || '—')}</p>
+      <small>#${proposal.id} · ${escapeHtml(proposal.submittedAt)}</small>
+      ${proposal.note ? `<details><summary>补录说明</summary><p class="review-note">${escapeHtml(proposal.note)}</p></details>` : ''}</div>
+    <ol class="review-roster">${proposal.members.map(member => `<li>${escapeHtml(member.name)} <small>${member.newMember ? '姓名补录' : `#${member.value}`}</small></li>`).join('')}</ol>
+    <div class="review-actions">${proposal.status === 'pending' ? `<button type="button" class="admin-button" data-review-id="${proposal.id}" data-approve="true">通过</button><button type="button" class="admin-button secondary reject" data-review-id="${proposal.id}" data-approve="false">不通过</button>` : `<strong>${statuses.find(([value]) => value === proposal.status)?.[1] || ''}</strong><small>${escapeHtml(proposal.reviewer || '')} ${escapeHtml(proposal.reviewedAt || '')}</small>${proposal.reviewNote ? `<small>${escapeHtml(proposal.reviewNote)}</small>` : ''}`}</div>
+    </article>`).join('');
+  return `${filters}<div class="review-list">${rows || '<div class="empty-state">没有符合条件的补录提案</div>'}</div><div class="review-pagination">
+    <span>${data.total} 份 · ${data.page} / ${data.pages} 页</span><button type="button" class="admin-button secondary" data-review-page="${data.page - 1}" ${data.page <= 1 ? 'disabled' : ''}>上一页</button>
+    <button type="button" class="admin-button secondary" data-review-page="${data.page + 1}" ${data.page >= data.pages ? 'disabled' : ''}>下一页</button></div>`;
+}
+
+async function loadAdminReviews() {
+  const request = ++state.adminReviewRequest;
+  state.adminReviewsLoading = true;
+  if (routeFromPath() === 'admin' && state.adminView === 'reviews') renderRoute('admin');
+  try {
+    const response = await fetch(`/api/admin/submissions?status=${state.adminReviewStatus}&page=${state.adminReviewPage}&school=${encodeURIComponent(state.adminReviewSchool)}`, {cache: 'no-store'});
+    if (request !== state.adminReviewRequest) return;
+    if (!response.ok) {
+      if (response.status === 401) state.adminSession = null;
+      throw new Error('审核队列加载失败');
+    }
+    const data = await response.json();
+    if (request !== state.adminReviewRequest) return;
+    state.adminReviews = data;
+    state.adminReviewPage = data.page;
+  } catch (error) {
+    if (request !== state.adminReviewRequest) return;
+    state.adminMessage = error.message;
+    state.adminError = true;
+  } finally {
+    if (request === state.adminReviewRequest) {
+      state.adminReviewsLoading = false;
+      if (routeFromPath() === 'admin' && state.adminView === 'reviews') renderRoute('admin');
+      if (!state.adminSession) await loadAdminSession();
+    }
+  }
+}
+
 function adminPage(data) {
   const session = state.adminSession;
   const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
@@ -336,7 +451,6 @@ function adminPage(data) {
     <label>密码<input name="password" type="password" autocomplete="current-password" required maxlength="512"></label>
     <button class="admin-button" ${!session.enabled ? 'disabled' : ''}>登录</button>
   </form></div>`;
-  const memberInput = (name, label, required = true, value = '') => `<label>${label}<input name="${name}" list="adminMembers" autocomplete="off" ${required ? 'required' : ''} value="${escapeHtml(value)}" placeholder="姓名或成员 ID"></label>`;
   const options = data.members.map(member => `<option value="${escapeHtml(adminMemberLabel(member))}"></option>`).join('');
   const forms = {
     members: `<form id="adminMember" class="admin-form">
@@ -366,8 +480,9 @@ function adminPage(data) {
   };
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
   forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
+  forms.reviews = adminReviewPage();
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
     <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
@@ -379,6 +494,12 @@ async function loadAdminSession() {
     const response = await fetch('/api/admin/session', {cache: 'no-store'});
     if (!response.ok) throw new Error('登录状态加载失败');
     state.adminSession = await response.json();
+    if (state.adminSession.authenticated) await loadAdminReviews();
+    else {
+      state.adminReviews = null;
+      state.adminReviewsLoading = false;
+      ++state.adminReviewRequest;
+    }
   } catch (error) {
     state.adminMessage = error.message;
     state.adminError = true;
@@ -411,6 +532,37 @@ function bindAdminEvents() {
     state.adminView = button.dataset.adminView;
     state.adminMessage = '';
     renderRoute('admin');
+    if (state.adminView === 'reviews') loadAdminReviews();
+  }));
+  for (const [selector, field] of [['#reviewStatus', 'adminReviewStatus'], ['#reviewSchool', 'adminReviewSchool']]) {
+    document.querySelector(selector)?.addEventListener('change', event => {
+      state[field] = event.target.value;
+      state.adminReviewPage = 1;
+      loadAdminReviews();
+    });
+  }
+  document.querySelector('#reviewRefresh')?.addEventListener('click', () => loadAdminReviews());
+  document.querySelectorAll('[data-review-page]').forEach(button => button.addEventListener('click', () => {
+    state.adminReviewPage = Number(button.dataset.reviewPage);
+    loadAdminReviews();
+  }));
+  document.querySelectorAll('[data-review-id]').forEach(button => button.addEventListener('click', async () => {
+    const item = button.closest('.review-actions');
+    item.querySelectorAll('button').forEach(control => { control.disabled = true; });
+    try {
+      const approve = button.dataset.approve === 'true';
+      await adminRequest('review-submission', {submissionId: Number(button.dataset.reviewId), approve});
+      state.adminMessage = approve ? '已通过，成员及参赛关联已保存' : '已标记不通过，正式数据未修改';
+      state.adminError = false;
+      const response = await fetch('/api/site', {cache: 'no-store'});
+      if (!response.ok) throw new Error('数据刷新失败');
+      state.data = await response.json();
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+    }
+    if (state.adminSession?.authenticated) await loadAdminReviews();
+    else await loadAdminSession();
   }));
   const bindForm = (id, path, buildBody, success) => document.querySelector(id)?.addEventListener('submit', async event => {
     event.preventDefault();
@@ -591,7 +743,10 @@ function renderRoute(route) {
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);
   if (route === 'admin') bindAdminEvents();
-  if (route === 'pending') bindPendingEvents('pending');
+  if (route === 'pending') {
+    bindPendingEvents('pending');
+    bindGuestRosterEvents();
+  }
   document.querySelector('#memberSchool')?.addEventListener('change', event => {
     state.memberSchool = event.target.value;
     renderRoute('rating');

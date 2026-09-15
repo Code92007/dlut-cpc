@@ -23,20 +23,21 @@ class AdminTests(unittest.TestCase):
         self.seed_path.write_text(json.dumps(self.seed), encoding="utf-8")
         self.database = Database(self.database_path)
         self.database.initialize(self.seed)
+        self.submission_limiter = app.SubmissionLimiter()
         with patch.dict("os.environ", {"ADMIN_USERNAME": "admin", "ADMIN_PASSWORD": "test-only-password-123"}):
             self.auth = AdminAuth(self.root)
 
     def tearDown(self):
         self.temporary.cleanup()
 
-    def request(self, path, body, *, cookie="", csrf="", origin="https://test.example"):
+    def request(self, path, body=None, *, cookie="", csrf="", origin="https://test.example", method="POST", headers=None):
         handler = app.SiteHandler.__new__(app.SiteHandler)
-        handler.path = "/api/admin/" + path
-        handler.server = SimpleNamespace(admin_auth=self.auth)
+        handler.path = path if path.startswith("/") else "/api/admin/" + path
+        handler.server = SimpleNamespace(admin_auth=self.auth, submission_limiter=self.submission_limiter)
         handler.client_address = ("127.0.0.1", 1)
         handler.headers = Message()
         for key, value in {"Host": "test.example", "Origin": origin, "X-Forwarded-Proto": "https",
-                           "Cookie": cookie, "X-CSRF-Token": csrf, "Content-Type": "application/json"}.items():
+                           "Cookie": cookie, "X-CSRF-Token": csrf, "Content-Type": "application/json", **(headers or {})}.items():
             handler.headers[key] = value
         data = json.dumps(body).encode()
         handler.headers["Content-Length"] = str(len(data))
@@ -44,7 +45,7 @@ class AdminTests(unittest.TestCase):
         result = {}
         handler._send_json = lambda payload, status=200, headers=None: result.update(body=payload, status=status, headers=headers or {})
         with patch.object(app, "DATABASE_PATH", self.database_path), patch.object(app, "DATA_PATH", self.seed_path):
-            handler.do_POST()
+            handler.do_GET() if method == "GET" else handler.do_POST()
         return result
 
     def login(self):
@@ -54,7 +55,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "name", "honor", "confirm-members", "refresh-ratings", "logout"):
+        for path in ("member", "account", "name", "honor", "confirm-members", "review-submission", "refresh-ratings", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -155,6 +156,93 @@ class AdminTests(unittest.TestCase):
                 payload = self.database.payload(self.seed)
                 self.assertEqual(payload["members"], [])
                 self.assertEqual(len(payload["pendingHonors"]), 1)
+
+    def submission_fixture(self):
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-v1", "honors": [record]})
+        return {"honorId": "historical", "members": ["甲", "乙", "丙"], "note": "private evidence"}
+
+    def test_guest_submission_then_admin_approval_requires_session_and_csrf(self):
+        request = self.submission_fixture()
+        result = self.request("/api/roster-submissions", {**request, "approve": True, "reviewer": "attacker"})
+        self.assertEqual(result["status"], 201, result)
+        submission = result["body"]["submissionId"]
+        self.assertEqual(self.database.payload(self.seed)["members"], [])
+        self.assertEqual(self.request("submissions", method="GET")["status"], 401)
+        review = {"submissionId": submission, "approve": True, "reviewer": "attacker"}
+        self.assertEqual(self.request("review-submission", review)["status"], 401)
+        cookie, csrf = self.login()
+        queue = self.request("submissions", method="GET", cookie=cookie)
+        self.assertEqual(queue["status"], 200, queue)
+        self.assertEqual(queue["body"]["submissions"][0]["note"], "private evidence")
+        self.assertEqual(self.request("review-submission", review, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("review-submission", review, cookie=cookie, csrf=csrf, origin="https://attacker.example")["status"], 403)
+        result = self.request("review-submission", review, cookie=cookie, csrf=csrf)
+        self.assertEqual(result["status"], 200, result)
+        self.assertEqual(len(self.database.payload(self.seed)["members"]), 3)
+        self.assertEqual(self.database.roster_submissions(status="approved")["submissions"][0]["reviewer"], "admin")
+        self.assertEqual(self.request("review-submission", review, cookie=cookie, csrf=csrf)["status"], 400)
+
+    def test_guest_cross_origin_invalid_json_format_and_duplicates_are_safe(self):
+        request = self.submission_fixture()
+        self.assertEqual(self.request("/api/roster-submissions", request, origin="https://attacker.example")["status"], 403)
+        self.assertEqual(self.request("/api/roster-submissions", request, origin="")["status"], 403)
+        self.assertEqual(self.request("/api/roster-submissions", request, headers={"Content-Type": "text/plain"})["status"], 400)
+        self.assertEqual(self.request("/api/roster-submissions", [request])["status"], 400)
+        for changes in ({"members": ["甲", "甲", "丙"]}, {"members": ["甲", "乙", True]}, {"honorId": "missing"}):
+            self.assertEqual(self.request("/api/roster-submissions", {**request, **changes})["status"], 400)
+        self.assertEqual(self.database.roster_submissions()["total"], 0)
+        first = self.request("/api/roster-submissions", request)
+        duplicate = self.request("/api/roster-submissions", {**request, "members": ["丙", "乙", "甲"]})
+        self.assertEqual((first["status"], duplicate["status"]), (201, 200))
+        self.assertTrue(duplicate["body"]["duplicate"])
+        self.assertEqual(first["body"]["submissionId"], duplicate["body"]["submissionId"])
+        self.assertEqual(self.database.payload(self.seed)["members"], [])
+
+    def test_guest_rate_limit_prevents_unbounded_requests(self):
+        request = self.submission_fixture()
+        for _ in range(20):
+            self.assertIn(self.request("/api/roster-submissions", request)["status"], (200, 201))
+        self.assertEqual(self.request("/api/roster-submissions", request)["status"], 429)
+        self.assertEqual(self.database.roster_submissions()["total"], 1)
+
+    def test_proxy_headers_used_for_rate_limit_only_when_explicitly_trusted(self):
+        request = self.submission_fixture()
+        for trusted, expected in (("0", "127.0.0.1"), ("1", "192.0.2.20")):
+            with patch.dict("os.environ", {"TRUST_PROXY_HEADERS": trusted}), patch.object(self.submission_limiter, "allow", return_value=True) as allow:
+                self.request("/api/roster-submissions", request, headers={"X-Forwarded-For": "192.0.2.1, 192.0.2.20"})
+                allow.assert_called_once_with(expected)
+
+    def test_admin_rejects_and_validates_decisions_and_queue_filters(self):
+        request = self.submission_fixture()
+        submission = self.request("/api/roster-submissions", request)["body"]["submissionId"]
+        cookie, csrf = self.login()
+        for changes in ({"approve": "yes"}, {"submissionId": True}, {"submissionId": 99999}):
+            review = {"submissionId": submission, "approve": True, **changes}
+            self.assertEqual(self.request("review-submission", review, cookie=cookie, csrf=csrf)["status"], 400)
+        self.assertEqual(self.request("review-submission", {"submissionId": submission, "approve": False}, cookie=cookie, csrf=csrf)["status"], 200)
+        self.assertEqual(self.database.payload(self.seed)["members"], [])
+        self.assertEqual(self.request("submissions?status=rejected&page=1", method="GET", cookie=cookie)["body"]["total"], 1)
+        for query in ("status=invalid", "page=no", "page=0", "school=other"):
+            self.assertEqual(self.request(f"submissions?{query}", method="GET", cookie=cookie)["status"], 400)
+
+    def test_guest_can_propose_even_if_admin_is_not_configured_yet(self):
+        with patch.dict("os.environ", {"ADMIN_PASSWORD": "", "ADMIN_PASSWORD_FILE": str(self.root / "missing")}):
+            self.auth = AdminAuth(self.root)
+        request = self.submission_fixture()
+        self.assertEqual(self.request("/api/roster-submissions", request)["status"], 201)
+        self.assertEqual(self.database.payload(self.seed)["members"], [])
+
+    def test_submission_limiter_expires_and_bounds_address_memory(self):
+        limiter = app.SubmissionLimiter()
+        self.assertTrue(all(limiter.allow("a", now=0) for _ in range(20)))
+        self.assertFalse(limiter.allow("a", now=599))
+        self.assertTrue(limiter.allow("a", now=600))
+        self.assertTrue(limiter.allow("b", now=600))
+        for index in range(4094):
+            self.assertTrue(limiter.allow(str(index), now=600))
+        self.assertFalse(limiter.allow("overflow", now=600))
+        self.assertTrue(limiter.allow("overflow", now=1200))
 
 
 if __name__ == "__main__":
