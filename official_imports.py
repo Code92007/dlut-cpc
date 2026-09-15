@@ -23,7 +23,12 @@ def contest_key(record: dict) -> tuple[str, str, str] | None:
         region = "总决赛"
     else:
         region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "合肥", "南阳", "桂林", "吉林",
-                                        "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州") if name in text), None)
+                                        "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州", "沈阳", "南京",
+                                        "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "乌鲁木齐") if name in text), None)
+        if not region:
+            suffix = re.sub(r"^(?:icpc|ccpc)\d{4}", "", str(record.get("externalContestId") or ""))
+            region = {"shenyang": "沈阳", "nanjing": "南京", "shanghai": "上海", "yinchuan": "银川", "nanchang": "南昌",
+                      "qingdao": "青岛", "jiaozuo": "焦作", "urumchi": "乌鲁木齐", "xi_an": "西安", "beijing": "北京"}.get(suffix)
     return (record.get("series", ""), season, region) if region else None
 
 
@@ -36,7 +41,9 @@ def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, 
     school = school_group(record.get("school", ""))
     candidates = [item for item in existing if school_group(item.get("school", "大连理工大学")) == school
                   and item.get("series") == record.get("series")
-                  and ((key and (contest_key(item) == key or (item.get("date") == record.get("date") and contest_key(item) and contest_key(item)[2] == key[2]))) or
+                  and (item.get("official") is False) == (record.get("official") is False)
+                  and ((item.get("date") == record.get("date") and normalized(item.get("event", "")) == normalized(record.get("event", ""))) or
+                       (key and (contest_key(item) == key or (item.get("date") == record.get("date") and contest_key(item) and contest_key(item)[2] == key[2]))) or
                        (not key and item.get("date") == record.get("date") and normalized(item.get("event", "")) == normalized(record.get("event", ""))))]
     matches = [item for item in candidates if names(item) & names(record)]
     if not matches:
@@ -48,12 +55,13 @@ def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, 
     if not matches:
         # A changed team name/roster at an occupied result rank needs a human check.
         rank = str(record.get("rank", "")).split("/")[0].strip()
-        occupied = [item for item in candidates if rank and rank.isdigit() and str(item.get("rank", "")).split("/")[0].strip() == rank]
+        occupied = [item for item in candidates if rank and rank.isdigit() and str(item.get("rank", "")).split("/")[0].strip() == rank
+                    and not (record.get("externalProvider") == "rankland" and record.get("externalContestId") and item.get("externalContestId") == record["externalContestId"] and item.get("externalProvider") == "rankland")]
         if occupied:
             return "conflict", None, ["same-rank-different-team:" + ",".join(item["id"] for item in occupied)]
         return "added", None, []
     target = matches[0]
-    if target.get("medal") != record["medal"]:
+    if record.get("medal") and target.get("medal") and target["medal"] != record["medal"]:
         return "conflict", target, ["medal-disagreement"]
     warnings = []
     for field in ("date", "team", "rank", "overallRank"):
@@ -71,14 +79,18 @@ def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, 
 def validate_batch(batch: dict) -> None:
     if not isinstance(batch.get("batchId"), str) or not re.fullmatch(r"[a-zA-Z0-9_-]{1,150}", batch["batchId"]):
         raise ValueError("Invalid official import batch ID")
+    provider = batch.get("provider", "ccpc-official")
+    if provider not in {"ccpc-official", "rankland"}:
+        raise ValueError("Invalid archive provider")
     identities = set()
     for record in batch.get("honors", []):
         dt.date.fromisoformat(record["date"])
-        if record.get("medal") not in {"金牌", "银牌", "铜牌", "铁牌"} or record.get("series") != "CCPC":
-            raise ValueError("Invalid CCPC result")
+        unknown = provider == "rankland" and record.get("medal") == "" and record.get("medalStatus") == "unknown"
+        if (record.get("medal") not in {"金牌", "银牌", "铜牌", "铁牌"} and not unknown) or record.get("series") not in ({"CCPC"} if provider == "ccpc-official" else {"ICPC", "CCPC"}):
+            raise ValueError("Invalid archived result")
         if record.get("school") not in MAINTENANCE_GROUPS or not record.get("team") or not record.get("event"):
             raise ValueError("Missing result identity or invalid maintenance group")
-        if record.get("externalProvider") != "ccpc-official" or not record.get("externalAwardId"):
+        if record.get("externalProvider") != provider or not record.get("externalAwardId"):
             raise ValueError("Missing official source identity")
         identity = record["externalAwardId"]
         if identity in identities:
@@ -86,10 +98,11 @@ def validate_batch(batch: dict) -> None:
         identities.add(identity)
         if type(record.get("expectedMembers", 3)) is not int or not 1 <= record.get("expectedMembers", 3) <= 3:
             raise ValueError("Invalid official team size")
-        if not record.get("source", {}).get("url", "").startswith("https://ccpc.io/"):
-            raise ValueError("Official result must retain its CCPC source")
-        if re.search(r"网络|选拔|预选|女生|女子|高职|热身|省赛|省竞赛|邀请赛|地区赛|挑战赛", record["event"]):
-            raise ValueError("Excluded CCPC contest type")
+        origin = "https://ccpc.io/" if provider == "ccpc-official" else "https://rl.algoux.cn/"
+        if not record.get("source", {}).get("url", "").startswith(origin):
+            raise ValueError("Archived result must retain its source")
+        if re.search(r"网络|选拔|预选|女生|女子|高职|热身|省赛|省竞赛|邀请赛|地区赛|挑战赛|preliminary|invitational|women|girls", record["event"], re.I):
+            raise ValueError("Excluded contest type")
 
 
 def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> dict:
@@ -129,11 +142,18 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
                                     json.dumps(record.get("archive", {}), ensure_ascii=False), json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)))
             existing.append({**record, "members": []})
         honor_id = outcome["honorId"]
+        fill_medal = status == "merged" and not target.get("medal") and record.get("medal")
+        if fill_medal:
+            target["medal"] = record["medal"]
         if not dry_run:
-            source_id = database._source(connection, record["source"])
+            if fill_medal:
+                connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
+                                   (record["medal"], honor_id))
             # Archived evidence persists across public snapshot refreshes. Never
-            # update the original honor fields, manual sources or confirmed roster.
-            connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role) VALUES (?,?,'archive')", (honor_id, source_id))
+            # replace known fields or the confirmed roster; only fill a missing award.
+            for source in database._honor_sources(record):
+                source_id = database._source(connection, source)
+                connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role) VALUES (?,?,'archive')", (honor_id, source_id))
             connection.execute("INSERT OR IGNORE INTO honor_source_records(provider,external_id,honor_id,record_json) VALUES (?,?,?,?)",
                                (record["externalProvider"], record["externalAwardId"], honor_id, json.dumps(record, ensure_ascii=False)))
     if not dry_run:

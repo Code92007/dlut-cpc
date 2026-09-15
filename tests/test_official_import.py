@@ -37,6 +37,10 @@ class OfficialMatchingTests(unittest.TestCase):
         existing = record(event="2018 CCPC 杭州站", date="2018-11-05")
         self.assertEqual(match_result(record(), [existing])[0], "added")
 
+    def test_unknown_region_accepts_nullable_contest_identity(self):
+        self.assertIsNone(contest_key({"event": "2018 ICPC Regional", "location": "", "date": "2018-10-01",
+                                       "series": "ICPC", "externalContestId": None}))
+
     def test_next_year_final_matches_ccpc_edition_not_calendar_year(self):
         new = record(event="2024 CCPC 总决赛", date="2025-05-11", location="总决赛")
         old = record(event="第 10 届 CCPC 中国大学生程序设计竞赛总决赛", date="2025-05-10", location="总决赛")

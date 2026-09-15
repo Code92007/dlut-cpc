@@ -1,0 +1,6252 @@
+{
+  "batchId": "rankland-supplement-20260916-v1",
+  "provider": "rankland",
+  "source": "https://rl.algoux.cn/collection/official",
+  "fetchedAt": "2026-09-15T19:21:32+00:00",
+  "contests": [
+    {
+      "key": "icpc2018shenyang",
+      "title": "第43届ACM国际大学生程序设计竞赛亚洲区域赛（沈阳站） （东北大学）",
+      "date": "2018-10-21",
+      "url": "https://rl.algoux.cn/ranklist/icpc2018shenyang",
+      "awards": 3,
+      "schools": [
+        "大连理工大学",
+        "大连理工大学软件学院"
+      ]
+    },
+    {
+      "key": "icpc2020yinchuan",
+      "title": "The 45th ICPC Asia Yinchuan Regional Programming Contest (Hosted by Ningxia Institute of Science and Technology, also known as IUPC 2021)",
+      "date": "2021-05-16",
+      "url": "https://rl.algoux.cn/ranklist/icpc2020yinchuan",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2020ecfinal",
+      "title": "The 2020 ICPC Asia-East Continent Final Contest",
+      "date": "2021-04-18",
+      "url": "https://rl.algoux.cn/ranklist/icpc2020ecfinal",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2019nanjing",
+      "title": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（南京） （南京航空航天大学）",
+      "date": "2019-10-27",
+      "url": "https://rl.algoux.cn/ranklist/icpc2019nanjing",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2019nanchang",
+      "title": "The 44th ICPC International Collegiate Programming Contest Asian Regional Contest (Nanchang) （江西师范大学）",
+      "date": "2019-11-10",
+      "url": "https://rl.algoux.cn/ranklist/icpc2019nanchang",
+      "awards": 2,
+      "schools": [
+        "Dalian University of Technology"
+      ]
+    },
+    {
+      "key": "icpc2019shenyang",
+      "title": "2019 ICPC Asia Shenyang Regional Contest",
+      "date": "2019-11-17",
+      "url": "https://rl.algoux.cn/ranklist/icpc2019shenyang",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2019shanghai",
+      "title": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（上海） （上海大学）",
+      "date": "2019-11-24",
+      "url": "https://rl.algoux.cn/ranklist/icpc2019shanghai",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2019ecfinal",
+      "title": "2019 ICPC Asia-East Continent Final",
+      "date": "2019-12-15",
+      "url": "https://rl.algoux.cn/ranklist/icpc2019ecfinal",
+      "awards": 1,
+      "schools": [
+        "Dalian University of Technology"
+      ]
+    },
+    {
+      "key": "icpc2018jiaozuo",
+      "title": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（焦作站） （河南理工大学）",
+      "date": "2018-11-25",
+      "url": "https://rl.algoux.cn/ranklist/icpc2018jiaozuo",
+      "awards": 1,
+      "schools": [
+        "大连理工大学软件学院"
+      ]
+    },
+    {
+      "key": "icpc2018ecfinal",
+      "title": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "date": "2018-12-16",
+      "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal",
+      "awards": 5,
+      "schools": [
+        "Dalian University of Technology"
+      ]
+    },
+    {
+      "key": "icpc2017shenyang",
+      "title": "2017 ACM ICPC Asia Shenyang Regional Contest （东北大学）",
+      "date": "2017-10-22",
+      "url": "https://rl.algoux.cn/ranklist/icpc2017shenyang",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2017xi_an",
+      "title": "第42届ACM国际大学生程序设计竞赛亚洲区域赛（西安） （西北工业大学）",
+      "date": "2017-10-29",
+      "url": "https://rl.algoux.cn/ranklist/icpc2017xi_an",
+      "awards": 3,
+      "schools": [
+        "大连理工大学",
+        "大连理工大学软件学院"
+      ]
+    },
+    {
+      "key": "icpc2017beijing",
+      "title": "The 2017 ACM-ICPC Asia Beijing Regional Contest （北京大学）",
+      "date": "2017-11-19",
+      "url": "https://rl.algoux.cn/ranklist/icpc2017beijing",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2017urumchi",
+      "title": "ICPC xju onsite",
+      "date": "2017-12-03",
+      "url": "https://rl.algoux.cn/ranklist/icpc2017urumchi",
+      "awards": 1,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2016beijing",
+      "title": "2016 ACM-ICPC 亚洲区北京赛站 （北京大学）",
+      "date": "2016-11-13",
+      "url": "https://rl.algoux.cn/ranklist/icpc2016beijing",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2016qingdao",
+      "title": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "date": "2016-11-13",
+      "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao",
+      "awards": 3,
+      "schools": [
+        "Dalian University of Technology",
+        "School of Software Technology, Dalian University of Technology"
+      ]
+    },
+    {
+      "key": "icpc2015shenyang",
+      "title": "2015 沈阳赛区现场赛 （东北大学）",
+      "date": "2015-10-25",
+      "url": "https://rl.algoux.cn/ranklist/icpc2015shenyang",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2015beijing",
+      "title": "2015 北京赛区现场赛 （北京大学）",
+      "date": "2015-11-15",
+      "url": "https://rl.algoux.cn/ranklist/icpc2015beijing",
+      "awards": 2,
+      "schools": [
+        "大连理工大学",
+        "大连理工大学软件学院"
+      ]
+    },
+    {
+      "key": "icpc2013changsha",
+      "title": "2013 长沙赛区现场赛 （湖南大学）",
+      "date": "2013-11-17",
+      "url": "https://rl.algoux.cn/ranklist/icpc2013changsha",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2012chengdu",
+      "title": "2012 成都赛区现场赛 （成都东软学院）",
+      "date": "2012-11-11",
+      "url": "https://rl.algoux.cn/ranklist/icpc2012chengdu",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2011dalian",
+      "title": "2011 大连赛区现场赛 （大连理工大学）",
+      "date": "2011-09-25",
+      "url": "https://rl.algoux.cn/ranklist/icpc2011dalian",
+      "awards": 7,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2011chengdu",
+      "title": "2011 成都赛区现场赛 （成都东软学院）",
+      "date": "2011-11-06",
+      "url": "https://rl.algoux.cn/ranklist/icpc2011chengdu",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2011fuzhou",
+      "title": "2011 福州赛区现场赛 （福州师范大学）",
+      "date": "2011-11-20",
+      "url": "https://rl.algoux.cn/ranklist/icpc2011fuzhou",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2010harbin",
+      "title": "2010 哈尔滨赛区现场赛 （哈尔滨工程大学）",
+      "date": "2010-09-26",
+      "url": "https://rl.algoux.cn/ranklist/icpc2010harbin",
+      "awards": 3,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2010tianjin",
+      "title": "2010 天津赛区现场赛 （天津大学）",
+      "date": "2010-10-17",
+      "url": "https://rl.algoux.cn/ranklist/icpc2010tianjin",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2010chengdu",
+      "title": "2010 成都赛区现场赛 （四川大学）",
+      "date": "2010-11-07",
+      "url": "https://rl.algoux.cn/ranklist/icpc2010chengdu",
+      "awards": 2,
+      "schools": [
+        "大连理工大学"
+      ]
+    },
+    {
+      "key": "icpc2009wuhan",
+      "title": "The 34th ACM/ICPC Aisa Regional Wuhan Onsite Contest （武汉大学）",
+      "date": "2009-11-01",
+      "url": "https://rl.algoux.cn/ranklist/icpc2009wuhan",
+      "awards": 1,
+      "schools": [
+        "大连理工大学"
+      ]
+    }
+  ],
+  "honors": [
+    {
+      "id": "rankland-1f1245bb75b5481a8e29",
+      "event": "第43届ACM国际大学生程序设计竞赛亚洲区域赛（沈阳站） （东北大学）",
+      "series": "ICPC",
+      "date": "2018-10-21",
+      "location": "",
+      "team": "远见",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "15 / 186",
+      "overallRank": "15 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018shenyang:21049198:大连理工大学",
+      "externalContestId": "icpc2018shenyang",
+      "externalTeamId": "21049198",
+      "archive": {
+        "fileId": "70792782637174784",
+        "score": {
+          "value": 4,
+          "time": [
+            499,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 15,
+          "segmentIndex": null
+        },
+        "pageSha256": "237a0f3daa0ff5732f21c3be7fdbd2d3df404c1cf615120d6d948ad06b45976c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2018shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/101955"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-43287fe95f90d23e9d38",
+      "event": "第43届ACM国际大学生程序设计竞赛亚洲区域赛（沈阳站） （东北大学）",
+      "series": "ICPC",
+      "date": "2018-10-21",
+      "location": "",
+      "team": "青歌行",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "42 / 186",
+      "overallRank": "43 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018shenyang:21049200:大连理工大学",
+      "externalContestId": "icpc2018shenyang",
+      "externalTeamId": "21049200",
+      "archive": {
+        "fileId": "70792782637174784",
+        "score": {
+          "value": 3,
+          "time": [
+            440,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 42,
+          "segmentIndex": null
+        },
+        "pageSha256": "237a0f3daa0ff5732f21c3be7fdbd2d3df404c1cf615120d6d948ad06b45976c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2018shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/101955"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-691add89c749a89fdbbf",
+      "event": "第43届ACM国际大学生程序设计竞赛亚洲区域赛（沈阳站） （东北大学）",
+      "series": "ICPC",
+      "date": "2018-10-21",
+      "location": "",
+      "team": "扶我起来还能A",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "82 / 186",
+      "overallRank": "84 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018shenyang:21049199:大连理工大学",
+      "externalContestId": "icpc2018shenyang",
+      "externalTeamId": "21049199",
+      "archive": {
+        "fileId": "70792782637174784",
+        "score": {
+          "value": 2,
+          "time": [
+            190,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 82,
+          "segmentIndex": null
+        },
+        "pageSha256": "237a0f3daa0ff5732f21c3be7fdbd2d3df404c1cf615120d6d948ad06b45976c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2018shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/101955"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-7279b422e07ff1e049fa",
+      "event": "The 45th ICPC Asia Yinchuan Regional Programming Contest (Hosted by Ningxia Institute of Science and Technology, also known as IUPC 2021)",
+      "series": "ICPC",
+      "date": "2021-05-16",
+      "location": "",
+      "team": "打铁上班",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "88 / 491",
+      "overallRank": "92 / 511",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2020yinchuan"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2020yinchuan:13:大连理工大学",
+      "externalContestId": "icpc2020yinchuan",
+      "externalTeamId": "13",
+      "archive": {
+        "fileId": "70792645772840960",
+        "score": {
+          "value": 4,
+          "time": [
+            13980,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  50,
+                  100,
+                  150
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 88,
+          "segmentIndex": 1
+        },
+        "pageSha256": "7528d08ceccf074397ceb99f8a8394c7082628cf2236ccaf20c4a25ac6f043e3",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/104022"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-0fc62cd6f0cb74517c69",
+      "event": "The 45th ICPC Asia Yinchuan Regional Programming Contest (Hosted by Ningxia Institute of Science and Technology, also known as IUPC 2021)",
+      "series": "ICPC",
+      "date": "2021-05-16",
+      "location": "",
+      "team": "优哉游戏",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "108 / 491",
+      "overallRank": "112 / 511",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2020yinchuan"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2020yinchuan:58:大连理工大学",
+      "externalContestId": "icpc2020yinchuan",
+      "externalTeamId": "58",
+      "archive": {
+        "fileId": "70792645772840960",
+        "score": {
+          "value": 4,
+          "time": [
+            18420,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  50,
+                  100,
+                  150
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 108,
+          "segmentIndex": 1
+        },
+        "pageSha256": "7528d08ceccf074397ceb99f8a8394c7082628cf2236ccaf20c4a25ac6f043e3",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/104022"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-056cfa4bf6bae71410f6",
+      "event": "The 2020 ICPC Asia-East Continent Final Contest",
+      "series": "ICPC",
+      "date": "2021-04-18",
+      "location": "总决赛",
+      "team": "二带一",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "51 / 294",
+      "overallRank": "51 / 294",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2020ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2020ecfinal:26:大连理工大学",
+      "externalContestId": "icpc2020ecfinal",
+      "externalTeamId": "26",
+      "archive": {
+        "fileId": "70792646913691648",
+        "score": {
+          "value": 5,
+          "time": [
+            56280,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 51,
+          "segmentIndex": null
+        },
+        "pageSha256": "8b184a67d281a75a2173272dc1c5a0662c5be29d383242e79abc9770649868e0",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/103069"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-6f91b2a9e3f70e3a03ee",
+      "event": "The 2020 ICPC Asia-East Continent Final Contest",
+      "series": "ICPC",
+      "date": "2021-04-18",
+      "location": "总决赛",
+      "team": "线性时间的支配者",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "88 / 294",
+      "overallRank": "88 / 294",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2020ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2020ecfinal:28:大连理工大学",
+      "externalContestId": "icpc2020ecfinal",
+      "externalTeamId": "28",
+      "archive": {
+        "fileId": "70792646913691648",
+        "score": {
+          "value": 4,
+          "time": [
+            40740,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 88,
+          "segmentIndex": null
+        },
+        "pageSha256": "8b184a67d281a75a2173272dc1c5a0662c5be29d383242e79abc9770649868e0",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/103069"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-13c31cffbdc7faefde2f",
+      "event": "The 2020 ICPC Asia-East Continent Final Contest",
+      "series": "ICPC",
+      "date": "2021-04-18",
+      "location": "总决赛",
+      "team": "终于出来旅游了",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "285 / 294",
+      "overallRank": "285 / 294",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2020ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2020ecfinal:27:大连理工大学",
+      "externalContestId": "icpc2020ecfinal",
+      "externalTeamId": "27",
+      "archive": {
+        "fileId": "70792646913691648",
+        "score": {
+          "value": 1,
+          "time": [
+            16380,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 285,
+          "segmentIndex": null
+        },
+        "pageSha256": "8b184a67d281a75a2173272dc1c5a0662c5be29d383242e79abc9770649868e0",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/103069"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-db4eef7bacc4353e8dbf",
+      "event": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（南京） （南京航空航天大学）",
+      "series": "ICPC",
+      "date": "2019-10-27",
+      "location": "",
+      "team": "QinggeX",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "46 / 311",
+      "overallRank": "56 / 334",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019nanjing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019nanjing:QinggeX:大连理工大学",
+      "externalContestId": "icpc2019nanjing",
+      "externalTeamId": "QinggeX",
+      "archive": {
+        "fileId": "70792780934287360",
+        "score": {
+          "value": 5,
+          "time": [
+            726,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 46,
+          "segmentIndex": null
+        },
+        "pageSha256": "1faaf49b41432000372b4b7c6648bd15423d3f2e26e2b17cbb62e20c50fc46e0",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019nanjing"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-80a611129e3970acc35c",
+      "event": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（南京） （南京航空航天大学）",
+      "series": "ICPC",
+      "date": "2019-10-27",
+      "location": "",
+      "team": "听说南航饭很好吃",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "217 / 311",
+      "overallRank": "239 / 334",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019nanjing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019nanjing:听说南航饭很好吃:大连理工大学",
+      "externalContestId": "icpc2019nanjing",
+      "externalTeamId": "听说南航饭很好吃",
+      "archive": {
+        "fileId": "70792780934287360",
+        "score": {
+          "value": 2,
+          "time": [
+            112,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 217,
+          "segmentIndex": null
+        },
+        "pageSha256": "1faaf49b41432000372b4b7c6648bd15423d3f2e26e2b17cbb62e20c50fc46e0",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019nanjing"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-f843e86cea16d00c369e",
+      "event": "The 44th ICPC International Collegiate Programming Contest Asian Regional Contest (Nanchang) （江西师范大学）",
+      "series": "ICPC",
+      "date": "2019-11-10",
+      "location": "",
+      "team": "TToughy",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "66 / 331",
+      "overallRank": "67 / 332",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019nanchang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019nanchang:58:大连理工大学",
+      "externalContestId": "icpc2019nanchang",
+      "externalTeamId": "58",
+      "archive": {
+        "fileId": "70792648885014528",
+        "score": {
+          "value": 4,
+          "time": [
+            238,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 66,
+          "segmentIndex": null
+        },
+        "pageSha256": "b155d61bd2546d1e2f61239efed9556f4394ee0293eaf43823b097b440d971f3",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019nanchang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/5530"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-502607c1a5c7e6ff7fd3",
+      "event": "The 44th ICPC International Collegiate Programming Contest Asian Regional Contest (Nanchang) （江西师范大学）",
+      "series": "ICPC",
+      "date": "2019-11-10",
+      "location": "",
+      "team": "烙呢",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "139 / 331",
+      "overallRank": "140 / 332",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019nanchang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019nanchang:59:大连理工大学",
+      "externalContestId": "icpc2019nanchang",
+      "externalTeamId": "59",
+      "archive": {
+        "fileId": "70792648885014528",
+        "score": {
+          "value": 4,
+          "time": [
+            586,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 139,
+          "segmentIndex": null
+        },
+        "pageSha256": "b155d61bd2546d1e2f61239efed9556f4394ee0293eaf43823b097b440d971f3",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019nanchang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/5530"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-2bc6aa5807d130e9091c",
+      "event": "2019 ICPC Asia Shenyang Regional Contest",
+      "series": "ICPC",
+      "date": "2019-11-17",
+      "location": "",
+      "team": "过往时光",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "56 / 200",
+      "overallRank": "56 / 204",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019shenyang:1110:大连理工大学",
+      "externalContestId": "icpc2019shenyang",
+      "externalTeamId": "1110",
+      "archive": {
+        "fileId": "70792768670142464",
+        "score": {
+          "value": 5,
+          "time": [
+            460,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 56,
+          "segmentIndex": null
+        },
+        "pageSha256": "b5cebdca9179ea117d4e3ffc8aecc9a81a35e1ede38c5d8745977d85ee0585aa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019shenyang"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-7fa530416e9ec78e345b",
+      "event": "2019 ICPC Asia Shenyang Regional Contest",
+      "series": "ICPC",
+      "date": "2019-11-17",
+      "location": "",
+      "team": "L",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "82 / 200",
+      "overallRank": "82 / 204",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019shenyang:1022:大连理工大学",
+      "externalContestId": "icpc2019shenyang",
+      "externalTeamId": "1022",
+      "archive": {
+        "fileId": "70792768670142464",
+        "score": {
+          "value": 4,
+          "time": [
+            153,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 82,
+          "segmentIndex": null
+        },
+        "pageSha256": "b5cebdca9179ea117d4e3ffc8aecc9a81a35e1ede38c5d8745977d85ee0585aa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019shenyang"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-c4c705a5336198486d14",
+      "event": "2019 ICPC Asia Shenyang Regional Contest",
+      "series": "ICPC",
+      "date": "2019-11-17",
+      "location": "",
+      "team": "烙呢",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "88 / 200",
+      "overallRank": "88 / 204",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019shenyang:1184:大连理工大学",
+      "externalContestId": "icpc2019shenyang",
+      "externalTeamId": "1184",
+      "archive": {
+        "fileId": "70792768670142464",
+        "score": {
+          "value": 4,
+          "time": [
+            174,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 88,
+          "segmentIndex": null
+        },
+        "pageSha256": "b5cebdca9179ea117d4e3ffc8aecc9a81a35e1ede38c5d8745977d85ee0585aa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019shenyang"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-c33ca83753ec7d269da2",
+      "event": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（上海） （上海大学）",
+      "series": "ICPC",
+      "date": "2019-11-24",
+      "location": "",
+      "team": "顶瓜瓜",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "78 / 300",
+      "overallRank": "91 / 336",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019shanghai"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019shanghai:32:大连理工大学",
+      "externalContestId": "icpc2019shanghai",
+      "externalTeamId": "32",
+      "archive": {
+        "fileId": "70792783174045696",
+        "score": {
+          "value": 4,
+          "time": [
+            498,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 78,
+          "segmentIndex": null
+        },
+        "pageSha256": "a2762eaec3c40502bd9fc1c6c61ea02807c2932d8a8324dfca6efc41fd0ba923",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019shanghai"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-453e2a8d8983a5d106e1",
+      "event": "第44届ICPC国际大学生程序设计竞赛亚洲区域赛（上海） （上海大学）",
+      "series": "ICPC",
+      "date": "2019-11-24",
+      "location": "",
+      "team": "黑灰化肥灰会挥发发灰黑讳为黑灰花会飞",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "207 / 300",
+      "overallRank": "232 / 336",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019shanghai"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019shanghai:33:大连理工大学",
+      "externalContestId": "icpc2019shanghai",
+      "externalTeamId": "33",
+      "archive": {
+        "fileId": "70792783174045696",
+        "score": {
+          "value": 1,
+          "time": [
+            39,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 207,
+          "segmentIndex": null
+        },
+        "pageSha256": "a2762eaec3c40502bd9fc1c6c61ea02807c2932d8a8324dfca6efc41fd0ba923",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019shanghai"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-fda47c1c9af148a7b81b",
+      "event": "2019 ICPC Asia-East Continent Final",
+      "series": "ICPC",
+      "date": "2019-12-15",
+      "location": "总决赛",
+      "team": "谁不爱布丁奶茶",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "209 / 378",
+      "overallRank": "216 / 386",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2019ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2019ecfinal:32103872:大连理工大学",
+      "externalContestId": "icpc2019ecfinal",
+      "externalTeamId": "32103872",
+      "archive": {
+        "fileId": "70792768150048768",
+        "score": {
+          "value": 2,
+          "time": [
+            10260000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 209,
+          "segmentIndex": null
+        },
+        "pageSha256": "1bd1d4133aa2b38058d87fc56d29610d3614ada7da90ce5953b2e03752c398e4",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2019ecfinal"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102471"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-0dee4949b3becc633108",
+      "event": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（焦作站） （河南理工大学）",
+      "series": "ICPC",
+      "date": "2018-11-25",
+      "location": "",
+      "team": "青歌行 (Qinggex)",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "37 / 289",
+      "overallRank": "38 / 298",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018jiaozuo"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018jiaozuo:21572722:大连理工大学",
+      "externalContestId": "icpc2018jiaozuo",
+      "externalTeamId": "21572722",
+      "archive": {
+        "fileId": "70792782159024128",
+        "score": {
+          "value": 6,
+          "time": [
+            735,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 37,
+          "segmentIndex": null
+        },
+        "pageSha256": "c4e82767eb3037167ebfe3bc93709eb83eaf703374a8093d6fb911f2baf1f9f1",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2018jiaozuo"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102028"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-b3bf8619af0b15b01a4d",
+      "event": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "series": "ICPC",
+      "date": "2018-12-16",
+      "location": "总决赛",
+      "team": "依依",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "61 / 374",
+      "overallRank": "64 / 382",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018ecfinal:22014837:大连理工大学",
+      "externalContestId": "icpc2018ecfinal",
+      "externalTeamId": "22014837",
+      "archive": {
+        "fileId": "70792767650926592",
+        "score": {
+          "value": 4,
+          "time": [
+            19020000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 61,
+          "segmentIndex": null
+        },
+        "pageSha256": "8f73daaf6145c6d385152c1829ffca7a20109b4c2e11dfb8e9499429584e31fa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102056"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-b296151eae45d5b6fea8",
+      "event": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "series": "ICPC",
+      "date": "2018-12-16",
+      "location": "总决赛",
+      "team": "青歌行",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "66 / 382",
+      "overallRank": "66 / 382",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018ecfinal:22014836:大连理工大学",
+      "externalContestId": "icpc2018ecfinal",
+      "externalTeamId": "22014836",
+      "archive": {
+        "fileId": "70792767650926592",
+        "score": {
+          "value": 4,
+          "time": [
+            19500000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "8f73daaf6145c6d385152c1829ffca7a20109b4c2e11dfb8e9499429584e31fa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102056"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": false
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-ed38e490ddc6dec78c30",
+      "event": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "series": "ICPC",
+      "date": "2018-12-16",
+      "location": "总决赛",
+      "team": "顶瓜瓜",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "165 / 382",
+      "overallRank": "165 / 382",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018ecfinal:22014835:大连理工大学",
+      "externalContestId": "icpc2018ecfinal",
+      "externalTeamId": "22014835",
+      "archive": {
+        "fileId": "70792767650926592",
+        "score": {
+          "value": 3,
+          "time": [
+            11580000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "8f73daaf6145c6d385152c1829ffca7a20109b4c2e11dfb8e9499429584e31fa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102056"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": false
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-c74eeb3f52e1c01ed968",
+      "event": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "series": "ICPC",
+      "date": "2018-12-16",
+      "location": "总决赛",
+      "team": "害羞幽灵",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "186 / 374",
+      "overallRank": "193 / 382",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018ecfinal:22014834:大连理工大学",
+      "externalContestId": "icpc2018ecfinal",
+      "externalTeamId": "22014834",
+      "archive": {
+        "fileId": "70792767650926592",
+        "score": {
+          "value": 3,
+          "time": [
+            16860000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 186,
+          "segmentIndex": null
+        },
+        "pageSha256": "8f73daaf6145c6d385152c1829ffca7a20109b4c2e11dfb8e9499429584e31fa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102056"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-477cd9860b37a9555498",
+      "event": "2018-2019 ACM-ICPC, Asia East Continent Finals",
+      "series": "ICPC",
+      "date": "2018-12-16",
+      "location": "总决赛",
+      "team": "One Minute Lost",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "313 / 374",
+      "overallRank": "321 / 382",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018ecfinal"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018ecfinal:22014833:大连理工大学",
+      "externalContestId": "icpc2018ecfinal",
+      "externalTeamId": "22014833",
+      "archive": {
+        "fileId": "70792767650926592",
+        "score": {
+          "value": 2,
+          "time": [
+            14580000,
+            "ms"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 313,
+          "segmentIndex": null
+        },
+        "pageSha256": "8f73daaf6145c6d385152c1829ffca7a20109b4c2e11dfb8e9499429584e31fa",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102056"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-e507752083f8eb1cbe07",
+      "event": "2017 ACM ICPC Asia Shenyang Regional Contest （东北大学）",
+      "series": "ICPC",
+      "date": "2017-10-22",
+      "location": "",
+      "team": "奇点",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "27 / 180",
+      "overallRank": "27 / 185",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017shenyang:27:大连理工大学",
+      "externalContestId": "icpc2017shenyang",
+      "externalTeamId": "27",
+      "archive": {
+        "fileId": "70792650411741184",
+        "score": {
+          "value": 6,
+          "time": [
+            979,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 27,
+          "segmentIndex": null
+        },
+        "pageSha256": "3de058f866ce31be2db4803190f5a0d0c9994fa7499fa89ea956bdd9efbb8bd6",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/942"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-7456058f726788e4ce62",
+      "event": "2017 ACM ICPC Asia Shenyang Regional Contest （东北大学）",
+      "series": "ICPC",
+      "date": "2017-10-22",
+      "location": "",
+      "team": "嘟嘟噜嘟噜",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "43 / 180",
+      "overallRank": "43 / 185",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017shenyang:43:大连理工大学",
+      "externalContestId": "icpc2017shenyang",
+      "externalTeamId": "43",
+      "archive": {
+        "fileId": "70792650411741184",
+        "score": {
+          "value": 5,
+          "time": [
+            543,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 43,
+          "segmentIndex": null
+        },
+        "pageSha256": "3de058f866ce31be2db4803190f5a0d0c9994fa7499fa89ea956bdd9efbb8bd6",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/942"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-4ea4737fdcb5c87b9f06",
+      "event": "2017 ACM ICPC Asia Shenyang Regional Contest （东北大学）",
+      "series": "ICPC",
+      "date": "2017-10-22",
+      "location": "",
+      "team": "扶我起来还能A",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "48 / 180",
+      "overallRank": "48 / 185",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017shenyang:48:大连理工大学",
+      "externalContestId": "icpc2017shenyang",
+      "externalTeamId": "48",
+      "archive": {
+        "fileId": "70792650411741184",
+        "score": {
+          "value": 5,
+          "time": [
+            585,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 48,
+          "segmentIndex": null
+        },
+        "pageSha256": "3de058f866ce31be2db4803190f5a0d0c9994fa7499fa89ea956bdd9efbb8bd6",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/942"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-627c33b599eef6518cdc",
+      "event": "第42届ACM国际大学生程序设计竞赛亚洲区域赛（西安） （西北工业大学）",
+      "series": "ICPC",
+      "date": "2017-10-29",
+      "location": "",
+      "team": "一步之遥",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "13 / 352",
+      "overallRank": "15 / 357",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017xi_an"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017xi_an:15:大连理工大学",
+      "externalContestId": "icpc2017xi_an",
+      "externalTeamId": "15",
+      "archive": {
+        "fileId": "70792650881503232",
+        "score": {
+          "value": 7,
+          "time": [
+            712,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 13,
+          "segmentIndex": null
+        },
+        "pageSha256": "3c7f315cb84a6b5657fa57461e6e6ec6867249612f57b3e185adfbed9d205a4f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017xi_an"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/966"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-af2c06e1cdd391253c82",
+      "event": "第42届ACM国际大学生程序设计竞赛亚洲区域赛（西安） （西北工业大学）",
+      "series": "ICPC",
+      "date": "2017-10-29",
+      "location": "",
+      "team": "远见",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "53 / 352",
+      "overallRank": "56 / 357",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017xi_an"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017xi_an:56:大连理工大学",
+      "externalContestId": "icpc2017xi_an",
+      "externalTeamId": "56",
+      "archive": {
+        "fileId": "70792650881503232",
+        "score": {
+          "value": 5,
+          "time": [
+            544,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 53,
+          "segmentIndex": null
+        },
+        "pageSha256": "3c7f315cb84a6b5657fa57461e6e6ec6867249612f57b3e185adfbed9d205a4f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017xi_an"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/966"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-299c67087e917739ba63",
+      "event": "第42届ACM国际大学生程序设计竞赛亚洲区域赛（西安） （西北工业大学）",
+      "series": "ICPC",
+      "date": "2017-10-29",
+      "location": "",
+      "team": "嘟嘟噜",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "93 / 352",
+      "overallRank": "98 / 357",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017xi_an"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017xi_an:98:大连理工大学",
+      "externalContestId": "icpc2017xi_an",
+      "externalTeamId": "98",
+      "archive": {
+        "fileId": "70792650881503232",
+        "score": {
+          "value": 4,
+          "time": [
+            411,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 93,
+          "segmentIndex": null
+        },
+        "pageSha256": "3c7f315cb84a6b5657fa57461e6e6ec6867249612f57b3e185adfbed9d205a4f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017xi_an"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/966"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-9da6927833fec226d61e",
+      "event": "The 2017 ACM-ICPC Asia Beijing Regional Contest （北京大学）",
+      "series": "ICPC",
+      "date": "2017-11-19",
+      "location": "",
+      "team": "WakemeuptogetAC",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "96 / 186",
+      "overallRank": "105 / 195",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017beijing:105:大连理工大学",
+      "externalContestId": "icpc2017beijing",
+      "externalTeamId": "105",
+      "archive": {
+        "fileId": "70792651481288704",
+        "score": {
+          "value": 2,
+          "time": [
+            7944,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 96,
+          "segmentIndex": null
+        },
+        "pageSha256": "7ab217000bc4050d0044c299b0ec268d44f5b131e43568ad10829fc7b7120125",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017beijing"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-8fcd2f661d29a22f90d5",
+      "event": "The 2017 ACM-ICPC Asia Beijing Regional Contest （北京大学）",
+      "series": "ICPC",
+      "date": "2017-11-19",
+      "location": "",
+      "team": "ACE",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "128 / 186",
+      "overallRank": "137 / 195",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017beijing:137:大连理工大学",
+      "externalContestId": "icpc2017beijing",
+      "externalTeamId": "137",
+      "archive": {
+        "fileId": "70792651481288704",
+        "score": {
+          "value": 2,
+          "time": [
+            10517,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 128,
+          "segmentIndex": null
+        },
+        "pageSha256": "7ab217000bc4050d0044c299b0ec268d44f5b131e43568ad10829fc7b7120125",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2017beijing"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-ae3684a3c44ec2e8f902",
+      "event": "ICPC xju onsite",
+      "series": "ICPC",
+      "date": "2017-12-03",
+      "location": "",
+      "team": "对不队 (right or not)",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "27 / 90",
+      "overallRank": "28 / 94",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2017urumchi"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2017urumchi:28:大连理工大学",
+      "externalContestId": "icpc2017urumchi",
+      "externalTeamId": "28",
+      "archive": {
+        "fileId": "70792649979727872",
+        "score": {
+          "value": 5,
+          "time": [
+            18780,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 27,
+          "segmentIndex": null
+        },
+        "pageSha256": "83bbf7f4bc08811e8f9f6c8cfe667384a222c7fb30a8fa5ad833500452070555",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://www.jisuanke.com/contest/969"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-325075086753cc615245",
+      "event": "2016 ACM-ICPC 亚洲区北京赛站 （北京大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "",
+      "team": "Poruna Cabeza",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "18 / 194",
+      "overallRank": "20 / 198",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2016beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2016beijing:大连理工大学_Poruna Cabeza:大连理工大学",
+      "externalContestId": "icpc2016beijing",
+      "externalTeamId": "大连理工大学_Poruna Cabeza",
+      "archive": {
+        "fileId": "70792655516209152",
+        "score": {
+          "value": 5,
+          "time": [
+            24600,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  13,
+                  30,
+                  50
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 18,
+          "segmentIndex": 1
+        },
+        "pageSha256": "b0d3d8076cc1db9c274b3665c41705482a0e1c0c3b919390bbc399f6c70368a6",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2016beijing"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/141613"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": [
+        "Huang Yufan",
+        "jin hangyu",
+        "Zhang shoukui"
+      ]
+    },
+    {
+      "id": "rankland-e397f6ff594b36fd9e1f",
+      "event": "2016 ACM-ICPC 亚洲区北京赛站 （北京大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "",
+      "team": "Providence",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "180 / 194",
+      "overallRank": "184 / 198",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2016beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2016beijing:大连理工大学_Providence:大连理工大学",
+      "externalContestId": "icpc2016beijing",
+      "externalTeamId": "大连理工大学_Providence",
+      "archive": {
+        "fileId": "70792655516209152",
+        "score": {
+          "value": 2,
+          "time": [
+            18120,
+            "s"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "金奖",
+              "style": "gold"
+            },
+            {
+              "title": "银奖",
+              "style": "silver"
+            },
+            {
+              "title": "铜奖",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  13,
+                  30,
+                  50
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 180,
+          "segmentIndex": null
+        },
+        "pageSha256": "b0d3d8076cc1db9c274b3665c41705482a0e1c0c3b919390bbc399f6c70368a6",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2016beijing"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/141613"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": [
+        "Liu Xikai",
+        "Zhang Heng",
+        "Liu Qingzhou"
+      ]
+    },
+    {
+      "id": "rankland-50bc24aa3d605bc117e3",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "",
+      "team": "winter is coming",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "185 / 327",
+      "overallRank": "209 / 327",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2016qingdao:hm-25:大连理工大学",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "hm-25",
+      "archive": {
+        "fileId": "70792859543932928",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 185,
+          "segmentIndex": null
+        },
+        "pageSha256": "43f94073cfa8ad043a8cc49efa949ff78bb78dcc352729dad26541c3b6bea579",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2016qingdao"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-6d20f43f9b64372a4982",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "",
+      "team": "Innovator",
+      "school": "大连理工大学",
+      "originalSchool": "School of Software Technology, Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "185 / 327",
+      "overallRank": "272 / 327",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2016qingdao:hm-88:大连理工大学",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "hm-88",
+      "archive": {
+        "fileId": "70792859543932928",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 185,
+          "segmentIndex": null
+        },
+        "pageSha256": "43f94073cfa8ad043a8cc49efa949ff78bb78dcc352729dad26541c3b6bea579",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2016qingdao"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-66e09a6980aa52d53d34",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "",
+      "team": "lingering_sound",
+      "school": "大连理工大学",
+      "originalSchool": "School of Software Technology, Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "185 / 327",
+      "overallRank": "273 / 327",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2016qingdao:hm-89:大连理工大学",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "hm-89",
+      "archive": {
+        "fileId": "70792859543932928",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 185,
+          "segmentIndex": null
+        },
+        "pageSha256": "43f94073cfa8ad043a8cc49efa949ff78bb78dcc352729dad26541c3b6bea579",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2016qingdao"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-b69e7b29894a2fcb7968",
+      "event": "2015 沈阳赛区现场赛 （东北大学）",
+      "series": "ICPC",
+      "date": "2015-10-25",
+      "location": "",
+      "team": "余音 (lingering sound)",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "41 / 161",
+      "overallRank": "41 / 172",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2015shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2015shenyang:81:大连理工大学",
+      "externalContestId": "icpc2015shenyang",
+      "externalTeamId": "81",
+      "archive": {
+        "fileId": "70792656510259200",
+        "score": {
+          "value": 4,
+          "time": [
+            623,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  17,
+                  34,
+                  51
+                ],
+                "noTied": true
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 41,
+          "segmentIndex": 1
+        },
+        "pageSha256": "108292ae0dc410955ef5a98f2604238d6e5d45df3c3091083ad52e7255db7483",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2015shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/97867"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-2885b680ce248d9eb3ef",
+      "event": "2015 沈阳赛区现场赛 （东北大学）",
+      "series": "ICPC",
+      "date": "2015-10-25",
+      "location": "",
+      "team": "夏洛特 (Charlotte)",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铜牌",
+      "rank": "78 / 161",
+      "overallRank": "79 / 172",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2015shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2015shenyang:27:大连理工大学",
+      "externalContestId": "icpc2015shenyang",
+      "externalTeamId": "27",
+      "archive": {
+        "fileId": "70792656510259200",
+        "score": {
+          "value": 3,
+          "time": [
+            517,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  17,
+                  34,
+                  51
+                ],
+                "noTied": true
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 78,
+          "segmentIndex": 2
+        },
+        "pageSha256": "108292ae0dc410955ef5a98f2604238d6e5d45df3c3091083ad52e7255db7483",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2015shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/97867"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-b041d5092196abf11e20",
+      "event": "2015 沈阳赛区现场赛 （东北大学）",
+      "series": "ICPC",
+      "date": "2015-10-25",
+      "location": "",
+      "team": "水煮鱼 (Boiled Fish)",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "112 / 161",
+      "overallRank": "116 / 172",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2015shenyang"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2015shenyang:22:大连理工大学",
+      "externalContestId": "icpc2015shenyang",
+      "externalTeamId": "22",
+      "archive": {
+        "fileId": "70792656510259200",
+        "score": {
+          "value": 2,
+          "time": [
+            203,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  17,
+                  34,
+                  51
+                ],
+                "noTied": true
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 112,
+          "segmentIndex": null
+        },
+        "pageSha256": "108292ae0dc410955ef5a98f2604238d6e5d45df3c3091083ad52e7255db7483",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2015shenyang"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/97867"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-e448e2ff3545e412a481",
+      "event": "2015 北京赛区现场赛 （北京大学）",
+      "series": "ICPC",
+      "date": "2015-11-15",
+      "location": "",
+      "team": "THE GRAY",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铜牌",
+      "rank": "57 / 200",
+      "overallRank": "57 / 200",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2015beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2015beijing:130:大连理工大学",
+      "externalContestId": "icpc2015beijing",
+      "externalTeamId": "130",
+      "archive": {
+        "fileId": "70792657609166848",
+        "score": {
+          "value": 4,
+          "time": [
+            445,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  31,
+                  45
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 57,
+          "segmentIndex": 2
+        },
+        "pageSha256": "fd1e2b891b958acbb665f7694c5254186a9f18e215464c4cfbd9d59979ebab0a",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2015beijing"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/121508"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-4e3cefb21d23f33fd0fc",
+      "event": "2015 北京赛区现场赛 （北京大学）",
+      "series": "ICPC",
+      "date": "2015-11-15",
+      "location": "",
+      "team": "zergling",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "189 / 200",
+      "overallRank": "189 / 200",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2015beijing"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2015beijing:35:大连理工大学",
+      "externalContestId": "icpc2015beijing",
+      "externalTeamId": "35",
+      "archive": {
+        "fileId": "70792657609166848",
+        "score": {
+          "value": 1,
+          "time": [
+            66,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  31,
+                  45
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 189,
+          "segmentIndex": null
+        },
+        "pageSha256": "fd1e2b891b958acbb665f7694c5254186a9f18e215464c4cfbd9d59979ebab0a",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2015beijing"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/121508"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-3fd109c3c4ca21876a7a",
+      "event": "2013 长沙赛区现场赛 （湖南大学）",
+      "series": "ICPC",
+      "date": "2013-11-17",
+      "location": "",
+      "team": "IBN5100",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "124 / 187",
+      "overallRank": "129 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2013changsha"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2013changsha:152:大连理工大学",
+      "externalContestId": "icpc2013changsha",
+      "externalTeamId": "152",
+      "archive": {
+        "fileId": "70792664051617792",
+        "score": {
+          "value": 3,
+          "time": [
+            630,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  38,
+                  62
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 124,
+          "segmentIndex": null
+        },
+        "pageSha256": "69bd3796703eedb702a880401a5b30249556d07edea56ec6571ab31ab095d56c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2013changsha"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/37671"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-0f28586bf847c1dfe081",
+      "event": "2013 长沙赛区现场赛 （湖南大学）",
+      "series": "ICPC",
+      "date": "2013-11-17",
+      "location": "",
+      "team": "Sequoia",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "128 / 187",
+      "overallRank": "133 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2013changsha"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2013changsha:160:大连理工大学",
+      "externalContestId": "icpc2013changsha",
+      "externalTeamId": "160",
+      "archive": {
+        "fileId": "70792664051617792",
+        "score": {
+          "value": 3,
+          "time": [
+            681,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  38,
+                  62
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 128,
+          "segmentIndex": null
+        },
+        "pageSha256": "69bd3796703eedb702a880401a5b30249556d07edea56ec6571ab31ab095d56c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2013changsha"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/37671"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-ceaa69e135d707fee09e",
+      "event": "2013 长沙赛区现场赛 （湖南大学）",
+      "series": "ICPC",
+      "date": "2013-11-17",
+      "location": "",
+      "team": "Risky",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "140 / 187",
+      "overallRank": "145 / 192",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2013changsha"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2013changsha:48:大连理工大学",
+      "externalContestId": "icpc2013changsha",
+      "externalTeamId": "48",
+      "archive": {
+        "fileId": "70792664051617792",
+        "score": {
+          "value": 2,
+          "time": [
+            170,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  38,
+                  62
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 140,
+          "segmentIndex": null
+        },
+        "pageSha256": "69bd3796703eedb702a880401a5b30249556d07edea56ec6571ab31ab095d56c",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2013changsha"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/37671"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-e16759d344c90d7241dc",
+      "event": "2012 成都赛区现场赛 （成都东软学院）",
+      "series": "ICPC",
+      "date": "2012-11-11",
+      "location": "",
+      "team": "Gospel",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "29 / 141",
+      "overallRank": "30 / 146",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2012chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2012chengdu:53:大连理工大学",
+      "externalContestId": "icpc2012chengdu",
+      "externalTeamId": "53",
+      "archive": {
+        "fileId": "70792667872628736",
+        "score": {
+          "value": 4,
+          "time": [
+            612,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  30,
+                  45
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 29,
+          "segmentIndex": 1
+        },
+        "pageSha256": "ad5e396e81c6eb77a7795277d7f6c3b14715ce9a454d15ea7f0e27be9509ba4a",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2012chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/17282"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-82eb5e789afaedf4f374",
+      "event": "2012 成都赛区现场赛 （成都东软学院）",
+      "series": "ICPC",
+      "date": "2012-11-11",
+      "location": "",
+      "team": "IBN5100",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "105 / 141",
+      "overallRank": "109 / 146",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2012chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2012chengdu:64:大连理工大学",
+      "externalContestId": "icpc2012chengdu",
+      "externalTeamId": "64",
+      "archive": {
+        "fileId": "70792667872628736",
+        "score": {
+          "value": 2,
+          "time": [
+            84,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  30,
+                  45
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 105,
+          "segmentIndex": null
+        },
+        "pageSha256": "ad5e396e81c6eb77a7795277d7f6c3b14715ce9a454d15ea7f0e27be9509ba4a",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2012chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/17282"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-a86a5e76960aabc0843f",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "一帆风顺",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "51 / 155",
+      "overallRank": "51 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:86:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "86",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 3,
+          "time": [
+            529,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-ace294fea641a72605b9",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "蠕虫",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "57 / 155",
+      "overallRank": "57 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:13:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "13",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 3,
+          "time": [
+            589,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-1df55aa0732f69695b1b",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "使徒",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "58 / 155",
+      "overallRank": "58 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:81:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "81",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 3,
+          "time": [
+            624,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-d747d9964c0cc673c459",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "GBM",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "75 / 155",
+      "overallRank": "75 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:29:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "29",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 2,
+          "time": [
+            246,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-f2c0bd7be7f8c87a72a2",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "小Y",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "89 / 155",
+      "overallRank": "89 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:60:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "60",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 2,
+          "time": [
+            339,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-47d3387b7b46d6a0e287",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "斯巴达",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "129 / 155",
+      "overallRank": "129 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:27:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "27",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 1,
+          "time": [
+            129,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-3efe62e8e3c4f385422c",
+      "event": "2011 大连赛区现场赛 （大连理工大学）",
+      "series": "ICPC",
+      "date": "2011-09-25",
+      "location": "",
+      "team": "乱码",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "155 / 155",
+      "overallRank": "155 / 155",
+      "official": false,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2011dalian"
+        },
+        {
+          "name": "队内确认：2011 大连站主办校队伍打星"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011dalian:133:大连理工大学",
+      "externalContestId": "icpc2011dalian",
+      "externalTeamId": "133",
+      "archive": {
+        "fileId": "70792668283670528",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  42
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": null,
+          "segmentIndex": null
+        },
+        "pageSha256": "331371424b6e8192470e0bb814fb8b69a81ddbd8a3da4bc792231101be39a979",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011dalian"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/4291"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": false,
+        "officialOverrideReason": "2011 大连站主办校打星，队内确认"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-6f30306e2d4467e5d38d",
+      "event": "2011 成都赛区现场赛 （成都东软学院）",
+      "series": "ICPC",
+      "date": "2011-11-06",
+      "location": "",
+      "team": "HSH",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "30 / 133",
+      "overallRank": "33 / 141",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011chengdu:54:大连理工大学",
+      "externalContestId": "icpc2011chengdu",
+      "externalTeamId": "54",
+      "archive": {
+        "fileId": "70792669722316800",
+        "score": {
+          "value": 4,
+          "time": [
+            530,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 30,
+          "segmentIndex": 1
+        },
+        "pageSha256": "a609c9854951a34e2e25f881fd806bf38d13f145cbeddfad55e89625663e330f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5666"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-f04b1d18df3b1874a579",
+      "event": "2011 成都赛区现场赛 （成都东软学院）",
+      "series": "ICPC",
+      "date": "2011-11-06",
+      "location": "",
+      "team": "NERV",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "33 / 133",
+      "overallRank": "36 / 141",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011chengdu:74:大连理工大学",
+      "externalContestId": "icpc2011chengdu",
+      "externalTeamId": "74",
+      "archive": {
+        "fileId": "70792669722316800",
+        "score": {
+          "value": 4,
+          "time": [
+            596,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 33,
+          "segmentIndex": 1
+        },
+        "pageSha256": "a609c9854951a34e2e25f881fd806bf38d13f145cbeddfad55e89625663e330f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5666"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-ce893142b58e0149413f",
+      "event": "2011 成都赛区现场赛 （成都东软学院）",
+      "series": "ICPC",
+      "date": "2011-11-06",
+      "location": "",
+      "team": "GodSpeed",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "104 / 133",
+      "overallRank": "111 / 141",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011chengdu:46:大连理工大学",
+      "externalContestId": "icpc2011chengdu",
+      "externalTeamId": "46",
+      "archive": {
+        "fileId": "70792669722316800",
+        "score": {
+          "value": 1,
+          "time": [
+            50,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  14,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 104,
+          "segmentIndex": null
+        },
+        "pageSha256": "a609c9854951a34e2e25f881fd806bf38d13f145cbeddfad55e89625663e330f",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5666"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-1b002249463ac74050c5",
+      "event": "2011 福州赛区现场赛 （福州师范大学）",
+      "series": "ICPC",
+      "date": "2011-11-20",
+      "location": "",
+      "team": "GodSpeed",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "25 / 133",
+      "overallRank": "31 / 142",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011fuzhou"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011fuzhou:17:大连理工大学",
+      "externalContestId": "icpc2011fuzhou",
+      "externalTeamId": "17",
+      "archive": {
+        "fileId": "70792670225633280",
+        "score": {
+          "value": 3,
+          "time": [
+            564,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 25,
+          "segmentIndex": 1
+        },
+        "pageSha256": "094af6187d65e53a36371bbc58e40c5f7eb3f56a4de30e1f4a1ab61c5287d201",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011fuzhou"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5844"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-7db0458b19394c163a1b",
+      "event": "2011 福州赛区现场赛 （福州师范大学）",
+      "series": "ICPC",
+      "date": "2011-11-20",
+      "location": "",
+      "team": "Gospel",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "33 / 133",
+      "overallRank": "40 / 142",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011fuzhou"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011fuzhou:8:大连理工大学",
+      "externalContestId": "icpc2011fuzhou",
+      "externalTeamId": "8",
+      "archive": {
+        "fileId": "70792670225633280",
+        "score": {
+          "value": 3,
+          "time": [
+            663,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 33,
+          "segmentIndex": 1
+        },
+        "pageSha256": "094af6187d65e53a36371bbc58e40c5f7eb3f56a4de30e1f4a1ab61c5287d201",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011fuzhou"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5844"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-8daaca7f8a6ed9b0710c",
+      "event": "2011 福州赛区现场赛 （福州师范大学）",
+      "series": "ICPC",
+      "date": "2011-11-20",
+      "location": "",
+      "team": "BlueSky",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "90 / 133",
+      "overallRank": "99 / 142",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2011fuzhou"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2011fuzhou:13:大连理工大学",
+      "externalContestId": "icpc2011fuzhou",
+      "externalTeamId": "13",
+      "archive": {
+        "fileId": "70792670225633280",
+        "score": {
+          "value": 1,
+          "time": [
+            77,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  15,
+                  28,
+                  43
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 90,
+          "segmentIndex": null
+        },
+        "pageSha256": "094af6187d65e53a36371bbc58e40c5f7eb3f56a4de30e1f4a1ab61c5287d201",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2011fuzhou"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/5844"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-c38b37e59a63fadea260",
+      "event": "2010 哈尔滨赛区现场赛 （哈尔滨工程大学）",
+      "series": "ICPC",
+      "date": "2010-09-26",
+      "location": "",
+      "team": "预知",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "35 / 124",
+      "overallRank": "37 / 126",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010harbin"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010harbin:37:大连理工大学",
+      "externalContestId": "icpc2010harbin",
+      "externalTeamId": "37",
+      "archive": {
+        "fileId": "70792670661840896",
+        "score": {
+          "value": 5,
+          "time": [
+            665,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 35,
+          "segmentIndex": null
+        },
+        "pageSha256": "182487c42f2cfdc80680340fa93fd2834d63cba8abb419002bf77247c3386894",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010harbin"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://acm.hdu.edu.cn/search.php?field=problem&key=2010+Asia+Regional+Harbin&source=1&searchmode=source"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-04d6b782fb22e7cf6e2b",
+      "event": "2010 哈尔滨赛区现场赛 （哈尔滨工程大学）",
+      "series": "ICPC",
+      "date": "2010-09-26",
+      "location": "",
+      "team": "2012",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "42 / 124",
+      "overallRank": "44 / 126",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010harbin"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010harbin:44:大连理工大学",
+      "externalContestId": "icpc2010harbin",
+      "externalTeamId": "44",
+      "archive": {
+        "fileId": "70792670661840896",
+        "score": {
+          "value": 4,
+          "time": [
+            356,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 42,
+          "segmentIndex": null
+        },
+        "pageSha256": "182487c42f2cfdc80680340fa93fd2834d63cba8abb419002bf77247c3386894",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010harbin"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://acm.hdu.edu.cn/search.php?field=problem&key=2010+Asia+Regional+Harbin&source=1&searchmode=source"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-706c363063fd15713dc7",
+      "event": "2010 哈尔滨赛区现场赛 （哈尔滨工程大学）",
+      "series": "ICPC",
+      "date": "2010-09-26",
+      "location": "",
+      "team": "不给力",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "48 / 124",
+      "overallRank": "51 / 126",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010harbin"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010harbin:51:大连理工大学",
+      "externalContestId": "icpc2010harbin",
+      "externalTeamId": "51",
+      "archive": {
+        "fileId": "70792670661840896",
+        "score": {
+          "value": 4,
+          "time": [
+            421,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 48,
+          "segmentIndex": null
+        },
+        "pageSha256": "182487c42f2cfdc80680340fa93fd2834d63cba8abb419002bf77247c3386894",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010harbin"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://acm.hdu.edu.cn/search.php?field=problem&key=2010+Asia+Regional+Harbin&source=1&searchmode=source"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-c4807241b51cf99bf92a",
+      "event": "2010 天津赛区现场赛 （天津大学）",
+      "series": "ICPC",
+      "date": "2010-10-17",
+      "location": "",
+      "team": "dlut_elephant",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "83 / 123",
+      "overallRank": "87 / 131",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010tianjin"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010tianjin:87:大连理工大学",
+      "externalContestId": "icpc2010tianjin",
+      "externalTeamId": "87",
+      "archive": {
+        "fileId": "70792671114825728",
+        "score": {
+          "value": 2,
+          "time": [
+            430,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  13,
+                  26,
+                  39
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 83,
+          "segmentIndex": null
+        },
+        "pageSha256": "e93e67033eee64682eed24e6a7cc79a8c441e746d1416b203cf27228f3dcb22d",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010tianjin"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/2109"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-b87e9437101613e06f38",
+      "event": "2010 天津赛区现场赛 （天津大学）",
+      "series": "ICPC",
+      "date": "2010-10-17",
+      "location": "",
+      "team": "dlut_iWorld",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "116 / 123",
+      "overallRank": "124 / 131",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010tianjin"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010tianjin:124:大连理工大学",
+      "externalContestId": "icpc2010tianjin",
+      "externalTeamId": "124",
+      "archive": {
+        "fileId": "70792671114825728",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  13,
+                  26,
+                  39
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 116,
+          "segmentIndex": null
+        },
+        "pageSha256": "e93e67033eee64682eed24e6a7cc79a8c441e746d1416b203cf27228f3dcb22d",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010tianjin"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/2109"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-13536b6727b5c8344ba6",
+      "event": "2010 成都赛区现场赛 （四川大学）",
+      "series": "ICPC",
+      "date": "2010-11-07",
+      "location": "",
+      "team": "dlut_Phoebus",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "23 / 115",
+      "overallRank": "26 / 126",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010chengdu:26:大连理工大学",
+      "externalContestId": "icpc2010chengdu",
+      "externalTeamId": "26",
+      "archive": {
+        "fileId": "70792671978852352",
+        "score": {
+          "value": 5,
+          "time": [
+            809,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  12,
+                  24,
+                  37
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 23,
+          "segmentIndex": 1
+        },
+        "pageSha256": "1ceaf87547c2614b3ec4a22c591032f94346a52010e33ae05072cbc97c5e8628",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/2106"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-7d7c45a2270fcbfcd656",
+      "event": "2010 成都赛区现场赛 （四川大学）",
+      "series": "ICPC",
+      "date": "2010-11-07",
+      "location": "",
+      "team": "dlut_Real Power",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "88 / 115",
+      "overallRank": "97 / 126",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2010chengdu"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2010chengdu:97:大连理工大学",
+      "externalContestId": "icpc2010chengdu",
+      "externalTeamId": "97",
+      "archive": {
+        "fileId": "70792671978852352",
+        "score": {
+          "value": 2,
+          "time": [
+            286,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  12,
+                  24,
+                  37
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 88,
+          "segmentIndex": null
+        },
+        "pageSha256": "1ceaf87547c2614b3ec4a22c591032f94346a52010e33ae05072cbc97c5e8628",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2010chengdu"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/2106"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "rankland-278f27618563aaa71b6e",
+      "event": "The 34th ACM/ICPC Aisa Regional Wuhan Onsite Contest （武汉大学）",
+      "series": "ICPC",
+      "date": "2009-11-01",
+      "location": "",
+      "team": "Bombee",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "",
+      "medalStatus": "unknown",
+      "rank": "27 / 124",
+      "overallRank": "33 / 132",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2009wuhan"
+      },
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2009wuhan:team75:大连理工大学",
+      "externalContestId": "icpc2009wuhan",
+      "externalTeamId": "team75",
+      "archive": {
+        "fileId": "70792672872239104",
+        "score": {
+          "value": 4,
+          "time": [
+            436,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "title": "Gold Medalist",
+              "style": "gold"
+            },
+            {
+              "title": "Silver Medalist",
+              "style": "silver"
+            },
+            {
+              "title": "Bronze Medalist",
+              "style": "bronze"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 27,
+          "segmentIndex": null
+        },
+        "pageSha256": "132eed81933d9d25f374d5727e873c58430854bdec9526d937c35d63ed9b65b8",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2009wuhan"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://vjudge.net/contest/3505"
+          }
+        ],
+        "medalBoundariesKnown": false,
+        "sourceOfficial": true
+      },
+      "suggestedMembers": []
+    }
+  ]
+}

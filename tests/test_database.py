@@ -143,7 +143,7 @@ class DatabaseTests(unittest.TestCase):
         enriched = seed_data()
         enriched["honors"].append({
             **enriched["honors"][0], "id": "iron-1", "team": "参赛队", "medal": "铁牌",
-            "official": False, "members": ["张三"],
+            "official": True, "members": ["张三"],
             "memberDetails": [{"name": "张三", "provider": "cpcfinder", "externalId": "student-1"}],
         })
         self.database.initialize(enriched)
@@ -154,7 +154,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(zhang["honorCount"], 1)
         self.assertEqual(li["medals"]["iron"], 0)
         self.assertEqual(payload["medalSummary"][0]["iron"], 1)
-        self.assertFalse(next(h for h in payload["honors"] if h["id"] == "iron-1")["official"])
+        self.assertTrue(next(h for h in payload["honors"] if h["id"] == "iron-1")["official"])
 
     def test_manual_iron_is_added_to_public_count_and_survives_resync(self):
         enriched = seed_data()

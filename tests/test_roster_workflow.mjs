@@ -217,6 +217,36 @@ test('local roster edit submits mixed IDs and names with admin csrf and refreshe
   assert.match(h.state().adminMessage, /奖牌统计已更新/);
 });
 
+test('starred results display only explicit medal grades and unknown official awards remain pending', () => {
+  const h = harness('honor', () => {});
+  for (const [honor, label] of [[{official: false, medal: '铁牌'}, ''], [{official: false, medal: '银牌'}, '打星银牌'],
+    [{official: true, medal: '', medalPending: true}, '奖项待确认']]) {
+    assert.equal(vm.runInContext(`resultMedal(${JSON.stringify(honor)})`, h.context), label);
+  }
+});
+
+test('unknown award selector is available to admin only for missing formal awards', () => {
+  const h = harness('admin', () => {});
+  const html = h.context.unknownMedalInput({medalPending: true});
+  assert.match(html, /<select name="medal">/);
+  assert.match(html, /铁牌/);
+  assert.equal(h.context.unknownMedalInput({medalPending: false}), '');
+});
+
+for (const [selector, endpoint] of [['#adminConfirmMembers', 'confirm-members'], ['#adminEditMembers', 'edit-members']]) {
+  test(`${endpoint}: admin can submit a missing medal with the roster`, async () => {
+    const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true}));
+    const button = element();
+    const form = element({fields: {honorId: 'historic', member1: '甲', member2: '乙', member3: '丙', medal: '银牌'}, querySelector: () => button});
+    h.nodes.set(selector, form);
+    h.context.bindAdminEvents();
+    await form.handlers.submit({preventDefault() {}, currentTarget: form});
+    assert.equal(h.calls[0].path, `/api/admin/${endpoint}`);
+    assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+    assert.equal(JSON.parse(h.calls[0].options.body).medal, '银牌');
+  });
+}
+
 test('visitor page offers submission, not direct confirmation, and scopes existing choices', () => {
   const h = harness('pending', () => {});
   const data = structuredClone(seed);

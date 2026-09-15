@@ -12,7 +12,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 9
+SCHEMA_VERSION = 10
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -24,6 +24,9 @@ def load_seed_file(path: Path | str) -> dict:
     official = path.parent / "ccpc_official_honors.json"
     if official.exists():
         data["officialImports"] = [json.loads(official.read_text(encoding="utf-8"))]
+    supplement = path.parent / "rankland_supplement_honors.json"
+    if supplement.exists():
+        data.setdefault("officialImports", []).append(json.loads(supplement.read_text(encoding="utf-8")))
     return data
 
 
@@ -78,6 +81,13 @@ CREATE TABLE IF NOT EXISTS members (
 );
 
 CREATE INDEX IF NOT EXISTS idx_members_normalized_name ON members(normalized_name);
+
+CREATE TABLE IF NOT EXISTS member_redirects (
+    old_id INTEGER PRIMARY KEY,
+    member_id INTEGER NOT NULL REFERENCES members(id),
+    archive_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS member_identities (
     provider TEXT NOT NULL,
@@ -135,6 +145,7 @@ CREATE TABLE IF NOT EXISTS member_public_stats (
     silver_count INTEGER NOT NULL DEFAULT 0,
     bronze_count INTEGER NOT NULL DEFAULT 0,
     iron_count INTEGER,
+    iron_excludes_unofficial INTEGER NOT NULL DEFAULT 0,
     latest_event_date TEXT NOT NULL DEFAULT '',
     source_id INTEGER REFERENCES sources(id),
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -254,13 +265,14 @@ class Database:
     def initialize(self, seed: dict | None = None) -> None:
         with self.connect() as connection:
             self._ensure_schema(connection)
+            self._merge_panjin_members(connection)
             if seed:
                 self._sync_site_data(connection, seed)
 
     @staticmethod
     def _ensure_schema(connection: sqlite3.Connection) -> None:
         connection.executescript(SCHEMA)
-        for table, column in (("member_public_stats", "iron_count"), ("honors", "official")):
+        for table, column in (("member_public_stats", "iron_count"), ("member_public_stats", "iron_excludes_unofficial"), ("honors", "official")):
             columns = {row["name"] for row in connection.execute(f"PRAGMA table_info({table})")}
             if column not in columns:
                 connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} INTEGER")
@@ -320,7 +332,8 @@ class Database:
             if row:
                 return int(row["member_id"])
         normalized = normalize_name(str(detail.get("name") or ""))
-        if provider and external_id:
+        school = school_group(detail.get("school", "大连理工大学")) or "大连理工大学"
+        if provider and external_id and school != "大连理工大学盘锦校区":
             rows = connection.execute(
                 "SELECT m.id FROM members m WHERE m.normalized_name=? "
                 "AND m.school=? "
@@ -334,6 +347,84 @@ class Database:
                 (normalized, school_group(detail.get("school", "大连理工大学")) or "大连理工大学"),
             ).fetchall()
         return int(rows[0]["id"]) if len(rows) == 1 else None
+
+    @staticmethod
+    def _current_member_id(connection: sqlite3.Connection, member_id: int) -> int:
+        row = connection.execute("SELECT member_id FROM member_redirects WHERE old_id=?", (member_id,)).fetchone()
+        return int(row[0]) if row else member_id
+
+    def _merge_panjin_members(self, connection: sqlite3.Connection) -> None:
+        # The team confirmed that names within Panjin identify one person.
+        groups = connection.execute("SELECT normalized_name FROM members WHERE school='大连理工大学盘锦校区' "
+                                    "GROUP BY normalized_name HAVING COUNT(*)>1").fetchall()
+        for group in groups:
+            members = connection.execute("SELECT m.* FROM members m WHERE school='大连理工大学盘锦校区' AND normalized_name=? "
+                                         "ORDER BY is_manual DESC, (SELECT MAX(rating) FROM member_public_stats WHERE member_id=m.id) DESC, id",
+                                         (group[0],)).fetchall()
+            target = members[0]["id"]
+            for member in members[1:]:
+                old = member["id"]
+                archive = {"member": dict(member), "stats": [dict(r) for r in connection.execute(
+                    "SELECT * FROM member_public_stats WHERE member_id=?", (old,))], "relations": {table: [dict(r) for r in connection.execute(
+                    f"SELECT * FROM {table} WHERE member_id=?", (old,))] for table in ("member_handles", "member_aliases", "member_sources", "honor_members", "removed_member_handles", "member_identities")}}
+                for table, keys in (("member_aliases", ["alias"]), ("removed_member_handles", ["platform", "handle"]),
+                                    ("member_sources", ["source_id", "role"]), ("member_handles", ["platform", "handle"]),
+                                    ("honor_members", ["honor_id"])):
+                    for row in connection.execute(f"SELECT * FROM {table} WHERE member_id=?", (old,)).fetchall():
+                        columns = list(row.keys())
+                        values = [target if column == "member_id" else row[column] for column in columns]
+                        conflict_keys = ["member_id", *keys]
+                        updates = ""
+                        if table == "member_handles":
+                            updates = " DO UPDATE SET max_rating=CASE WHEN member_handles.max_rating IS NULL THEN excluded.max_rating WHEN excluded.max_rating IS NULL THEN member_handles.max_rating ELSE MAX(member_handles.max_rating,excluded.max_rating) END, "
+                            updates += "rating=CASE WHEN COALESCE(excluded.rating_updated_at,'')>COALESCE(member_handles.rating_updated_at,'') THEN excluded.rating ELSE member_handles.rating END, "
+                            updates += "rating_updated_at=MAX(COALESCE(member_handles.rating_updated_at,''),COALESCE(excluded.rating_updated_at,'')), verified=MAX(member_handles.verified,excluded.verified)"
+                        elif "is_manual" in columns:
+                            updates = f" DO UPDATE SET is_manual=MAX({table}.is_manual, excluded.is_manual)"
+                        else:
+                            updates = " DO NOTHING"
+                        connection.execute(f"INSERT INTO {table}({','.join(columns)}) VALUES ({','.join('?' for _ in columns)}) "
+                                           f"ON CONFLICT({','.join(conflict_keys)}){updates}", values)
+                connection.execute("UPDATE member_identities SET member_id=? WHERE member_id=?", (target, old))
+                connection.execute("UPDATE member_redirects SET member_id=? WHERE member_id=?", (target, old))
+                connection.execute("INSERT INTO member_redirects(old_id,member_id,archive_json) VALUES (?,?,?)",
+                                   (old, target, json.dumps(archive, ensure_ascii=False)))
+                # Keep every approval record; only supersede newly duplicate pending requests.
+                connection.execute("UPDATE account_submissions SET status='superseded', review_note='同名成员合并后重复申请' "
+                                   "WHERE member_id=? AND status='pending' AND EXISTS(SELECT 1 FROM account_submissions p "
+                                   "WHERE p.member_id=? AND p.handle=account_submissions.handle AND p.status='pending')", (old, target))
+                connection.execute("UPDATE account_submissions SET member_id=? WHERE member_id=?", (target, old))
+                connection.execute("UPDATE members SET display_name=COALESCE(display_name, ?), entry_year=COALESCE(entry_year, ?), "
+                                   "graduation_year=COALESCE(graduation_year, ?), is_manual=MAX(is_manual, ?), "
+                                   "status=CASE WHEN status='auto' THEN ? ELSE status END, "
+                                   "notes=CASE WHEN ?='' OR notes=? THEN notes WHEN notes='' THEN ? ELSE notes || char(10) || ? END WHERE id=?",
+                                   (member["display_name"], member["entry_year"], member["graduation_year"], member["is_manual"],
+                                    member["status"],
+                                    member["notes"], member["notes"], member["notes"], member["notes"], target))
+                for stat in archive["stats"]:
+                    current = connection.execute("SELECT rating FROM member_public_stats WHERE member_id=? AND provider=?",
+                                                 (target, stat["provider"])).fetchone()
+                    if not current or (stat["rating"] or 0) > (current[0] or 0):
+                        connection.execute("DELETE FROM member_public_stats WHERE member_id=? AND provider=?", (target, stat["provider"]))
+                        columns = list(stat)
+                        connection.execute(f"INSERT INTO member_public_stats({','.join(columns)}) VALUES ({','.join('?' for _ in columns)})",
+                                           [target if c == "member_id" else stat[c] for c in columns])
+                connection.execute("DELETE FROM members WHERE id=?", (old,))
+            # Deletion tombstones must still win over stale imported bindings.
+            connection.execute("DELETE FROM member_handles WHERE member_id=? AND EXISTS(SELECT 1 FROM removed_member_handles r "
+                               "WHERE r.member_id=member_handles.member_id AND r.platform=member_handles.platform AND r.handle=member_handles.handle)", (target,))
+        if groups:
+            for proposal in connection.execute("SELECT * FROM roster_submissions WHERE status='pending' ORDER BY id").fetchall():
+                members = [self._current_member_id(connection, value) if type(value) is int else value for value in json.loads(proposal["members_json"])]
+                keys = [f"id:{value}" if type(value) is int else f"name:{normalize_name(value)}" for value in members]
+                fingerprint = hashlib.sha256(json.dumps(sorted(keys), ensure_ascii=False).encode()).hexdigest()
+                duplicate = connection.execute("SELECT 1 FROM roster_submissions WHERE honor_id=? AND fingerprint=? AND status='pending' AND id<>?",
+                                               (proposal["honor_id"], fingerprint, proposal["id"])).fetchone()
+                if duplicate or len(set(keys)) != len(keys):
+                    connection.execute("UPDATE roster_submissions SET status='superseded', review_note='同名成员合并后名单重复' WHERE id=?", (proposal["id"],))
+                else:
+                    connection.execute("UPDATE roster_submissions SET members_json=?, fingerprint=? WHERE id=?",
+                                       (json.dumps(members, ensure_ascii=False), fingerprint, proposal["id"]))
 
     def _upsert_member(
         self,
@@ -478,7 +569,7 @@ class Database:
             ).fetchone()
             if identity:
                 honor_id = identity["id"]
-            elif record.get("series") == "CCPC" and external_provider != "ccpc-official" and not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
+            elif record.get("series") in {"ICPC", "CCPC"} and external_provider not in {"ccpc-official", "rankland"} and not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
                 identity = connection.execute("SELECT honor_id FROM honor_source_records WHERE provider=? AND external_id=?",
                                               (external_provider, external_award_id)).fetchone()
                 if identity:
@@ -486,13 +577,13 @@ class Database:
                 else:
                     # A public provider may later collect a previously archived
                     # result. Reuse its local ID and preserve its curated roster.
-                    archived_ids = [row[0] for row in connection.execute("SELECT DISTINCT honor_id FROM honor_source_records WHERE provider='ccpc-official'")]
+                    archived_ids = [row[0] for row in connection.execute("SELECT DISTINCT honor_id FROM honor_source_records WHERE provider IN ('ccpc-official', 'rankland')")]
                     if archived_ids:
                         from official_imports import match_result
                         incoming = {**record, "suggestedMembers": record.get("members", [])}
                         status, target, warnings = match_result(incoming, self._honors_payload(connection, honor_ids=archived_ids))
                         if status == "conflict":
-                            raise ValueError("Public result conflicts with the local CCPC archive: " + "; ".join(warnings))
+                            raise ValueError("Public result conflicts with the local result archive: " + "; ".join(warnings))
                         if status == "merged":
                             honor_id, archive_union = target["id"], True
         sources = self._honor_sources(record)
@@ -524,6 +615,9 @@ class Database:
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (honor_id, *values),
             )
+        elif archive_union and not manual:
+            connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
+                               (str(record.get("medal") or ""), honor_id))
         elif manual or not existing["is_manual"]:
             connection.execute(
                 "UPDATE honors SET event=?, series=?, date=?, location=?, team=?, normalized_team=?, medal=?, rank=?, "
@@ -568,21 +662,25 @@ class Database:
         return honor_id
 
     def _sync_site_data(self, connection: sqlite3.Connection, site: dict) -> None:
+        self._merge_panjin_members(connection)
         connection.execute("DELETE FROM member_public_stats WHERE provider='cpcfinder'")
         for detail in site.get("publicMembers", []):
             source_id = self._source(connection, detail.get("source"), manual=False)
             member_id = self._upsert_member(connection, detail, source_id, manual=False)
             stats = detail.get("cpcfinder") or {}
             if stats:
+                current = connection.execute("SELECT rating FROM member_public_stats WHERE member_id=? AND provider='cpcfinder'", (member_id,)).fetchone()
+                if current and detail.get("school") == "大连理工大学盘锦校区" and (current[0] or 0) > (stats.get("rating") or 0):
+                    continue
                 connection.execute(
                     "INSERT INTO member_public_stats(member_id, provider, rating, provider_rank, champion_count, "
-                    "second_count, third_count, gold_count, silver_count, bronze_count, iron_count, latest_event_date, source_id) "
-                    "VALUES (?, 'cpcfinder', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                    "second_count, third_count, gold_count, silver_count, bronze_count, iron_count, iron_excludes_unofficial, latest_event_date, source_id) "
+                    "VALUES (?, 'cpcfinder', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
                     "ON CONFLICT(member_id, provider) DO UPDATE SET rating=excluded.rating, "
                     "provider_rank=excluded.provider_rank, champion_count=excluded.champion_count, "
                     "second_count=excluded.second_count, third_count=excluded.third_count, "
                     "gold_count=excluded.gold_count, silver_count=excluded.silver_count, "
-                    "bronze_count=excluded.bronze_count, iron_count=excluded.iron_count, latest_event_date=excluded.latest_event_date, "
+                    "bronze_count=excluded.bronze_count, iron_count=excluded.iron_count, iron_excludes_unofficial=excluded.iron_excludes_unofficial, latest_event_date=excluded.latest_event_date, "
                     "source_id=excluded.source_id, updated_at=CURRENT_TIMESTAMP",
                     (
                         member_id,
@@ -595,6 +693,7 @@ class Database:
                         int(stats.get("silverCount") or 0),
                         int(stats.get("bronzeCount") or 0),
                         stats.get("ironCount"),
+                        int(bool(stats.get("ironExcludesUnofficial"))),
                         str(stats.get("latestEventDate") or ""),
                         source_id,
                     ),
@@ -702,6 +801,7 @@ class Database:
     def _resolve_roster_member(self, connection: sqlite3.Connection, value: int | str,
                                school: str | None, source_id: int | None, *, create_missing: bool = True) -> int | str:
         if type(value) is int and value > 0:
+            value = self._current_member_id(connection, value)
             member = connection.execute("SELECT school FROM members WHERE id=?", (value,)).fetchone()
             if not member:
                 raise ValueError(f"member {value} does not exist")
@@ -780,17 +880,31 @@ class Database:
                            "review_note='名单已由其他确认完善' WHERE honor_id=? AND status='pending'", (honor_id,))
         return member_ids
 
-    def confirm_honor_members(self, honor_id: str, member_ids: list[int | str], *, source: dict | None = None) -> None:
+    def _confirm_unknown_medal(self, connection: sqlite3.Connection, honor_id: str, medal: str | None, source: dict | None) -> None:
+        if medal is None:
+            return
+        if medal not in {"金牌", "银牌", "铜牌", "铁牌"}:
+            raise ValueError("成绩无效")
+        row = connection.execute("SELECT medal FROM honors WHERE id=?", (honor_id,)).fetchone()
+        if not row or row["medal"]:
+            raise ValueError("仅能在此处补齐未确认的奖项")
+        source_id = self._source(connection, source, manual=True)
+        connection.execute("UPDATE honors SET medal=?, is_manual=1, updated_at=CURRENT_TIMESTAMP WHERE id=?", (medal, honor_id))
+        connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role,is_manual) VALUES (?,?,'result',1)", (honor_id, source_id))
+
+    def confirm_honor_members(self, honor_id: str, member_ids: list[int | str], *, source: dict | None = None, medal: str | None = None) -> None:
         with self.connect() as connection:
             # Serialize creation and confirmation so concurrent requests cannot
             # create duplicate people or overwrite an already confirmed roster.
             connection.execute("BEGIN IMMEDIATE")
             self._confirm_honor_members(connection, honor_id, member_ids, source)
+            self._confirm_unknown_medal(connection, honor_id, medal, source)
 
-    def edit_honor_members(self, honor_id: str, members: list[int | str], *, source: dict | None = None) -> None:
+    def edit_honor_members(self, honor_id: str, members: list[int | str], *, source: dict | None = None, medal: str | None = None) -> None:
         with self.connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
             self._confirm_honor_members(connection, honor_id, members, source, edit=True)
+            self._confirm_unknown_medal(connection, honor_id, medal, source)
 
     def submit_roster(self, honor_id: str, members: list[int | str], *, note: str = "") -> tuple[int, bool]:
         if not isinstance(note, str) or len(note) > 2000:
@@ -871,6 +985,8 @@ class Database:
             for row in rows:
                 members = []
                 for value in json.loads(row["members_json"]):
+                    if type(value) is int:
+                        value = self._current_member_id(connection, value)
                     member = connection.execute("SELECT COALESCE(display_name, name) AS name FROM members WHERE id=?", (value,)).fetchone() if type(value) is int else None
                     members.append({"value": value, "name": member["name"] if member else str(value), "newMember": type(value) is str})
                 submissions.append({"id": row["id"], "honorId": row["honor_id"], "team": row["team"], "event": row["event"],
@@ -894,6 +1010,7 @@ class Database:
         handle = handle.strip()
         with self.connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
+            member_id = self._current_member_id(connection, member_id)
             if not connection.execute("SELECT 1 FROM members WHERE id=?", (member_id,)).fetchone():
                 raise ValueError("成员不存在")
             owner = connection.execute("SELECT member_id FROM member_handles WHERE platform='codeforces' AND handle=?",
@@ -1191,9 +1308,9 @@ class Database:
         result = []
         for row in rows:
             member_rows = connection.execute(
-                "SELECT m.id, m.school, hm.is_manual, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
+                "SELECT m.id, m.school, hm.is_manual, COALESCE(m.display_name, m.name) AS name, "
+                "(SELECT external_id FROM member_identities WHERE member_id=m.id AND provider='cpcfinder' ORDER BY external_id LIMIT 1) AS cpcfinder_id FROM honor_members hm "
                 "JOIN members m ON m.id=hm.member_id "
-                "LEFT JOIN member_identities mi ON mi.member_id=m.id AND mi.provider='cpcfinder' "
                 "WHERE hm.honor_id=? ORDER BY hm.position, m.id",
                 (row["id"],),
             ).fetchall()
@@ -1205,6 +1322,10 @@ class Database:
             result.append(
                 {
                     "id": row["id"],
+                    "externalProvider": row["external_provider"],
+                    "externalAwardId": row["external_award_id"],
+                    "externalContestId": row["external_contest_id"],
+                    "externalTeamId": row["external_team_id"],
                     "event": row["event"],
                     "series": row["series"],
                     "date": row["date"],
@@ -1230,7 +1351,9 @@ class Database:
                         }
                         for item in member_rows
                     ],
-                    "medal": row["medal"],
+                    "medal": "" if row["official"] == 0 and row["medal"] == "铁牌" else row["medal"],
+                    "medalPending": row["official"] != 0 and not row["medal"],
+                    "resultLabel": ("打星" + row["medal"] if row["medal"] in {"金牌", "银牌", "铜牌"} else "") if row["official"] == 0 else row["medal"],
                     "rank": row["rank"],
                     "overallRank": row["overall_rank"],
                     "official": bool(row["official"]) if row["official"] is not None else None,
@@ -1247,7 +1370,7 @@ class Database:
         result = []
         for row in rows:
             honors = connection.execute(
-                "SELECT h.id, h.date, h.team, h.medal, h.is_manual, h.external_provider, h.external_award_id, "
+                "SELECT h.id, h.date, h.team, h.medal, h.official, h.is_manual, h.external_provider, h.external_award_id, "
                 "EXISTS(SELECT 1 FROM honor_source_records sr WHERE sr.honor_id=h.id AND sr.provider='cpcfinder') AS public_covered FROM honor_members hm "
                 "JOIN honors h ON h.id=hm.honor_id LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
                 "WHERE hm.member_id=? AND (r.honor_id IS NULL OR r.confirmed_at IS NOT NULL) ORDER BY h.date DESC",
@@ -1272,24 +1395,32 @@ class Database:
             manual_medals = dict(medals)
             medal_fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze", "铁牌": "iron"}
             for honor in honors:
+                if honor["official"] == 0:
+                    continue
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
                     if (honor["is_manual"] or honor["external_provider"] in {"rankland", "ccpc-official"}) and not honor["public_covered"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
                         manual_medals[field] += 1
-            if public_stats:
+            merged_identity = row["school"] == "大连理工大学盘锦校区" and (
+                connection.execute("SELECT 1 FROM member_redirects WHERE member_id=?", (row["id"],)).fetchone()
+                or connection.execute("SELECT COUNT(*) FROM member_identities WHERE member_id=? AND provider='cpcfinder'", (row["id"],)).fetchone()[0] > 1)
+            old_unofficial_iron = sum(h["official"] == 0 and h["medal"] == "铁牌" and h["external_provider"] == "cpcfinder" for h in honors)
+            if public_stats and not merged_identity:
                 medals = {
                     "gold": int(public_stats["gold_count"]) + manual_medals["gold"],
                     "silver": int(public_stats["silver_count"]) + manual_medals["silver"],
                     "bronze": int(public_stats["bronze_count"]) + manual_medals["bronze"],
                     "iron": (
-                        int(public_stats["iron_count"]) + manual_medals["iron"]
+                        max(0, int(public_stats["iron_count"]) - (0 if public_stats["iron_excludes_unofficial"] else old_unofficial_iron)) + manual_medals["iron"]
                         if public_stats["iron_count"] is not None else None
                     ),
                 }
-            elif any(honor["external_provider"] in {"rankland", "ccpc-official"} for honor in honors):
+            elif not public_stats and any(honor["external_provider"] in {"rankland", "ccpc-official"} for honor in honors):
                 # Historical archives do not prove a complete participation
                 # record. Do not reward unknown lifetime iron totals as zero.
+                medals["iron"] = None
+            elif merged_identity and public_stats and public_stats["iron_count"] is None:
                 medals["iron"] = None
             latest_public_year = None
             if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():
@@ -1330,7 +1461,8 @@ class Database:
                     "firstYear": min(years) if years else row["entry_year"],
                     "lastYear": max(activity_years) if activity_years else row["graduation_year"],
                     "teams": teams,
-                    "honorCount": sum(medals[key] for key in ("gold", "silver", "bronze")) if public_stats else sum(honor["medal"] != "铁牌" for honor in honors),
+                    "honorCount": sum(medals[key] for key in ("gold", "silver", "bronze")) if public_stats else sum(
+                        h["official"] != 0 and bool(h["medal"]) and h["medal"] != "铁牌" for h in honors),
                     "medals": medals,
                     "handles": account_map,
                     "accounts": accounts,
@@ -1377,6 +1509,8 @@ class Database:
         years: dict[str, dict] = {}
         fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze", "铁牌": "iron"}
         for record in honors:
+            if record.get("official") is False:
+                continue
             year = record["date"][:4]
             item = years.setdefault(year, {"year": year, "gold": 0, "silver": 0, "bronze": 0, "iron": 0})
             field = fields.get(record["medal"])

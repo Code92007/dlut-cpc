@@ -27,6 +27,8 @@ CCPC_REGIONAL_KEYS = {
     "ccpc2018guilin", "ccpc2018jilin", "ccpc2018qinhuangdao",
     "ccpc2019qinhuangdao", "ccpc2019haerbin", "ccpc2019xiamen",
 }
+# The official collection names this regional contest only "ICPC xju onsite".
+ICPC_REGIONAL_KEYS = {"icpc2017urumchi"}
 
 class StateParser(HTMLParser):
     def __init__(self) -> None:
@@ -85,7 +87,14 @@ def excluded_event(key: str, title: str) -> bool:
     return bool(re.search(r"preliminary|province|provincial|invitational|邀请|省赛|省级|网络|预选|女子|女队|girls|women", text))
 
 
-def parse_ranklist(document: str, *, convert=None) -> tuple[list[dict], dict]:
+def localized_name(value) -> str:
+    if isinstance(value, dict):
+        return value.get("zh-CN") or value.get("fallback") or value.get("en") or ""
+    return str(value or "")
+
+
+def parse_ranklist(document: str, *, convert=None, before_date: str | None = "2020-01-01",
+                   include_participation: bool = False) -> tuple[list[dict], dict]:
     if convert is None:
         from standard_ranklist_utils import convert_to_static_ranklist
         convert = convert_to_static_ranklist
@@ -97,9 +106,9 @@ def parse_ranklist(document: str, *, convert=None) -> tuple[list[dict], dict]:
     all_titles = " ".join(str(value) for value in titles.values()) if isinstance(titles, dict) else str(titles)
     date = dt.datetime.fromisoformat(srk["contest"]["startAt"].replace("Z", "+00:00")).date().isoformat()
     audit = {"key": key, "title": title, "date": date, "url": f"{ORIGIN}/ranklist/{key}"}
-    if date >= "2020-01-01" or excluded_event(key, all_titles):
+    if (before_date and date >= before_date) or excluded_event(key, all_titles):
         return [], {**audit, "excluded": "date-or-event-type"}
-    if key not in CCPC_REGIONAL_KEYS and not re.search(r"regional|区域|final|总决赛", all_titles, re.I):
+    if key not in CCPC_REGIONAL_KEYS | ICPC_REGIONAL_KEYS and not re.search(r"regional|区域|final|总决赛", all_titles, re.I):
         return [], {**audit, "excluded": "unverified-event-type"}
     medal_series = [i for i, series in enumerate(srk.get("series", []))
                     if any(segment.get("style") in {"gold", "silver", "bronze"} for segment in series.get("segments", []))]
@@ -107,7 +116,8 @@ def parse_ranklist(document: str, *, convert=None) -> tuple[list[dict], dict]:
         return [], {**audit, "excluded": "missing-or-ambiguous-medal-configuration"}
     medal_index = medal_series[0]
     count = srk["series"][medal_index].get("rule", {}).get("options", {}).get("count", {}).get("value")
-    if count == [0, 0, 0]:
+    boundaries_known = bool(count) and count != [0, 0, 0]
+    if not boundaries_known and not include_participation:
         return [], {**audit, "excluded": "missing-medal-boundaries"}
     static = srk if srk.get("type") == "static" else convert(srk)
     official_total = sum(row["user"].get("official", True) is not False for row in static["rows"])
@@ -124,11 +134,19 @@ def parse_ranklist(document: str, *, convert=None) -> tuple[list[dict], dict]:
         matching_schools.add(original_school)
         value = row["rankValues"][medal_index]
         segment = value.get("segmentIndex")
-        if user.get("official", True) is False or segment is None:
+        official = user.get("official", True) is not False
+        host_starred = key == "icpc2011dalian"
+        if host_starred:
+            official = False
+        if not official and not include_participation:
             continue
-        style = srk["series"][medal_index]["segments"][segment].get("style")
+        style = srk["series"][medal_index]["segments"][segment].get("style") if segment is not None and boundaries_known else None
         medal = {"gold": "金牌", "silver": "银牌", "bronze": "铜牌"}.get(style)
-        if not medal or value.get("rank") is None:
+        if not official:
+            medal = ""
+        elif not medal and include_participation:
+            medal = "铁牌" if boundaries_known else ""
+        if (not medal and not include_participation) or (official and value.get("rank") is None):
             continue
         team = user.get("name") or str(user["id"])
         if isinstance(team, dict):
@@ -140,15 +158,18 @@ def parse_ranklist(document: str, *, convert=None) -> tuple[list[dict], dict]:
             "date": date, "location": "总决赛" if re.search(r"final|总决赛", all_titles, re.I) else "",
             "team": team, "school": group, "originalSchool": original_school,
             "members": [], "expectedMembers": 3, "medal": medal,
-            "rank": f"{value['rank']} / {official_total}", "overallRank": f"{position} / {len(static['rows'])}",
-            "official": True, "source": {"name": "RankLand 历史榜单", "url": audit["url"]},
+            **({"medalStatus": "unknown"} if not medal else {}),
+            "rank": f"{value['rank']} / {official_total}" if official else f"{position} / {len(static['rows'])}", "overallRank": f"{position} / {len(static['rows'])}",
+            "official": official, "source": {"name": "RankLand 历史榜单", "url": audit["url"]},
+            **({"sources": [{"name": "RankLand 历史榜单", "url": audit["url"]}, {"name": "队内确认：2011 大连站主办校队伍打星"}]} if host_starred else {}),
             "externalProvider": "rankland", "externalAwardId": identity,
             "externalContestId": key, "externalTeamId": str(user["id"]),
             "archive": {"fileId": info.get("fileID"), "score": row.get("score"),
                         "medalSeries": srk["series"][medal_index], "rankValue": value,
                         "pageSha256": hashlib.sha256(document.encode()).hexdigest(),
-                        "rawLinks": srk["contest"].get("refLinks", [])},
-            "suggestedMembers": [member["name"] for member in user.get("teamMembers", [])
+                        "rawLinks": srk["contest"].get("refLinks", []), "medalBoundariesKnown": boundaries_known,
+                        "sourceOfficial": user.get("official", True), **({"officialOverrideReason": "2011 大连站主办校打星，队内确认"} if host_starred else {})},
+            "suggestedMembers": [localized_name(member["name"]) for member in user.get("teamMembers", [])
                                  if member.get("role", "contestant") not in {"coach", "reserve"} and member.get("name")],
         })
     return result, {**audit, "awards": len(result), "schools": sorted(matching_schools)}

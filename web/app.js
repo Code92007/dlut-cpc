@@ -57,7 +57,8 @@ const routeFromPath = () => {
 };
 
 const medalClass = (medal) => ({ 金牌: "gold", 银牌: "silver", 铜牌: "bronze", 铁牌: "iron" }[medal] || "");
-const resultRank = (honor) => `${escapeHtml(honor.rank || honor.overallRank || "—")}${honor.official === false ? '<small class="result-status">非正式</small>' : ""}`;
+const resultMedal = (honor) => honor.medalPending ? '奖项待确认' : honor.resultLabel ?? (honor.official === false ? (['金牌', '银牌', '铜牌'].includes(honor.medal) ? `打星${honor.medal}` : '') : honor.medal || '');
+const resultRank = (honor) => `${escapeHtml(honor.rank || honor.overallRank || "—")}${honor.official === false ? '<small class="result-status">打星 · 非正式</small>' : ""}`;
 
 const renderMembers = (members) => {
   if (!members?.length) return '<span class="unknown">暂无成员记录</span>';
@@ -126,7 +127,7 @@ function honorRows(honors) {
       <td>${escapeHtml(honor.location)}</td>
       <td class="team-name">${escapeHtml(honor.team)}</td>
       <td><div class="member-list">${renderMembers(honor.members)}</div></td>
-      <td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td>
+      <td class="medal ${medalClass(honor.medal)}">${escapeHtml(resultMedal(honor))}</td>
       <td>${resultRank(honor)}</td>
       <td>${sourceLink(honor.source)}</td>
     </tr>`).join("");
@@ -171,7 +172,7 @@ function honorPage(data) {
   const years = [...new Set(data.honors.map((item) => item.date.slice(0, 4)))].sort().reverse();
   if (state.honorYear !== "all" && !years.includes(state.honorYear)) state.honorYear = "all";
   let filtered = data.honors.filter((item) => state.honorYear === "all" || item.date.startsWith(state.honorYear));
-  filtered = filtered.filter((item) => state.honorMedal === "all" || item.medal === state.honorMedal);
+  filtered = filtered.filter((item) => state.honorMedal === "all" || (state.honorMedal === 'unofficial' ? item.official === false : item.official !== false && item.medal === state.honorMedal));
   filtered = filtered.filter((item) => state.honorSchool === "all" || item.school === state.honorSchool);
   const query = state.honorQuery.trim().toLowerCase();
   if (query) filtered = filtered.filter((item) => [item.event, item.team, item.location, ...(item.members || [])].join(" ").toLowerCase().includes(query));
@@ -183,13 +184,13 @@ function honorPage(data) {
       <p class="contest-caption">${escapeHtml(rows[0].date)} · ${escapeHtml(rows[0].location)}</p>
       <div class="data-table-wrap"><table class="data-table honor-table result-table">
         <thead><tr><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
-        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}<small class="result-status" title="${escapeHtml(honor.originalSchool || honor.school)}">${escapeHtml(honor.school)}</small></td><td><div class="member-list">${renderMembers(honor.members)}</div>${!honor.rosterConfirmed ? '<a href="/pending" data-route="pending" class="result-status">待确认成员</a>' : ''}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
+        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}<small class="result-status" title="${escapeHtml(honor.originalSchool || honor.school)}">${escapeHtml(honor.school)}</small></td><td><div class="member-list">${renderMembers(honor.members)}</div>${!honor.rosterConfirmed ? '<a href="/pending" data-route="pending" class="result-status">待确认成员</a>' : ''}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(resultMedal(honor))}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
       </table></div>
     </section>`).join("");
   return `<div class="page-shell">
       <div class="page-heading"><div><span class="eyebrow">Contest Results</span><h1>参赛成绩</h1><p>ICPC、CCPC 区域赛与总决赛成绩。</p></div><a href="/pending" data-route="pending">待确认成员 · ${(data.pendingHonors || []).length}</a></div>
       <div class="filters">
-        <label class="filter-group"><span>成绩</span><select id="honorMedal"><option value="all">全部成绩</option>${["金牌", "银牌", "铜牌", "铁牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
+        <label class="filter-group"><span>成绩</span><select id="honorMedal"><option value="all">全部成绩</option>${["金牌", "银牌", "铜牌", "铁牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}<option value="unofficial" ${state.honorMedal === 'unofficial' ? 'selected' : ''}>打星队伍</option></select></label>
         <label class="filter-group"><span>所属范围</span><select id="honorSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.honorSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
         <label class="filter-group grow"><span>搜索</span><input id="honorQuery" type="search" value="${escapeHtml(state.honorQuery)}" placeholder="比赛、赛区、队伍或成员"></label>
       </div>
@@ -210,7 +211,7 @@ function pendingTable(data, editable = false, guest = false) {
     <label class="filter-group grow"><span>搜索</span><input id="pendingQuery" type="search" value="${escapeHtml(state.pendingQuery)}" placeholder="年份、比赛、队伍或榜单队员"></label>
     <span class="pending-count">${rows.length} 条待确认</span></div>
     <div class="data-table-wrap"><table class="data-table pending-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成绩</th><th>排名</th><th>榜单队员</th><th>${editable ? '操作' : guest ? '来源 / 补录' : '来源'}</th></tr></thead><tbody>
-    ${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td><td title="${escapeHtml(honor.originalSchool)}">${escapeHtml(honor.school)}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td><div class="member-list">${renderMembers(honor.suggestedMembers)}</div></td><td>${editable ? `<button type="button" class="admin-button secondary" data-pending-id="${escapeHtml(honor.id)}">补齐成员</button>` : `${sourceLink(honor.source)}${guest ? `<button type="button" class="admin-button secondary guest-roster-button" data-guest-honor="${escapeHtml(honor.id)}">补录成员</button>` : ''}`}${honor.pendingSubmissionCount ? `<small class="result-status">待审核 ${honor.pendingSubmissionCount} 份</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="table-empty">没有待确认的成绩</td></tr>'}
+    ${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td><td title="${escapeHtml(honor.originalSchool)}">${escapeHtml(honor.school)}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(resultMedal(honor))}</td><td>${resultRank(honor)}</td><td><div class="member-list">${renderMembers(honor.suggestedMembers)}</div></td><td>${editable ? `<button type="button" class="admin-button secondary" data-pending-id="${escapeHtml(honor.id)}">补齐成员</button>` : `${sourceLink(honor.source)}${guest ? `<button type="button" class="admin-button secondary guest-roster-button" data-guest-honor="${escapeHtml(honor.id)}">补录成员</button>` : ''}`}${honor.pendingSubmissionCount ? `<small class="result-status">待审核 ${honor.pendingSubmissionCount} 份</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="table-empty">没有待确认的成绩</td></tr>'}
     </tbody></table></div>`;
 }
 
@@ -277,13 +278,44 @@ function bindPendingEvents(route) {
     state.pendingSchool = event.target.value;
     renderRoute(route);
   });
-  document.querySelector('#pendingQuery')?.addEventListener('input', event => {
-    const position = event.target.selectionStart;
-    state.pendingQuery = event.target.value;
-    renderRoute(route);
-    const input = document.querySelector('#pendingQuery');
-    input?.focus();
-    input?.setSelectionRange(position, position);
+  bindSearchInput('#pendingQuery', 'pendingQuery', route);
+}
+
+function bindSearchInput(selector, stateKey, route) {
+  const input = document.querySelector(selector);
+  if (!input) return;
+  let composing = false;
+  let timer;
+  const schedule = () => {
+    window.clearTimeout(timer);
+    state[stateKey] = input.value;
+    timer = window.setTimeout(() => {
+      if (composing || document.querySelector(selector) !== input) return;
+      const focused = document.activeElement === input;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      renderRoute(route);
+      if (focused) {
+        const replacement = document.querySelector(selector);
+        replacement?.focus({preventScroll: true});
+        if (start != null && end != null) replacement?.setSelectionRange(start, end);
+      }
+    }, 180);
+  };
+  input.addEventListener('compositionstart', () => {
+    composing = true;
+    window.clearTimeout(timer);
+  });
+  input.addEventListener('compositionend', () => {
+    composing = false;
+    schedule();
+  });
+  input.addEventListener('input', event => {
+    if (composing || event.isComposing) {
+      window.clearTimeout(timer);
+      return;
+    }
+    schedule();
   });
 }
 
@@ -546,6 +578,10 @@ function adminAccountPage(data) {
       <tbody>${rows || '<tr><td colspan="6" class="table-empty">暂无账号</td></tr>'}</tbody></table></div></section>`;
 }
 
+function unknownMedalInput(honor) {
+  return honor.medalPending ? `<label>成绩<select name="medal"><option value="">奖项待确认</option>${['金牌', '银牌', '铜牌', '铁牌'].map(medal => `<option>${medal}</option>`).join('')}</select></label>` : '';
+}
+
 function adminRosterPage(data) {
   const rows = (data.honors || []).filter(honor => honor.rosterEditable
     && (state.adminRosterSchool === 'all' || honor.school === state.adminRosterSchool)
@@ -554,6 +590,7 @@ function adminRosterPage(data) {
   const form = selected ? `<form id="adminEditMembers" class="admin-form"><h2>${escapeHtml(selected.team)}</h2>
     <p class="contest-caption">${escapeHtml(selected.date)} · ${escapeHtml(selected.event)} · ${escapeHtml(selected.school)}</p>
     <input name="honorId" type="hidden" value="${escapeHtml(selected.id)}"><div class="admin-fields">
+    ${unknownMedalInput(selected)}
     ${Array.from({length: selected.expectedMembers || selected.members.length}, (_, index) => {
       const detail = selected.memberDetails?.[index];
       const member = detail && data.members.find(item => item.id === detail.id);
@@ -605,7 +642,7 @@ function adminPage(data) {
     </div><button class="admin-button">保存成绩</button></form>`,
   };
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
-  forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
+  forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${unknownMedalInput(pending)}${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
   forms.reviews = adminReviewPage();
   forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
@@ -802,8 +839,10 @@ function bindAdminEvents() {
     aliases: values.aliases.split(/\n/).map(alias => alias.trim()).filter(Boolean)}), () => '姓名映射已保存');
   bindForm('#adminHonor', 'honor', values => ({...values, memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '参赛成绩已保存');
   bindForm('#adminConfirmMembers', 'confirm-members', values => ({honorId: values.honorId,
+    ...(values.medal ? {medal: values.medal} : {}),
     members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => '成员已确认，参赛成绩已保留');
   bindForm('#adminEditMembers', 'edit-members', values => ({honorId: values.honorId,
+    ...(values.medal ? {medal: values.medal} : {}),
     members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => {
     state.adminRosterId = null;
     return '名单已修改，成员参赛记录和奖牌统计已更新';
@@ -904,11 +943,7 @@ function bindPageEvents(route) {
       state.honorMedal = event.target.value;
       renderRoute("honor");
     });
-    document.querySelector("#honorQuery")?.addEventListener("input", (event) => {
-      state.honorQuery = event.target.value;
-      window.clearTimeout(state.searchTimer);
-      state.searchTimer = window.setTimeout(() => renderRoute("honor"), 180);
-    });
+    bindSearchInput('#honorQuery', 'honorQuery', 'honor');
   }
   if (route === "rating") {
     bindGuestAccountEvents();
@@ -920,11 +955,7 @@ function bindPageEvents(route) {
       state.memberSort = event.target.value;
       renderRoute("rating");
     });
-    document.querySelector("#memberQuery")?.addEventListener("input", (event) => {
-      state.memberQuery = event.target.value;
-      window.clearTimeout(state.searchTimer);
-      state.searchTimer = window.setTimeout(() => renderRoute("rating"), 180);
-    });
+    bindSearchInput('#memberQuery', 'memberQuery', 'rating');
   }
   if (route === "training") {
     document.querySelectorAll("[data-training-series]").forEach((button) => button.addEventListener("click", () => {

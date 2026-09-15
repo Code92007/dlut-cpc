@@ -240,7 +240,8 @@ class SiteHandler(BaseHTTPRequestHandler):
                 if "members" not in body:
                     members = [self._member_id(value) for value in members]
                 action = database.edit_honor_members if path.endswith("edit-members") else database.confirm_honor_members
-                action(self._text(body, "honorId", 150, required=True), members, source=source)
+                action(self._text(body, "honorId", 150, required=True), members, source=source,
+                       medal=self._text(body, "medal", 20, required=True) if "medal" in body else None)
                 self._send_json({"ok": True})
             elif path == "/api/admin/review-submission":
                 if type(body.get("approve")) is not bool:

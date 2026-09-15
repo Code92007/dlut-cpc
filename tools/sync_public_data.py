@@ -293,7 +293,7 @@ def fetch_cpcfinder_student_results(
             student_id = futures[future]
             try:
                 _, rows = future.result()
-                iron_awards[student_id] = {str(row["cpcfinderAwardId"]) for row in rows if row["medal"] == "铁牌"}
+                iron_awards[student_id] = {str(row["cpcfinderAwardId"]) for row in rows if row["medal"] == "铁牌" and row.get("official") is not False}
                 for row in rows:
                     row["requiresSchoolVerification"] = True
                 records.extend(rows)
@@ -313,6 +313,7 @@ def apply_iron_counts(members: list[dict], records: list[dict], iron_awards: dic
         awards = iron_awards.get(member["externalId"])
         if awards is not None and not awards.intersection(uncertain):
             member.setdefault("cpcfinder", {})["ironCount"] = len(awards.intersection(verified))
+            member["cpcfinder"]["ironExcludesUnofficial"] = True
 
 
 def parse_cpcfinder(document: str, source_url: str, min_year: int = 2020) -> list[dict]:
@@ -503,6 +504,7 @@ def main() -> None:
                 previous = old_member_stats.get(member["externalId"], {})
                 if "ironCount" in previous:
                     member["cpcfinder"]["ironCount"] = previous["ironCount"]
+                    member["cpcfinder"]["ironExcludesUnofficial"] = previous.get("ironExcludesUnofficial", False)
         except Exception as exc:
             print(f"warning: student directory fetch failed, preserving existing data: {exc}", file=sys.stderr)
     iron_awards: dict[str, set[str]] = {}

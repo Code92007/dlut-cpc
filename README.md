@@ -32,7 +32,7 @@ python3 app.py
 python3 -m unittest discover -s tests -v
 ```
 
-有 Node.js 的环境还可执行排序回归测试：`node --test tests/test_member_sort.mjs`。
+有 Node.js 的环境还可执行前端回归测试：`node --test tests/*.mjs`，包括排序、审核、柱状图及中文输入法组合输入。
 
 ## 数据
 
@@ -41,6 +41,8 @@ python3 -m unittest discover -s tests -v
 当前成绩与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API、选手目录 API、选手参赛 API 和各赛事榜单 API，仅保留 2020 年及以后的成绩。同步脚本会逐项关联 `awardId`、`contestId`、`teamId` 与稳定的 `studentId`，核对学校后导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或经过核验的 QOJ 镜像榜补充或覆盖。
 
 学校别名按队内指定范围处理：大连理工大学、本部、开发区校区及旧称软件学院统一为“大连理工大学”；城市学院、盘锦校区（盘锦学院）为两个独立维护范围。三者可在总览汇总，也可在成绩、成员和待确认页面分别筛选。保留原始榜单学校名，不因同名跨范围合并成员。CPC Finder 的校内奖牌汇总作为成员页公开基准，队内数据库仍可补录更早成员、账号和历史赛事。
+
+队内已确认盘锦范围没有同名同姓的独立选手，因此仅在盘锦按规范化姓名合并重复成员。保留所有来源选手 UUID、参赛关联、账号、报名别名、人工资料、删除账号记录及审核历史，旧成员 ID 在 `member_redirects` 中映射到保留成员并归档被合并资料。更新后新的重复来源 UUID 也会复用同一人；本部、城市学院以及跨范围同名不合并。合并成员的奖牌次数从数据库中已确认的不同正式成绩计算，不相加两份来源汇总；CPC Finder Rating 保留已有资料中的最高值，不把两个人物页的分数相加。
 
 ### 一次性历史导入
 
@@ -90,7 +92,30 @@ curl -fsS http://127.0.0.1:8021/healthz
 
 仅维护者生成后续新归档时需要可选的 `pdfplumber`，部署无需安装。`tools/import_ccpc.py --channel 6 --pdfs` 及 `--channel 18 --pdfs` 缓存官方原文与 PDF 提取数据；`--build --baseline <api-site.json> --rankland-cache <cache-dir> --batch-id <new-id> --output <new-snapshot.json>` 生成新批次。已导入批次不可原地修改；后续批次必须使用新 ID。现有归档可通过 `--compare --baseline <api-site.json> --report <report.md>` 离线重新对照。未知 PDF 表格格式会报错，须人工核对并补充解析，不直接猜测列位置或奖项。
 
-铁牌指有有效比赛名次、但没有金银铜牌的参赛成绩，包含来源标记为非正式的参赛记录，并在页面保留“非正式”标记。缺少名次或尚未确定结果不视为铁牌。铁牌次数来自选手逐场参赛记录，并与学校榜单核对；未查全的次数显示“铁待补”，不会当作 0。“奖牌榜顺序”依次按金、银、铜数量降序及铁牌数量升序排列；“获奖次数”不含铁牌。
+### RankLand 参赛记录补缺
+
+`data/rankland_supplement_honors.json` 单独归档本次指定的 27 场 ICPC 榜单，共 69 条本校队伍成绩。对照生成时的线上公开快照，59 条新增、10 条只追加来源、0 条冲突；逐场队名、奖项状态、排名及已有记录 ID 见 [完整补缺清单](docs/rankland-merge-20260916.md)。其中新增记录有 2 条银牌、12 条铁牌、36 条奖项待确认、9 条打星，不将缺少奖牌边界的榜单猜成铁牌。2020 银川站、EC Final 实际举办于 2021 年，保留来源比赛日期。2011 大连站的 7 支本校队伍按队内确认全部标记打星。
+
+原先明确获牌归档不修改，此补缺批次以 `official_import:rankland-supplement-20260916-v1` 一次性合并。自动启动只读取随仓库提供的归档，之后跳过完成批次，不重复爬取。人工补录与其他来源取并集，匹配时只追加来源，不覆盖已确认的字段或名单；未知奖项可由管理员确认成员时补齐，已补录名单中也可补齐。后续可靠来源收录同一结果时复用原 ID，只填空缺奖项，不替换已有奖项、排名或人工名单。
+
+先对实时生产数据库备份并预览，再更新容器，禁止上传本地数据库覆盖线上补录：
+
+```bash
+cd ~/dlut-cpc
+git pull --ff-only
+python3 tools/merge_ccpc.py --snapshot data/rankland_supplement_honors.json --dry-run \
+  --backup "runtime/backups/before-rankland-$(date +%Y%m%d-%H%M%S).sqlite3" \
+  --report runtime/rankland-preview.json
+# 核对后更新，启动会按当时的生产数据库再次去重并合并盘锦重复成员
+docker compose up -d --build
+docker compose exec -T dlut-cpc python tools/merge_ccpc.py \
+  --snapshot data/rankland_supplement_honors.json --report runtime/rankland-import.json
+curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:8021/healthz
+```
+
+`rankland-preview.json` 是启动前的预览；`rankland-import.json` 是实际导入报告，包含每条结果的处理状态及警告。线上已经补录的队伍会匹配旧记录，实际新增数可能小于 59。端口、`runtime`、`.env` 和既有 Caddy 配置保持不变。维护者生成后续归档可使用可选工具 `tools/import_rankland_supplement.py --rank-id <key> --batch-id <new-id> --output <new-file>`，部署无须安装爬取依赖。
+
+铁牌指结果已确认但未获得金银铜牌的正式参赛成绩。打星队伍保留参赛记录与“打星 · 非正式”标记，但不计年度奖牌、个人奖牌、铁牌或获奖次数；来源明确注明金银铜时显示“打星银牌”等，否则成绩留空。没有奖项依据的正式记录显示“奖项待确认”，不按铁牌统计。铁牌次数来自选手逐场正式参赛记录，并与学校榜单核对；未查全的次数显示“铁待补”，不会当作 0。“奖牌榜顺序”依次按金、银、铜数量降序及铁牌数量升序排列；“获奖次数”不含铁牌。
 
 同步 CPC Finder 并执行归一化去重：
 
@@ -124,7 +149,7 @@ python3 tools/sync_training_data.py
 
 管理员在“账号”页可追加、修改或二次确认删除已有账号。修改为不同账号后重新获取该账号评分，不沿用旧账号分数；删掉主号后自动从剩余账号中选取主号。删除记录保存在数据库的 `removed_member_handles` 中，启动与公开数据同步不会重新导入被删除的绑定；管理员明确重新追加时可以恢复。`accountCorrections` 是带唯一 ID 的一次性纠错记录，用于更新已有部署中的错误绑定，不反复覆盖管理员后续维护。杨君泓的错误绑定 `Lance_J` 已纠正为 `Farewell`。
 
-“已补录名单”列出已确认的历史成绩及本地人工补录成绩，支持按比赛、队伍、成员和独立维护范围筛选。管理员可修改参赛名单，已有姓名 / 别名合并，未知姓名新建成员；原比赛、队伍及奖项不变，参赛关联和本地补录奖牌统计随之更新。修改事务失败时保留原名单；本地确认和修改后的名单不会被启动快照覆盖。游客仅可提交待确认成绩的补录申请，不能直接修改已确认名单。
+“已补录名单”列出已确认的历史成绩及本地人工补录成绩，支持按比赛、队伍、成员和独立维护范围筛选。管理员可修改参赛名单，已有姓名 / 别名合并，未知姓名新建成员；原比赛、队伍及已知奖项不变，空缺奖项可以一并补齐，参赛关联和本地补录奖牌统计随之更新。修改事务失败时保留原名单；本地确认和修改后的名单不会被启动快照覆盖。游客仅可提交待确认成绩的补录申请，不能直接修改已确认名单。
 
 `memberOverrides` 保存稳定选手 UUID、中文显示姓名与报名别名。例如 `Fangyu Bu` 显示为“卜方昱”，英文名仍可检索；映射同时作用于成员页和参赛成绩。管理员后续修改的显示名不会被启动快照覆盖。
 
@@ -163,7 +188,7 @@ docker compose restart dlut-cpc
 
 提交必须同源并使用 JSON，名单与 CF 账号申请共用每个来源 IP 十分钟最多 20 次的限流；每条成绩最多保留 5 份不同的待审核名单，每位成员最多保留 5 份不同的待审核账号申请，两类总待审核队列上限 1000 份。相同成员名单不计次序、空格、已知报名别名差异自动去重；相同成员的账号申请忽略账号大小写与两端空格去重。存在多个同名候选时要求指定成员 ID，城市学院与盘锦校区不能误合并到本部。限流计数保存在进程内，重启后重置；提案、审核历史和正式数据均持久化，重建容器或来源网站下线不会丢失。
 
-Compose 默认 `TRUST_PROXY_HEADERS=1`，用于读取 Caddy 设置的真实客户端 IP，宿主机端口必须保持 `127.0.0.1` 绑定且只由可信反向代理访问。直接将服务端口暴露到外网时应设置 `TRUST_PROXY_HEADERS=0`，不接受客户端伪造的转发头。此次更新不需要新端口或更改 Caddy 配置；更新前备份生产 SQLite，启动会自动升级到 v8。
+Compose 默认 `TRUST_PROXY_HEADERS=1`，用于读取 Caddy 设置的真实客户端 IP，宿主机端口必须保持 `127.0.0.1` 绑定且只由可信反向代理访问。直接将服务端口暴露到外网时应设置 `TRUST_PROXY_HEADERS=0`，不接受客户端伪造的转发头。此次更新不需要新端口或更改 Caddy 配置；更新前备份生产 SQLite，启动会自动升级到 v10。
 
 无法从公开网站找到的老成员直接写入 SQLite，不需要修改前端：
 

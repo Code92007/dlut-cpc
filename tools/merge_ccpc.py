@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preview or import the bundled CCPC archive against this deployment's database."""
+"""Preview or import a bundled result archive against this deployment's database."""
 from __future__ import annotations
 
 import argparse

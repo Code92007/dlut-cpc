@@ -186,6 +186,21 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(payload["honors"][0]["members"], ["董霄然", "傅心语", "何泾"])
         self.assertEqual(payload["pendingHonors"], [])
 
+    def test_only_admin_can_fill_unknown_medal_while_confirming_or_editing_members(self):
+        cookie, csrf = self.login()
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-v1", "honors": [record]})
+        with self.database.connect() as connection:
+            connection.execute("UPDATE honors SET medal='' WHERE id='historical'")
+        body = {"honorId": "historical", "members": ["甲", "乙", "丙"], "medal": "银牌"}
+        self.assertEqual(self.request("confirm-members", body)["status"], 401)
+        self.assertEqual(self.request("confirm-members", body, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("confirm-members", body, cookie=cookie, csrf=csrf)["status"], 200)
+        self.assertEqual(self.database.payload(self.seed)["honors"][0]["medal"], "银牌")
+        body["medal"] = "铜牌"
+        self.assertEqual(self.request("edit-members", body, cookie=cookie, csrf=csrf)["status"], 400)
+        self.assertEqual(self.database.payload(self.seed)["honors"][0]["medal"], "银牌")
+
     def test_invalid_name_confirmation_rolls_back_without_partial_people(self):
         cookie, csrf = self.login()
         record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
