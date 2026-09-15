@@ -125,6 +125,37 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(payload["honors"][0]["medal"], "金牌")
         self.assertEqual(self.request("confirm-members", request, cookie=cookie, csrf=csrf)["status"], 400)
 
+    def test_admin_confirms_names_and_ids_creating_only_missing_members(self):
+        cookie, csrf = self.login()
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-v1", "honors": [record]})
+        he = self.database.add_manual_member("何泾")
+        fu = self.database.add_manual_member("傅心语")
+        request = {"honorId": "historical", "members": ["董霄然", "傅心语", he]}
+        self.assertEqual(self.request("confirm-members", request)["status"], 401)
+        self.assertEqual(self.request("confirm-members", request, cookie=cookie)["status"], 403)
+        self.assertEqual(len(self.database.payload(self.seed)["members"]), 2)
+        result = self.request("confirm-members", request, cookie=cookie, csrf=csrf)
+        self.assertEqual(result["status"], 200, result)
+        payload = self.database.payload(self.seed)
+        self.assertEqual(len(payload["members"]), 3)
+        self.assertEqual(next(m["id"] for m in payload["members"] if m["name"] == "傅心语"), fu)
+        self.assertEqual(payload["honors"][0]["members"], ["董霄然", "傅心语", "何泾"])
+        self.assertEqual(payload["pendingHonors"], [])
+
+    def test_invalid_name_confirmation_rolls_back_without_partial_people(self):
+        cookie, csrf = self.login()
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-v1", "honors": [record]})
+        for members in ("not a list", [], ["甲"], ["甲", "乙", True], ["甲", "乙", {}],
+                        ["甲", "乙", " "], ["甲", "乙", "字" * 151], ["甲", "甲", "乙"]):
+            with self.subTest(members=members):
+                result = self.request("confirm-members", {"honorId": "historical", "members": members}, cookie=cookie, csrf=csrf)
+                self.assertEqual(result["status"], 400, result)
+                payload = self.database.payload(self.seed)
+                self.assertEqual(payload["members"], [])
+                self.assertEqual(len(payload["pendingHonors"]), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

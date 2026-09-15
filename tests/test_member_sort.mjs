@@ -70,3 +70,27 @@ test("pending awards are read-only for visitors and filter by independent school
   assert.ok(context.pendingTable(data, true).includes('data-pending-id="b"'));
   vm.runInContext("state.pendingSchool = 'all'", context);
 });
+
+test("roster confirmation accepts plain names while preserving selected member IDs", () => {
+  const data = {members: [{id: 66, name: '何泾', school: '大连理工大学'},
+    {id: 67, name: '何泾', school: '大连理工大学城市学院'}]};
+  vm.runInContext(`state.data = ${JSON.stringify(data)}`, context);
+  assert.equal(context.adminRosterMember(' 董霄然 '), '董霄然');
+  assert.equal(context.adminRosterMember('傅心语'), '傅心语');
+  assert.equal(context.adminRosterMember('何泾'), '何泾');
+  assert.equal(context.adminRosterMember(' 何泾 · #66 '), 66);
+  assert.equal(context.adminRosterMember('何泾 · #67 · 大连理工大学城市学院'), 67);
+  assert.throws(() => context.adminMemberId('董霄然'), /请选择名单中的成员/);
+});
+
+test("historical roster suggestions are escaped and prefilled without auto submission", () => {
+  const data = {members: [], pendingHonors: [{id: 'historic', team: 'Old Team', date: '2018-01-01',
+    event: 'ICPC Regional', school: '大连理工大学', medal: '金牌', expectedMembers: 3,
+    suggestedMembers: ['董霄然', 'O\"Brien', '<name>']}]};
+  vm.runInContext("state.adminSession = {authenticated: true, username: 'admin'}; state.adminView = 'pending'; state.pendingId = 'historic'; state.adminMessage = ''", context);
+  const html = context.adminPage(data);
+  assert.ok(html.includes('value="董霄然"'));
+  assert.ok(html.includes('value="O&quot;Brien"'));
+  assert.ok(html.includes('value="&lt;name&gt;"'));
+  assert.ok(html.includes('确认成员'));
+});

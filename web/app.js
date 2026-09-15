@@ -319,6 +319,12 @@ function adminMemberId(value) {
   return member.id;
 }
 
+function adminRosterMember(value) {
+  const name = value.trim();
+  const member = state.data.members.find(item => adminMemberLabel(item) === name);
+  return member ? member.id : name;
+}
+
 function adminPage(data) {
   const session = state.adminSession;
   const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
@@ -330,7 +336,7 @@ function adminPage(data) {
     <label>密码<input name="password" type="password" autocomplete="current-password" required maxlength="512"></label>
     <button class="admin-button" ${!session.enabled ? 'disabled' : ''}>登录</button>
   </form></div>`;
-  const memberInput = (name, label, required = true) => `<label>${label}<input name="${name}" list="adminMembers" autocomplete="off" ${required ? 'required' : ''} placeholder="姓名或成员 ID"></label>`;
+  const memberInput = (name, label, required = true, value = '') => `<label>${label}<input name="${name}" list="adminMembers" autocomplete="off" ${required ? 'required' : ''} value="${escapeHtml(value)}" placeholder="姓名或成员 ID"></label>`;
   const options = data.members.map(member => `<option value="${escapeHtml(adminMemberLabel(member))}"></option>`).join('');
   const forms = {
     members: `<form id="adminMember" class="admin-form">
@@ -359,7 +365,7 @@ function adminPage(data) {
     </div><button class="admin-button">保存成绩</button></form>`,
   };
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
-  forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`)).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
+  forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
     ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
@@ -447,7 +453,7 @@ function bindAdminEvents() {
     aliases: values.aliases.split(/\n/).map(alias => alias.trim()).filter(Boolean)}), () => '姓名映射已保存');
   bindForm('#adminHonor', 'honor', values => ({...values, memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '参赛成绩已保存');
   bindForm('#adminConfirmMembers', 'confirm-members', values => ({honorId: values.honorId,
-    memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '成员已确认，参赛成绩已保留');
+    members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => '成员已确认，参赛成绩已保留');
   const bindAction = (id, path, success) => document.querySelector(id)?.addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;

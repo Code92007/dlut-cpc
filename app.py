@@ -194,11 +194,13 @@ class SiteHandler(BaseHTTPRequestHandler):
                 honor_id = database.add_manual_honor_with_members(record, member_ids)
                 self._send_json({"ok": True, "honorId": honor_id})
             elif path == "/api/admin/confirm-members":
-                member_ids = body.get("memberIds")
-                if not isinstance(member_ids, list) or not 1 <= len(member_ids) <= 3:
+                members = body.get("members") if "members" in body else body.get("memberIds")
+                if not isinstance(members, list) or not 1 <= len(members) <= 3:
                     raise ValueError("参赛成员列表无效")
+                if "members" not in body:
+                    members = [self._member_id(value) for value in members]
                 database.confirm_honor_members(self._text(body, "honorId", 150, required=True),
-                                               [self._member_id(value) for value in member_ids], source=source)
+                                               members, source=source)
                 self._send_json({"ok": True})
             elif path == "/api/admin/refresh-ratings":
                 from tools.sync_codeforces import sync_ratings

@@ -573,7 +573,7 @@ class Database:
                 raise ValueError("Historical imports accept only pre-2020 medal results")
             dt.date.fromisoformat(record["date"])
             # A repeated team name is not evidence of the same roster. Always
-            # leave historical people unlinked until an admin selects their IDs.
+            # leave historical people unlinked until an admin confirms the roster.
             honor_id = self._upsert_honor(connection, {**record, "members": [], "memberDetails": []})
             connection.execute(
                 "INSERT OR IGNORE INTO honor_roster_reviews(honor_id, batch_id, expected_members, school, "
@@ -592,8 +592,40 @@ class Database:
             self._ensure_schema(connection)
             return self._import_historical_batch(connection, batch)
 
-    def confirm_honor_members(self, honor_id: str, member_ids: list[int], *, source: dict | None = None) -> None:
+    def _resolve_roster_member(self, connection: sqlite3.Connection, value: int | str,
+                               school: str | None, source_id: int) -> int:
+        if type(value) is int and value > 0:
+            member = connection.execute("SELECT school FROM members WHERE id=?", (value,)).fetchone()
+            if not member:
+                raise ValueError(f"member {value} does not exist")
+            if school and member["school"] != school:
+                raise ValueError("参赛成员与成绩所属范围不一致；城市学院、盘锦校区须独立维护")
+            return value
+        if not isinstance(value, str) or not value.strip() or len(value) > 150:
+            raise ValueError("参赛成员须为有效成员 ID 或一至 150 字的姓名")
+        name = value.strip()
+        normalized = normalize_name(name)
+        target_school = school or "大连理工大学"
+        rows = connection.execute(
+            "SELECT m.id, m.name, m.display_name, a.alias FROM members m "
+            "LEFT JOIN member_aliases a ON a.member_id=m.id WHERE m.school=?",
+            (target_school,),
+        ).fetchall()
+        matches = {int(row["id"]) for row in rows
+                   if any(normalize_name(candidate) == normalized
+                          for candidate in (row["name"], row["display_name"], row["alias"]) if candidate)}
+        if len(matches) > 1:
+            raise ValueError(f"“{name}”有多个同名或同别名成员，请从名单中选择具体成员 ID")
+        if matches:
+            return next(iter(matches))
+        return self._upsert_member(connection, {"name": name, "school": target_school,
+                                               "status": "alumni", "_forceNew": True}, source_id, manual=True)
+
+    def confirm_honor_members(self, honor_id: str, member_ids: list[int | str], *, source: dict | None = None) -> None:
         with self.connect() as connection:
+            # Serialize creation and confirmation so concurrent requests cannot
+            # create duplicate people or overwrite an already confirmed roster.
+            connection.execute("BEGIN IMMEDIATE")
             honor = connection.execute("SELECT id FROM honors WHERE id=?", (honor_id,)).fetchone()
             if not honor:
                 raise ValueError("参赛成绩不存在")
@@ -603,15 +635,13 @@ class Database:
             if not review and connection.execute("SELECT 1 FROM honor_members WHERE honor_id=?", (honor_id,)).fetchone():
                 raise ValueError("该成绩已有成员名单，不能作为待确认项覆盖")
             expected = review["expected_members"] if review else 3
-            if len(member_ids) != expected or len(set(member_ids)) != expected:
-                raise ValueError(f"请选择 {expected} 位不同的参赛成员")
-            for member_id in member_ids:
-                member = connection.execute("SELECT school FROM members WHERE id=?", (member_id,)).fetchone() if type(member_id) is int else None
-                if not member:
-                    raise ValueError(f"member {member_id} does not exist")
-                if review and member["school"] != review["school"]:
-                    raise ValueError("参赛成员与成绩所属范围不一致；城市学院、盘锦校区须独立维护")
+            if not isinstance(member_ids, list) or len(member_ids) != expected:
+                raise ValueError(f"请填写 {expected} 位不同的参赛成员")
             source_id = self._source(connection, source, manual=True)
+            member_ids = [self._resolve_roster_member(connection, value, review["school"] if review else None, source_id)
+                          for value in member_ids]
+            if len(set(member_ids)) != expected:
+                raise ValueError(f"请填写 {expected} 位不同的参赛成员，同一成员不能重复")
             connection.execute("DELETE FROM honor_members WHERE honor_id=?", (honor_id,))
             for position, member_id in enumerate(member_ids):
                 connection.execute("INSERT INTO honor_members(honor_id, member_id, position, source_id, is_manual) VALUES (?, ?, ?, ?, 1)",
