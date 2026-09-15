@@ -376,9 +376,8 @@ a:hover {
   width: 9px;
   height: 9px;
   margin-right: 7px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  background: #fff;
+  border-radius: 1px;
+  background: currentColor;
   content: "";
   vertical-align: -1px;
 }
@@ -1365,6 +1364,7 @@ a:hover {
 }
 
 .guest-roster-button { display: block; margin-top: 8px; }
+.directory-actions { display: flex; justify-content: flex-end; margin: 24px 0; }
 .guest-roster-form { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .review-item { display: grid; grid-template-columns: minmax(0, 2fr) minmax(160px, 1fr) auto; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); }
 .review-item h3 { margin: 0 0 10px; font-size: 17px; }

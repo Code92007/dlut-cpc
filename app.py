@@ -92,7 +92,8 @@ class SiteHandler(BaseHTTPRequestHandler):
                 return
             try:
                 query = parse_qs(urlsplit(self.path).query)
-                self._send_json(Database(DATABASE_PATH).roster_submissions(
+                self._send_json(Database(DATABASE_PATH).review_submissions(
+                    kind=query.get("kind", ["roster"])[0],
                     status=query.get("status", ["pending"])[0], page=int(query.get("page", ["1"])[0]),
                     school=query.get("school", ["all"])[0]))
             except (OSError, ValueError, sqlite3.Error) as exc:
@@ -125,8 +126,8 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
-        if path == "/api/roster-submissions":
-            self._submit_roster()
+        if path in {"/api/roster-submissions", "/api/account-submissions"}:
+            self._submit_public_submission("account" if path.endswith("account-submissions") else "roster")
             return
         if not path.startswith("/api/admin/"):
             self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
@@ -202,13 +203,7 @@ class SiteHandler(BaseHTTPRequestHandler):
                     database.edit_handle(member_id, "codeforces", old_handle, handle, source=source)
                 else:
                     database.set_handle(member_id, "codeforces", handle, source=source)
-                warning = None
-                try:
-                    from tools.sync_codeforces import fetch_ratings
-                    updates = fetch_ratings([handle])
-                    database.update_account_ratings(updates, dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"))
-                except (OSError, ValueError) as exc:
-                    warning = f"账号已保存，Rating 未更新：{exc}"
+                warning = self._refresh_account_rating(database, handle)
                 self._send_json({"ok": True, "warning": warning})
             elif path == "/api/admin/name":
                 aliases = body.get("aliases", [])
@@ -253,6 +248,13 @@ class SiteHandler(BaseHTTPRequestHandler):
                 database.review_roster_submission(self._member_id(body.get("submissionId")), body["approve"],
                                                  reviewer=session["username"], reason=self._text(body, "reason", 2000))
                 self._send_json({"ok": True})
+            elif path == "/api/admin/review-account-submission":
+                if type(body.get("approve")) is not bool:
+                    raise ValueError("审核决定无效")
+                handle = database.review_account_submission(self._member_id(body.get("submissionId")), body["approve"],
+                                                            reviewer=session["username"], reason=self._text(body, "reason", 2000))
+                warning = self._refresh_account_rating(database, handle) if body["approve"] else None
+                self._send_json({"ok": True, "warning": warning})
             elif path == "/api/admin/refresh-ratings":
                 from tools.sync_codeforces import sync_ratings
                 updates, errors = sync_ratings(database, load_seed_data())
@@ -262,7 +264,17 @@ class SiteHandler(BaseHTTPRequestHandler):
         except (OSError, ValueError, TypeError, sqlite3.Error) as exc:
             self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
 
-    def _submit_roster(self) -> None:
+    @staticmethod
+    def _refresh_account_rating(database: Database, handle: str) -> str | None:
+        try:
+            from tools.sync_codeforces import fetch_ratings
+            updates = fetch_ratings([handle])
+            database.update_account_ratings(updates, dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"))
+        except (OSError, ValueError) as exc:
+            return f"账号已保存，Rating 未更新：{exc}"
+        return None
+
+    def _submit_public_submission(self, kind: str) -> None:
         scheme = "https" if self.headers.get("X-Forwarded-Proto") == "https" else "http"
         if self.headers.get("Origin") != f"{scheme}://{self.headers.get('Host')}":
             self._send_json({"error": "拒绝跨站提交请求"}, HTTPStatus.FORBIDDEN)
@@ -279,8 +291,13 @@ class SiteHandler(BaseHTTPRequestHandler):
             return
         try:
             body = self._read_json()
-            submission_id, created = Database(DATABASE_PATH).submit_roster(
-                self._text(body, "honorId", 150, required=True), body.get("members"), note=self._text(body, "note", 2000))
+            database = Database(DATABASE_PATH)
+            if kind == "account":
+                submission_id, created = database.submit_account(self._member_id(body.get("memberId")),
+                    self._text(body, "handle", 100, required=True), note=self._text(body, "note", 2000))
+            else:
+                submission_id, created = database.submit_roster(
+                    self._text(body, "honorId", 150, required=True), body.get("members"), note=self._text(body, "note", 2000))
             self._send_json({"ok": True, "submissionId": submission_id, "duplicate": not created},
                             HTTPStatus.CREATED if created else HTTPStatus.OK)
         except (OSError, ValueError, TypeError, sqlite3.Error) as exc:

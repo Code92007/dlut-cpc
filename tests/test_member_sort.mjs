@@ -13,13 +13,33 @@ vm.runInContext(readFileSync(new URL("../web/app.js", import.meta.url), "utf8"),
 const compare = context.compareMemberMedals;
 const member = (name, gold, silver, bronze, iron) => ({ name, medals: { gold, silver, bronze, iron } });
 
-test('annual medal chart excludes iron from lines, legend and vertical scale', () => {
+test('annual medal chart groups three bars per year and excludes iron from chart and scale', () => {
   const summary = [{year: 2025, gold: 1, silver: 2, bronze: 3, iron: 100},
     {year: 2026, gold: 2, silver: 1, bronze: 2, iron: 200}];
   const html = context.medalChart(summary);
-  assert.equal((html.match(/<polyline /g) || []).length, 3);
+  assert.equal((html.match(/class="medal-bar"/g) || []).length, 6);
+  assert.equal((html.match(/<rect /g) || []).length, 6);
+  assert.ok(!html.includes('<polyline'));
+  assert.ok(!html.includes('<circle'));
+  assert.ok(html.includes('年度奖牌数量柱状图'));
+  assert.ok(html.includes('2025 年铜牌：3 枚'));
   assert.ok(!html.includes('铁牌'));
   assert.equal(html, context.medalChart(summary.map(({iron, ...item}) => item)));
+});
+
+test('annual bar chart handles no years, a single year, zero awards and long histories', () => {
+  for (const summary of [[], [{year: 2000, gold: 0, silver: 0, bronze: 0}],
+    Array.from({length: 50}, (_, index) => ({year: 1977 + index, gold: index % 4, silver: 3, bronze: 8}))]) {
+    const html = context.medalChart(summary);
+    assert.equal((html.match(/<rect /g) || []).length, summary.length * 3);
+    assert.ok(!/NaN|Infinity/.test(html));
+    const width = Number(html.match(/viewBox="0 0 ([\d.]+) /)[1]);
+    for (const rect of html.matchAll(/<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"/g)) {
+      const [x, y, barWidth, barHeight] = rect.slice(1).map(Number);
+      assert.ok(x >= 44 && x + barWidth <= width - 32);
+      assert.ok(y >= 30 && barHeight >= 0 && y + barHeight <= 292.00001);
+    }
+  }
 });
 
 test('silver and iron text use clearly different hues with readable contrast', () => {

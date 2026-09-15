@@ -12,7 +12,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 7
+SCHEMA_VERSION = 8
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -209,6 +209,22 @@ CREATE TABLE IF NOT EXISTS roster_submissions (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_roster_submissions_duplicate
 ON roster_submissions(honor_id, fingerprint) WHERE status='pending';
 CREATE INDEX IF NOT EXISTS idx_roster_submissions_queue ON roster_submissions(status, id);
+
+CREATE TABLE IF NOT EXISTS account_submissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    handle TEXT NOT NULL COLLATE NOCASE,
+    note TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'approved', 'rejected', 'superseded')),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TEXT,
+    reviewed_by TEXT,
+    review_note TEXT NOT NULL DEFAULT ''
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_account_submissions_duplicate
+ON account_submissions(member_id, handle) WHERE status='pending';
+CREATE INDEX IF NOT EXISTS idx_account_submissions_queue ON account_submissions(status, id);
 """
 
 
@@ -750,7 +766,7 @@ class Database:
                 return int(duplicate["id"]), False
             if connection.execute("SELECT COUNT(*) FROM roster_submissions WHERE honor_id=? AND status='pending'", (honor_id,)).fetchone()[0] >= 5:
                 raise ValueError("这条成绩已有多份名单待审核，请等待管理员处理")
-            if connection.execute("SELECT COUNT(*) FROM roster_submissions WHERE status='pending'").fetchone()[0] >= 1000:
+            if self._pending_submission_count(connection) >= 1000:
                 raise ValueError("审核队列已满，请稍后提交")
             cursor = connection.execute("INSERT INTO roster_submissions(honor_id, members_json, note, fingerprint) VALUES (?, ?, ?, ?)",
                                         (honor_id, json.dumps(members, ensure_ascii=False), note.strip(), fingerprint))
@@ -815,6 +831,104 @@ class Database:
                                     "members": members, "note": row["note"], "status": row["status"], "submittedAt": row["created_at"],
                                     "reviewedAt": row["reviewed_at"], "reviewer": row["reviewed_by"], "reviewNote": row["review_note"]})
         return {"submissions": submissions, "total": total, "page": page, "pages": pages, "pendingCount": pending_count}
+
+    @staticmethod
+    def _pending_submission_count(connection: sqlite3.Connection) -> int:
+        return sum(connection.execute(f"SELECT COUNT(*) FROM {table} WHERE status='pending'").fetchone()[0]
+                   for table in ("roster_submissions", "account_submissions"))
+
+    def submit_account(self, member_id: int, handle: str, *, note: str = "") -> tuple[int, bool]:
+        if type(member_id) is not int or member_id <= 0:
+            raise ValueError("请选择名单中的成员")
+        if not isinstance(handle, str) or not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", handle.strip()):
+            raise ValueError("Codeforces 账号格式无效")
+        if not isinstance(note, str) or len(note) > 2000:
+            raise ValueError("补录说明最多 2000 字")
+        handle = handle.strip()
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not connection.execute("SELECT 1 FROM members WHERE id=?", (member_id,)).fetchone():
+                raise ValueError("成员不存在")
+            owner = connection.execute("SELECT member_id FROM member_handles WHERE platform='codeforces' AND handle=?",
+                                       (handle,)).fetchone()
+            if owner:
+                raise ValueError("该账号已绑定这位成员" if owner["member_id"] == member_id else "该账号已绑定其他成员，请联系管理员纠正")
+            duplicate = connection.execute("SELECT id FROM account_submissions WHERE member_id=? AND handle=? AND status='pending'",
+                                           (member_id, handle)).fetchone()
+            if duplicate:
+                return int(duplicate["id"]), False
+            if connection.execute("SELECT COUNT(*) FROM account_submissions WHERE member_id=? AND status='pending'", (member_id,)).fetchone()[0] >= 5:
+                raise ValueError("这位成员已有多份账号申请待审核，请等待管理员处理")
+            if self._pending_submission_count(connection) >= 1000:
+                raise ValueError("审核队列已满，请稍后提交")
+            cursor = connection.execute("INSERT INTO account_submissions(member_id, handle, note) VALUES (?, ?, ?)",
+                                        (member_id, handle, note.strip()))
+            return int(cursor.lastrowid), True
+
+    def review_account_submission(self, submission_id: int, approve: bool, *, reviewer: str, reason: str = "") -> str:
+        if type(submission_id) is not int or submission_id <= 0 or type(approve) is not bool:
+            raise ValueError("审核参数无效")
+        if not isinstance(reviewer, str) or not reviewer.strip() or len(reviewer) > 100:
+            raise ValueError("审核管理员无效")
+        if not isinstance(reason, str) or len(reason) > 2000:
+            raise ValueError("审核说明最多 2000 字")
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            submission = connection.execute("SELECT * FROM account_submissions WHERE id=?", (submission_id,)).fetchone()
+            if not submission or submission["status"] != "pending":
+                raise ValueError("该账号申请不存在、已处理或已失效，请刷新审核列表")
+            if approve:
+                # Ownership and the binding are checked in the same transaction as approval.
+                source_id = self._source(connection, {"name": f"游客账号补录（管理员 {reviewer} 审核 · CF #{submission_id}）",
+                                                      "kind": "manual", "priority": 100}, manual=True)
+                connection.execute("DELETE FROM removed_member_handles WHERE member_id=? AND platform='codeforces' AND handle=?",
+                                   (submission["member_id"], submission["handle"]))
+                self._set_handle(connection, submission["member_id"], "codeforces",
+                                 {"handle": submission["handle"], "verified": True}, source_id)
+            connection.execute("UPDATE account_submissions SET status=?, reviewed_at=CURRENT_TIMESTAMP, reviewed_by=?, review_note=? WHERE id=?",
+                               ("approved" if approve else "rejected", reviewer, reason.strip(), submission_id))
+            return submission["handle"]
+
+    def account_submissions(self, *, status: str = "pending", page: int = 1, school: str = "all") -> dict:
+        if status not in {"pending", "approved", "rejected", "superseded", "all"}:
+            raise ValueError("审核状态无效")
+        if type(page) is not int or not 1 <= page <= 1_000_000:
+            raise ValueError("审核页码无效")
+        if school not in {*MAINTENANCE_GROUPS, "all"}:
+            raise ValueError("所属范围无效")
+        conditions, parameters = [], []
+        if status != "all":
+            conditions.append("p.status=?")
+            parameters.append(status)
+        if school != "all":
+            conditions.append("m.school=?")
+            parameters.append(school)
+        where = " WHERE " + " AND ".join(conditions) if conditions else ""
+        joined = " FROM account_submissions p JOIN members m ON m.id=p.member_id"
+        with self.connect() as connection:
+            total = connection.execute("SELECT COUNT(*)" + joined + where, parameters).fetchone()[0]
+            pages = max(1, (total + 49) // 50)
+            page = min(page, pages)
+            pending_count = connection.execute("SELECT COUNT(*) FROM account_submissions WHERE status='pending'").fetchone()[0]
+            order = "p.id ASC" if status == "pending" else "p.id DESC"
+            rows = connection.execute("SELECT p.*, COALESCE(m.display_name, m.name) AS member_name, m.school" + joined + where
+                                      + " ORDER BY " + order + " LIMIT 50 OFFSET ?", [*parameters, (page - 1) * 50]).fetchall()
+            submissions = [{"id": row["id"], "memberId": row["member_id"], "memberName": row["member_name"],
+                            "school": row["school"], "handle": row["handle"], "note": row["note"], "status": row["status"],
+                            "submittedAt": row["created_at"], "reviewedAt": row["reviewed_at"], "reviewer": row["reviewed_by"],
+                            "reviewNote": row["review_note"], "existingAccounts": [account["handle"] for account in connection.execute(
+                                "SELECT handle FROM member_handles WHERE member_id=? AND platform='codeforces' ORDER BY COALESCE(max_rating, -1) DESC, handle",
+                                (row["member_id"],))]} for row in rows]
+        return {"submissions": submissions, "total": total, "page": page, "pages": pages, "pendingCount": pending_count}
+
+    def review_submissions(self, *, kind: str = "roster", status: str = "pending", page: int = 1, school: str = "all") -> dict:
+        if kind not in {"roster", "account"}:
+            raise ValueError("补录类型无效")
+        result = (self.account_submissions if kind == "account" else self.roster_submissions)(status=status, page=page, school=school)
+        with self.connect() as connection:
+            result["totalPendingCount"] = self._pending_submission_count(connection)
+        result["kind"] = kind
+        return result
 
     def sync_site_data(self, site: dict) -> None:
         with self.connect() as connection:

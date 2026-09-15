@@ -15,6 +15,10 @@ const state = {
   guestPendingId: null,
   guestMessage: '',
   guestError: false,
+  guestAccountOpen: false,
+  guestAccountDraft: {},
+  guestAccountMessage: '',
+  guestAccountError: false,
   memberQuery: "",
   memberStatus: "all",
   memberSchool: "all",
@@ -33,6 +37,7 @@ const state = {
   adminRosterSchool: 'all',
   adminReviews: null,
   adminReviewStatus: 'pending',
+  adminReviewKind: 'roster',
   adminReviewSchool: 'all',
   adminReviewPage: 1,
   adminReviewRequest: 0,
@@ -84,14 +89,17 @@ function navigate(route, push = true) {
 }
 
 function medalChart(summary) {
-  const width = 1040;
+  const width = Math.max(1040, summary.length * 56 + 76);
   const height = 340;
   const margin = { top: 30, right: 32, bottom: 48, left: 44 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
   const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze]));
   const maxY = Math.ceil(maxValue / 3) * 3;
-  const x = (index) => margin.left + (chartWidth * index) / Math.max(1, summary.length - 1);
+  const groupWidth = chartWidth / Math.max(1, summary.length);
+  const slotWidth = Math.min(22, groupWidth * 0.26);
+  const barWidth = Math.max(1, slotWidth - 3);
+  const x = (index) => margin.left + groupWidth * (index + 0.5);
   const y = (value) => margin.top + chartHeight - (chartHeight * value) / maxY;
   const colors = { gold: "#d8a126", silver: "#9aa2ad", bronze: "#b86d45" };
   const grids = [];
@@ -99,14 +107,17 @@ function medalChart(summary) {
     grids.push(`<line x1="${margin.left}" y1="${y(value)}" x2="${width - margin.right}" y2="${y(value)}" stroke="#dfe3e8" />`);
     grids.push(`<text x="${margin.left - 10}" y="${y(value) + 4}" text-anchor="end" fill="#7a838f" font-size="11">${value}</text>`);
   }
-  const series = ["gold", "silver", "bronze"].map((key) => {
-    const points = summary.map((item, index) => `${x(index)},${y(item[key] || 0)}`).join(" ");
-    const dots = summary.map((item, index) => `<circle cx="${x(index)}" cy="${y(item[key] || 0)}" r="3.5" fill="#fff" stroke="${colors[key]}" stroke-width="2" />`).join("");
-    return `<polyline points="${points}" fill="none" stroke="${colors[key]}" stroke-width="2.2" stroke-linejoin="round" />${dots}`;
-  }).join("");
-  const years = summary.map((item, index) => `<text x="${x(index)}" y="${height - 18}" text-anchor="middle" fill="#68717e" font-size="11">${item.year}</text>`).join("");
+  const labels = {gold: '金牌', silver: '银牌', bronze: '铜牌'};
+  const series = summary.map((item, index) => ['gold', 'silver', 'bronze'].map((key, medalIndex) => {
+    const value = item[key] || 0;
+    const center = x(index) + (medalIndex - 1) * slotWidth;
+    return `<g class="medal-bar" data-year="${escapeHtml(item.year)}" data-medal="${key}"><title>${escapeHtml(item.year)} 年${labels[key]}：${escapeHtml(value)} 枚</title>
+      <rect x="${center - barWidth / 2}" y="${y(value)}" width="${barWidth}" height="${y(0) - y(value)}" fill="${colors[key]}" />
+      ${value > 0 ? `<text x="${center}" y="${y(value) - 7}" text-anchor="middle" fill="#505965" font-size="10">${escapeHtml(value)}</text>` : ''}</g>`;
+  }).join('')).join('');
+  const years = summary.map((item, index) => `<text x="${x(index)}" y="${height - 18}" text-anchor="middle" fill="#68717e" font-size="11">${escapeHtml(item.year)}</text>`).join("");
   return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span></div>
-    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度成绩趋势图">${grids.join("")}${series}${years}</svg></div>`;
+    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度奖牌数量柱状图">${grids.join("")}${series}${years}</svg></div>`;
 }
 
 function honorRows(honors) {
@@ -143,7 +154,7 @@ function homePage(data) {
     </section>
     <div class="home-content">
       <section class="section-block">
-        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度成绩趋势</h2></div><div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div>
+        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌统计</h2></div><div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div>
         <div class="chart-panel">${medalChart(data.medalSummary)}</div>
       </section>
       <section class="section-block">
@@ -307,6 +318,64 @@ function compareMemberMedals(a, b) {
     || a.name.localeCompare(b.name, "zh-CN");
 }
 
+function guestAccountForm(data) {
+  const message = state.guestAccountMessage ? `<div class="admin-message ${state.guestAccountError ? 'error' : ''}" role="status">${escapeHtml(state.guestAccountMessage)}</div>` : '';
+  if (!state.guestAccountOpen) return `<div class="directory-actions"><button type="button" id="guestAccountOpen" class="admin-button secondary">补充 CF 账号</button></div>${message}`;
+  const draft = state.guestAccountDraft;
+  return `${message}<form id="guestAccount" class="admin-form guest-roster-form"><h2>补充 Codeforces 账号</h2><div class="admin-fields">
+    ${memberInput('member', '成员', true, draft.member || '', 'guestAccountMembers')}
+    <label>Codeforces 账号<input name="handle" required maxlength="100" pattern="[A-Za-z0-9_.\\-]+" autocomplete="off" value="${escapeHtml(draft.handle || '')}"></label>
+    <label class="wide">补充说明 / 依据<textarea name="note" rows="3" maxlength="2000">${escapeHtml(draft.note || '')}</textarea></label></div>
+    <datalist id="guestAccountMembers">${(data.members || []).map(member => `<option value="${escapeHtml(adminMemberLabel(member))}"></option>`).join('')}</datalist>
+    <button class="admin-button">提交审核</button><button type="button" id="guestAccountCancel" class="admin-button secondary">取消</button></form>`;
+}
+
+function bindGuestAccountEvents() {
+  document.querySelector('#guestAccountOpen')?.addEventListener('click', () => {
+    state.guestAccountOpen = true;
+    state.guestAccountMessage = '';
+    renderRoute('rating');
+    document.querySelector('#guestAccount')?.scrollIntoView({block: 'start'});
+  });
+  document.querySelector('#guestAccountCancel')?.addEventListener('click', () => {
+    state.guestAccountOpen = false;
+    state.guestAccountDraft = {};
+    renderRoute('rating');
+  });
+  const form = document.querySelector('#guestAccount');
+  form?.addEventListener('input', () => {state.guestAccountDraft = Object.fromEntries(new FormData(form));});
+  form?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const button = form.querySelector('button');
+    button.disabled = true;
+    const values = Object.fromEntries(new FormData(form));
+    state.guestAccountDraft = values;
+    try {
+      const response = await fetch('/api/account-submissions', {method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({memberId: adminMemberId(values.member.trim()), handle: values.handle.trim(), note: values.note})});
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+      state.guestAccountOpen = false;
+      state.guestAccountDraft = {};
+      state.guestAccountMessage = `${result.duplicate ? '相同账号申请已提交' : '已提交'} · CF #${result.submissionId} · 等待管理员审核`;
+      state.guestAccountError = false;
+      if (routeFromPath() === 'rating') renderRoute('rating');
+    } catch (error) {
+      state.guestAccountMessage = error.message;
+      state.guestAccountError = true;
+      button.disabled = false;
+      let message = form.querySelector('[role="alert"]');
+      if (!message) {
+        message = document.createElement('div');
+        message.className = 'admin-message error';
+        message.setAttribute('role', 'alert');
+        form.prepend(message);
+      }
+      message.textContent = error.message;
+    }
+  });
+}
+
 function ratingPage(data) {
   const statusLabel = { current: "近年成员", alumni: "往届成员", unknown: "年代待补", manual: "人工补录" };
   const query = state.memberQuery.trim().toLowerCase();
@@ -365,6 +434,7 @@ function ratingPage(data) {
         <div><strong>${handleCount}</strong><span>已关联 CF 成员</span></div>
         <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含成员的参赛成绩</span></div>
       </section>
+      ${guestAccountForm(data)}
       <div class="filters member-filters">
         <label class="filter-group"><span>所属范围</span><select id="memberSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.memberSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
@@ -401,17 +471,18 @@ function memberInput(name, label, required = true, value = '', listId = 'adminMe
 function adminReviewPage() {
   const data = state.adminReviews;
   const statuses = [['pending', '待审核'], ['approved', '已通过'], ['rejected', '不通过'], ['superseded', '已失效'], ['all', '全部状态']];
-  const filters = `<div class="filters"><label class="filter-group"><span>审核状态</span><select id="reviewStatus">${statuses.map(([value, label]) => `<option value="${value}" ${state.adminReviewStatus === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+  const filters = `<div class="filters"><label class="filter-group"><span>补录类型</span><select id="reviewKind"><option value="roster" ${state.adminReviewKind === 'roster' ? 'selected' : ''}>参赛成员</option><option value="account" ${state.adminReviewKind === 'account' ? 'selected' : ''}>CF 账号</option></select></label>
+    <label class="filter-group"><span>审核状态</span><select id="reviewStatus">${statuses.map(([value, label]) => `<option value="${value}" ${state.adminReviewStatus === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
     <label class="filter-group"><span>所属范围</span><select id="reviewSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.adminReviewSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
     <button type="button" id="reviewRefresh" class="admin-button secondary" ${state.adminReviewsLoading ? 'disabled' : ''}>刷新</button></div>`;
   if (state.adminReviewsLoading || !data) return `${filters}<div class="empty-state">${state.adminReviewsLoading ? '正在加载审核队列' : '暂无审核数据'}</div>`;
   const rows = data.submissions.map(proposal => `<article class="review-item">
-    <div class="review-contest"><h3>${escapeHtml(proposal.team)}</h3><p>${escapeHtml(proposal.date)} · ${escapeHtml(proposal.event)}</p>
+    <div class="review-contest">${data.kind === 'account' ? `<h3>${escapeHtml(proposal.memberName)} · CF 账号补充</h3><p>${escapeHtml(proposal.school)} · 成员 #${proposal.memberId}</p><p>已有账号：${escapeHtml((proposal.existingAccounts || []).join(' / ') || '—')}</p>` : `<h3>${escapeHtml(proposal.team)}</h3><p>${escapeHtml(proposal.date)} · ${escapeHtml(proposal.event)}</p>
       <p>${escapeHtml(proposal.school)} · <span class="medal ${medalClass(proposal.medal)}">${escapeHtml(proposal.medal)}</span> · ${escapeHtml(proposal.rank || '—')}</p>
-      <small>#${proposal.id} · ${escapeHtml(proposal.submittedAt)}</small>
+      `}<small>${data.kind === 'account' ? 'CF ' : ''}#${proposal.id} · ${escapeHtml(proposal.submittedAt)}</small>
       ${proposal.note ? `<details><summary>补录说明</summary><p class="review-note">${escapeHtml(proposal.note)}</p></details>` : ''}</div>
-    <ol class="review-roster">${proposal.members.map(member => `<li>${escapeHtml(member.name)} <small>${member.newMember ? '姓名补录' : `#${member.value}`}</small></li>`).join('')}</ol>
-    <div class="review-actions">${proposal.status === 'pending' ? `<button type="button" class="admin-button" data-review-id="${proposal.id}" data-approve="true">通过</button><button type="button" class="admin-button secondary reject" data-review-id="${proposal.id}" data-approve="false">不通过</button>` : `<strong>${statuses.find(([value]) => value === proposal.status)?.[1] || ''}</strong><small>${escapeHtml(proposal.reviewer || '')} ${escapeHtml(proposal.reviewedAt || '')}</small>${proposal.reviewNote ? `<small>${escapeHtml(proposal.reviewNote)}</small>` : ''}`}</div>
+    ${data.kind === 'account' ? `<div class="review-roster">${accountLink({handle: proposal.handle})}</div>` : `<ol class="review-roster">${proposal.members.map(member => `<li>${escapeHtml(member.name)} <small>${member.newMember ? '姓名补录' : `#${member.value}`}</small></li>`).join('')}</ol>`}
+    <div class="review-actions">${proposal.status === 'pending' ? `<button type="button" class="admin-button" data-review-id="${proposal.id}" data-review-kind="${data.kind || 'roster'}" data-approve="true">通过</button><button type="button" class="admin-button secondary reject" data-review-id="${proposal.id}" data-review-kind="${data.kind || 'roster'}" data-approve="false">不通过</button>` : `<strong>${statuses.find(([value]) => value === proposal.status)?.[1] || ''}</strong><small>${escapeHtml(proposal.reviewer || '')} ${escapeHtml(proposal.reviewedAt || '')}</small>${proposal.reviewNote ? `<small>${escapeHtml(proposal.reviewNote)}</small>` : ''}`}</div>
     </article>`).join('');
   return `${filters}<div class="review-list">${rows || '<div class="empty-state">没有符合条件的补录提案</div>'}</div><div class="review-pagination">
     <span>${data.total} 份 · ${data.page} / ${data.pages} 页</span><button type="button" class="admin-button secondary" data-review-page="${data.page - 1}" ${data.page <= 1 ? 'disabled' : ''}>上一页</button>
@@ -423,7 +494,7 @@ async function loadAdminReviews() {
   state.adminReviewsLoading = true;
   if (routeFromPath() === 'admin' && state.adminView === 'reviews') renderRoute('admin');
   try {
-    const response = await fetch(`/api/admin/submissions?status=${state.adminReviewStatus}&page=${state.adminReviewPage}&school=${encodeURIComponent(state.adminReviewSchool)}`, {cache: 'no-store'});
+    const response = await fetch(`/api/admin/submissions?kind=${state.adminReviewKind}&status=${state.adminReviewStatus}&page=${state.adminReviewPage}&school=${encodeURIComponent(state.adminReviewSchool)}`, {cache: 'no-store'});
     if (request !== state.adminReviewRequest) return;
     if (!response.ok) {
       if (response.status === 401) state.adminSession = null;
@@ -538,7 +609,7 @@ function adminPage(data) {
   forms.reviews = adminReviewPage();
   forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
     <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
@@ -653,10 +724,11 @@ function bindAdminEvents() {
     renderRoute('admin');
     if (state.adminView === 'reviews') loadAdminReviews();
   }));
-  for (const [selector, field] of [['#reviewStatus', 'adminReviewStatus'], ['#reviewSchool', 'adminReviewSchool']]) {
+  for (const [selector, field] of [['#reviewKind', 'adminReviewKind'], ['#reviewStatus', 'adminReviewStatus'], ['#reviewSchool', 'adminReviewSchool']]) {
     document.querySelector(selector)?.addEventListener('change', event => {
       state[field] = event.target.value;
       state.adminReviewPage = 1;
+      state.adminReviews = null;
       loadAdminReviews();
     });
   }
@@ -670,8 +742,9 @@ function bindAdminEvents() {
     item.querySelectorAll('button').forEach(control => { control.disabled = true; });
     try {
       const approve = button.dataset.approve === 'true';
-      await adminRequest('review-submission', {submissionId: Number(button.dataset.reviewId), approve});
-      state.adminMessage = approve ? '已通过，成员及参赛关联已保存' : '已标记不通过，正式数据未修改';
+      const account = button.dataset.reviewKind === 'account';
+      const result = await adminRequest(account ? 'review-account-submission' : 'review-submission', {submissionId: Number(button.dataset.reviewId), approve});
+      state.adminMessage = result.warning || (approve ? (account ? '已通过，账号及 Rating 已保存' : '已通过，成员及参赛关联已保存') : '已标记不通过，正式数据未修改');
       state.adminError = false;
       const response = await fetch('/api/site', {cache: 'no-store'});
       if (!response.ok) throw new Error('数据刷新失败');
@@ -838,6 +911,7 @@ function bindPageEvents(route) {
     });
   }
   if (route === "rating") {
+    bindGuestAccountEvents();
     document.querySelector("#memberStatus")?.addEventListener("change", (event) => {
       state.memberStatus = event.target.value;
       renderRoute("rating");

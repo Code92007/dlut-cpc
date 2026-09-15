@@ -59,6 +59,103 @@ test('account deletion requires a separate confirmation and sends only the selec
   assert.equal(h.state().adminAccountDelete, null);
 });
 
+test('visitor account form offers all independent groups and escapes saved input', () => {
+  const h = harness('rating', () => {});
+  h.state().guestAccountOpen = true;
+  h.state().guestAccountDraft = {member: '何泾 · #66', handle: 'Example', note: '<script>bad</script>'};
+  const html = h.context.guestAccountForm({...seed, members: [...seed.members, {id: 67, name: '城市成员', school: '大连理工大学城市学院'}]});
+  assert.ok(html.includes('提交审核'));
+  assert.ok(html.includes('城市成员 · #67 · 大连理工大学城市学院'));
+  assert.ok(html.includes('value="何泾 · #66"'));
+  assert.ok(html.includes('&lt;script&gt;bad&lt;/script&gt;'));
+  assert.ok(!html.includes('<script>bad</script>'));
+});
+
+test('visitor account submission sends only member ID, handle and note without modifying public accounts', async () => {
+  const h = harness('rating', async () => response({ok: true, submissionId: 12}));
+  h.state().guestAccountOpen = true;
+  const button = element();
+  const form = element({fields: {member: '何泾 · #66', handle: ' Example ', note: 'evidence'}, querySelector: () => button});
+  h.nodes.set('#guestAccount', form);
+  h.context.bindGuestAccountEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(h.calls.length, 1);
+  assert.equal(h.calls[0].path, '/api/account-submissions');
+  assert.deepEqual(JSON.parse(h.calls[0].options.body), {memberId: 66, handle: 'Example', note: 'evidence'});
+  assert.equal(h.calls[0].options.headers['X-CSRF-Token'], undefined);
+  assert.equal(h.state().guestAccountOpen, false);
+  assert.match(h.state().guestAccountMessage, /等待管理员审核/);
+  assert.equal(h.state().data.members[0].accounts, undefined);
+});
+
+test('failed guest account submission preserves draft and re-enables submit', async () => {
+  const h = harness('rating', async () => response({error: '该账号已绑定其他成员'}, false, 400));
+  h.state().guestAccountOpen = true;
+  const button = element({disabled: false});
+  let alert;
+  const fields = {member: '何泾 · #66', handle: 'Taken', note: 'evidence'};
+  const form = element({fields, querySelector: selector => selector === 'button' ? button : null, prepend: value => {alert = value;}});
+  h.nodes.set('#guestAccount', form);
+  h.context.bindGuestAccountEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(button.disabled, false);
+  assert.equal(h.state().guestAccountOpen, true);
+  assert.deepEqual(JSON.parse(JSON.stringify(h.state().guestAccountDraft)), fields);
+  assert.equal(alert.textContent, '该账号已绑定其他成员');
+});
+
+test('guest account submission rejects free text instead of guessing a same-name member', async () => {
+  const h = harness('rating', () => {throw new Error('should not send');});
+  const button = element();
+  const form = element({fields: {member: '何泾', handle: 'Example'}, querySelector: selector => selector === 'button' ? button : null, prepend() {}});
+  h.nodes.set('#guestAccount', form);
+  h.context.bindGuestAccountEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(h.calls.length, 0);
+  assert.match(h.state().guestAccountMessage, /请选择名单/);
+});
+
+for (const approve of [true, false]) {
+  test(`account ${approve ? 'approval' : 'rejection'} uses its own authenticated endpoint`, async () => {
+    const h = harness('admin', async path => response(path === '/api/site' ? seed : path.includes('review-account-submission') ? {ok: true, warning: approve ? 'Rating offline' : null} : emptyQueue));
+    const button = element({dataset: {reviewId: '7', reviewKind: 'account', approve: String(approve)}});
+    button.closest = () => ({querySelectorAll: () => [button]});
+    h.arrays.set('[data-review-id]', [button]);
+    h.context.bindAdminEvents();
+    await button.handlers.click();
+    assert.equal(h.calls[0].path, '/api/admin/review-account-submission');
+    assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+    assert.deepEqual(JSON.parse(h.calls[0].options.body), {submissionId: 7, approve});
+    assert.match(h.state().adminMessage, approve ? /Rating offline/ : /正式数据未修改/);
+  });
+}
+
+test('account review shows member, requested handle, existing handles and approval controls', () => {
+  const h = harness('admin', () => {});
+  h.state().adminReviews = {kind: 'account', submissions: [{id: 4, memberId: 66, memberName: '何泾',
+    school: '大连理工大学', handle: 'NewHandle', existingAccounts: ['OldHandle'], note: '<script>bad</script>', status: 'pending'}], total: 1, page: 1, pages: 1};
+  const html = h.context.adminReviewPage();
+  assert.ok(html.includes('何泾 · CF 账号补充'));
+  assert.ok(html.includes('已有账号：OldHandle'));
+  assert.ok(html.includes('https://codeforces.com/profile/NewHandle'));
+  assert.ok(html.includes('data-review-kind="account"'));
+  assert.ok(html.includes('&lt;script&gt;bad&lt;/script&gt;'));
+  assert.ok(!html.includes('<script>bad</script>'));
+});
+
+test('switching review type resets pagination and requests the account queue', async () => {
+  const h = harness('admin', async () => response({...emptyQueue, kind: 'account'}));
+  const select = element();
+  h.nodes.set('#reviewKind', select);
+  h.state().adminReviewPage = 4;
+  h.context.bindAdminEvents();
+  select.handlers.change({target: {value: 'account'}});
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.state().adminReviewPage, 1);
+  assert.ok(h.calls[0].path.includes('kind=account'));
+  assert.equal(h.state().adminReviews.kind, 'account');
+});
+
 test('account edit sends old and new handles and leaves saved edit mode even when rating sync warns', async () => {
   const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true, warning: 'Rating sync unavailable'}));
   const button = element();

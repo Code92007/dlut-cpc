@@ -55,7 +55,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "refresh-ratings", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -237,6 +237,73 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(len(self.database.payload(self.seed)["members"]), 3)
         self.assertEqual(self.database.roster_submissions(status="approved")["submissions"][0]["reviewer"], "admin")
         self.assertEqual(self.request("review-submission", review, cookie=cookie, csrf=csrf)["status"], 400)
+
+    def test_guest_account_submission_then_authenticated_approval_fetches_ratings(self):
+        member = self.database.add_manual_member("队员")
+        body = {"memberId": member, "handle": "Example", "note": "private evidence", "approve": True, "rating": 9999}
+        with patch("tools.sync_codeforces.fetch_ratings") as fetch:
+            result = self.request("/api/account-submissions", body)
+            self.assertEqual(result["status"], 201)
+            fetch.assert_not_called()
+        submission = result["body"]["submissionId"]
+        self.assertEqual(self.database.payload(self.seed)["members"][0]["accounts"], {})
+        self.assertNotIn("private evidence", json.dumps(self.request("/api/site", method="GET")["body"]))
+        self.assertEqual(self.request("submissions?kind=account", method="GET")["status"], 401)
+        review = {"submissionId": submission, "approve": True, "reviewer": "attacker"}
+        self.assertEqual(self.request("review-account-submission", review)["status"], 401)
+        cookie, csrf = self.login()
+        self.assertEqual(self.request("review-account-submission", review, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("review-account-submission", review, cookie=cookie, csrf=csrf, origin="https://attacker.example")["status"], 403)
+        queue = self.request("submissions?kind=account", method="GET", cookie=cookie)["body"]
+        self.assertEqual((queue["kind"], queue["totalPendingCount"], queue["submissions"][0]["note"]), ("account", 1, "private evidence"))
+        with patch("tools.sync_codeforces.fetch_ratings", return_value=[{"handle": "Example", "rating": 1800, "maxRating": 2300}]) as fetch:
+            approved = self.request("review-account-submission", review, cookie=cookie, csrf=csrf)
+            self.assertEqual(approved["status"], 200, approved)
+            fetch.assert_called_once_with(["Example"])
+        account = self.database.payload(self.seed)["members"][0]["handles"]["codeforces"]
+        self.assertEqual((account["handle"], account["rating"], account["maxRating"]), ("Example", 1800, 2300))
+        self.assertEqual(self.database.account_submissions(status="approved")["submissions"][0]["reviewer"], "admin")
+        self.assertEqual(self.request("review-account-submission", review, cookie=cookie, csrf=csrf)["status"], 400)
+
+    def test_guest_account_request_validation_duplicates_and_shared_rate_limiter(self):
+        member = self.database.add_manual_member("队员")
+        body = {"memberId": member, "handle": "Example"}
+        for origin in ("", "https://attacker.example"):
+            self.assertEqual(self.request("/api/account-submissions", body, origin=origin)["status"], 403)
+        self.assertEqual(self.request("/api/account-submissions", body, headers={"Content-Type": "text/plain"})["status"], 400)
+        for changes in ({"memberId": True}, {"memberId": 99999}, {"handle": "bad;handle"}):
+            self.assertEqual(self.request("/api/account-submissions", {**body, **changes})["status"], 400)
+        self.assertEqual(self.database.account_submissions()["total"], 0)
+        first = self.request("/api/account-submissions", body)
+        duplicate = self.request("/api/account-submissions", {**body, "handle": "eXample"})
+        self.assertEqual((first["status"], duplicate["status"]), (201, 200))
+        self.assertTrue(duplicate["body"]["duplicate"])
+        self.assertEqual(first["body"]["submissionId"], duplicate["body"]["submissionId"])
+        roster = self.submission_fixture()
+        self.submission_limiter = app.SubmissionLimiter()
+        for index in range(20):
+            self.assertIn(self.request("/api/account-submissions" if index % 2 else "/api/roster-submissions", body if index % 2 else roster)["status"], (200, 201))
+        self.assertEqual(self.request("/api/account-submissions", body)["status"], 429)
+        self.assertEqual(self.request("/api/roster-submissions", roster)["status"], 429)
+
+    def test_account_review_rejects_without_fetching_and_rating_failure_retains_approved_binding(self):
+        member = self.database.add_manual_member("队员")
+        rejected, _ = self.database.submit_account(member, "Wrong")
+        approved, _ = self.database.submit_account(member, "Good")
+        cookie, csrf = self.login()
+        with patch("tools.sync_codeforces.fetch_ratings") as fetch:
+            result = self.request("review-account-submission", {"submissionId": rejected, "approve": False}, cookie=cookie, csrf=csrf)
+            self.assertEqual(result["status"], 200)
+            fetch.assert_not_called()
+        with patch("tools.sync_codeforces.fetch_ratings", side_effect=OSError("offline")):
+            result = self.request("review-account-submission", {"submissionId": approved, "approve": True}, cookie=cookie, csrf=csrf)
+        self.assertEqual(result["status"], 200)
+        self.assertIn("offline", result["body"]["warning"])
+        account = self.database.payload(self.seed)["members"][0]["handles"]["codeforces"]
+        self.assertEqual(account["handle"], "Good")
+        self.assertIsNone(account["rating"])
+        self.assertEqual(self.request("submissions?kind=account&status=approved", method="GET", cookie=cookie)["body"]["total"], 1)
+        self.assertEqual(self.request("submissions?kind=invalid", method="GET", cookie=cookie)["status"], 400)
 
     def test_guest_cross_origin_invalid_json_format_and_duplicates_are_safe(self):
         request = self.submission_fixture()
