@@ -93,7 +93,8 @@ class SiteHandler(BaseHTTPRequestHandler):
             media_type += "; charset=utf-8"
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", media_type)
-        self.send_header("Cache-Control", "public, max-age=3600" if cache else "no-cache")
+        cache_asset = cache and path.suffix not in {".js", ".css"}
+        self.send_header("Cache-Control", "public, max-age=3600" if cache_asset else "no-cache")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
         self.send_header("Content-Length", str(len(body)))
