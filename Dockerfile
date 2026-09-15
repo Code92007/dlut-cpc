@@ -11,6 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 COPY app.py /app/app.py
 COPY database.py /app/database.py
+COPY official_imports.py /app/official_imports.py
 COPY schools.py /app/schools.py
 COPY admin_auth.py /app/admin_auth.py
 COPY tools /app/tools
