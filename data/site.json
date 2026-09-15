@@ -1,4 +1,544 @@
 {
+  "accountBindings": [
+    {
+      "name": "徐昊天",
+      "provider": "cpcfinder",
+      "externalId": "123b31ee-fe82-4308-a286-c8622534e0be",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "lingo2",
+            "verified": true,
+            "rating": 1754,
+            "maxRating": 1754,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "毛谦韵",
+      "provider": "cpcfinder",
+      "externalId": "14739e75-38eb-45cf-b463-19bc407628c0",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Aderose_yr",
+            "verified": true,
+            "rating": 1903,
+            "maxRating": 2010,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "刘杰",
+      "provider": "cpcfinder",
+      "externalId": "a4aa75ce-ad21-46a5-b971-9d887aa2b4da",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "r2203liujie",
+            "verified": true,
+            "rating": 1822,
+            "maxRating": 1822,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "刘兆洲",
+      "provider": "cpcfinder",
+      "externalId": "e9ce07b4-f663-485c-a1ac-195c90297447",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "EternalEpic",
+            "verified": true,
+            "rating": 2191,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2191
+          }
+        ]
+      }
+    },
+    {
+      "name": "李泽与",
+      "provider": "cpcfinder",
+      "externalId": "f0ea69ce-da2c-436a-854d-d8a982e203c3",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "International_River",
+            "verified": true,
+            "rating": 2230,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2264
+          },
+          {
+            "handle": "InterRiver",
+            "verified": true,
+            "rating": 2125,
+            "maxRating": 2125,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "杨君泓",
+      "provider": "manual",
+      "externalId": "yang-junhong-user-confirmed",
+      "createMember": true,
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Lance_J",
+            "verified": true,
+            "rating": 2024,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2024
+          }
+        ]
+      }
+    },
+    {
+      "name": "时佳骏",
+      "provider": "cpcfinder",
+      "externalId": "cee139fd-e1e1-4139-9e19-bfe65cf85c22",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Astral_Plane",
+            "verified": true,
+            "rating": 1896,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1907
+          }
+        ]
+      }
+    },
+    {
+      "name": "毛祥宇",
+      "provider": "cpcfinder",
+      "externalId": "3f030e59-3b07-4b52-b59e-261cefaa324c",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Emertyst",
+            "verified": true,
+            "rating": 1796,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1931
+          }
+        ]
+      }
+    },
+    {
+      "name": "冯子祥",
+      "provider": "cpcfinder",
+      "externalId": "08c16c96-c456-4144-af51-494a33c6bde0",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "abhwolxq",
+            "verified": true,
+            "rating": 1717,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1877
+          }
+        ]
+      }
+    },
+    {
+      "name": "黄承诺",
+      "provider": "cpcfinder",
+      "externalId": "c09115b2-959e-441b-bd56-7b21a43cdd42",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "SorryNaCN",
+            "verified": true,
+            "rating": 2168,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2168
+          }
+        ]
+      }
+    },
+    {
+      "name": "夏鸿康",
+      "provider": "cpcfinder",
+      "externalId": "93d16d76-63f4-437f-bfbd-301f2c43915e",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Operation27",
+            "verified": true,
+            "rating": 2243,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2281
+          }
+        ]
+      }
+    },
+    {
+      "name": "高盛轩",
+      "provider": "cpcfinder",
+      "externalId": "dbeac081-aa11-4b26-b352-7591d0a0db07",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "paekae",
+            "verified": true,
+            "rating": 2101,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2101
+          }
+        ]
+      }
+    },
+    {
+      "name": "谭傲",
+      "provider": "cpcfinder",
+      "externalId": "d7a9a7b4-d731-45ab-80d4-84e07131ae9b",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "tanao_",
+            "verified": true,
+            "rating": 1980,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2041
+          }
+        ]
+      }
+    },
+    {
+      "name": "陈英奇",
+      "provider": "cpcfinder",
+      "externalId": "af38a535-d301-41da-af95-e59963bdef4b",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Chenyingqi",
+            "verified": true,
+            "rating": 1949,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1949
+          }
+        ]
+      }
+    },
+    {
+      "name": "卢品仁",
+      "provider": "cpcfinder",
+      "externalId": "40467107-4557-4087-a2da-586d51f29413",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "poplpr",
+            "verified": true,
+            "rating": 1860,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1860
+          }
+        ]
+      }
+    },
+    {
+      "name": "张思凡",
+      "provider": "cpcfinder",
+      "externalId": "d8d36605-9984-48f9-9e95-64c4784fd859",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "ileln",
+            "verified": true,
+            "rating": 1748,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1822
+          }
+        ]
+      }
+    },
+    {
+      "name": "蔡廷漳",
+      "provider": "cpcfinder",
+      "externalId": "378e8b34-58e9-49c7-b6ec-9e420fcfb2c9",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "AwA_cc",
+            "verified": true,
+            "rating": 1713,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1873
+          }
+        ]
+      }
+    },
+    {
+      "name": "赖哲剑",
+      "provider": "cpcfinder",
+      "externalId": "0238376d-2424-4966-a987-a4514e28c651",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "742949301",
+            "verified": true,
+            "rating": 1516,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1630
+          }
+        ]
+      }
+    },
+    {
+      "name": "赵一鹏",
+      "provider": "cpcfinder",
+      "externalId": "1c7c9e51-83b9-47ed-b464-ff95600f170f",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Agakiss",
+            "verified": true,
+            "rating": 1476,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1493
+          }
+        ]
+      }
+    },
+    {
+      "name": "江雨桐",
+      "provider": "cpcfinder",
+      "externalId": "b57b5bdd-11e7-4beb-932a-725c795196a9",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Jyt",
+            "verified": true,
+            "rating": 2494,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2494
+          }
+        ]
+      }
+    },
+    {
+      "name": "濮凡轶",
+      "provider": "cpcfinder",
+      "externalId": "824e66a7-df5d-46f7-a279-9cf9ae9ca4d1",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "pufanyi",
+            "verified": true,
+            "rating": 2109,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2284
+          }
+        ]
+      }
+    },
+    {
+      "name": "李冠霖",
+      "provider": "cpcfinder",
+      "externalId": "9dbb7355-de3c-45d0-803f-dc7502a2742c",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "LiGuanlin",
+            "verified": true,
+            "rating": 1556,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1556
+          }
+        ]
+      }
+    },
+    {
+      "name": "葛俊辰",
+      "provider": "cpcfinder",
+      "externalId": "13d3c029-d1e8-4076-b06b-ef723a1685c1",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "GJC_xj",
+            "verified": true,
+            "rating": 1690,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1839
+          }
+        ]
+      }
+    },
+    {
+      "name": "吴励宁",
+      "provider": "cpcfinder",
+      "externalId": "05466c05-ad25-4124-a85f-5a64513b5065",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "sher_wu",
+            "verified": true,
+            "rating": 2159,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2159
+          }
+        ]
+      }
+    },
+    {
+      "name": "吴耀宗",
+      "provider": "cpcfinder",
+      "externalId": "df7dacca-e329-43d7-beb5-f123a0c3e169",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "DDDickWWW",
+            "verified": true,
+            "rating": 1916,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1916
+          }
+        ]
+      }
+    },
+    {
+      "name": "侯硕伟",
+      "provider": "cpcfinder",
+      "externalId": "32471008-8f3e-4209-b0b9-cd03e575d733",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "DuanYue",
+            "verified": true,
+            "rating": 1630,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1644
+          }
+        ]
+      }
+    },
+    {
+      "name": "欧阳东进",
+      "provider": "cpcfinder",
+      "externalId": "facf2f3f-7153-446c-bccc-fdb389f83122",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "OuOu",
+            "verified": true,
+            "rating": 1129,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1129
+          }
+        ]
+      }
+    },
+    {
+      "name": "潘健",
+      "provider": "cpcfinder",
+      "externalId": "b21e89d3-28c7-4baa-8491-67faa41c81d1",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "L1bra",
+            "verified": true,
+            "rating": 1677,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1785
+          }
+        ]
+      }
+    },
+    {
+      "name": "申永琦",
+      "provider": "cpcfinder",
+      "externalId": "11117d86-f42d-4187-bf70-b023e352a561",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "911Boom",
+            "verified": true,
+            "rating": 1860,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1905
+          }
+        ]
+      }
+    },
+    {
+      "name": "陈德威",
+      "provider": "cpcfinder",
+      "externalId": "e8580e96-012a-4241-8d50-242816a51202",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "shining_qwq",
+            "verified": true,
+            "rating": 1595,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1724
+          }
+        ]
+      }
+    },
+    {
+      "name": "戴宁凯",
+      "provider": "manual",
+      "externalId": "dai-ningkai-user-confirmed",
+      "createMember": true,
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "tttfred",
+            "verified": true,
+            "rating": 1508,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 1580
+          }
+        ]
+      }
+    },
+    {
+      "name": "钟剑辉",
+      "provider": "cpcfinder",
+      "externalId": "d407521f-ad3f-47c3-8301-5c6c6236ab3f",
+      "accounts": {
+        "codeforces": [
+          {
+            "handle": "Brilliance_Z",
+            "verified": true,
+            "rating": 2105,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "maxRating": 2105
+          },
+          {
+            "handle": "Brilliance_2",
+            "verified": true,
+            "rating": 1939,
+            "maxRating": 2084,
+            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+          }
+        ]
+      }
+    }
+  ],
+  "memberOverrides": [
+    {
+      "provider": "cpcfinder",
+      "externalId": "6330da69-2f64-475a-93f2-a8e50225f3df",
+      "displayName": "卜方昱",
+      "aliases": [
+        "Fangyu Bu"
+      ]
+    }
+  ],
   "meta": {
     "school": "大连理工大学",
     "updatedAt": "2026-09-15",

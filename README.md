@@ -10,6 +10,7 @@
 - `/honor`：按年份、成绩、关键词检索获牌及未获牌记录。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
 - `/training`：牛客暑期多校、杭电多校和队内训练榜单。
+- `/admin`：管理员登录与成员、账号、姓名别名、历史参赛成绩补录。访客只读。
 
 页面不依赖前端构建工具，图表使用原生 SVG 渲染。
 
@@ -68,6 +69,35 @@ python3 tools/sync_training_data.py
 
 ### 人工补录
 
+账号关联的可版本控制快照放在 `data/site.json` 的 `accountBindings` 中，以 CPC Finder UUID 对应选手；该来源没有收录的成员可显式设置 `createMember: true`。每人可保存任意多个 Codeforces 账号。主号取所有账号中 `maxRating` 最高者，与加入顺序无关；最高分相同则按当前分、账号名字稳定排序。成员页分别显示主号最高分、当前分和副号列表，账号搜索包含副号。
+
+`memberOverrides` 保存稳定选手 UUID、中文显示姓名与报名别名。例如 `Fangyu Bu` 显示为“卜方昱”，英文名仍可检索；映射同时作用于成员页和参赛成绩。管理员后续修改的显示名不会被启动快照覆盖。
+
+拉取所有已绑定账号的当前分与历史最高分：
+
+```bash
+python3 tools/sync_codeforces.py
+# 生产容器只更新已挂载数据库，不改容器内的公开快照
+docker compose exec -T dlut-cpc python tools/sync_codeforces.py --database-only
+```
+
+Rating 来自 Codeforces 官方 `user.info` API。同步按账号名匹配，不依赖返回数组顺序；接口失败保留旧分数，没有评级的账号保存为空，不伪造 0。重启时仅导入不早于数据库评级更新时间的快照。CPC Finder Rating 是该平台选手资料中的独立分数，只用于展示与对应排序，不参与我们自己的奖牌榜排序。
+
+### 网站管理员
+
+部署或更新后，生成管理员密码并重启服务：
+
+```bash
+docker compose exec -T dlut-cpc python tools/manage_data.py init-admin
+docker compose restart dlut-cpc
+```
+
+命令仅首次创建 `runtime/admin_password`（权限 `0600`），显示生成的随机密码；已存在时拒绝覆盖。用户名默认 `admin`，可通过 `ADMIN_USERNAME` 配置。密码文件在持久化卷中，不提交 Git，不从网站提供下载。也可以通过 `ADMIN_PASSWORD` 环境变量配置至少 12 位密码；未配置或密码过短时禁止登录。公开站点应始终通过 HTTPS 访问。
+
+访问 `/admin` 登录后可补录未被 CPC Finder 收录的古早成员、追加主副账号、设置中文名和别名、录入历史成绩（金银铜铁）。成员选择含独立 ID，同名选手不会被自动合并；补录姓名已存在时需显式确认是独立同名成员。账号归属不能同时绑定两人。人工数据写入 SQLite，重建容器和公开同步均不会删除。
+
+管理 API 使用服务端八小时会话、HttpOnly/SameSite Cookie、HTTPS Secure Cookie、同源校验与 CSRF 令牌。未登录访客不能执行写入操作；登录失败有限流，退出立即撤销会话，服务重启后需重新登录。内部备注不进入公开成员接口。
+
 无法从公开网站找到的老成员直接写入 SQLite，不需要修改前端：
 
 ```bash
@@ -82,6 +112,12 @@ python3 tools/manage_data.py add-member \
 # 给成员绑定经本人或队内确认的 Codeforces 账号
 python3 tools/manage_data.py set-handle \
   --member-id 76 --handle example_handle --rating 2100
+
+# 再执行 set-handle 可追加副号，原账号会保留
+python3 tools/manage_data.py set-handle --member-id 76 --handle another_handle
+
+# 中文显示名与报名别名
+python3 tools/manage_data.py set-name --member-id 76 --name 张三 --alias 'San Zhang'
 
 # 新增历史奖项，并通过成员 ID 关联队员
 python3 tools/manage_data.py add-honor \

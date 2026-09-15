@@ -3,7 +3,7 @@ import sqlite3
 import unittest
 from pathlib import Path
 
-from database import Database, SCHEMA
+from database import Database, SCHEMA, SCHEMA_VERSION
 
 
 def source(name="CPC Finder", url="https://example.com/source"):
@@ -176,6 +176,8 @@ class DatabaseTests(unittest.TestCase):
     def test_v2_migration_preserves_manual_members_and_handles(self):
         old_path = Path(self.temporary.name) / "old.sqlite3"
         old_schema = SCHEMA.replace("    iron_count INTEGER,\n", "").replace("    official INTEGER,\n", "")
+        old_schema = old_schema.replace("    display_name TEXT,\n", "").replace("    max_rating INTEGER,\n", "").replace("    rating_updated_at TEXT,\n", "")
+        old_schema = old_schema.replace("PRIMARY KEY(member_id, platform, handle)", "PRIMARY KEY(member_id, platform)")
         with sqlite3.connect(old_path) as connection:
             connection.executescript(old_schema)
             connection.execute("INSERT INTO members(id, name, normalized_name, is_manual) VALUES (100, '远古成员', '远古成员', 1)")
@@ -187,7 +189,80 @@ class DatabaseTests(unittest.TestCase):
         self.assertTrue(member["manual"])
         self.assertEqual(member["handles"]["codeforces"]["handle"], "legacy")
         with migrated.connect() as connection:
-            self.assertEqual(connection.execute("PRAGMA user_version").fetchone()[0], 3)
+            self.assertEqual(connection.execute("PRAGMA user_version").fetchone()[0], SCHEMA_VERSION)
+
+    def test_multiple_accounts_select_highest_max_rating_not_current_or_insertion_order(self):
+        member_id = self.database.payload(self.seed)["members"][0]["id"]
+        self.database.set_handle(member_id, "codeforces", "older", rating=2200)
+        self.database.set_handle(member_id, "codeforces", "newer", rating=1500)
+        self.database.update_account_ratings([
+            {"handle": "older", "rating": 2200, "maxRating": 2250},
+            {"handle": "newer", "rating": 1500, "maxRating": 2600},
+        ], "2099-01-01T00:00:00+00:00")
+        member = next(m for m in self.database.payload(self.seed)["members"] if m["id"] == member_id)
+        self.assertEqual(member["handles"]["codeforces"]["handle"], "newer")
+        self.assertEqual([a["handle"] for a in member["accounts"]["codeforces"]], ["newer", "older"])
+        self.database.set_handle(member_id, "codeforces", "NEWER")
+        self.database.initialize(self.seed)
+        member = next(m for m in self.database.payload(self.seed)["members"] if m["id"] == member_id)
+        self.assertEqual(len(member["accounts"]["codeforces"]), 2)
+        self.assertEqual(member["handles"]["codeforces"]["rating"], 1500)
+
+    def test_one_account_cannot_be_assigned_to_two_members(self):
+        ids = [m["id"] for m in self.database.payload(self.seed)["members"]]
+        self.database.set_handle(ids[0], "codeforces", "owner")
+        with self.assertRaises(ValueError):
+            self.database.set_handle(ids[1], "codeforces", "OWNER")
+
+    def test_manual_account_identity_survives_another_same_name_member(self):
+        self.seed["accountBindings"] = [{"name": "Old", "provider": "manual", "externalId": "old-1", "createMember": True,
+                                        "accounts": {"codeforces": [{"handle": "old", "verified": True}]}}]
+        self.database.initialize(self.seed)
+        owner = next(m for m in self.database.payload(self.seed)["members"] if m["name"] == "Old")
+        other = self.database.add_manual_member("Old")
+        self.database.initialize(self.seed)
+        payload = self.database.payload(self.seed)
+        self.assertEqual(next(m for m in payload["members"] if m["id"] == owner["id"])["handles"]["codeforces"]["handle"], "old")
+        self.assertEqual(next(m for m in payload["members"] if m["id"] == other)["accounts"], {})
+
+    def test_seed_bindings_preserve_newer_db_ratings_and_secondary_accounts(self):
+        self.seed["accountBindings"] = [{"provider": "cpcfinder", "externalId": "student-1", "name": "张三",
+                                        "accounts": {"codeforces": [{"handle": "primary", "verified": True, "rating": 1800,
+                                        "maxRating": 2000, "ratingUpdatedAt": "2025-01-01T00:00:00+00:00"}]}}]
+        self.database.initialize(self.seed)
+        member = next(m for m in self.database.payload(self.seed)["members"] if m["name"] == "张三")
+        self.database.set_handle(member["id"], "codeforces", "secondary")
+        self.database.update_account_ratings([{"handle": "primary", "rating": 2100, "maxRating": 2400}], "2099-01-01T00:00:00+00:00")
+        self.database.initialize(self.seed)
+        member = next(m for m in self.database.payload(self.seed)["members"] if m["name"] == "张三")
+        self.assertEqual(member["handles"]["codeforces"]["rating"], 2100)
+        self.assertEqual(member["handles"]["codeforces"]["maxRating"], 2400)
+        self.assertEqual(len(member["accounts"]["codeforces"]), 2)
+
+    def test_name_alias_applies_to_member_and_honor_without_changing_identity(self):
+        self.seed["memberOverrides"] = [{"provider": "cpcfinder", "externalId": "student-1", "displayName": "中文名", "aliases": ["English Name"]}]
+        self.database.initialize(self.seed)
+        payload = self.database.payload(self.seed)
+        member = next(m for m in payload["members"] if m["name"] == "中文名")
+        self.assertEqual(len(payload["members"]), 3)
+        self.assertIn("English Name", member["aliases"])
+        self.assertEqual(payload["honors"][0]["members"][0], "中文名")
+        self.database.set_display_name(member["id"], "人工修订名")
+        self.database.initialize(self.seed)
+        self.assertEqual(next(m for m in self.database.payload(self.seed)["members"] if m["id"] == member["id"])["name"], "人工修订名")
+
+    def test_manual_honor_uses_ids_for_same_name_members_and_is_atomic(self):
+        original = next(m for m in self.database.payload(self.seed)["members"] if m["name"] == "张三")
+        other_id = self.database.add_manual_member("张三")
+        record = {"event": "2009 老比赛", "date": "2009-10-01", "team": "历史队", "medal": "铁牌"}
+        with self.assertRaises(ValueError):
+            self.database.add_manual_honor_with_members(record, [other_id, 999999])
+        self.assertEqual(len(self.database.payload(self.seed)["honors"]), 1)
+        self.database.add_manual_honor_with_members(record, [other_id])
+        self.database.initialize(self.seed)
+        payload = self.database.payload(self.seed)
+        self.assertEqual(next(m for m in payload["members"] if m["id"] == original["id"])["medals"]["iron"], 0)
+        self.assertEqual(next(m for m in payload["members"] if m["id"] == other_id)["medals"]["iron"], 1)
 
     def test_same_external_award_different_snapshot_id_updates_existing_record(self):
         enriched = seed_data()

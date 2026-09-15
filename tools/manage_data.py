@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import secrets
 import sqlite3
 import sys
 from pathlib import Path
@@ -45,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_member.add_argument("--source-name", default="人工录入")
     add_member.add_argument("--source-url", default="")
 
-    handle = commands.add_parser("set-handle", help="set a verified platform account for a member")
+    handle = commands.add_parser("set-handle", help="add or update an account without removing other accounts")
     handle.add_argument("--member-id", type=int, required=True)
     handle.add_argument("--platform", default="codeforces")
     handle.add_argument("--handle", required=True)
@@ -53,6 +55,14 @@ def build_parser() -> argparse.ArgumentParser:
     handle.add_argument("--unverified", action="store_true")
     handle.add_argument("--source-name", default="人工确认")
     handle.add_argument("--source-url", default="")
+
+    rename = commands.add_parser("set-name", help="set the display name and retain registration aliases")
+    rename.add_argument("--member-id", type=int, required=True)
+    rename.add_argument("--name", required=True)
+    rename.add_argument("--alias", action="append", default=[])
+
+    admin = commands.add_parser("init-admin", help="create a random admin password file; never overwrites an existing password")
+    admin.add_argument("--password-file", type=Path, default=ROOT / "runtime/admin_password")
 
     add_honor = commands.add_parser("add-honor", help="add an older or otherwise missing honor")
     add_honor.add_argument("--event", required=True)
@@ -88,6 +98,22 @@ def main() -> None:
     seed = load_seed(args.site_data)
     database = Database(args.database)
     database.initialize(seed)
+
+    if args.command == "init-admin":
+        args.password_file.parent.mkdir(parents=True, exist_ok=True)
+        password = secrets.token_urlsafe(24)
+        try:
+            descriptor = os.open(args.password_file, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            raise SystemExit("Admin password already exists; existing password retained")
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(password + "\n")
+        print(f"Admin username: admin\nAdmin password: {password}\nRestart the service to enable login.")
+        return
+    if args.command == "set-name":
+        database.set_display_name(args.member_id, args.name, args.alias)
+        print(f"Updated member {args.member_id}")
+        return
 
     if args.command == "list-members":
         query = args.query.casefold().strip()

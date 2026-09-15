@@ -11,7 +11,7 @@ from typing import Iterable
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 
 def normalize_name(value: str) -> str:
@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS members (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     normalized_name TEXT NOT NULL,
+    display_name TEXT,
     entry_year INTEGER,
     graduation_year INTEGER,
     status TEXT NOT NULL DEFAULT 'auto',
@@ -75,12 +76,20 @@ CREATE TABLE IF NOT EXISTS member_identities (
 CREATE TABLE IF NOT EXISTS member_handles (
     member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
     platform TEXT NOT NULL,
-    handle TEXT NOT NULL,
+    handle TEXT NOT NULL COLLATE NOCASE,
     rating INTEGER,
+    max_rating INTEGER,
+    rating_updated_at TEXT,
     verified INTEGER NOT NULL DEFAULT 0,
     source_id INTEGER REFERENCES sources(id),
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(member_id, platform)
+    PRIMARY KEY(member_id, platform, handle)
+);
+
+CREATE TABLE IF NOT EXISTS member_aliases (
+    member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    alias TEXT NOT NULL,
+    PRIMARY KEY(member_id, alias)
 );
 
 CREATE TABLE IF NOT EXISTS member_sources (
@@ -179,6 +188,30 @@ class Database:
             columns = {row["name"] for row in connection.execute(f"PRAGMA table_info({table})")}
             if column not in columns:
                 connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} INTEGER")
+        member_columns = {row["name"] for row in connection.execute("PRAGMA table_info(members)")}
+        if "display_name" not in member_columns:
+            connection.execute("ALTER TABLE members ADD COLUMN display_name TEXT")
+        handle_columns = list(connection.execute("PRAGMA table_info(member_handles)"))
+        if not any(row["name"] == "handle" and row["pk"] for row in handle_columns):
+            # Rebuild the old one-account-per-platform table without losing ownership.
+            connection.execute(
+                "CREATE TABLE member_handles_v4 ("
+                "member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE, "
+                "platform TEXT NOT NULL, handle TEXT NOT NULL COLLATE NOCASE, rating INTEGER, max_rating INTEGER, "
+                "rating_updated_at TEXT, verified INTEGER NOT NULL DEFAULT 0, "
+                "source_id INTEGER REFERENCES sources(id), updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, "
+                "PRIMARY KEY(member_id, platform, handle))"
+            )
+            connection.execute(
+                "INSERT INTO member_handles_v4(member_id, platform, handle, rating, rating_updated_at, verified, source_id, updated_at) "
+                "SELECT member_id, platform, handle, rating, CASE WHEN rating IS NOT NULL "
+                "THEN strftime('%Y-%m-%dT%H:%M:%S+00:00', updated_at) END, "
+                "verified, source_id, updated_at FROM member_handles"
+            )
+            connection.execute("DROP TABLE member_handles")
+            connection.execute("ALTER TABLE member_handles_v4 RENAME TO member_handles")
+        elif not any(row["name"] == "max_rating" for row in handle_columns):
+            connection.execute("ALTER TABLE member_handles ADD COLUMN max_rating INTEGER")
         connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     def _source(self, connection: sqlite3.Connection, source: dict | None, *, manual: bool = False) -> int:
@@ -282,9 +315,10 @@ class Database:
             "INSERT OR IGNORE INTO member_sources(member_id, source_id, role, is_manual) VALUES (?, ?, 'roster', ?)",
             (member_id, source_id, int(manual)),
         )
-        for platform, account in (detail.get("handles") or {}).items():
-            if account and account.get("handle"):
-                self._set_handle(connection, member_id, platform, account, source_id)
+        for platform, value in (detail.get("handles") or {}).items():
+            for account in value if isinstance(value, list) else [value]:
+                if account and account.get("handle"):
+                    self._set_handle(connection, member_id, platform, account, source_id)
         return member_id
 
     def _set_handle(
@@ -295,15 +329,41 @@ class Database:
         account: dict,
         source_id: int,
     ) -> None:
+        platform = platform.strip().casefold()
+        handle = str(account["handle"]).strip()
+        if not platform or not handle or ";" in handle:
+            raise ValueError("platform and a single account handle are required")
+        owner = connection.execute(
+            "SELECT member_id FROM member_handles WHERE platform=? AND handle=? COLLATE NOCASE AND member_id<>?",
+            (platform, handle, member_id),
+        ).fetchone()
+        if owner:
+            raise ValueError(f"{platform} account {handle} already belongs to member {owner['member_id']}")
+        rating_updated_at = account.get("ratingUpdatedAt")
+        if "rating" in account and not rating_updated_at:
+            rating_updated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
         connection.execute(
-            "INSERT INTO member_handles(member_id, platform, handle, rating, verified, source_id) VALUES (?, ?, ?, ?, ?, ?) "
-            "ON CONFLICT(member_id, platform) DO UPDATE SET handle=excluded.handle, rating=excluded.rating, "
-            "verified=excluded.verified, source_id=excluded.source_id, updated_at=CURRENT_TIMESTAMP",
+            "INSERT INTO member_handles(member_id, platform, handle, rating, max_rating, rating_updated_at, verified, source_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(member_id, platform, handle) DO UPDATE SET "
+            "rating=CASE WHEN excluded.rating_updated_at IS NOT NULL AND "
+            "(member_handles.rating_updated_at IS NULL OR excluded.rating_updated_at>=member_handles.rating_updated_at) "
+            "THEN excluded.rating ELSE member_handles.rating END, "
+            "max_rating=CASE WHEN excluded.rating_updated_at IS NOT NULL AND "
+            "(member_handles.rating_updated_at IS NULL OR excluded.rating_updated_at>=member_handles.rating_updated_at) "
+            "THEN COALESCE(excluded.max_rating, member_handles.max_rating) ELSE member_handles.max_rating END, "
+            "rating_updated_at=CASE WHEN excluded.rating_updated_at IS NOT NULL AND "
+            "(member_handles.rating_updated_at IS NULL OR excluded.rating_updated_at>=member_handles.rating_updated_at) "
+            "THEN excluded.rating_updated_at ELSE member_handles.rating_updated_at END, "
+            "verified=MAX(member_handles.verified, excluded.verified), "
+            "source_id=CASE WHEN excluded.verified THEN excluded.source_id ELSE member_handles.source_id END, "
+            "updated_at=CURRENT_TIMESTAMP",
             (
                 member_id,
-                platform.casefold(),
-                str(account["handle"]),
+                platform,
+                handle,
                 account.get("rating"),
+                account.get("maxRating"),
+                rating_updated_at,
                 int(bool(account.get("verified"))),
                 source_id,
             ),
@@ -430,6 +490,34 @@ class Database:
         for member in site.get("manualMembers", []):
             source_id = self._source(connection, member.get("source"), manual=True)
             self._upsert_member(connection, member, source_id, manual=True)
+        for binding in site.get("accountBindings", []):
+            member_id = self._find_member(connection, binding)
+            source_id = self._source(connection, binding.get("source") or {"name": "队内人工确认"}, manual=True)
+            if member_id is None:
+                if not binding.get("createMember"):
+                    raise ValueError(f"account binding has no unambiguous member: {binding.get('name')}")
+                if not binding.get("externalId") and connection.execute("SELECT 1 FROM members WHERE normalized_name=?", (normalize_name(binding["name"]),)).fetchone():
+                    raise ValueError(f"account binding is ambiguous: {binding['name']}")
+                member_id = self._upsert_member(connection, {**binding, "status": "unknown"}, source_id, manual=True)
+            else:
+                name = connection.execute("SELECT name FROM members WHERE id=?", (member_id,)).fetchone()["name"]
+                if normalize_name(name) != normalize_name(binding["name"]):
+                    raise ValueError(f"account binding name does not match member {member_id}: {binding['name']}")
+            if binding.get("provider") and binding.get("externalId"):
+                connection.execute(
+                    "INSERT OR IGNORE INTO member_identities(provider, external_id, member_id, source_id) VALUES (?, ?, ?, ?)",
+                    (binding["provider"], binding["externalId"], member_id, source_id),
+                )
+            for platform, accounts in binding.get("accounts", {}).items():
+                for account in accounts:
+                    self._set_handle(connection, member_id, platform, account, source_id)
+        for override in site.get("memberOverrides", []):
+            member_id = self._find_member(connection, override)
+            if member_id is None:
+                raise ValueError(f"name override has no unambiguous member: {override.get('externalId')}")
+            display_name = connection.execute("SELECT display_name FROM members WHERE id=?", (member_id,)).fetchone()["display_name"]
+            if not display_name or display_name == override["displayName"]:
+                self._set_display_name(connection, member_id, override["displayName"], override.get("aliases", []))
         connection.execute(
             "INSERT INTO metadata(key, value) VALUES ('data_updated_at', ?) "
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
@@ -486,13 +574,61 @@ class Database:
                 connection,
                 member_id,
                 platform,
-                {"handle": handle, "rating": rating, "verified": verified},
+                {"handle": handle, "verified": verified, **({"rating": rating} if rating is not None else {})},
                 source_id,
             )
+
+    @staticmethod
+    def _set_display_name(connection: sqlite3.Connection, member_id: int, name: str, aliases: list[str]) -> None:
+        name = name.strip()
+        if not name:
+            raise ValueError("display name cannot be empty")
+        row = connection.execute("SELECT name, display_name FROM members WHERE id=?", (member_id,)).fetchone()
+        if not row:
+            raise ValueError(f"member {member_id} does not exist")
+        for alias in [row["name"], row["display_name"], *aliases]:
+            if alias and alias.strip() and alias.strip() != name:
+                connection.execute("INSERT OR IGNORE INTO member_aliases(member_id, alias) VALUES (?, ?)", (member_id, alias.strip()))
+        connection.execute("UPDATE members SET display_name=?, updated_at=CURRENT_TIMESTAMP WHERE id=?", (name, member_id))
+
+    def set_display_name(self, member_id: int, name: str, aliases: list[str] | None = None) -> None:
+        with self.connect() as connection:
+            self._set_display_name(connection, member_id, name, aliases or [])
+
+    def update_account_ratings(self, updates: list[dict], timestamp: str) -> None:
+        with self.connect() as connection:
+            for update in updates:
+                connection.execute(
+                    "UPDATE member_handles SET rating=?, max_rating=?, rating_updated_at=?, updated_at=CURRENT_TIMESTAMP "
+                    "WHERE platform='codeforces' AND handle=? COLLATE NOCASE "
+                    "AND (rating_updated_at IS NULL OR rating_updated_at<=?)",
+                    (update.get("rating"), update.get("maxRating"), timestamp, update["handle"], timestamp),
+                )
 
     def add_manual_honor(self, record: dict) -> str:
         with self.connect() as connection:
             return self._upsert_honor(connection, {**record, "manual": True}, manual=True)
+
+    def add_manual_honor_with_members(self, record: dict, member_ids: list[int]) -> str:
+        with self.connect() as connection:
+            existing = connection.execute(
+                "SELECT id FROM honors WHERE date=? AND event=? AND normalized_team=? AND is_manual=0",
+                (record.get("date", ""), record.get("event", ""), self._normalize_team(record.get("team", ""))),
+            ).fetchone()
+            if existing:
+                raise ValueError("该队伍的公开参赛成绩已存在，不能重复补录")
+            for member_id in member_ids:
+                if not connection.execute("SELECT 1 FROM members WHERE id=?", (member_id,)).fetchone():
+                    raise ValueError(f"member {member_id} does not exist")
+            honor_id = self._upsert_honor(connection, {**record, "members": [], "memberDetails": [], "manual": True}, manual=True)
+            source_id = self._source(connection, record.get("source"), manual=True)
+            connection.execute("DELETE FROM honor_members WHERE honor_id=?", (honor_id,))
+            for position, member_id in enumerate(member_ids):
+                connection.execute(
+                    "INSERT INTO honor_members(honor_id, member_id, position, source_id, is_manual) VALUES (?, ?, ?, ?, 1)",
+                    (honor_id, member_id, position, source_id),
+                )
+            return honor_id
 
     def link_member(self, honor_id: str, member_id: int, *, source: dict | None = None) -> None:
         with self.connect() as connection:
@@ -537,7 +673,7 @@ class Database:
         result = []
         for row in rows:
             member_rows = connection.execute(
-                "SELECT m.id, m.name, mi.external_id AS cpcfinder_id FROM honor_members hm "
+                "SELECT m.id, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
                 "JOIN members m ON m.id=hm.member_id "
                 "LEFT JOIN member_identities mi ON mi.member_id=m.id AND mi.provider='cpcfinder' "
                 "WHERE hm.honor_id=? ORDER BY hm.position, m.id",
@@ -591,7 +727,8 @@ class Database:
                 (row["id"],),
             ).fetchall()
             handles = connection.execute(
-                "SELECT platform, handle, rating, verified FROM member_handles WHERE member_id=?",
+                "SELECT platform, handle, rating, max_rating, rating_updated_at, verified FROM member_handles WHERE member_id=? "
+                "ORDER BY platform, max_rating DESC, rating DESC, handle COLLATE NOCASE",
                 (row["id"],),
             ).fetchall()
             sources = connection.execute(
@@ -630,14 +767,21 @@ class Database:
             status = row["status"]
             if status == "auto":
                 status = "current" if activity_years and max(activity_years) >= current_year - 2 else "alumni"
-            account_map = {
-                item["platform"]: {
+            accounts: dict[str, list[dict]] = {}
+            for item in handles:
+                accounts.setdefault(item["platform"], []).append({
                     "handle": item["handle"],
                     "rating": item["rating"],
+                    "maxRating": item["max_rating"],
+                    "ratingUpdatedAt": item["rating_updated_at"],
                     "verified": bool(item["verified"]),
-                }
-                for item in handles
-            }
+                })
+            account_map = {platform: items[0] for platform, items in accounts.items()}
+            aliases = [item["alias"] for item in connection.execute(
+                "SELECT alias FROM member_aliases WHERE member_id=? ORDER BY alias", (row["id"],)
+            )]
+            if row["display_name"] and row["name"] != row["display_name"] and row["name"] not in aliases:
+                aliases.append(row["name"])
             teams_by_key: dict[str, str] = {}
             for honor in honors:
                 teams_by_key.setdefault(self._normalize_team(honor["team"]), honor["team"])
@@ -645,7 +789,8 @@ class Database:
             result.append(
                 {
                     "id": row["id"],
-                    "name": row["name"],
+                    "name": row["display_name"] or row["name"],
+                    "aliases": aliases,
                     "entryYear": row["entry_year"],
                     "graduationYear": row["graduation_year"],
                     "status": status,
@@ -656,6 +801,7 @@ class Database:
                     "honorCount": sum(medals[key] for key in ("gold", "silver", "bronze")) if public_stats else sum(honor["medal"] != "铁牌" for honor in honors),
                     "medals": medals,
                     "handles": account_map,
+                    "accounts": accounts,
                     "cpcfinder": (
                         {
                             "rating": public_stats["rating"],

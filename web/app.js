@@ -1,7 +1,7 @@
 const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
-const routes = new Set(["home", "honor", "rating", "training"]);
+const routes = new Set(["home", "honor", "rating", "training", "admin"]);
 const state = {
   data: null,
   honorYear: "all",
@@ -12,6 +12,10 @@ const state = {
   memberSort: "recent",
   trainingId: null,
   trainingSeries: "all",
+  adminSession: null,
+  adminView: "members",
+  adminMessage: "",
+  adminError: false,
 };
 
 const escapeHtml = (value) => String(value ?? "")
@@ -53,6 +57,7 @@ function navigate(route, push = true) {
   if (push && location.pathname !== `/${route}`) history.pushState({}, "", `/${route}`);
   updateNav(route);
   renderRoute(route);
+  if (route === "admin") loadAdminSession();
   window.scrollTo({ top: 0, behavior: "instant" });
   app.focus({ preventScroll: true });
 }
@@ -162,11 +167,22 @@ function honorPage(data) {
 }
 
 function ratingColor(rating) {
-  if (!rating) return "gray";
+  if (rating == null) return "gray";
   if (rating >= 2400) return "red";
   if (rating >= 2100) return "orange";
   if (rating >= 1900) return "purple";
-  return "blue";
+  if (rating >= 1600) return "blue";
+  if (rating >= 1400) return "cyan";
+  if (rating >= 1200) return "green";
+  return "gray";
+}
+
+function memberAccounts(member) {
+  return member.accounts?.codeforces || (member.handles?.codeforces ? [member.handles.codeforces] : []);
+}
+
+function accountLink(account) {
+  return `<a class="handle ${ratingColor(account.rating)}" href="https://codeforces.com/profile/${encodeURIComponent(account.handle)}" target="_blank" rel="noreferrer">${escapeHtml(account.handle)}</a>`;
 }
 
 function compareMemberMedals(a, b) {
@@ -188,16 +204,18 @@ function ratingPage(data) {
     if (state.memberStatus === "manual" && !member.manual) return false;
     if (state.memberStatus !== "all" && state.memberStatus !== "manual" && member.status !== state.memberStatus) return false;
     if (!query) return true;
-    return [member.name, ...(member.teams || []), member.handles?.codeforces?.handle || ""].join(" ").toLowerCase().includes(query);
+    return [member.name, ...(member.aliases || []), ...(member.teams || []), ...memberAccounts(member).map(account => account.handle)].join(" ").toLowerCase().includes(query);
   });
   if (state.memberSort === "honors") members.sort((a, b) => b.honorCount - a.honorCount || a.name.localeCompare(b.name, "zh-CN"));
   if (state.memberSort === "medals") members.sort(compareMemberMedals);
-  if (state.memberSort === "rating") members.sort((a, b) => (b.handles?.codeforces?.rating || -1) - (a.handles?.codeforces?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
+  if (state.memberSort === "rating") members.sort((a, b) => (b.handles?.codeforces?.rating ?? -1) - (a.handles?.codeforces?.rating ?? -1) || a.name.localeCompare(b.name, "zh-CN"));
+  if (state.memberSort === "maxrating") members.sort((a, b) => (b.handles?.codeforces?.maxRating ?? -1) - (a.handles?.codeforces?.maxRating ?? -1) || a.name.localeCompare(b.name, "zh-CN"));
   if (state.memberSort === "cpcfinder") members.sort((a, b) => (b.cpcfinder?.rating || -1) - (a.cpcfinder?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
   const handleCount = (data.members || []).filter((member) => member.handles?.codeforces?.handle).length;
   const publicMemberCount = (data.members || []).filter((member) => member.cpcfinder).length;
   const rows = members.map((member) => {
     const account = member.handles?.codeforces;
+    const secondary = memberAccounts(member).slice(1);
     const years = member.firstYear && member.lastYear
       ? (member.firstYear === member.lastYear ? member.firstYear : `${member.firstYear}–${member.lastYear}`)
       : (member.firstYear || member.lastYear || "—");
@@ -207,13 +225,13 @@ function ratingPage(data) {
     const medals = member.medals || {};
     const profile = member.cpcfinder;
     const memberName = profile?.url
-      ? `<a class="member-profile-link" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer">${escapeHtml(member.name)}</a>`
-      : `<strong>${escapeHtml(member.name)}</strong>`;
+      ? `<a class="member-profile-link" title="${escapeHtml((member.aliases || []).join(' / '))}" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer">${escapeHtml(member.name)}</a>`
+      : `<strong title="${escapeHtml((member.aliases || []).join(' / '))}">${escapeHtml(member.name)}</strong>`;
     const publicRating = profile?.rating == null
       ? "—"
-      : `<a class="public-rating" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer" title="CPC Finder 校内榜第 ${escapeHtml(profile.rank || "—")} 名">${escapeHtml(Math.round(profile.rating))}</a>`;
+      : `<a class="public-rating" href="${escapeHtml(profile.url)}" target="_blank" rel="noreferrer" title="CPC Finder Rating · 来源排名 ${escapeHtml(profile.rank || "—")}">${escapeHtml(Math.round(profile.rating))}</a>`;
     const accountCell = account
-      ? `<a class="handle ${ratingColor(account.rating)}" href="https://codeforces.com/profile/${encodeURIComponent(account.handle)}" target="_blank" rel="noreferrer">${escapeHtml(account.handle)}</a>`
+      ? accountLink(account)
       : '<span class="unknown">待补充</span>';
     return `<tr>
       <td>${memberName}${member.manual ? '<span class="manual-tag">人工</span>' : ""}</td>
@@ -223,7 +241,9 @@ function ratingPage(data) {
       <td><div class="member-medals"><span class="gold">金 ${medals.gold || 0}</span><span class="silver">银 ${medals.silver || 0}</span><span class="bronze">铜 ${medals.bronze || 0}</span><span class="iron">${medals.iron == null ? "铁待补" : `铁 ${medals.iron}`}</span></div></td>
       <td>${publicRating}</td>
       <td>${accountCell}</td>
-      <td class="handle ${ratingColor(account?.rating)}">${account?.rating ? escapeHtml(account.rating) : "—"}</td>
+      <td class="handle ${ratingColor(account?.maxRating)}">${account?.maxRating != null ? escapeHtml(account.maxRating) : "—"}</td>
+      <td class="handle ${ratingColor(account?.rating)}" title="${account?.ratingUpdatedAt ? escapeHtml(new Date(account.ratingUpdatedAt).toLocaleString('zh-CN')) : ''}">${account?.rating != null ? escapeHtml(account.rating) : (account?.ratingUpdatedAt ? "未评级" : "—")}</td>
+      <td><div class="secondary-accounts">${secondary.length ? secondary.map(item => `<div>${accountLink(item)}<small title="最高 Rating / 当前 Rating">${escapeHtml(item.maxRating ?? '—')} / ${escapeHtml(item.rating ?? '—')}</small></div>`).join('') : '<span class="unknown">—</span>'}</div></td>
     </tr>`;
   }).join("");
   return `<div class="page-shell">
@@ -231,19 +251,167 @@ function ratingPage(data) {
       <section class="directory-stats" aria-label="成员数据概览">
         <div><strong>${escapeHtml(data.meta.memberCount)}</strong><span>已收录成员</span></div>
         <div><strong>${publicMemberCount}</strong><span>CPC Finder 名册</span></div>
-        <div><strong>${handleCount}</strong><span>已关联 CF 账号</span></div>
+        <div><strong>${handleCount}</strong><span>已关联 CF 成员</span></div>
         <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含成员的参赛成绩</span></div>
       </section>
       <div class="filters member-filters">
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
-        <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="medals" ${state.memberSort === "medals" ? "selected" : ""}>奖牌榜顺序</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="cpcfinder" ${state.memberSort === "cpcfinder" ? "selected" : ""}>CPC Finder Rating</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>Codeforces Rating</option></select></label>
+        <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="medals" ${state.memberSort === "medals" ? "selected" : ""}>奖牌榜顺序</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="cpcfinder" ${state.memberSort === "cpcfinder" ? "selected" : ""}>CPC Finder Rating</option><option value="maxrating" ${state.memberSort === "maxrating" ? "selected" : ""}>CF 最高 Rating</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>CF 当前 Rating</option></select></label>
         <label class="filter-group grow"><span>搜索</span><input id="memberQuery" type="search" value="${escapeHtml(state.memberQuery)}" placeholder="成员、队伍或 Codeforces 账号"></label>
       </div>
       <div class="data-table-wrap"><table class="data-table member-directory-table">
-        <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>CPC Finder</th><th>Codeforces</th><th>CF Rating</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="8" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
+        <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>CPC Finder Rating</th><th>CF 主号</th><th>最高 Rating</th><th>当前 Rating</th><th>CF 副号</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="10" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
       </table></div>
     </div>`;
+}
+
+function adminMemberLabel(member) {
+  return `${member.name} · #${member.id}`;
+}
+
+function adminMemberId(value) {
+  const member = state.data.members.find(item => adminMemberLabel(item) === value);
+  if (!member) throw new Error("请选择名单中的成员");
+  return member.id;
+}
+
+function adminPage(data) {
+  const session = state.adminSession;
+  const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
+  const heading = `<div class="page-heading"><div><span class="eyebrow">Admin</span><h1>数据管理</h1></div>${session?.authenticated ? `<div class="admin-session"><span>${escapeHtml(session.username)}</span><button id="adminLogout" class="admin-button secondary" type="button">退出登录</button></div>` : ''}</div>`;
+  if (!session) return `<div class="page-shell">${heading}<div class="empty-state">正在验证登录状态</div>${message}</div>`;
+  if (!session.authenticated) return `<div class="page-shell">${heading}${message}<form id="adminLogin" class="admin-login">
+    ${!session.enabled ? '<div class="admin-message error">管理员账号尚未配置</div>' : ''}
+    <label>账号<input name="username" autocomplete="username" required value="admin" maxlength="100"></label>
+    <label>密码<input name="password" type="password" autocomplete="current-password" required maxlength="512"></label>
+    <button class="admin-button" ${!session.enabled ? 'disabled' : ''}>登录</button>
+  </form></div>`;
+  const memberInput = (name, label, required = true) => `<label>${label}<input name="${name}" list="adminMembers" autocomplete="off" ${required ? 'required' : ''} placeholder="姓名或成员 ID"></label>`;
+  const options = data.members.map(member => `<option value="${escapeHtml(adminMemberLabel(member))}"></option>`).join('');
+  const forms = {
+    members: `<form id="adminMember" class="admin-form">
+      <h2>补录成员</h2><div class="admin-fields">
+      <label>姓名<input name="name" required maxlength="150"></label>
+      <label>类别<select name="status"><option value="alumni">往届成员</option><option value="current">近年成员</option><option value="unknown">年代待补</option></select></label>
+      <label>入学年份<input name="entryYear" type="number" min="1900" max="2046"></label>
+      <label>毕业年份<input name="graduationYear" type="number" min="1900" max="2046"></label>
+      <label class="wide">内部备注<textarea name="notes" rows="3" maxlength="2000"></textarea></label>
+      <label class="admin-checkbox wide"><input name="allowSameName" type="checkbox">独立的同名成员</label>
+      </div><button class="admin-button">保存成员</button></form>`,
+    accounts: `<form id="adminAccount" class="admin-form"><h2>追加 Codeforces 账号</h2><div class="admin-fields">
+      ${memberInput('member', '成员')}<label>Codeforces 账号<input name="handle" required maxlength="100" autocomplete="off"></label>
+      </div><button class="admin-button">保存账号</button><button id="adminRefreshRatings" class="admin-button secondary" type="button">更新全部 Rating</button></form>`,
+    names: `<form id="adminName" class="admin-form"><h2>姓名映射</h2><div class="admin-fields">
+      ${memberInput('member', '成员')}<label>显示姓名<input name="displayName" required maxlength="150"></label>
+      <label class="wide">报名别名<textarea name="aliases" rows="3" placeholder="Fangyu Bu" maxlength="3000"></textarea></label>
+      </div><button class="admin-button">保存映射</button></form>`,
+    honors: `<form id="adminHonor" class="admin-form"><h2>补录参赛成绩</h2><div class="admin-fields">
+      <label>比赛名称<input name="event" required maxlength="300"></label><label>日期<input name="date" type="date" required></label>
+      <label>赛事<select name="series"><option>ICPC</option><option>CCPC</option><option>其他</option></select></label><label>赛区<input name="location" maxlength="150"></label>
+      <label>队伍<input name="team" required maxlength="200"></label><label>成绩<select name="medal"><option>金牌</option><option>银牌</option><option>铜牌</option><option>铁牌</option></select></label>
+      ${memberInput('member1', '成员 1')}${memberInput('member2', '成员 2', false)}${memberInput('member3', '成员 3', false)}
+      <label>排名<input name="rank" maxlength="100" placeholder="11 / 200"></label><label class="wide">来源链接<input name="sourceUrl" type="url" maxlength="1500"></label>
+      </div><button class="admin-button">保存成绩</button></form>`,
+  };
+  return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩']].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
+    <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
+    </tbody></table></div></section></div>`;
+}
+
+async function loadAdminSession() {
+  try {
+    const response = await fetch('/api/admin/session', {cache: 'no-store'});
+    if (!response.ok) throw new Error('登录状态加载失败');
+    state.adminSession = await response.json();
+  } catch (error) {
+    state.adminMessage = error.message;
+    state.adminError = true;
+  }
+  if (routeFromPath() === 'admin') renderRoute('admin');
+}
+
+async function adminRequest(path, body) {
+  const response = await fetch(`/api/admin/${path}`, {
+    method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': state.adminSession?.csrf || ''},
+    body: JSON.stringify(body),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    if (response.status === 401) state.adminSession = null;
+    throw new Error(result.error || `HTTP ${response.status}`);
+  }
+  return result;
+}
+
+function bindAdminEvents() {
+  document.querySelectorAll('[data-admin-view]').forEach(button => button.addEventListener('click', () => {
+    state.adminView = button.dataset.adminView;
+    state.adminMessage = '';
+    renderRoute('admin');
+  }));
+  const bindForm = (id, path, buildBody, success) => document.querySelector(id)?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button');
+    button.disabled = true;
+    state.adminMessage = '';
+    try {
+      const values = Object.fromEntries(new FormData(form));
+      const result = await adminRequest(path, buildBody(values));
+      state.adminMessage = result.warning || success(result);
+      state.adminError = false;
+      if (path === 'login') await loadAdminSession();
+      else {
+        const response = await fetch('/api/site', {cache: 'no-store'});
+        if (!response.ok) throw new Error('数据刷新失败');
+        state.data = await response.json();
+      }
+      if (routeFromPath() === 'admin') renderRoute('admin');
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+      button.disabled = false;
+      let message = document.querySelector('.admin-message');
+      if (!message) {
+        message = document.createElement('div');
+        form.before(message);
+      }
+      message.className = 'admin-message error';
+      message.setAttribute('role', 'alert');
+      message.textContent = error.message;
+      if (!state.adminSession) await loadAdminSession();
+    }
+  });
+  bindForm('#adminLogin', 'login', values => values, () => '已登录');
+  bindForm('#adminMember', 'member', values => ({...values, entryYear: values.entryYear ? Number(values.entryYear) : null,
+    graduationYear: values.graduationYear ? Number(values.graduationYear) : null, allowSameName: values.allowSameName === 'on'}), result => `成员已保存 · #${result.memberId}`);
+  bindForm('#adminAccount', 'account', values => ({memberId: adminMemberId(values.member), handle: values.handle}), () => '账号及 Rating 已保存');
+  bindForm('#adminName', 'name', values => ({memberId: adminMemberId(values.member), displayName: values.displayName,
+    aliases: values.aliases.split(/\n/).map(alias => alias.trim()).filter(Boolean)}), () => '姓名映射已保存');
+  bindForm('#adminHonor', 'honor', values => ({...values, memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '参赛成绩已保存');
+  const bindAction = (id, path, success) => document.querySelector(id)?.addEventListener('click', async event => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    try {
+      const result = await adminRequest(path, {});
+      state.adminMessage = result.warning || success(result);
+      state.adminError = false;
+      await loadAdminSession();
+      const response = await fetch('/api/site', {cache: 'no-store'});
+      if (!response.ok) throw new Error('数据刷新失败');
+      state.data = await response.json();
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+    }
+    if (routeFromPath() === 'admin') renderRoute('admin');
+  });
+  bindAction('#adminLogout', 'logout', () => '已退出登录');
+  bindAction('#adminRefreshRatings', 'refresh-ratings', result => `已更新 ${result.updated} 个账号的 Rating`);
 }
 
 function standingsTable(contest) {
@@ -357,10 +525,11 @@ function bindPageEvents(route) {
 
 function renderRoute(route) {
   if (!state.data) return;
-  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage };
+  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, admin: adminPage };
   app.innerHTML = renderers[route](state.data);
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);
+  if (route === 'admin') bindAdminEvents();
 }
 
 document.addEventListener("click", (event) => {
