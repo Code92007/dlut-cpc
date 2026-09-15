@@ -395,10 +395,9 @@ a:hover {
   color: var(--bronze);
 }
 
-.chart-legend .iron,
 .medal.iron,
 .member-medals .iron {
-  color: #52606d;
+  color: #8b3a46;
 }
 
 .result-status {
@@ -481,7 +480,7 @@ a:hover {
 }
 
 .medal.silver {
-  color: #68707a;
+  color: #4f6b88;
 }
 
 .medal.bronze {
@@ -761,8 +760,14 @@ a:hover {
 }
 
 .member-medals .silver {
-  color: #68707a;
+  color: #4f6b88;
 }
+
+.account-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+#adminEditAccount { margin-bottom: 28px; }
+.account-actions .admin-button { margin: 0; min-width: 58px; padding: 6px 10px; }
+.admin-button.danger { color: #8b3a46; border: 1px solid #c68d96; background: #fff; }
+.admin-button.danger:hover { background: #fff1f3; }
 
 .member-medals .bronze {
   color: #99502d;

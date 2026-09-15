@@ -13,6 +13,44 @@ vm.runInContext(readFileSync(new URL("../web/app.js", import.meta.url), "utf8"),
 const compare = context.compareMemberMedals;
 const member = (name, gold, silver, bronze, iron) => ({ name, medals: { gold, silver, bronze, iron } });
 
+test('annual medal chart excludes iron from lines, legend and vertical scale', () => {
+  const summary = [{year: 2025, gold: 1, silver: 2, bronze: 3, iron: 100},
+    {year: 2026, gold: 2, silver: 1, bronze: 2, iron: 200}];
+  const html = context.medalChart(summary);
+  assert.equal((html.match(/<polyline /g) || []).length, 3);
+  assert.ok(!html.includes('铁牌'));
+  assert.equal(html, context.medalChart(summary.map(({iron, ...item}) => item)));
+});
+
+test('silver and iron text use clearly different hues with readable contrast', () => {
+  const css = readFileSync(new URL('../web/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.medal\.silver\s*\{\s*color: #4f6b88;/);
+  assert.match(css, /\.member-medals \.silver\s*\{\s*color: #4f6b88;/);
+  assert.match(css, /\.medal\.iron,[\s\S]*?color: #8b3a46;/);
+  const luminance = hex => {
+    const rgb = hex.match(/../g).map(part => parseInt(part, 16) / 255)
+      .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+  };
+  for (const hex of ['4f6b88', '8b3a46']) {
+    assert.ok((luminance('e8f2fa') + 0.05) / (luminance(hex) + 0.05) >= 4.5);
+  }
+});
+
+test('account management lists main and secondary accounts and scopes confirmation to one account', () => {
+  const data = {members: [{id: 1, name: '杨君泓', accounts: {codeforces: [
+    {handle: 'Farewell', rating: 1551, maxRating: 1595}, {handle: 'Other', rating: 1400, maxRating: 1500}]}},
+    {id: 2, name: '其他成员', accounts: {codeforces: [{handle: 'Else', rating: 1000, maxRating: 1200}]}}]};
+  vm.runInContext("state.adminAccountMember = '1'; state.adminAccountEdit = {memberId: 1, handle: 'Farewell'}; state.adminAccountDelete = {memberId: 1, handle: 'Other'}", context);
+  const html = context.adminAccountPage(data);
+  assert.ok(html.includes('name="oldHandle" type="hidden" value="Farewell"'));
+  assert.ok(html.includes('>主号</td>'));
+  assert.ok(html.includes('>副号</td>'));
+  assert.ok(html.includes('data-account-delete="confirm" data-member-id="1" data-handle="Other"'));
+  assert.ok(!html.includes('data-handle="Else"'));
+  vm.runInContext("state.adminAccountMember = 'all'; state.adminAccountEdit = null; state.adminAccountDelete = null", context);
+});
+
 test("gold, silver, bronze outrank a lower iron count", () => {
   assert.ok(compare(member("A", 2, 0, 0, 99), member("B", 1, 99, 99, 0)) < 0);
   assert.ok(compare(member("A", 1, 2, 0, 99), member("B", 1, 1, 99, 0)) < 0);

@@ -1,4 +1,14 @@
 {
+  "accountCorrections": [
+    {
+      "id": "yang-junhong-farewell-v1",
+      "name": "杨君泓",
+      "provider": "manual",
+      "externalId": "yang-junhong-user-confirmed",
+      "platform": "codeforces",
+      "removeHandles": ["Lance_J"]
+    }
+  ],
   "accountBindings": [
     {
       "name": "徐昊天",
@@ -95,11 +105,11 @@
       "accounts": {
         "codeforces": [
           {
-            "handle": "Lance_J",
+            "handle": "Farewell",
             "verified": true,
-            "rating": 2024,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
-            "maxRating": 2024
+            "rating": 1551,
+            "ratingUpdatedAt": "2026-09-15T14:10:02+00:00",
+            "maxRating": 1595
           }
         ]
       }

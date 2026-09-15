@@ -186,11 +186,22 @@ class SiteHandler(BaseHTTPRequestHandler):
                 member_id = database.add_manual_member(name, entry_year=entry, graduation_year=graduation,
                                                       status=status, notes=self._text(body, "notes", 2000), source=source, school=school)
                 self._send_json({"ok": True, "memberId": member_id})
-            elif path == "/api/admin/account":
+            elif path in {"/api/admin/account", "/api/admin/account-edit", "/api/admin/account-delete"}:
                 handle = self._text(body, "handle", 100, required=True)
                 if not re.fullmatch(r"[A-Za-z0-9_.-]+", handle):
                     raise ValueError("Codeforces 账号格式无效")
-                database.set_handle(self._member_id(body.get("memberId")), "codeforces", handle, source=source)
+                member_id = self._member_id(body.get("memberId"))
+                if path.endswith("account-delete"):
+                    database.delete_handle(member_id, "codeforces", handle, source=source)
+                    self._send_json({"ok": True})
+                    return
+                if path.endswith("account-edit"):
+                    old_handle = self._text(body, "oldHandle", 100, required=True)
+                    if not re.fullmatch(r"[A-Za-z0-9_.-]+", old_handle):
+                        raise ValueError("原 Codeforces 账号格式无效")
+                    database.edit_handle(member_id, "codeforces", old_handle, handle, source=source)
+                else:
+                    database.set_handle(member_id, "codeforces", handle, source=source)
                 warning = None
                 try:
                     from tools.sync_codeforces import fetch_ratings
@@ -227,14 +238,14 @@ class SiteHandler(BaseHTTPRequestHandler):
                           "rank": self._text(body, "rank", 100), "source": {**source, "url": source_url}}
                 honor_id = database.add_manual_honor_with_members(record, member_ids)
                 self._send_json({"ok": True, "honorId": honor_id})
-            elif path == "/api/admin/confirm-members":
+            elif path in {"/api/admin/confirm-members", "/api/admin/edit-members"}:
                 members = body.get("members") if "members" in body else body.get("memberIds")
                 if not isinstance(members, list) or not 1 <= len(members) <= 3:
                     raise ValueError("参赛成员列表无效")
                 if "members" not in body:
                     members = [self._member_id(value) for value in members]
-                database.confirm_honor_members(self._text(body, "honorId", 150, required=True),
-                                               members, source=source)
+                action = database.edit_honor_members if path.endswith("edit-members") else database.confirm_honor_members
+                action(self._text(body, "honorId", 150, required=True), members, source=source)
                 self._send_json({"ok": True})
             elif path == "/api/admin/review-submission":
                 if type(body.get("approve")) is not bool:

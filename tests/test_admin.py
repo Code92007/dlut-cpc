@@ -55,9 +55,51 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "name", "honor", "confirm-members", "review-submission", "refresh-ratings", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "refresh-ratings", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
+
+    def test_admin_edits_and_deletes_accounts_with_auth_and_fresh_ratings(self):
+        member_id = self.database.add_manual_member("杨君泓")
+        self.database.set_handle(member_id, "codeforces", "Lance_J", rating=2024)
+        cookie, csrf = self.login()
+        body = {"memberId": member_id, "oldHandle": "Lance_J", "handle": "Farewell"}
+        for path in ("account-edit", "account-delete"):
+            self.assertEqual(self.request(path, body, cookie=cookie)["status"], 403)
+            self.assertEqual(self.request(path, body, cookie=cookie, csrf=csrf, origin="https://attacker.example")["status"], 403)
+        with patch("tools.sync_codeforces.fetch_ratings", return_value=[{"handle": "Farewell", "rating": 1551, "maxRating": 1595}]) as fetch:
+            result = self.request("account-edit", body, cookie=cookie, csrf=csrf)
+            self.assertEqual(result["status"], 200, result)
+            fetch.assert_called_once_with(["Farewell"])
+        member = self.database.payload(self.seed)["members"][0]
+        self.assertEqual(member["handles"]["codeforces"]["handle"], "Farewell")
+        self.assertEqual(member["handles"]["codeforces"]["maxRating"], 1595)
+        with patch("tools.sync_codeforces.fetch_ratings") as fetch:
+            self.assertEqual(self.request("account-delete", body, cookie=cookie, csrf=csrf)["status"], 200)
+            fetch.assert_not_called()
+        self.assertEqual(self.database.payload(self.seed)["members"][0]["accounts"], {})
+
+    def test_edit_api_failure_saves_binding_without_wrong_old_rating(self):
+        member_id = self.database.add_manual_member("杨君泓")
+        self.database.set_handle(member_id, "codeforces", "Old", rating=2400)
+        cookie, csrf = self.login()
+        with patch("tools.sync_codeforces.fetch_ratings", side_effect=OSError("offline")):
+            result = self.request("account-edit", {"memberId": member_id, "oldHandle": "Old", "handle": "New"}, cookie=cookie, csrf=csrf)
+        self.assertEqual(result["status"], 200)
+        self.assertIn("offline", result["body"]["warning"])
+        account = self.database.payload(self.seed)["members"][0]["handles"]["codeforces"]
+        self.assertEqual(account["handle"], "New")
+        self.assertIsNone(account["rating"])
+
+    def test_account_management_rejects_invalid_ids_handles_and_stale_old_account(self):
+        member_id = self.database.add_manual_member("测试成员")
+        self.database.set_handle(member_id, "codeforces", "Old")
+        cookie, csrf = self.login()
+        for path in ("account-edit", "account-delete"):
+            for change in ({"memberId": True}, {"memberId": 999999}, {"handle": "a;b"}, {"handle": ""}, {"handle": "Other", "oldHandle": "Missing"}):
+                body = {"memberId": member_id, "oldHandle": "Old", "handle": "Old", **change}
+                self.assertEqual(self.request(path, body, cookie=cookie, csrf=csrf)["status"], 400)
+        self.assertEqual(self.database.payload(self.seed)["members"][0]["handles"]["codeforces"]["handle"], "Old")
 
     def test_cookie_security_csrf_and_same_origin_are_required(self):
         cookie, csrf = self.login()
@@ -156,6 +198,19 @@ class AdminTests(unittest.TestCase):
                 payload = self.database.payload(self.seed)
                 self.assertEqual(payload["members"], [])
                 self.assertEqual(len(payload["pendingHonors"]), 1)
+
+    def test_admin_can_correct_confirmed_roster_but_guest_and_csrf_missing_are_rejected(self):
+        record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}
+        self.database.import_historical_batch({"batchId": "test-edit-v1", "honors": [record]})
+        self.database.confirm_honor_members("historical", ["甲", "乙", "丙"])
+        body = {"honorId": "historical", "members": ["甲", "丁", "丙"]}
+        self.assertEqual(self.request("edit-members", body)["status"], 401)
+        cookie, csrf = self.login()
+        self.assertEqual(self.request("edit-members", body, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("edit-members", body, cookie=cookie, csrf=csrf, origin="https://attacker.example")["status"], 403)
+        self.assertEqual(self.request("edit-members", body, cookie=cookie, csrf=csrf)["status"], 200)
+        self.assertEqual(self.database.payload(self.seed)["honors"][0]["members"], ["甲", "丁", "丙"])
+        self.assertEqual(self.request("confirm-members", body, cookie=cookie, csrf=csrf)["status"], 400)
 
     def submission_fixture(self):
         record = {"id": "historical", "event": "2018 ICPC", "date": "2018-10-01", "team": "Old Team", "medal": "金牌"}

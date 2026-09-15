@@ -25,6 +25,12 @@ const state = {
   adminView: "members",
   adminMessage: "",
   adminError: false,
+  adminAccountMember: 'all',
+  adminAccountEdit: null,
+  adminAccountDelete: null,
+  adminRosterId: null,
+  adminRosterQuery: '',
+  adminRosterSchool: 'all',
   adminReviews: null,
   adminReviewStatus: 'pending',
   adminReviewSchool: 'all',
@@ -83,23 +89,23 @@ function medalChart(summary) {
   const margin = { top: 30, right: 32, bottom: 48, left: 44 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
-  const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze, item.iron || 0]));
+  const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze]));
   const maxY = Math.ceil(maxValue / 3) * 3;
   const x = (index) => margin.left + (chartWidth * index) / Math.max(1, summary.length - 1);
   const y = (value) => margin.top + chartHeight - (chartHeight * value) / maxY;
-  const colors = { gold: "#d8a126", silver: "#9aa2ad", bronze: "#b86d45", iron: "#52606d" };
+  const colors = { gold: "#d8a126", silver: "#9aa2ad", bronze: "#b86d45" };
   const grids = [];
   for (let value = 0; value <= maxY; value += 3) {
     grids.push(`<line x1="${margin.left}" y1="${y(value)}" x2="${width - margin.right}" y2="${y(value)}" stroke="#dfe3e8" />`);
     grids.push(`<text x="${margin.left - 10}" y="${y(value) + 4}" text-anchor="end" fill="#7a838f" font-size="11">${value}</text>`);
   }
-  const series = ["gold", "silver", "bronze", "iron"].map((key) => {
+  const series = ["gold", "silver", "bronze"].map((key) => {
     const points = summary.map((item, index) => `${x(index)},${y(item[key] || 0)}`).join(" ");
     const dots = summary.map((item, index) => `<circle cx="${x(index)}" cy="${y(item[key] || 0)}" r="3.5" fill="#fff" stroke="${colors[key]}" stroke-width="2" />`).join("");
     return `<polyline points="${points}" fill="none" stroke="${colors[key]}" stroke-width="2.2" stroke-linejoin="round" />${dots}`;
   }).join("");
   const years = summary.map((item, index) => `<text x="${x(index)}" y="${height - 18}" text-anchor="middle" fill="#68717e" font-size="11">${item.year}</text>`).join("");
-  return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span><span class="iron">铁牌</span></div>
+  return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span></div>
     <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度成绩趋势图">${grids.join("")}${series}${years}</svg></div>`;
 }
 
@@ -440,6 +446,57 @@ async function loadAdminReviews() {
   }
 }
 
+function adminAccountPage(data) {
+  const editing = state.adminAccountEdit;
+  const member = data.members.find(item => item.id === editing?.memberId);
+  const rows = data.members.filter(item => state.adminAccountMember === 'all' || String(item.id) === state.adminAccountMember)
+    .flatMap(item => memberAccounts(item).map((account, index) => {
+      const deleting = state.adminAccountDelete?.memberId === item.id && state.adminAccountDelete?.handle === account.handle;
+      const attributes = `data-member-id="${item.id}" data-handle="${escapeHtml(account.handle)}"`;
+      return `<tr><td>${escapeHtml(item.name)}<small class="result-status">${escapeHtml(item.school || '大连理工大学')}</small></td>
+        <td>${accountLink(account)}</td><td>${index === 0 ? '主号' : '副号'}</td>
+        <td>${escapeHtml(account.maxRating ?? '—')}</td><td>${escapeHtml(account.rating ?? '—')}</td>
+        <td><div class="account-actions">${deleting
+          ? `<button type="button" class="admin-button danger" data-account-delete="confirm" ${attributes}>确认删除</button><button type="button" class="admin-button secondary" data-account-cancel-delete>取消</button>`
+          : `<button type="button" class="admin-button secondary" data-account-edit ${attributes}>修改</button><button type="button" class="admin-button danger" data-account-delete="ask" ${attributes}>删除</button>`}</div></td></tr>`;
+    })).join('');
+  return `${editing && member ? `<form id="adminEditAccount" class="admin-form"><h2>修改 Codeforces 账号</h2>
+      <input name="memberId" type="hidden" value="${member.id}"><input name="oldHandle" type="hidden" value="${escapeHtml(editing.handle)}">
+      <div class="admin-fields"><label>成员<input readonly value="${escapeHtml(adminMemberLabel(member))}"></label>
+      <label>Codeforces 账号<input name="handle" required maxlength="100" autocomplete="off" value="${escapeHtml(editing.handle)}"></label></div>
+      <button class="admin-button">保存修改</button><button id="adminCancelAccountEdit" type="button" class="admin-button secondary">取消</button></form>` : ''}
+    <form id="adminAccount" class="admin-form"><h2>追加 Codeforces 账号</h2><div class="admin-fields">
+      ${memberInput('member', '成员')}<label>Codeforces 账号<input name="handle" required maxlength="100" autocomplete="off"></label>
+      </div><button class="admin-button">保存账号</button><button id="adminRefreshRatings" class="admin-button secondary" type="button">更新全部 Rating</button></form>
+    <section class="admin-recent"><h2>已有 Codeforces 账号</h2><div class="filters">
+      <label class="filter-group"><span>成员</span><select id="adminAccountMember"><option value="all">全部成员</option>${data.members.filter(item => memberAccounts(item).length)
+        .map(item => `<option value="${item.id}" ${String(item.id) === state.adminAccountMember ? 'selected' : ''}>${escapeHtml(adminMemberLabel(item))}</option>`).join('')}</select></label></div>
+      <div class="data-table-wrap"><table class="data-table"><thead><tr><th>成员</th><th>Codeforces</th><th>主副号</th><th>最高 Rating</th><th>当前 Rating</th><th>操作</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" class="table-empty">暂无账号</td></tr>'}</tbody></table></div></section>`;
+}
+
+function adminRosterPage(data) {
+  const rows = (data.honors || []).filter(honor => honor.rosterEditable
+    && (state.adminRosterSchool === 'all' || honor.school === state.adminRosterSchool)
+    && [honor.date, honor.event, honor.team, ...(honor.members || [])].join(' ').toLowerCase().includes(state.adminRosterQuery.toLowerCase()));
+  const selected = (data.honors || []).find(honor => honor.id === state.adminRosterId && honor.rosterEditable);
+  const form = selected ? `<form id="adminEditMembers" class="admin-form"><h2>${escapeHtml(selected.team)}</h2>
+    <p class="contest-caption">${escapeHtml(selected.date)} · ${escapeHtml(selected.event)} · ${escapeHtml(selected.school)}</p>
+    <input name="honorId" type="hidden" value="${escapeHtml(selected.id)}"><div class="admin-fields">
+    ${Array.from({length: selected.expectedMembers || selected.members.length}, (_, index) => {
+      const detail = selected.memberDetails?.[index];
+      const member = detail && data.members.find(item => item.id === detail.id);
+      return memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, member ? adminMemberLabel(member) : selected.members[index] || '');
+    }).join('')}</div><button class="admin-button">保存名单修改</button><button id="adminCancelRosterEdit" type="button" class="admin-button secondary">取消</button></form>` : '';
+  return `${form}<section class="admin-recent"><h2>已补录名单</h2><form id="adminRosterFilter" class="filters">
+    <label class="filter-group"><span>所属范围</span><select id="adminRosterSchool">${[['all', '全部范围'], ...schoolGroups.map(school => [school, school])]
+      .map(([value, label]) => `<option value="${value}" ${state.adminRosterSchool === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+    <label class="filter-group grow"><span>搜索</span><input name="query" value="${escapeHtml(state.adminRosterQuery)}" placeholder="比赛、队伍或成员"></label><button class="admin-button">搜索</button></form>
+    <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成员</th><th>操作</th></tr></thead>
+    <tbody>${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td>
+      <td>${escapeHtml(honor.school)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td><button type="button" class="admin-button secondary" data-roster-edit="${escapeHtml(honor.id)}">修改成员</button></td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无符合条件的已补录名单</td></tr>'}</tbody></table></div></section>`;
+}
+
 function adminPage(data) {
   const session = state.adminSession;
   const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
@@ -463,9 +520,7 @@ function adminPage(data) {
       <label class="wide">内部备注<textarea name="notes" rows="3" maxlength="2000"></textarea></label>
       <label class="admin-checkbox wide"><input name="allowSameName" type="checkbox">独立的同名成员</label>
       </div><button class="admin-button">保存成员</button></form>`,
-    accounts: `<form id="adminAccount" class="admin-form"><h2>追加 Codeforces 账号</h2><div class="admin-fields">
-      ${memberInput('member', '成员')}<label>Codeforces 账号<input name="handle" required maxlength="100" autocomplete="off"></label>
-      </div><button class="admin-button">保存账号</button><button id="adminRefreshRatings" class="admin-button secondary" type="button">更新全部 Rating</button></form>`,
+    accounts: adminAccountPage(data),
     names: `<form id="adminName" class="admin-form"><h2>姓名映射</h2><div class="admin-fields">
       ${memberInput('member', '成员')}<label>显示姓名<input name="displayName" required maxlength="150"></label>
       <label class="wide">报名别名<textarea name="aliases" rows="3" placeholder="Fangyu Bu" maxlength="3000"></textarea></label>
@@ -481,8 +536,9 @@ function adminPage(data) {
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
   forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
   forms.reviews = adminReviewPage();
+  forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
     <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
@@ -521,6 +577,69 @@ async function adminRequest(path, body) {
 }
 
 function bindAdminEvents() {
+  document.querySelector('#adminRosterFilter')?.addEventListener('submit', event => {
+    event.preventDefault();
+    state.adminRosterQuery = new FormData(event.currentTarget).get('query') || '';
+    renderRoute('admin');
+  });
+  document.querySelector('#adminRosterSchool')?.addEventListener('change', event => {
+    state.adminRosterSchool = event.target.value;
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-roster-edit]').forEach(button => button.addEventListener('click', () => {
+    state.adminRosterId = button.dataset.rosterEdit;
+    state.adminMessage = '';
+    renderRoute('admin');
+    document.querySelector('#adminEditMembers')?.scrollIntoView({block: 'center'});
+  }));
+  document.querySelector('#adminCancelRosterEdit')?.addEventListener('click', () => {
+    state.adminRosterId = null;
+    renderRoute('admin');
+  });
+  document.querySelector('#adminAccountMember')?.addEventListener('change', event => {
+    state.adminAccountMember = event.target.value;
+    state.adminAccountDelete = null;
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-account-edit]').forEach(button => button.addEventListener('click', () => {
+    state.adminAccountEdit = {memberId: Number(button.dataset.memberId), handle: button.dataset.handle};
+    state.adminAccountDelete = null;
+    state.adminMessage = '';
+    renderRoute('admin');
+    document.querySelector('#adminEditAccount')?.scrollIntoView({block: 'center'});
+  }));
+  document.querySelector('#adminCancelAccountEdit')?.addEventListener('click', () => {
+    state.adminAccountEdit = null;
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-account-cancel-delete]').forEach(button => button.addEventListener('click', () => {
+    state.adminAccountDelete = null;
+    renderRoute('admin');
+  }));
+  document.querySelectorAll('[data-account-delete]').forEach(button => button.addEventListener('click', async () => {
+    const account = {memberId: Number(button.dataset.memberId), handle: button.dataset.handle};
+    if (button.dataset.accountDelete !== 'confirm') {
+      state.adminAccountDelete = account;
+      renderRoute('admin');
+      return;
+    }
+    button.closest('.account-actions').querySelectorAll('button').forEach(control => {control.disabled = true;});
+    try {
+      await adminRequest('account-delete', account);
+      state.adminAccountDelete = null;
+      if (state.adminAccountEdit?.memberId === account.memberId && state.adminAccountEdit?.handle === account.handle) state.adminAccountEdit = null;
+      state.adminMessage = '账号已删除';
+      state.adminError = false;
+      const response = await fetch('/api/site', {cache: 'no-store'});
+      if (!response.ok) throw new Error('数据刷新失败');
+      state.data = await response.json();
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+    }
+    if (!state.adminSession) await loadAdminSession();
+    else if (routeFromPath() === 'admin') renderRoute('admin');
+  }));
   bindPendingEvents('admin');
   document.querySelectorAll('[data-pending-id]').forEach(button => button.addEventListener('click', () => {
     state.pendingId = button.dataset.pendingId;
@@ -573,7 +692,8 @@ function bindAdminEvents() {
     try {
       const values = Object.fromEntries(new FormData(form));
       const result = await adminRequest(path, buildBody(values));
-      state.adminMessage = result.warning || success(result);
+      const successMessage = success(result);
+      state.adminMessage = result.warning || successMessage;
       state.adminError = false;
       if (path === 'login') await loadAdminSession();
       else {
@@ -601,11 +721,20 @@ function bindAdminEvents() {
   bindForm('#adminMember', 'member', values => ({...values, entryYear: values.entryYear ? Number(values.entryYear) : null,
     graduationYear: values.graduationYear ? Number(values.graduationYear) : null, allowSameName: values.allowSameName === 'on'}), result => `成员已保存 · #${result.memberId}`);
   bindForm('#adminAccount', 'account', values => ({memberId: adminMemberId(values.member), handle: values.handle}), () => '账号及 Rating 已保存');
+  bindForm('#adminEditAccount', 'account-edit', values => ({memberId: Number(values.memberId), oldHandle: values.oldHandle, handle: values.handle}), () => {
+    state.adminAccountEdit = null;
+    return '账号已修改，Rating 已更新';
+  });
   bindForm('#adminName', 'name', values => ({memberId: adminMemberId(values.member), displayName: values.displayName,
     aliases: values.aliases.split(/\n/).map(alias => alias.trim()).filter(Boolean)}), () => '姓名映射已保存');
   bindForm('#adminHonor', 'honor', values => ({...values, memberIds: [values.member1, values.member2, values.member3].filter(Boolean).map(adminMemberId)}), () => '参赛成绩已保存');
   bindForm('#adminConfirmMembers', 'confirm-members', values => ({honorId: values.honorId,
     members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => '成员已确认，参赛成绩已保留');
+  bindForm('#adminEditMembers', 'edit-members', values => ({honorId: values.honorId,
+    members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => {
+    state.adminRosterId = null;
+    return '名单已修改，成员参赛记录和奖牌统计已更新';
+  });
   const bindAction = (id, path, success) => document.querySelector(id)?.addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;

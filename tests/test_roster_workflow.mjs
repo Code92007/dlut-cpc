@@ -42,6 +42,84 @@ function harness(route, fetcher) {
   return {context, nodes, arrays, calls, state: () => vm.runInContext('state', context)};
 }
 
+test('account deletion requires a separate confirmation and sends only the selected binding', async () => {
+  const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true}));
+  const button = element({dataset: {memberId: '66', handle: 'Wrong', accountDelete: 'ask'}});
+  button.closest = () => ({querySelectorAll: () => [button]});
+  h.arrays.set('[data-account-delete]', [button]);
+  h.context.bindAdminEvents();
+  await button.handlers.click();
+  assert.equal(h.calls.length, 0);
+  assert.deepEqual(JSON.parse(JSON.stringify(h.state().adminAccountDelete)), {memberId: 66, handle: 'Wrong'});
+  button.dataset.accountDelete = 'confirm';
+  await button.handlers.click();
+  assert.equal(h.calls[0].path, '/api/admin/account-delete');
+  assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+  assert.deepEqual(JSON.parse(h.calls[0].options.body), {memberId: 66, handle: 'Wrong'});
+  assert.equal(h.state().adminAccountDelete, null);
+});
+
+test('account edit sends old and new handles and leaves saved edit mode even when rating sync warns', async () => {
+  const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true, warning: 'Rating sync unavailable'}));
+  const button = element();
+  const form = element({fields: {memberId: '66', oldHandle: 'Wrong', handle: 'Correct'}, querySelector: () => button});
+  h.nodes.set('#adminEditAccount', form);
+  h.state().adminAccountEdit = {memberId: 66, handle: 'Wrong'};
+  h.context.bindAdminEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(h.calls[0].path, '/api/admin/account-edit');
+  assert.deepEqual(JSON.parse(h.calls[0].options.body), {memberId: 66, oldHandle: 'Wrong', handle: 'Correct'});
+  assert.equal(h.state().adminAccountEdit, null);
+  assert.equal(h.state().adminMessage, 'Rating sync unavailable');
+});
+
+test('failed account edit keeps input and re-enables saving', async () => {
+  const h = harness('admin', async () => response({error: 'account already belongs to another member'}, false, 400));
+  const button = element({disabled: false});
+  const fields = {memberId: '66', oldHandle: 'Old', handle: 'Taken'};
+  let alert;
+  const form = element({fields, querySelector: () => button, before: message => {alert = message;}});
+  h.nodes.set('#adminEditAccount', form);
+  h.state().adminAccountEdit = {memberId: 66, handle: 'Old'};
+  h.context.bindAdminEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(button.disabled, false);
+  assert.deepEqual(form.fields, fields);
+  assert.equal(h.state().adminAccountEdit.handle, 'Old');
+  assert.match(alert.textContent, /another member/);
+});
+
+test('local roster edit form preselects exact IDs and excludes untouched public rosters', () => {
+  const h = harness('admin', () => {});
+  const data = structuredClone(seed);
+  data.honors = [{...data.pendingHonors[0], rosterConfirmed: true, rosterEditable: true,
+    members: ['董霄然', '傅心语', '何泾'], memberDetails: [{id: 68}, {id: 69}, {id: 66}]},
+    {id: 'public', rosterConfirmed: true, rosterEditable: false, date: '2025-01-01', team: 'Untouched Public'}];
+  data.members.push({id: 68, name: '董霄然'}, {id: 69, name: '傅心语'});
+  h.state().adminRosterId = 'historic';
+  const html = h.context.adminRosterPage(data);
+  assert.ok(html.includes('value="董霄然 · #68"'));
+  assert.ok(html.includes('value="何泾 · #66"'));
+  assert.ok(html.includes('保存名单修改'));
+  assert.ok(!html.includes('Untouched Public'));
+});
+
+test('local roster edit submits mixed IDs and names with admin csrf and refreshes statistics', async () => {
+  const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true}));
+  const button = element();
+  const form = element({fields: {honorId: 'historic', member1: '董霄然', member2: '傅心语', member3: '何泾 · #66'},
+    querySelector: () => button});
+  h.nodes.set('#adminEditMembers', form);
+  h.state().adminRosterId = 'historic';
+  h.context.bindAdminEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(h.calls[0].path, '/api/admin/edit-members');
+  assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+  assert.deepEqual(JSON.parse(h.calls[0].options.body), {honorId: 'historic', members: ['董霄然', '傅心语', 66]});
+  assert.equal(h.state().adminRosterId, null);
+  assert.match(h.state().adminMessage, /奖牌统计已更新/);
+});
+
 test('visitor page offers submission, not direct confirmation, and scopes existing choices', () => {
   const h = harness('pending', () => {});
   const data = structuredClone(seed);

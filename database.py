@@ -12,7 +12,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 7
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -101,6 +101,15 @@ CREATE TABLE IF NOT EXISTS member_aliases (
     member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
     alias TEXT NOT NULL,
     PRIMARY KEY(member_id, alias)
+);
+
+CREATE TABLE IF NOT EXISTS removed_member_handles (
+    member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    platform TEXT NOT NULL,
+    handle TEXT NOT NULL COLLATE NOCASE,
+    source_id INTEGER REFERENCES sources(id),
+    removed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(member_id, platform, handle)
 );
 
 CREATE TABLE IF NOT EXISTS member_sources (
@@ -379,6 +388,11 @@ class Database:
         handle = str(account["handle"]).strip()
         if not platform or not handle or ";" in handle:
             raise ValueError("platform and a single account handle are required")
+        if connection.execute(
+            "SELECT 1 FROM removed_member_handles WHERE member_id=? AND platform=? AND handle=?",
+            (member_id, platform, handle),
+        ).fetchone():
+            return
         owner = connection.execute(
             "SELECT member_id FROM member_handles WHERE platform=? AND handle=? COLLATE NOCASE AND member_id<>?",
             (platform, handle, member_id),
@@ -484,7 +498,9 @@ class Database:
                 (honor_id, source_id, int(manual)),
             )
 
-        details = record.get("memberDetails") or [{"name": name} for name in record.get("members", [])]
+        roster_override = connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"roster_override:{honor_id}",)).fetchone()
+        # A confirmed local roster replaces imported membership, not just adds to it.
+        details = [] if roster_override else record.get("memberDetails") or [{"name": name} for name in record.get("members", [])]
         if details:
             connection.execute("DELETE FROM honor_members WHERE honor_id=? AND is_manual=0", (honor_id,))
             roster_source = record.get("memberSource") if isinstance(record.get("memberSource"), dict) else sources[0]
@@ -564,6 +580,17 @@ class Database:
             display_name = connection.execute("SELECT display_name FROM members WHERE id=?", (member_id,)).fetchone()["display_name"]
             if not display_name or display_name == override["displayName"]:
                 self._set_display_name(connection, member_id, override["displayName"], override.get("aliases", []))
+        for correction in site.get("accountCorrections", []):
+            marker = "account_correction:" + correction["id"]
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            member_id = self._find_member(connection, correction)
+            if member_id is None:
+                raise ValueError("Account correction has no unambiguous member")
+            source_id = self._source(connection, {"name": "队内人工纠正账号"}, manual=True)
+            for handle in correction["removeHandles"]:
+                self._remove_handle(connection, member_id, correction["platform"].strip().casefold(), handle.strip(), source_id)
+            connection.execute("INSERT INTO metadata(key, value) VALUES (?, '1')", (marker,))
         for batch in site.get("historicalImports", []):
             self._import_historical_batch(connection, batch)
         connection.execute(
@@ -653,13 +680,26 @@ class Database:
         return review
 
     def _confirm_honor_members(self, connection: sqlite3.Connection, honor_id: str,
-                               members: list[int | str], source: dict | None) -> list[int]:
-        review = self._pending_roster(connection, honor_id)
-        expected = review["expected_members"] if review else 3
+                               members: list[int | str], source: dict | None, *, edit: bool = False) -> list[int]:
+        if edit:
+            honor = connection.execute("SELECT is_manual FROM honors WHERE id=?", (honor_id,)).fetchone()
+            review = connection.execute("SELECT * FROM honor_roster_reviews WHERE honor_id=?", (honor_id,)).fetchone()
+            rows = connection.execute("SELECT hm.is_manual, m.school FROM honor_members hm JOIN members m ON m.id=hm.member_id WHERE honor_id=?",
+                                      (honor_id,)).fetchall()
+            if not honor or not rows or (review and not review["confirmed_at"]):
+                raise ValueError("该成绩尚未确认成员，请先补录")
+            if not ((review and review["confirmed_at"]) or honor["is_manual"] or any(row["is_manual"] for row in rows)):
+                raise ValueError("此入口仅修改本地人工补录的成员名单")
+            expected = review["expected_members"] if review else len(rows)
+            school = review["school"] if review else (rows[0]["school"] if len({row["school"] for row in rows}) == 1 else "大连理工大学")
+        else:
+            review = self._pending_roster(connection, honor_id)
+            expected = review["expected_members"] if review else 3
+            school = review["school"] if review else None
         if not isinstance(members, list) or len(members) != expected:
             raise ValueError(f"请填写 {expected} 位不同的参赛成员")
         source_id = self._source(connection, source, manual=True)
-        member_ids = [self._resolve_roster_member(connection, value, review["school"] if review else None, source_id)
+        member_ids = [self._resolve_roster_member(connection, value, school, source_id)
                       for value in members]
         if len(set(member_ids)) != expected:
             raise ValueError(f"请填写 {expected} 位不同的参赛成员，同一成员不能重复")
@@ -671,6 +711,8 @@ class Database:
                                (member_id, source_id))
         connection.execute("UPDATE honor_roster_reviews SET confirmed_at=CURRENT_TIMESTAMP, confirmed_source_id=? WHERE honor_id=?",
                            (source_id, honor_id))
+        connection.execute("INSERT INTO metadata(key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                           (f"roster_override:{honor_id}", str(source_id)))
         connection.execute("UPDATE roster_submissions SET status='superseded', reviewed_at=CURRENT_TIMESTAMP, "
                            "review_note='名单已由其他确认完善' WHERE honor_id=? AND status='pending'", (honor_id,))
         return member_ids
@@ -681,6 +723,11 @@ class Database:
             # create duplicate people or overwrite an already confirmed roster.
             connection.execute("BEGIN IMMEDIATE")
             self._confirm_honor_members(connection, honor_id, member_ids, source)
+
+    def edit_honor_members(self, honor_id: str, members: list[int | str], *, source: dict | None = None) -> None:
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            self._confirm_honor_members(connection, honor_id, members, source, edit=True)
 
     def submit_roster(self, honor_id: str, members: list[int | str], *, note: str = "") -> tuple[int, bool]:
         if not isinstance(note, str) or len(note) > 2000:
@@ -816,9 +863,12 @@ class Database:
         source: dict | None = None,
     ) -> None:
         with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
             if not connection.execute("SELECT 1 FROM members WHERE id=?", (member_id,)).fetchone():
                 raise ValueError(f"member {member_id} does not exist")
             source_id = self._source(connection, source, manual=True)
+            connection.execute("DELETE FROM removed_member_handles WHERE member_id=? AND platform=? AND handle=?",
+                               (member_id, platform.strip().casefold(), handle.strip()))
             self._set_handle(
                 connection,
                 member_id,
@@ -826,6 +876,44 @@ class Database:
                 {"handle": handle, "verified": verified, **({"rating": rating} if rating is not None else {})},
                 source_id,
             )
+
+    @staticmethod
+    def _remove_handle(connection: sqlite3.Connection, member_id: int, platform: str, handle: str, source_id: int) -> None:
+        connection.execute(
+            "INSERT INTO removed_member_handles(member_id, platform, handle, source_id) VALUES (?, ?, ?, ?) "
+            "ON CONFLICT(member_id, platform, handle) DO UPDATE SET source_id=excluded.source_id, removed_at=CURRENT_TIMESTAMP",
+            (member_id, platform, handle, source_id),
+        )
+        connection.execute("DELETE FROM member_handles WHERE member_id=? AND platform=? AND handle=?",
+                           (member_id, platform, handle))
+
+    def delete_handle(self, member_id: int, platform: str, handle: str, *, source: dict | None = None) -> None:
+        platform, handle = platform.strip().casefold(), handle.strip()
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not connection.execute("SELECT 1 FROM member_handles WHERE member_id=? AND platform=? AND handle=?",
+                                      (member_id, platform, handle)).fetchone():
+                raise ValueError("该成员的账号不存在或已被修改")
+            self._remove_handle(connection, member_id, platform, handle, self._source(connection, source, manual=True))
+
+    def edit_handle(self, member_id: int, platform: str, old_handle: str, handle: str, *, source: dict | None = None) -> None:
+        platform, old_handle, handle = platform.strip().casefold(), old_handle.strip(), handle.strip()
+        if not platform or not handle or ";" in handle:
+            raise ValueError("platform and a single account handle are required")
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not connection.execute("SELECT 1 FROM member_handles WHERE member_id=? AND platform=? AND handle=?",
+                                      (member_id, platform, old_handle)).fetchone():
+                raise ValueError("该成员的账号不存在或已被修改")
+            source_id = self._source(connection, source, manual=True)
+            if old_handle.casefold() != handle.casefold():
+                self._remove_handle(connection, member_id, platform, old_handle, source_id)
+            connection.execute("DELETE FROM removed_member_handles WHERE member_id=? AND platform=? AND handle=?",
+                               (member_id, platform, handle))
+            # A different account starts without the previous account's ratings.
+            self._set_handle(connection, member_id, platform, {"handle": handle, "verified": True}, source_id)
+            connection.execute("UPDATE member_handles SET handle=? WHERE member_id=? AND platform=? AND handle=?",
+                               (handle, member_id, platform, handle))
 
     @staticmethod
     def _set_display_name(connection: sqlite3.Connection, member_id: int, name: str, aliases: list[str]) -> None:
@@ -900,6 +988,8 @@ class Database:
         result = copy.deepcopy(base)
         result.pop("ratingGroups", None)
         result.pop("historicalImports", None)
+        result.pop("accountCorrections", None)
+        result.pop("accountBindings", None)
         with self.connect() as connection:
             honors = self._honors_payload(connection)
             members = self._members_payload(connection)
@@ -935,7 +1025,7 @@ class Database:
         result = []
         for row in rows:
             member_rows = connection.execute(
-                "SELECT m.id, m.school, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
+                "SELECT m.id, m.school, hm.is_manual, COALESCE(m.display_name, m.name) AS name, mi.external_id AS cpcfinder_id FROM honor_members hm "
                 "JOIN members m ON m.id=hm.member_id "
                 "LEFT JOIN member_identities mi ON mi.member_id=m.id AND mi.provider='cpcfinder' "
                 "WHERE hm.honor_id=? ORDER BY hm.position, m.id",
@@ -958,6 +1048,7 @@ class Database:
                     "originalSchool": row["original_school"] or "",
                     "expectedMembers": row["expected_members"] or len(member_rows) or 3,
                     "rosterConfirmed": bool(row["confirmed_at"]) if row["batch_id"] else bool(member_rows),
+                    "rosterEditable": bool(member_rows) and (bool(row["confirmed_at"]) if row["batch_id"] else (bool(row["is_manual"]) or any(item["is_manual"] for item in member_rows))),
                     "suggestedMembers": json.loads(row["suggested_members_json"] or "[]"),
                     "pendingSubmissionCount": submission_counts.get(row["id"], 0),
                     "members": [item["name"] for item in member_rows],
