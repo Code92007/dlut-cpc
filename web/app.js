@@ -26,7 +26,8 @@ const routeFromPath = () => {
   return routes.has(route) ? route : "home";
 };
 
-const medalClass = (medal) => ({ 金牌: "gold", 银牌: "silver", 铜牌: "bronze" }[medal] || "");
+const medalClass = (medal) => ({ 金牌: "gold", 银牌: "silver", 铜牌: "bronze", 铁牌: "iron" }[medal] || "");
+const resultRank = (honor) => `${escapeHtml(honor.rank || honor.overallRank || "—")}${honor.official === false ? '<small class="result-status">非正式</small>' : ""}`;
 
 const renderMembers = (members) => {
   if (!members?.length) return '<span class="unknown">暂无成员记录</span>';
@@ -62,24 +63,24 @@ function medalChart(summary) {
   const margin = { top: 30, right: 32, bottom: 48, left: 44 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
-  const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze]));
+  const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze, item.iron || 0]));
   const maxY = Math.ceil(maxValue / 3) * 3;
   const x = (index) => margin.left + (chartWidth * index) / Math.max(1, summary.length - 1);
   const y = (value) => margin.top + chartHeight - (chartHeight * value) / maxY;
-  const colors = { gold: "#d8a126", silver: "#9aa2ad", bronze: "#b86d45" };
+  const colors = { gold: "#d8a126", silver: "#9aa2ad", bronze: "#b86d45", iron: "#52606d" };
   const grids = [];
   for (let value = 0; value <= maxY; value += 3) {
     grids.push(`<line x1="${margin.left}" y1="${y(value)}" x2="${width - margin.right}" y2="${y(value)}" stroke="#dfe3e8" />`);
     grids.push(`<text x="${margin.left - 10}" y="${y(value) + 4}" text-anchor="end" fill="#7a838f" font-size="11">${value}</text>`);
   }
-  const series = ["gold", "silver", "bronze"].map((key) => {
-    const points = summary.map((item, index) => `${x(index)},${y(item[key])}`).join(" ");
-    const dots = summary.map((item, index) => `<circle cx="${x(index)}" cy="${y(item[key])}" r="3.5" fill="#fff" stroke="${colors[key]}" stroke-width="2" />`).join("");
+  const series = ["gold", "silver", "bronze", "iron"].map((key) => {
+    const points = summary.map((item, index) => `${x(index)},${y(item[key] || 0)}`).join(" ");
+    const dots = summary.map((item, index) => `<circle cx="${x(index)}" cy="${y(item[key] || 0)}" r="3.5" fill="#fff" stroke="${colors[key]}" stroke-width="2" />`).join("");
     return `<polyline points="${points}" fill="none" stroke="${colors[key]}" stroke-width="2.2" stroke-linejoin="round" />${dots}`;
   }).join("");
   const years = summary.map((item, index) => `<text x="${x(index)}" y="${height - 18}" text-anchor="middle" fill="#68717e" font-size="11">${item.year}</text>`).join("");
-  return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span></div>
-    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度奖牌趋势图">${grids.join("")}${series}${years}</svg></div>`;
+  return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span><span class="iron">铁牌</span></div>
+    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度成绩趋势图">${grids.join("")}${series}${years}</svg></div>`;
 }
 
 function honorRows(honors) {
@@ -89,7 +90,7 @@ function honorRows(honors) {
       <td class="team-name">${escapeHtml(honor.team)}</td>
       <td><div class="member-list">${renderMembers(honor.members)}</div></td>
       <td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td>
-      <td>${escapeHtml(honor.rank || "—")}</td>
+      <td>${resultRank(honor)}</td>
       <td>${sourceLink(honor.source)}</td>
     </tr>`).join("");
 }
@@ -112,17 +113,17 @@ function homePage(data) {
       <div class="metric"><strong>${total}</strong><span>2020 年以来奖牌</span></div>
       <div class="metric"><strong>${gold}</strong><span>金牌</span></div>
       <div class="metric"><strong>${escapeHtml(data.meta.bestRank)}</strong><span>区域赛最高正式排名</span></div>
-      <div class="metric"><strong>${escapeHtml(data.meta.memberCoverage)}%</strong><span>获奖成员覆盖率</span></div>
+      <div class="metric"><strong>${escapeHtml(data.meta.memberCoverage)}%</strong><span>参赛成员覆盖率</span></div>
     </section>
     <div class="home-content">
       <section class="section-block">
-        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌趋势</h2></div><div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div>
+        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度成绩趋势</h2></div><div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div>
         <div class="chart-panel">${medalChart(data.medalSummary)}</div>
       </section>
       <section class="section-block">
-        <div class="section-heading"><div><span class="eyebrow">Honor</span><h2>最近获奖</h2></div><a href="/honor" data-route="honor">查看完整荣誉 ›</a></div>
+        <div class="section-heading"><div><span class="eyebrow">Honor</span><h2>最近参赛</h2></div><a href="/honor" data-route="honor">查看全部成绩 ›</a></div>
         <div class="data-table-wrap"><table class="data-table">
-          <thead><tr><th>日期</th><th>赛区</th><th>队伍</th><th>成员</th><th>奖项</th><th>正式排名</th><th>来源</th></tr></thead>
+          <thead><tr><th>日期</th><th>赛区</th><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
           <tbody>${honorRows(recent)}</tbody>
         </table></div>
       </section>
@@ -143,14 +144,14 @@ function honorPage(data) {
       <h2>${escapeHtml(event)}</h2>
       <p class="contest-caption">${escapeHtml(rows[0].date)} · ${escapeHtml(rows[0].location)}</p>
       <div class="data-table-wrap"><table class="data-table honor-table">
-        <thead><tr><th>队伍</th><th>成员</th><th>奖项</th><th>正式排名</th><th>来源</th></tr></thead>
-        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${escapeHtml(honor.rank || "—")}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
+        <thead><tr><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
+        <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
       </table></div>
     </section>`).join("");
   return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Honor Archive</span><h1>获奖记录</h1><p>公开榜单按学校、赛事、日期与队名归一化去重，队员名单来自对应赛事榜单及补充来源。</p></div><div class="source-status"><i></i><span>${filtered.length} 条记录</span></div></div>
+      <div class="page-heading"><div><span class="eyebrow">Contest Results</span><h1>参赛成绩</h1><p>2020 年以来 ICPC、CCPC 等赛事的获牌与未获牌记录。</p></div><div class="source-status"><i></i><span>${filtered.length} 条记录</span></div></div>
       <div class="filters">
-        <label class="filter-group"><span>奖项</span><select id="honorMedal"><option value="all">全部奖项</option>${["金牌", "银牌", "铜牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
+        <label class="filter-group"><span>成绩</span><select id="honorMedal"><option value="all">全部成绩</option>${["金牌", "银牌", "铜牌", "铁牌"].map((m) => `<option value="${m}" ${state.honorMedal === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
         <label class="filter-group grow"><span>搜索</span><input id="honorQuery" type="search" value="${escapeHtml(state.honorQuery)}" placeholder="比赛、赛区、队伍或成员"></label>
       </div>
       <div class="season-layout">
@@ -168,6 +169,18 @@ function ratingColor(rating) {
   return "blue";
 }
 
+function compareMemberMedals(a, b) {
+  const aMedals = a.medals || {};
+  const bMedals = b.medals || {};
+  const aIron = aMedals.iron ?? Infinity;
+  const bIron = bMedals.iron ?? Infinity;
+  return (bMedals.gold || 0) - (aMedals.gold || 0)
+    || (bMedals.silver || 0) - (aMedals.silver || 0)
+    || (bMedals.bronze || 0) - (aMedals.bronze || 0)
+    || (aIron === bIron ? 0 : aIron - bIron)
+    || a.name.localeCompare(b.name, "zh-CN");
+}
+
 function ratingPage(data) {
   const statusLabel = { current: "近年成员", alumni: "往届成员", unknown: "年代待补", manual: "人工补录" };
   const query = state.memberQuery.trim().toLowerCase();
@@ -178,15 +191,7 @@ function ratingPage(data) {
     return [member.name, ...(member.teams || []), member.handles?.codeforces?.handle || ""].join(" ").toLowerCase().includes(query);
   });
   if (state.memberSort === "honors") members.sort((a, b) => b.honorCount - a.honorCount || a.name.localeCompare(b.name, "zh-CN"));
-  if (state.memberSort === "medals") members.sort((a, b) => {
-    const aMedals = a.medals || {};
-    const bMedals = b.medals || {};
-    return (bMedals.gold || 0) - (aMedals.gold || 0)
-      || (bMedals.silver || 0) - (aMedals.silver || 0)
-      || (bMedals.bronze || 0) - (aMedals.bronze || 0)
-      || b.honorCount - a.honorCount
-      || a.name.localeCompare(b.name, "zh-CN");
-  });
+  if (state.memberSort === "medals") members.sort(compareMemberMedals);
   if (state.memberSort === "rating") members.sort((a, b) => (b.handles?.codeforces?.rating || -1) - (a.handles?.codeforces?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
   if (state.memberSort === "cpcfinder") members.sort((a, b) => (b.cpcfinder?.rating || -1) - (a.cpcfinder?.rating || -1) || a.name.localeCompare(b.name, "zh-CN"));
   const handleCount = (data.members || []).filter((member) => member.handles?.codeforces?.handle).length;
@@ -215,7 +220,7 @@ function ratingPage(data) {
       <td>${escapeHtml(statusLabel[member.status] || "成员")}</td>
       <td>${escapeHtml(years)}</td>
       <td>${teams}</td>
-      <td><div class="member-medals"><span class="gold">金 ${medals.gold || 0}</span><span class="silver">银 ${medals.silver || 0}</span><span class="bronze">铜 ${medals.bronze || 0}</span></div></td>
+      <td><div class="member-medals"><span class="gold">金 ${medals.gold || 0}</span><span class="silver">银 ${medals.silver || 0}</span><span class="bronze">铜 ${medals.bronze || 0}</span><span class="iron">${medals.iron == null ? "铁待补" : `铁 ${medals.iron}`}</span></div></td>
       <td>${publicRating}</td>
       <td>${accountCell}</td>
       <td class="handle ${ratingColor(account?.rating)}">${account?.rating ? escapeHtml(account.rating) : "—"}</td>
@@ -227,7 +232,7 @@ function ratingPage(data) {
         <div><strong>${escapeHtml(data.meta.memberCount)}</strong><span>已收录成员</span></div>
         <div><strong>${publicMemberCount}</strong><span>CPC Finder 名册</span></div>
         <div><strong>${handleCount}</strong><span>已关联 CF 账号</span></div>
-        <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含完整成员的奖项</span></div>
+        <div><strong>${escapeHtml(data.meta.honorsWithMembers)}</strong><span>含成员的参赛成绩</span></div>
       </section>
       <div class="filters member-filters">
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>

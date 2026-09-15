@@ -395,6 +395,20 @@ a:hover {
   color: var(--bronze);
 }
 
+.chart-legend .iron,
+.medal.iron,
+.member-medals .iron {
+  color: #52606d;
+}
+
+.result-status {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+}
+
 .data-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--line-strong);
@@ -642,7 +656,7 @@ a:hover {
 }
 
 .member-directory-table {
-  min-width: 1160px;
+  min-width: 1210px;
 }
 
 .member-directory-table th:nth-child(1) {
@@ -655,7 +669,7 @@ a:hover {
 }
 
 .member-directory-table th:nth-child(5) {
-  width: 190px;
+  width: 240px;
 }
 
 .member-directory-table th:nth-child(6) {

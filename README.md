@@ -6,8 +6,8 @@
 
 ## 页面
 
-- `/home`：2020 年以来奖牌趋势与最近获奖。
-- `/honor`：按年份、奖项、关键词检索获奖记录。
+- `/home`：2020 年以来金、银、铜、铁成绩趋势与最近参赛。
+- `/honor`：按年份、成绩、关键词检索获牌及未获牌记录。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
 - `/training`：牛客暑期多校、杭电多校和队内训练榜单。
 
@@ -28,13 +28,17 @@ python3 app.py
 python3 -m unittest discover -s tests -v
 ```
 
+有 Node.js 的环境还可执行排序回归测试：`node --test tests/test_member_sort.mjs`。
+
 ## 数据
 
 `data/site.json` 是可版本控制的公开数据快照，`runtime/dlut_cpc.sqlite3` 是运行时主数据库。首次启动会将快照导入 SQLite，之后自动同步只更新公开数据，不会删除人工录入的成员、账号关联或历史奖项。数据库支持同一奖项和成员关联多个来源，并用 CPC Finder 学生 UUID 区分同名成员。
 
-当前奖牌与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API、选手目录 API 和各赛事榜单 API，仅保留 2020 年及以后的金、银、铜牌记录。同步脚本会逐项关联 `awardId`、`contestId`、`teamId` 与稳定的 `studentId`，再导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或经过核验的 QOJ 镜像榜补充或覆盖。
+当前成绩与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API、选手目录 API、选手参赛 API 和各赛事榜单 API，仅保留 2020 年及以后的成绩。同步脚本会逐项关联 `awardId`、`contestId`、`teamId` 与稳定的 `studentId`，核对学校后导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或经过核验的 QOJ 镜像榜补充或覆盖。
 
 选手目录收录大连理工大学主校区及盘锦校区，显式排除查询结果中名称相似但并非本校 CPC 队的“大连理工大学城市学院”。CPC Finder 的校内奖牌汇总作为成员页奖牌数的公开基准，队内数据库仍可补录更早成员、账号和历史赛事。
+
+铁牌指有有效比赛名次、但没有金银铜牌的参赛成绩，包含来源标记为非正式的参赛记录，并在页面保留“非正式”标记。缺少名次或尚未确定结果不视为铁牌。铁牌次数来自选手逐场参赛记录，并与学校榜单核对；未查全的次数显示“铁待补”，不会当作 0。“奖牌榜顺序”依次按金、银、铜数量降序及铁牌数量升序排列；“获奖次数”不含铁牌。
 
 同步 CPC Finder 并执行归一化去重：
 

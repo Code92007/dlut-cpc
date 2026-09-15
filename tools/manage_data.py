@@ -60,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_honor.add_argument("--date", required=True)
     add_honor.add_argument("--location", default="")
     add_honor.add_argument("--team", required=True)
-    add_honor.add_argument("--medal", choices=("金牌", "银牌", "铜牌", "冠军", "亚军", "季军"), required=True)
+    add_honor.add_argument("--medal", choices=("金牌", "银牌", "铜牌", "铁牌", "冠军", "亚军", "季军"), required=True)
     add_honor.add_argument("--rank", default="")
     add_honor.add_argument("--overall-rank", default="")
     add_honor.add_argument("--member-id", type=int, action="append", default=[])

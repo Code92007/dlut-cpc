@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Iterable
 
 
-MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3}
-SCHEMA_VERSION = 2
+MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
+SCHEMA_VERSION = 3
 
 
 def normalize_name(value: str) -> str:
@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS member_public_stats (
     gold_count INTEGER NOT NULL DEFAULT 0,
     silver_count INTEGER NOT NULL DEFAULT 0,
     bronze_count INTEGER NOT NULL DEFAULT 0,
+    iron_count INTEGER,
     latest_event_date TEXT NOT NULL DEFAULT '',
     source_id INTEGER REFERENCES sources(id),
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -119,6 +120,7 @@ CREATE TABLE IF NOT EXISTS honors (
     medal TEXT NOT NULL,
     rank TEXT NOT NULL DEFAULT '',
     overall_rank TEXT NOT NULL DEFAULT '',
+    official INTEGER,
     external_provider TEXT,
     external_award_id TEXT,
     external_contest_id TEXT,
@@ -166,10 +168,18 @@ class Database:
 
     def initialize(self, seed: dict | None = None) -> None:
         with self.connect() as connection:
-            connection.executescript(SCHEMA)
-            connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+            self._ensure_schema(connection)
             if seed:
                 self._sync_site_data(connection, seed)
+
+    @staticmethod
+    def _ensure_schema(connection: sqlite3.Connection) -> None:
+        connection.executescript(SCHEMA)
+        for table, column in (("member_public_stats", "iron_count"), ("honors", "official")):
+            columns = {row["name"] for row in connection.execute(f"PRAGMA table_info({table})")}
+            if column not in columns:
+                connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} INTEGER")
+        connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     def _source(self, connection: sqlite3.Connection, source: dict | None, *, manual: bool = False) -> int:
         item = source or {"name": "人工录入" if manual else "未知来源", "url": ""}
@@ -311,6 +321,15 @@ class Database:
 
     def _upsert_honor(self, connection: sqlite3.Connection, record: dict, *, manual: bool = False) -> str:
         honor_id = str(record.get("id") or self._manual_honor_id(record))
+        external_provider = record.get("externalProvider") or ("cpcfinder" if record.get("cpcfinderAwardId") is not None else None)
+        external_award_id = str(record["cpcfinderAwardId"]) if record.get("cpcfinderAwardId") is not None else record.get("externalAwardId")
+        if external_provider and external_award_id:
+            identity = connection.execute(
+                "SELECT id FROM honors WHERE external_provider=? AND external_award_id=?",
+                (external_provider, external_award_id),
+            ).fetchone()
+            if identity:
+                honor_id = identity["id"]
         sources = self._honor_sources(record)
         source_ids = [(self._source(connection, item, manual=manual), item) for item in sources]
         primary_source_id = max(source_ids, key=lambda pair: source_priority(str(pair[1].get("name") or "")))[0]
@@ -325,8 +344,9 @@ class Database:
             str(record.get("medal") or ""),
             str(record.get("rank") or ""),
             str(record.get("overallRank") or ""),
-            record.get("externalProvider") or ("cpcfinder" if record.get("cpcfinderAwardId") is not None else None),
-            str(record["cpcfinderAwardId"]) if record.get("cpcfinderAwardId") is not None else record.get("externalAwardId"),
+            int(record["official"]) if record.get("official") is not None else None,
+            external_provider,
+            external_award_id,
             str(record["cpcfinderContestId"]) if record.get("cpcfinderContestId") is not None else record.get("externalContestId"),
             str(record["cpcfinderTeamId"]) if record.get("cpcfinderTeamId") is not None else record.get("externalTeamId"),
             primary_source_id,
@@ -334,15 +354,15 @@ class Database:
         )
         if not existing:
             connection.execute(
-                "INSERT INTO honors(id, event, series, date, location, team, normalized_team, medal, rank, overall_rank, "
+                "INSERT INTO honors(id, event, series, date, location, team, normalized_team, medal, rank, overall_rank, official, "
                 "external_provider, external_award_id, external_contest_id, external_team_id, primary_source_id, is_manual) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (honor_id, *values),
             )
         elif manual or not existing["is_manual"]:
             connection.execute(
                 "UPDATE honors SET event=?, series=?, date=?, location=?, team=?, normalized_team=?, medal=?, rank=?, "
-                "overall_rank=?, external_provider=?, external_award_id=?, external_contest_id=?, external_team_id=?, "
+                "overall_rank=?, official=?, external_provider=?, external_award_id=?, external_contest_id=?, external_team_id=?, "
                 "primary_source_id=?, is_manual=MAX(is_manual, ?), updated_at=CURRENT_TIMESTAMP WHERE id=?",
                 (*values, honor_id),
             )
@@ -382,13 +402,13 @@ class Database:
             if stats:
                 connection.execute(
                     "INSERT INTO member_public_stats(member_id, provider, rating, provider_rank, champion_count, "
-                    "second_count, third_count, gold_count, silver_count, bronze_count, latest_event_date, source_id) "
-                    "VALUES (?, 'cpcfinder', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                    "second_count, third_count, gold_count, silver_count, bronze_count, iron_count, latest_event_date, source_id) "
+                    "VALUES (?, 'cpcfinder', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
                     "ON CONFLICT(member_id, provider) DO UPDATE SET rating=excluded.rating, "
                     "provider_rank=excluded.provider_rank, champion_count=excluded.champion_count, "
                     "second_count=excluded.second_count, third_count=excluded.third_count, "
                     "gold_count=excluded.gold_count, silver_count=excluded.silver_count, "
-                    "bronze_count=excluded.bronze_count, latest_event_date=excluded.latest_event_date, "
+                    "bronze_count=excluded.bronze_count, iron_count=excluded.iron_count, latest_event_date=excluded.latest_event_date, "
                     "source_id=excluded.source_id, updated_at=CURRENT_TIMESTAMP",
                     (
                         member_id,
@@ -400,6 +420,7 @@ class Database:
                         int(stats.get("goldCount") or 0),
                         int(stats.get("silverCount") or 0),
                         int(stats.get("bronzeCount") or 0),
+                        stats.get("ironCount"),
                         str(stats.get("latestEventDate") or ""),
                         source_id,
                     ),
@@ -417,7 +438,7 @@ class Database:
 
     def sync_site_data(self, site: dict) -> None:
         with self.connect() as connection:
-            connection.executescript(SCHEMA)
+            self._ensure_schema(connection)
             self._sync_site_data(connection, site)
 
     def add_manual_member(
@@ -551,6 +572,7 @@ class Database:
                     "medal": row["medal"],
                     "rank": row["rank"],
                     "overallRank": row["overall_rank"],
+                    "official": bool(row["official"]) if row["official"] is not None else None,
                     "source": {"name": row["source_name"] or "未知来源", "url": row["source_url"] or ""},
                     "sources": [{"name": item["name"], "url": item["url"]} for item in source_rows],
                     "manual": bool(row["is_manual"]),
@@ -564,7 +586,7 @@ class Database:
         result = []
         for row in rows:
             honors = connection.execute(
-                "SELECT h.id, h.date, h.team, h.medal FROM honor_members hm "
+                "SELECT h.id, h.date, h.team, h.medal, h.is_manual, h.external_provider, h.external_award_id FROM honor_members hm "
                 "JOIN honors h ON h.id=hm.honor_id WHERE hm.member_id=? ORDER BY h.date DESC",
                 (row["id"],),
             ).fetchall()
@@ -582,17 +604,24 @@ class Database:
                 (row["id"],),
             ).fetchone()
             years = [int(item["date"][:4]) for item in honors if item["date"][:4].isdigit()]
-            medals = {"gold": 0, "silver": 0, "bronze": 0}
-            medal_fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze"}
+            medals = {"gold": 0, "silver": 0, "bronze": 0, "iron": 0}
+            manual_medals = dict(medals)
+            medal_fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze", "铁牌": "iron"}
             for honor in honors:
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
+                    if honor["is_manual"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
+                        manual_medals[field] += 1
             if public_stats:
                 medals = {
-                    "gold": int(public_stats["gold_count"]),
-                    "silver": int(public_stats["silver_count"]),
-                    "bronze": int(public_stats["bronze_count"]),
+                    "gold": int(public_stats["gold_count"]) + manual_medals["gold"],
+                    "silver": int(public_stats["silver_count"]) + manual_medals["silver"],
+                    "bronze": int(public_stats["bronze_count"]) + manual_medals["bronze"],
+                    "iron": (
+                        int(public_stats["iron_count"]) + manual_medals["iron"]
+                        if public_stats["iron_count"] is not None else None
+                    ),
                 }
             latest_public_year = None
             if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():
@@ -624,7 +653,7 @@ class Database:
                     "firstYear": min(years) if years else row["entry_year"],
                     "lastYear": max(activity_years) if activity_years else row["graduation_year"],
                     "teams": teams,
-                    "honorCount": sum(medals.values()) if public_stats else len(honors),
+                    "honorCount": sum(medals[key] for key in ("gold", "silver", "bronze")) if public_stats else sum(honor["medal"] != "铁牌" for honor in honors),
                     "medals": medals,
                     "handles": account_map,
                     "cpcfinder": (
@@ -667,10 +696,10 @@ class Database:
     @staticmethod
     def _medal_summary(honors: Iterable[dict]) -> list[dict]:
         years: dict[str, dict] = {}
-        fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze"}
+        fields = {"金牌": "gold", "银牌": "silver", "铜牌": "bronze", "铁牌": "iron"}
         for record in honors:
             year = record["date"][:4]
-            item = years.setdefault(year, {"year": year, "gold": 0, "silver": 0, "bronze": 0})
+            item = years.setdefault(year, {"year": year, "gold": 0, "silver": 0, "bronze": 0, "iron": 0})
             field = fields.get(record["medal"])
             if field:
                 item[field] += 1

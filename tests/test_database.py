@@ -1,8 +1,9 @@
 import tempfile
+import sqlite3
 import unittest
 from pathlib import Path
 
-from database import Database
+from database import Database, SCHEMA
 
 
 def source(name="CPC Finder", url="https://example.com/source"):
@@ -105,6 +106,7 @@ class DatabaseTests(unittest.TestCase):
                     "goldCount": 2,
                     "silverCount": 6,
                     "bronzeCount": 2,
+                    "ironCount": 4,
                     "latestEventDate": "2023-03-25",
                 },
                 "source": source("CPC Finder 选手库", "https://cpcfinder.com/student/student-1"),
@@ -119,6 +121,7 @@ class DatabaseTests(unittest.TestCase):
                     "goldCount": 0,
                     "silverCount": 0,
                     "bronzeCount": 0,
+                    "ironCount": 0,
                     "latestEventDate": "2025-07-01",
                 },
                 "source": source("CPC Finder 选手库", "https://cpcfinder.com/student/student-4"),
@@ -131,9 +134,72 @@ class DatabaseTests(unittest.TestCase):
         unawarded = next(item for item in payload["members"] if item["name"] == "未获奖成员")
 
         self.assertEqual(len(payload["members"]), 4)
-        self.assertEqual(zhang["medals"], {"gold": 2, "silver": 6, "bronze": 2})
+        self.assertEqual(zhang["medals"], {"gold": 2, "silver": 6, "bronze": 2, "iron": 4})
+        self.assertEqual(zhang["honorCount"], 10)
         self.assertEqual(zhang["cpcfinder"]["rank"], 1)
         self.assertEqual(unawarded["honorCount"], 0)
+
+    def test_iron_counts_actual_members_and_does_not_increase_honor_count(self):
+        enriched = seed_data()
+        enriched["honors"].append({
+            **enriched["honors"][0], "id": "iron-1", "team": "参赛队", "medal": "铁牌",
+            "official": False, "members": ["张三"],
+            "memberDetails": [{"name": "张三", "provider": "cpcfinder", "externalId": "student-1"}],
+        })
+        self.database.initialize(enriched)
+        payload = self.database.payload(enriched)
+        zhang = next(m for m in payload["members"] if m["name"] == "张三")
+        li = next(m for m in payload["members"] if m["name"] == "李四")
+        self.assertEqual(zhang["medals"]["iron"], 1)
+        self.assertEqual(zhang["honorCount"], 1)
+        self.assertEqual(li["medals"]["iron"], 0)
+        self.assertEqual(payload["medalSummary"][0]["iron"], 1)
+        self.assertFalse(next(h for h in payload["honors"] if h["id"] == "iron-1")["official"])
+
+    def test_manual_iron_is_added_to_public_count_and_survives_resync(self):
+        enriched = seed_data()
+        enriched["publicMembers"] = [{
+            "name": "张三", "provider": "cpcfinder", "externalId": "student-1",
+            "cpcfinder": {"goldCount": 1, "ironCount": 2}, "source": source(),
+        }]
+        self.database.initialize(enriched)
+        zhang = next(m for m in self.database.payload(enriched)["members"] if m["name"] == "张三")
+        honor_id = self.database.add_manual_honor({
+            "event": "历史参赛", "date": "2021-11-01", "team": "老队伍", "medal": "铁牌", "source": source("人工录入"),
+        })
+        self.database.link_member(honor_id, zhang["id"])
+        self.database.initialize(enriched)
+        zhang = next(m for m in self.database.payload(enriched)["members"] if m["name"] == "张三")
+        self.assertEqual(zhang["medals"]["iron"], 3)
+        self.assertEqual(zhang["honorCount"], 1)
+
+    def test_v2_migration_preserves_manual_members_and_handles(self):
+        old_path = Path(self.temporary.name) / "old.sqlite3"
+        old_schema = SCHEMA.replace("    iron_count INTEGER,\n", "").replace("    official INTEGER,\n", "")
+        with sqlite3.connect(old_path) as connection:
+            connection.executescript(old_schema)
+            connection.execute("INSERT INTO members(id, name, normalized_name, is_manual) VALUES (100, '远古成员', '远古成员', 1)")
+            connection.execute("INSERT INTO member_handles(member_id, platform, handle) VALUES (100, 'codeforces', 'legacy')")
+            connection.execute("PRAGMA user_version=2")
+        migrated = Database(old_path)
+        migrated.initialize(self.seed)
+        member = next(m for m in migrated.payload(self.seed)["members"] if m["id"] == 100)
+        self.assertTrue(member["manual"])
+        self.assertEqual(member["handles"]["codeforces"]["handle"], "legacy")
+        with migrated.connect() as connection:
+            self.assertEqual(connection.execute("PRAGMA user_version").fetchone()[0], 3)
+
+    def test_same_external_award_different_snapshot_id_updates_existing_record(self):
+        enriched = seed_data()
+        enriched["honors"][0]["cpcfinderAwardId"] = 101
+        self.database.initialize(enriched)
+        enriched["honors"][0]["id"] = "new-snapshot-id"
+        enriched["honors"][0]["rank"] = "2 / 100"
+        self.database.initialize(enriched)
+        honors = self.database.payload(enriched)["honors"]
+        self.assertEqual(len(honors), 1)
+        self.assertEqual(honors[0]["id"], "award-1")
+        self.assertEqual(honors[0]["rank"], "2 / 100")
 
     def test_resync_removes_stale_public_result_link_but_keeps_manual_source(self):
         stale_seed = seed_data()
