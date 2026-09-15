@@ -159,7 +159,7 @@ function homePage(data) {
       </section>
       <section class="section-block">
         <div class="section-heading"><div><span class="eyebrow">Honor</span><h2>最近参赛</h2></div><a href="/honor" data-route="honor">查看全部成绩 ›</a></div>
-        <div class="data-table-wrap"><table class="data-table">
+        <div class="data-table-wrap"><table class="data-table result-table">
           <thead><tr><th>日期</th><th>赛区</th><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
           <tbody>${honorRows(recent)}</tbody>
         </table></div>
@@ -181,7 +181,7 @@ function honorPage(data) {
   const sections = Object.entries(grouped).map(([event, rows]) => `<section class="season-section">
       <h2>${escapeHtml(event)}</h2>
       <p class="contest-caption">${escapeHtml(rows[0].date)} · ${escapeHtml(rows[0].location)}</p>
-      <div class="data-table-wrap"><table class="data-table honor-table">
+      <div class="data-table-wrap"><table class="data-table honor-table result-table">
         <thead><tr><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>
         <tbody>${rows.map((honor) => `<tr><td class="team-name">${escapeHtml(honor.team)}<small class="result-status" title="${escapeHtml(honor.originalSchool || honor.school)}">${escapeHtml(honor.school)}</small></td><td><div class="member-list">${renderMembers(honor.members)}</div>${!honor.rosterConfirmed ? '<a href="/pending" data-route="pending" class="result-status">待确认成员</a>' : ''}</td><td class="medal ${medalClass(honor.medal)}">${escapeHtml(honor.medal)}</td><td>${resultRank(honor)}</td><td>${sourceLink(honor.source)}</td></tr>`).join("")}</tbody>
       </table></div>

@@ -12,7 +12,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 8
+SCHEMA_VERSION = 9
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -21,6 +21,9 @@ def load_seed_file(path: Path | str) -> dict:
     archive = path.parent / "historical_honors.json"
     if archive.exists():
         data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]
+    official = path.parent / "ccpc_official_honors.json"
+    if official.exists():
+        data["officialImports"] = [json.loads(official.read_text(encoding="utf-8"))]
     return data
 
 
@@ -170,6 +173,14 @@ CREATE TABLE IF NOT EXISTS honor_sources (
     role TEXT NOT NULL DEFAULT 'result',
     is_manual INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY(honor_id, source_id, role)
+);
+
+CREATE TABLE IF NOT EXISTS honor_source_records (
+    provider TEXT NOT NULL,
+    external_id TEXT NOT NULL,
+    honor_id TEXT NOT NULL REFERENCES honors(id) ON DELETE CASCADE,
+    record_json TEXT NOT NULL,
+    PRIMARY KEY(provider, external_id)
 );
 
 CREATE TABLE IF NOT EXISTS honor_members (
@@ -459,6 +470,7 @@ class Database:
         honor_id = str(record.get("id") or self._manual_honor_id(record))
         external_provider = record.get("externalProvider") or ("cpcfinder" if record.get("cpcfinderAwardId") is not None else None)
         external_award_id = str(record["cpcfinderAwardId"]) if record.get("cpcfinderAwardId") is not None else record.get("externalAwardId")
+        archive_union = False
         if external_provider and external_award_id:
             identity = connection.execute(
                 "SELECT id FROM honors WHERE external_provider=? AND external_award_id=?",
@@ -466,6 +478,23 @@ class Database:
             ).fetchone()
             if identity:
                 honor_id = identity["id"]
+            elif record.get("series") == "CCPC" and external_provider != "ccpc-official" and not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
+                identity = connection.execute("SELECT honor_id FROM honor_source_records WHERE provider=? AND external_id=?",
+                                              (external_provider, external_award_id)).fetchone()
+                if identity:
+                    honor_id, archive_union = identity["honor_id"], True
+                else:
+                    # A public provider may later collect a previously archived
+                    # result. Reuse its local ID and preserve its curated roster.
+                    archived_ids = [row[0] for row in connection.execute("SELECT DISTINCT honor_id FROM honor_source_records WHERE provider='ccpc-official'")]
+                    if archived_ids:
+                        from official_imports import match_result
+                        incoming = {**record, "suggestedMembers": record.get("members", [])}
+                        status, target, warnings = match_result(incoming, self._honors_payload(connection, honor_ids=archived_ids))
+                        if status == "conflict":
+                            raise ValueError("Public result conflicts with the local CCPC archive: " + "; ".join(warnings))
+                        if status == "merged":
+                            honor_id, archive_union = target["id"], True
         sources = self._honor_sources(record)
         source_ids = [(self._source(connection, item, manual=manual), item) for item in sources]
         primary_source_id = max(source_ids, key=lambda pair: source_priority(str(pair[1].get("name") or "")))[0]
@@ -505,7 +534,7 @@ class Database:
         # A public sync is an authoritative snapshot of the currently verified
         # links. Drop stale imported mirrors while retaining human-curated links.
         connection.execute(
-            "DELETE FROM honor_sources WHERE honor_id=? AND is_manual=0",
+            "DELETE FROM honor_sources WHERE honor_id=? AND is_manual=0 AND role='result'",
             (honor_id,),
         )
         for source_id, _ in source_ids:
@@ -513,10 +542,17 @@ class Database:
                 "INSERT OR IGNORE INTO honor_sources(honor_id, source_id, role, is_manual) VALUES (?, ?, 'result', ?)",
                 (honor_id, source_id, int(manual)),
             )
+        if archive_union:
+            for source_id, _ in source_ids:
+                connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role,is_manual) VALUES (?,?,'archive',?)",
+                                   (honor_id, source_id, int(manual)))
+            connection.execute("INSERT OR IGNORE INTO honor_source_records(provider,external_id,honor_id,record_json) VALUES (?,?,?,?)",
+                               (external_provider, external_award_id, honor_id, json.dumps(record, ensure_ascii=False)))
 
         roster_override = connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"roster_override:{honor_id}",)).fetchone()
+        archived_roster = connection.execute("SELECT 1 FROM honor_roster_reviews WHERE honor_id=?", (honor_id,)).fetchone()
         # A confirmed local roster replaces imported membership, not just adds to it.
-        details = [] if roster_override else record.get("memberDetails") or [{"name": name} for name in record.get("members", [])]
+        details = [] if roster_override or archive_union or archived_roster else record.get("memberDetails") or [{"name": name} for name in record.get("members", [])]
         if details:
             connection.execute("DELETE FROM honor_members WHERE honor_id=? AND is_manual=0", (honor_id,))
             roster_source = record.get("memberSource") if isinstance(record.get("memberSource"), dict) else sources[0]
@@ -609,6 +645,9 @@ class Database:
             connection.execute("INSERT INTO metadata(key, value) VALUES (?, '1')", (marker,))
         for batch in site.get("historicalImports", []):
             self._import_historical_batch(connection, batch)
+        for batch in site.get("officialImports", []):
+            from official_imports import merge_batch
+            merge_batch(self, connection, batch)
         connection.execute(
             "INSERT INTO metadata(key, value) VALUES ('data_updated_at', ?) "
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
@@ -651,6 +690,14 @@ class Database:
         with self.connect() as connection:
             self._ensure_schema(connection)
             return self._import_historical_batch(connection, batch)
+
+    def merge_official_batch(self, batch: dict, *, dry_run: bool = False) -> dict:
+        from official_imports import merge_batch
+        with self.connect() as connection:
+            self._ensure_schema(connection)
+            connection.commit()
+            connection.execute("BEGIN IMMEDIATE")
+            return merge_batch(self, connection, batch, dry_run=dry_run)
 
     def _resolve_roster_member(self, connection: sqlite3.Connection, value: int | str,
                                school: str | None, source_id: int | None, *, create_missing: bool = True) -> int | str:
@@ -1102,6 +1149,7 @@ class Database:
         result = copy.deepcopy(base)
         result.pop("ratingGroups", None)
         result.pop("historicalImports", None)
+        result.pop("officialImports", None)
         result.pop("accountCorrections", None)
         result.pop("accountBindings", None)
         with self.connect() as connection:
@@ -1127,14 +1175,18 @@ class Database:
         )
         return result
 
-    def _honors_payload(self, connection: sqlite3.Connection) -> list[dict]:
+    def _honors_payload(self, connection: sqlite3.Connection, *, honor_ids: list[str] | None = None) -> list[dict]:
+        if honor_ids == []:
+            return []
         submission_counts = {row["honor_id"]: row["count"] for row in connection.execute(
             "SELECT honor_id, COUNT(*) AS count FROM roster_submissions WHERE status='pending' GROUP BY honor_id")}
+        where = " WHERE h.id IN (" + ",".join("?" for _ in honor_ids) + ")" if honor_ids else ""
         rows = connection.execute(
             "SELECT h.*, s.name AS source_name, s.url AS source_url, r.expected_members, r.school, r.original_school, "
             "r.confirmed_at, r.batch_id, r.suggested_members_json FROM honors h "
             "LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
-            "LEFT JOIN sources s ON s.id=h.primary_source_id ORDER BY h.date DESC, h.event, h.team"
+            "LEFT JOIN sources s ON s.id=h.primary_source_id" + where + " ORDER BY h.date DESC, h.event, h.team",
+            honor_ids or [],
         ).fetchall()
         result = []
         for row in rows:
@@ -1146,7 +1198,7 @@ class Database:
                 (row["id"],),
             ).fetchall()
             source_rows = connection.execute(
-                "SELECT s.name, s.url FROM honor_sources hs JOIN sources s ON s.id=hs.source_id "
+                "SELECT DISTINCT s.name, s.url, s.priority FROM honor_sources hs JOIN sources s ON s.id=hs.source_id "
                 "WHERE hs.honor_id=? ORDER BY s.priority DESC, s.name",
                 (row["id"],),
             ).fetchall()
@@ -1195,7 +1247,8 @@ class Database:
         result = []
         for row in rows:
             honors = connection.execute(
-                "SELECT h.id, h.date, h.team, h.medal, h.is_manual, h.external_provider, h.external_award_id FROM honor_members hm "
+                "SELECT h.id, h.date, h.team, h.medal, h.is_manual, h.external_provider, h.external_award_id, "
+                "EXISTS(SELECT 1 FROM honor_source_records sr WHERE sr.honor_id=h.id AND sr.provider='cpcfinder') AS public_covered FROM honor_members hm "
                 "JOIN honors h ON h.id=hm.honor_id LEFT JOIN honor_roster_reviews r ON r.honor_id=h.id "
                 "WHERE hm.member_id=? AND (r.honor_id IS NULL OR r.confirmed_at IS NOT NULL) ORDER BY h.date DESC",
                 (row["id"],),
@@ -1222,7 +1275,7 @@ class Database:
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
-                    if (honor["is_manual"] or honor["external_provider"] == "rankland") and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
+                    if (honor["is_manual"] or honor["external_provider"] in {"rankland", "ccpc-official"}) and not honor["public_covered"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
                         manual_medals[field] += 1
             if public_stats:
                 medals = {
@@ -1234,9 +1287,9 @@ class Database:
                         if public_stats["iron_count"] is not None else None
                     ),
                 }
-            elif any(honor["external_provider"] == "rankland" for honor in honors):
-                # The archive contains medalists only, not a complete record of
-                # participation. Do not reward unknown iron totals as zero.
+            elif any(honor["external_provider"] in {"rankland", "ccpc-official"} for honor in honors):
+                # Historical archives do not prove a complete participation
+                # record. Do not reward unknown lifetime iron totals as zero.
                 medals["iron"] = None
             latest_public_year = None
             if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():

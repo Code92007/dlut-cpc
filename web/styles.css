@@ -486,6 +486,15 @@ a:hover {
   color: #99502d;
 }
 
+.result-table .medal.iron {
+  color: transparent;
+}
+
+.result-table .medal.iron::selection {
+  color: #8b3a46;
+  background-color: #c5e2f4;
+}
+
 .source-link {
   white-space: nowrap;
   font-size: 12px;

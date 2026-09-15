@@ -1,0 +1,3350 @@
+{
+  "batchId": "ccpc-official-union-20260916-v1",
+  "source": "https://ccpc.io/award",
+  "rankSource": "https://ccpc.io/rank",
+  "fetchedAt": "2026-09-15T16:38:53+00:00",
+  "contests": [
+    {
+      "postId": 366,
+      "title": "CCPC-2024 总决赛 获奖名单",
+      "event": "2024 CCPC 总决赛",
+      "date": "2025-05-11",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 365,
+      "title": "CCPC-2024 哈尔滨 获奖名单",
+      "event": "2024 CCPC 哈尔滨站",
+      "date": "2024-10-20",
+      "results": 3,
+      "pageComplete": true
+    },
+    {
+      "postId": 364,
+      "title": "CCPC-2024 济南 获奖名单",
+      "event": "2024 CCPC 济南站",
+      "date": "2024-10-27",
+      "results": 2,
+      "pageComplete": true
+    },
+    {
+      "postId": 363,
+      "title": "CCPC-2024 重庆 获奖名单",
+      "event": "2024 CCPC 重庆站",
+      "date": "2024-11-10",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 362,
+      "title": "CCPC-2024 郑州 获奖名单",
+      "event": "2024 CCPC 郑州站",
+      "date": "2024-11-17",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 361,
+      "title": "CCPC-2024 高职专场 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 360,
+      "title": "CCPC-2024 女生专场 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 340,
+      "title": "CCPC-2023 总决赛 获奖名单",
+      "event": "2023 CCPC 总决赛",
+      "date": "2024-03-31",
+      "results": 0,
+      "pageComplete": true
+    },
+    {
+      "postId": 334,
+      "title": "CCPC 2023 高职专场 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 333,
+      "title": "CCPC 2023 女生专场 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 332,
+      "title": "CCPC 2023 深圳 获奖名单",
+      "event": "2023 CCPC 深圳站",
+      "date": "2023-11-12",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 331,
+      "title": "CCPC 2023 哈尔滨 获奖名单",
+      "event": "2023 CCPC 哈尔滨站",
+      "date": "2023-11-05",
+      "results": 3,
+      "pageComplete": true
+    },
+    {
+      "postId": 329,
+      "title": "CCPC 2023 桂林 获奖名单",
+      "event": "2023 CCPC 桂林站",
+      "date": "2023-10-29",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 328,
+      "title": "CCPC 2023-秦皇岛 获奖名单",
+      "event": "2023 CCPC 秦皇岛站",
+      "date": "2023-10-15",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 304,
+      "title": "CCPC-2022 总决赛 获奖名单",
+      "event": "2022 CCPC 总决赛",
+      "date": "2023-05-14",
+      "results": 0,
+      "pageComplete": true
+    },
+    {
+      "postId": 288,
+      "title": "CCPC-2022 女生专场获奖名单 ",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 286,
+      "title": "CCPC-2022 绵阳获奖名单",
+      "event": "2022 CCPC 绵阳站",
+      "date": "2022-11-20",
+      "results": 0,
+      "pageComplete": null
+    },
+    {
+      "postId": 282,
+      "title": "CCPC-2022 广州获奖名单",
+      "event": "2022 CCPC 广州站",
+      "date": "2022-11-13",
+      "results": 1,
+      "pageComplete": null
+    },
+    {
+      "postId": 279,
+      "title": "CCPC-2022 威海获奖名单",
+      "event": "2022 CCPC 威海站",
+      "date": "2022-11-06",
+      "results": 1,
+      "pageComplete": null
+    },
+    {
+      "postId": 276,
+      "title": "CCPC-2022 桂林获奖名单",
+      "event": "2022 CCPC 桂林站",
+      "date": "2022-10-30",
+      "results": 1,
+      "pageComplete": null
+    },
+    {
+      "postId": 272,
+      "title": "CCPC-2022 高职专场获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 261,
+      "title": "2021 CCPC 总决赛获奖名单",
+      "event": "2021 CCPC 总决赛",
+      "date": "2022-07-27",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 245,
+      "title": "CCPC-2021 女生赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 231,
+      "title": "CCPC-2021 华为云挑战赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 225,
+      "title": "CCPC-2020 长春站获奖名单",
+      "event": "2020 CCPC 长春站",
+      "date": "2020-11-08",
+      "results": 4,
+      "pageComplete": null
+    },
+    {
+      "postId": 224,
+      "title": "CCPC-2020 绵阳站获奖名单",
+      "event": "2020 CCPC 绵阳站",
+      "date": "2020-11-01",
+      "results": 2,
+      "pageComplete": null
+    },
+    {
+      "postId": 223,
+      "title": "CCPC-2020威海站获奖名单",
+      "event": "2020 CCPC 威海站",
+      "date": "2020-10-25",
+      "results": 2,
+      "pageComplete": null
+    },
+    {
+      "postId": 222,
+      "title": "CCPC-2020女生专场获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 221,
+      "title": "CCPC-2020秦皇岛获奖名单",
+      "event": "2020 CCPC 秦皇岛站",
+      "date": "2020-10-18",
+      "results": 2,
+      "pageComplete": null
+    },
+    {
+      "postId": 193,
+      "title": "CCPC-2019 总决赛获奖名单",
+      "event": "2019 CCPC 总决赛",
+      "date": "2019-11-17",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 194,
+      "title": "CCPC-2019 女生赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 192,
+      "title": "CCPC-2019 厦门获奖名单",
+      "event": "2019 CCPC 厦门站",
+      "date": "2019-10-20",
+      "results": 0,
+      "pageComplete": false
+    },
+    {
+      "postId": 191,
+      "title": "CCPC-2019 哈尔滨获奖名单",
+      "event": "2019 CCPC 哈尔滨站",
+      "date": "2019-10-13",
+      "results": 0,
+      "pageComplete": false
+    },
+    {
+      "postId": 190,
+      "title": "CCPC-2019 秦皇岛获奖名单",
+      "event": "2019 CCPC 秦皇岛站",
+      "date": "2019-09-22",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 137,
+      "title": "CCPC 2018 总决赛获奖名单",
+      "event": "2018 CCPC 总决赛",
+      "date": "2018-11-25",
+      "results": 1,
+      "pageComplete": true
+    },
+    {
+      "postId": 115,
+      "title": "CCPC 2018 吉林站获奖名单",
+      "event": "2018 CCPC 吉林站",
+      "date": "2018-09-22",
+      "results": 4,
+      "pageComplete": true
+    },
+    {
+      "postId": 135,
+      "title": "CCPC 2018 秦皇岛站获奖名单",
+      "event": "2018 CCPC 秦皇岛站",
+      "date": "2018-09-28",
+      "results": 3,
+      "pageComplete": true
+    },
+    {
+      "postId": 136,
+      "title": "CCPC 2018 桂林站获奖名单",
+      "event": "2018 CCPC 桂林站",
+      "date": "2018-10-28",
+      "results": 2,
+      "pageComplete": true
+    },
+    {
+      "postId": 113,
+      "title": "CCPC 2018 湘潭邀请赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 114,
+      "title": "CCPC 2018 女生专场获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 112,
+      "title": "CCPC 2018 河北省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 111,
+      "title": "CCPC 2018 广西省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 110,
+      "title": "CCPC 2018 广东省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 109,
+      "title": "CCPC 2018 江苏省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 108,
+      "title": "CCPC 2018 湖北省赛 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 107,
+      "title": "CCPC 2018 黑龙江省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 116,
+      "title": "CCPC 2018 东北地区赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 99,
+      "title": "CCPC 2017 总决赛获奖名单",
+      "event": "2017 CCPC 总决赛",
+      "date": "2017-12-03",
+      "results": 1,
+      "pageComplete": false
+    },
+    {
+      "postId": 96,
+      "title": "CCPC 2017 秦皇岛站获奖名单",
+      "event": "2017 CCPC 秦皇岛站",
+      "date": "2017-10-29",
+      "results": 0,
+      "pageComplete": false
+    },
+    {
+      "postId": 97,
+      "title": "CCPC 2017 杭州站获奖名单",
+      "event": "2017 CCPC 杭州站",
+      "date": "2017-11-05",
+      "results": 2,
+      "pageComplete": false
+    },
+    {
+      "postId": 98,
+      "title": "CCPC 2017 哈尔滨站获奖名单",
+      "event": "2017 CCPC 哈尔滨站",
+      "date": "2017-10-22",
+      "results": 2,
+      "pageComplete": false
+    },
+    {
+      "postId": 120,
+      "title": "CCPC 2017 女生专场获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 121,
+      "title": "CCPC 2017 湘潭邀请赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 122,
+      "title": "CCPC 2017 江苏省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 123,
+      "title": "CCPC 2017 吉林省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 124,
+      "title": "CCPC 2017  黑龙江省竞赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 125,
+      "title": "CCPC 2017 河北省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 126,
+      "title": "CCPC 2017 广东省赛 获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 127,
+      "title": "CCPC 2017 东北地区赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 95,
+      "title": "CCPC 2016 宁波总决赛获奖名单",
+      "event": "2016 CCPC 总决赛",
+      "date": "2016-11-27",
+      "results": 1,
+      "pageComplete": false
+    },
+    {
+      "postId": 94,
+      "title": "CCPC 2016 合肥站获奖名单",
+      "event": "2016 CCPC 合肥站",
+      "date": "2016-10-16",
+      "results": 1,
+      "pageComplete": false
+    },
+    {
+      "postId": 93,
+      "title": "CCPC 2016 杭州站获奖名单",
+      "event": "2016 CCPC 杭州站",
+      "date": "2016-10-19",
+      "results": 1,
+      "pageComplete": false
+    },
+    {
+      "postId": 92,
+      "title": "CCPC 2016 长春站获奖名单",
+      "event": "2016 CCPC 长春站",
+      "date": "2016-09-27",
+      "results": 2,
+      "pageComplete": false
+    },
+    {
+      "postId": 138,
+      "title": "CCPC 2016 女生专场获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 140,
+      "title": "CCPC 2016 湘潭邀请赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 91,
+      "title": "CCPC 2015 获奖名单",
+      "event": "2015 CCPC 南阳站",
+      "date": "2015-10-18",
+      "results": 0,
+      "pageComplete": false
+    },
+    {
+      "postId": 139,
+      "title": "CCPC 2016 吉林省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 141,
+      "title": "CCPC 2016 黑龙江省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 142,
+      "title": "CCPC 2016 东北地区赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 143,
+      "title": "CCPC 2016 广东省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 144,
+      "title": "CCPC 2016 江苏省赛获奖名单",
+      "excluded": "contest-type"
+    },
+    {
+      "postId": 382,
+      "title": "第11届中国大学生程序设计竞赛总决赛",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 381,
+      "title": "第 11 届 CCPC 中国大学生程序设计竞赛重庆站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 380,
+      "title": "第 11 届 CCPC 中国大学生程序设计竞赛郑州站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 379,
+      "title": "第 11 届 CCPC 中国大学生程序设计竞赛济南站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 378,
+      "title": "第 11 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 357,
+      "title": "第﻿十届 CCPC 总决赛",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 350,
+      "title": "第 10 届 CCPC 中国大学生程序设计竞赛郑州站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 349,
+      "title": "第 10 届 CCPC 中国大学生程序设计竞赛重庆站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 345,
+      "title": "第 10 届 CCPC 中国大学生程序设计竞赛济南站",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 343,
+      "title": "第 10 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "57",
+          "37",
+          "大连理工大学",
+          "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+          "7",
+          "1068"
+        ],
+        [
+          "206",
+          "",
+          "大连理工大学",
+          "我将点燃大海",
+          "4",
+          "394"
+        ],
+        [
+          "228",
+          "",
+          "大连理工大学",
+          "喵喵嘤",
+          "4",
+          "555"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 341,
+      "title": "第 9 届 CCPC 中国大学生程序设计竞赛总决赛",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "119",
+          "104",
+          "大连理工大学",
+          "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+          "2",
+          "116"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 327,
+      "title": "第 9 届 CCPC 中国大学生程序设计竞赛深圳站",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "106",
+          "62",
+          "大连理工大学",
+          "遇见彩虹，吃定彩虹",
+          "4",
+          "363"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 326,
+      "title": "第 9 届 CCPC 中国大学生程序设计竞赛桂林站",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "41",
+          "33",
+          "大连理工大学",
+          "新二保一",
+          "6",
+          "884"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 325,
+      "title": "第 9 届 CCPC 中国大学生程序设计竞赛哈尔滨站",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "100",
+          "69",
+          "大连理工大学",
+          "今天午饭吃了吗",
+          "4",
+          "371"
+        ],
+        [
+          "201",
+          "",
+          "大连理工大学",
+          "对无名",
+          "3",
+          "681"
+        ],
+        [
+          "224",
+          "",
+          "大连理工大学",
+          "我的魔法国",
+          "2",
+          "421"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 324,
+      "title": "第 9 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "198",
+          "130",
+          "大连理工大学",
+          "欧拉高斯哥德巴赫",
+          "4",
+          "612"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 285,
+      "title": "CCPC-2022 绵阳榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "215",
+          "141",
+          "大连理工大学",
+          "看懂题面就算成功",
+          "3",
+          "268"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 283,
+      "title": "CCPC-2022 广州榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "28",
+          "22",
+          "大连理工大学",
+          "秋招没人要",
+          "5",
+          "551"
+        ],
+        [
+          "186",
+          "-",
+          "大连理工大学",
+          "囚牛睚眦嘲风",
+          "3",
+          "258"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 278,
+      "title": "CCPC-2022 威海榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "22",
+          "17",
+          "大连理工大学",
+          "暂无名",
+          "8",
+          "1177"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 275,
+      "title": "CCPC-2022 桂林榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "*",
+          "-",
+          "大连理工大学",
+          "暂无名",
+          "7",
+          "1119"
+        ],
+        [
+          "126",
+          "84",
+          "大连理工大学",
+          "鹏鹏今天吃什么",
+          "4",
+          "523"
+        ],
+        [
+          "155",
+          "-",
+          "大连理工大学",
+          "给个AC吧",
+          "4",
+          "695"
+        ],
+        [
+          "*",
+          "-",
+          "大连理工大学",
+          "我要做纳西妲的编译器",
+          "3",
+          "318"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 265,
+      "title": "CCPC-2021-哈尔滨榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "36",
+          "28",
+          "大连理工大学",
+          "三带一",
+          "6",
+          "624"
+        ],
+        [
+          "81",
+          "-",
+          "大连理工大学",
+          "dlut01",
+          "5",
+          "522"
+        ],
+        [
+          "162",
+          "-",
+          "大连理工大学",
+          "阿巴阿巴",
+          "4",
+          "442"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 264,
+      "title": "CCPC-2021-威海榜单",
+      "kind": "rank-audit",
+      "pageComplete": true,
+      "dlutRows": [
+        [
+          "75",
+          "52",
+          "大连理工大学",
+          "东北三小只",
+          "5",
+          "657"
+        ],
+        [
+          "118",
+          "-",
+          "大连理工大学",
+          "优哉游哉",
+          "4",
+          "311"
+        ],
+        [
+          "*",
+          "-",
+          "大连理工大学",
+          "给个AC吧",
+          "3",
+          "528"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 228,
+      "title": "CCPC-2020 秦皇岛站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 226,
+      "title": "CCPC-2020 长春站终榜榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 187,
+      "title": "CCPC2019-秦皇岛站终榜榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 186,
+      "title": "CCPC2019-厦门站终榜榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 185,
+      "title": "CCPC2019-哈尔滨站终榜榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 163,
+      "title": "CCPC 2018 总决赛实时榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 101,
+      "title": "CCPC 2018 桂林站最终榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 66,
+      "title": "CCPC 2018 秦皇岛站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 65,
+      "title": "CCPC 2018 吉林站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [
+        [
+          "34",
+          "大连理工大学_远见",
+          "7",
+          "845",
+          "1/29",
+          "1/43"
+        ],
+        [
+          "71",
+          "大连理工大学开发区校区_冰菓",
+          "6",
+          "1009",
+          "1/66",
+          "6/93"
+        ],
+        [
+          "72",
+          "大连理工大学开发区校区_青歌行",
+          "6",
+          "1019",
+          "1/32",
+          "1/44"
+        ],
+        [
+          "75",
+          "大连理工大学_扶我起来还能A",
+          "6",
+          "1349",
+          "1/100",
+          "2/91"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 53,
+      "title": "CCPC 2017 总决赛榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [
+        [
+          "31",
+          "D9-大连理工大学-一步之遥",
+          "6",
+          "562",
+          "1/4",
+          "0/--"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 76,
+      "title": "CCPC 2017 杭州站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [
+        [
+          "59",
+          "大连理工大学软件学院",
+          "21",
+          "duduruduru",
+          "5",
+          "435"
+        ],
+        [
+          "72",
+          "大连理工大学软件学院",
+          "152",
+          "right or not",
+          "5",
+          "658"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 75,
+      "title": "CCPC 2017 秦皇岛站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 77,
+      "title": "CCPC 2017 哈尔滨站榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [
+        [
+          "8",
+          "大连理工大学软件学院_一步之遥_15D43",
+          "7",
+          "1009",
+          "1/122",
+          "1/106"
+        ],
+        [
+          "32",
+          "大连理工大学_远见_11D14",
+          "5",
+          "1200",
+          "2/282",
+          "0/–"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    },
+    {
+      "postId": 51,
+      "title": "CCPC 2016 总决赛榜单",
+      "kind": "rank-audit",
+      "pageComplete": false,
+      "dlutRows": [
+        [
+          "",
+          "41",
+          "43",
+          "30",
+          "大连理工大学软件学院",
+          "9"
+        ]
+      ],
+      "note": "Use explicit award lists; ranking without medal labels is not evidence of iron"
+    }
+  ],
+  "unresolved": [
+    {
+      "postId": 304,
+      "reason": "no-explicit-medal-or-school",
+      "cells": [
+        "114",
+        "一带三",
+        "本科",
+        "大连理工大学",
+        "",
+        "李雁志",
+        "葛俊辰",
+        "侯硕伟",
+        "陆坤"
+      ]
+    },
+    {
+      "postId": 115,
+      "reason": "no-explicit-medal-or-school",
+      "cells": [
+        "33",
+        "25",
+        "第二十五名",
+        "大连理工大学",
+        "王镜潼",
+        "武根泽",
+        "薛昕磊",
+        "梁冰"
+      ]
+    }
+  ],
+  "honors": [
+    {
+      "id": "ccpc-official-61966ea0befcd93aae16",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2016:长春:大连理工大学:境界的彼方",
+      "externalContestId": "ccpc2016:长春",
+      "event": "2016 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2016-09-27",
+      "location": "长春",
+      "team": "境界的彼方",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "45",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "孙敏",
+        "胡天翼",
+        "盛涛"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/92"
+      },
+      "archive": {
+        "postId": 92,
+        "rawAward": "银奖",
+        "rawCells": [
+          "(36)",
+          "45",
+          "银奖",
+          "G2016CCT045U036S",
+          "大连理工大学",
+          "境界的彼方",
+          "孙敏",
+          "胡天翼",
+          "盛涛",
+          "路慧"
+        ],
+        "pageSha256": "780f1e3b8c27378ac8fc5fe3e4ebd3af95814d7087e348b0f241497701389762",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2016changchun"
+      }
+    },
+    {
+      "id": "ccpc-official-d4350486c7f4ccd914bf",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2016:长春:大连理工大学:欧摩西裸衣",
+      "externalContestId": "ccpc2016:长春",
+      "event": "2016 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2016-09-27",
+      "location": "长春",
+      "team": "欧摩西裸衣",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "25",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "马少楠",
+        "刘小坤",
+        "熊昆"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/92"
+      },
+      "archive": {
+        "postId": 92,
+        "rawAward": "银奖",
+        "rawCells": [
+          "19",
+          "25",
+          "银奖",
+          "G2016CCT025U020S",
+          "大连理工大学",
+          "欧摩西裸衣",
+          "马少楠",
+          "刘小坤",
+          "熊昆",
+          "路慧"
+        ],
+        "pageSha256": "780f1e3b8c27378ac8fc5fe3e4ebd3af95814d7087e348b0f241497701389762",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2016changchun"
+      }
+    },
+    {
+      "id": "ccpc-official-74d9b061f900c8e90fef",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2016:合肥:大连理工大学:邪恶的极客",
+      "externalContestId": "ccpc2016:合肥",
+      "event": "2016 CCPC 合肥站",
+      "series": "CCPC",
+      "date": "2016-10-16",
+      "location": "合肥",
+      "team": "邪恶的极客",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "medal": "金牌",
+      "rank": "16",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "黄宇凡",
+        "金航宇",
+        "张寿奎"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/94"
+      },
+      "archive": {
+        "postId": 94,
+        "rawAward": "金奖",
+        "rawCells": [
+          "16",
+          "金奖",
+          "G2016HFT016U013G",
+          "大连理工大学软件学院",
+          "邪恶的极客",
+          "黄宇凡",
+          "金航宇",
+          "张寿奎",
+          "路慧"
+        ],
+        "pageSha256": "82bdec529f578cd1b09534f38b94ea3e4c72defdd13376f086f2bf5b451dc3e5",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2016hefei"
+      }
+    },
+    {
+      "id": "ccpc-official-66079b4895fb9dde030d",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2016:杭州:大连理工大学:求过签道题",
+      "externalContestId": "ccpc2016:杭州",
+      "event": "2016 CCPC 杭州站",
+      "series": "CCPC",
+      "date": "2016-10-19",
+      "location": "杭州",
+      "team": "求过签道题",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "67",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "解一鸣",
+        "章睿",
+        "薛昕磊"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/93"
+      },
+      "archive": {
+        "postId": 93,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "44",
+          "67",
+          "铜奖",
+          "G2016HZT067U044B",
+          "大连理工大学",
+          "求过签道题",
+          "解一鸣",
+          "章睿",
+          "薛昕磊",
+          "梁冰"
+        ],
+        "pageSha256": "bdf852bee5284910cace68dd6ed3292c244b9a10a3cc66ced06fc3c1f53fa59b",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2016hangzhou"
+      }
+    },
+    {
+      "id": "ccpc-official-7a83ec1cd3c6ad3a9e7a",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2016:总决赛:大连理工大学:邪恶的极客",
+      "externalContestId": "ccpc2016:总决赛",
+      "event": "2016 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2016-11-27",
+      "location": "总决赛",
+      "team": "邪恶的极客",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "medal": "铜牌",
+      "rank": "41",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "黄宇凡",
+        "金航宇",
+        "张寿奎"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/95"
+      },
+      "archive": {
+        "postId": 95,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "30",
+          "41",
+          "铜奖",
+          "大连理工大学软件学院",
+          "邪恶的极客",
+          "黄宇凡",
+          "金航宇",
+          "张寿奎",
+          "路慧"
+        ],
+        "pageSha256": "ec78ffc66425f401b65d7f5d00c5380a246bf5f42cb21564fc3e2a0f9b5cd8ea",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2016final"
+      }
+    },
+    {
+      "id": "ccpc-official-38e7afb7d84a2c7ae4a3",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2017:哈尔滨:大连理工大学:一步之遥",
+      "externalContestId": "ccpc2017:哈尔滨",
+      "event": "2017 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2017-10-22",
+      "location": "哈尔滨",
+      "team": "一步之遥",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "金牌",
+      "rank": "7",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "黄宇凡",
+        "金航宇",
+        "张寿奎"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/98"
+      },
+      "archive": {
+        "postId": 98,
+        "rawAward": "金奖",
+        "rawCells": [
+          "7",
+          "金奖",
+          "G2017HRBT007U005G",
+          "一步之遥",
+          "大连理工大学",
+          "黄宇凡",
+          "金航宇",
+          "张寿奎",
+          "路慧"
+        ],
+        "pageSha256": "10ae89e2a4e8adf51bed78d396c5fa13f0563554cdfe865a79a2782886115ee7",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2017harbin"
+      }
+    },
+    {
+      "id": "ccpc-official-137e6df9ab8ce39a2334",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2017:哈尔滨:大连理工大学:远见",
+      "externalContestId": "ccpc2017:哈尔滨",
+      "event": "2017 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2017-10-22",
+      "location": "哈尔滨",
+      "team": "远见",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "30",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "王镜潼",
+        "武根泽",
+        "薛昕磊"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/98"
+      },
+      "archive": {
+        "postId": 98,
+        "rawAward": "银奖",
+        "rawCells": [
+          "30",
+          "银奖",
+          "G2017HRBT030U022S",
+          "远见",
+          "大连理工大学",
+          "王镜潼",
+          "武根泽",
+          "薛昕磊",
+          "梁冰"
+        ],
+        "pageSha256": "10ae89e2a4e8adf51bed78d396c5fa13f0563554cdfe865a79a2782886115ee7",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2017harbin"
+      }
+    },
+    {
+      "id": "ccpc-official-310099724e83aec1bd88",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2017:杭州:大连理工大学:嘟嘟噜嘟噜",
+      "externalContestId": "ccpc2017:杭州",
+      "event": "2017 CCPC 杭州站",
+      "series": "CCPC",
+      "date": "2017-11-05",
+      "location": "杭州",
+      "team": "嘟嘟噜嘟噜",
+      "teamAliases": [
+        "duduruduru"
+      ],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "medal": "铜牌",
+      "rank": "56",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "胡天翼",
+        "史博文",
+        "沈书晗"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/97"
+      },
+      "archive": {
+        "postId": 97,
+        "rawAward": "铜牌",
+        "rawCells": [
+          "56",
+          "铜牌",
+          "大连理工大学软件学院",
+          "嘟嘟噜嘟噜",
+          "duduruduru",
+          "胡天翼",
+          "史博文",
+          "沈书晗",
+          "路慧"
+        ],
+        "pageSha256": "eed422b8681d67f28001544f4dd5cc778c3eaabff4480f030a7737cc81ad4af7",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
+      }
+    },
+    {
+      "id": "ccpc-official-1e6351b86d426d619d9f",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2017:杭州:大连理工大学:对不队",
+      "externalContestId": "ccpc2017:杭州",
+      "event": "2017 CCPC 杭州站",
+      "series": "CCPC",
+      "date": "2017-11-05",
+      "location": "杭州",
+      "team": "对不队",
+      "teamAliases": [
+        "right or not"
+      ],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "medal": "铜牌",
+      "rank": "69",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "李煜峰",
+        "杨飞",
+        "高凯"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/97"
+      },
+      "archive": {
+        "postId": 97,
+        "rawAward": "铜牌",
+        "rawCells": [
+          "69",
+          "铜牌",
+          "大连理工大学软件学院",
+          "对不队",
+          "right or not",
+          "李煜峰",
+          "杨飞",
+          "高凯",
+          "路慧"
+        ],
+        "pageSha256": "eed422b8681d67f28001544f4dd5cc778c3eaabff4480f030a7737cc81ad4af7",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
+      }
+    },
+    {
+      "id": "ccpc-official-e0408e2dcbeda0f990f3",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2017:总决赛:大连理工大学:一步之遥",
+      "externalContestId": "ccpc2017:总决赛",
+      "event": "2017 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2017-12-03",
+      "location": "总决赛",
+      "team": "一步之遥",
+      "teamAliases": [
+        "Poruna Cabeza"
+      ],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "medal": "银牌",
+      "rank": "29",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "黄宇凡",
+        "金航宇",
+        "张寿奎"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/99"
+      },
+      "archive": {
+        "postId": 99,
+        "rawAward": "银奖",
+        "rawCells": [
+          "29",
+          "银奖",
+          "大连理工大学软件学院",
+          "一步之遥",
+          "Poruna Cabeza",
+          "黄宇凡",
+          "金航宇",
+          "张寿奎",
+          "路慧",
+          ""
+        ],
+        "pageSha256": "9f8c1a314d54e108ccd1097cccf810e0c77f00b2aec7fbf38d6995c9644325b0",
+        "pageComplete": false,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2017final"
+      }
+    },
+    {
+      "id": "ccpc-official-263e9d169f818c0324c5",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:吉林:大连理工大学:冰菓",
+      "externalContestId": "ccpc2018:吉林",
+      "event": "2018 CCPC 吉林站",
+      "series": "CCPC",
+      "date": "2018-09-22",
+      "location": "吉林",
+      "team": "冰菓",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "70",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "傅心语",
+        "任奕舟",
+        "林俊贤"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/115"
+      },
+      "archive": {
+        "postId": 115,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "70",
+          "46",
+          "铜奖",
+          "大连理工大学",
+          "傅心语",
+          "任奕舟",
+          "林俊贤",
+          "陆坤"
+        ],
+        "pageSha256": "cc3c13a9c4eddddaae8302baeabd62209f9b8d4fc535c7e57decbedd7bb0f784",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin"
+      }
+    },
+    {
+      "id": "ccpc-official-6e1e3e16e0295294fb56",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:吉林:大连理工大学:扶我起来还能a",
+      "externalContestId": "ccpc2018:吉林",
+      "event": "2018 CCPC 吉林站",
+      "series": "CCPC",
+      "date": "2018-09-22",
+      "location": "吉林",
+      "team": "扶我起来还能A",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "74",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "陈建川",
+        "陈臻熙",
+        "张恒宇"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/115"
+      },
+      "archive": {
+        "postId": 115,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "74",
+          "47",
+          "铜奖",
+          "大连理工大学",
+          "陈建川",
+          "陈臻熙",
+          "张恒宇",
+          "梁冰"
+        ],
+        "pageSha256": "cc3c13a9c4eddddaae8302baeabd62209f9b8d4fc535c7e57decbedd7bb0f784",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin"
+      }
+    },
+    {
+      "id": "ccpc-official-3db4e4f1622caa6b7490",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:吉林:大连理工大学:远见",
+      "externalContestId": "ccpc2018:吉林",
+      "event": "2018 CCPC 吉林站",
+      "series": "CCPC",
+      "date": "2018-09-22",
+      "location": "吉林",
+      "team": "远见",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "33",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "王镜潼",
+        "武根泽",
+        "薛昕磊"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/115"
+      },
+      "archive": {
+        "postId": 115,
+        "rawAward": "银奖",
+        "rawCells": [
+          "33",
+          "25",
+          "银奖",
+          "大连理工大学",
+          "王镜潼",
+          "武根泽",
+          "薛昕磊",
+          "梁冰"
+        ],
+        "pageSha256": "cc3c13a9c4eddddaae8302baeabd62209f9b8d4fc535c7e57decbedd7bb0f784",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin"
+      }
+    },
+    {
+      "id": "ccpc-official-015d33bb4efae7219426",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:吉林:大连理工大学:青歌行",
+      "externalContestId": "ccpc2018:吉林",
+      "event": "2018 CCPC 吉林站",
+      "series": "CCPC",
+      "date": "2018-09-22",
+      "location": "吉林",
+      "team": "青歌行",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "71",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "高凯",
+        "张航",
+        "杨飞"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/115"
+      },
+      "archive": {
+        "postId": 115,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "71",
+          "46",
+          "铜奖",
+          "大连理工大学",
+          "高凯",
+          "张航",
+          "杨飞",
+          "陆坤"
+        ],
+        "pageSha256": "cc3c13a9c4eddddaae8302baeabd62209f9b8d4fc535c7e57decbedd7bb0f784",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018jilin"
+      }
+    },
+    {
+      "id": "ccpc-official-48d969beccd541320c18",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:秦皇岛:大连理工大学:海棠酒满",
+      "externalContestId": "ccpc2018:秦皇岛",
+      "event": "2018 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2018-09-28",
+      "location": "秦皇岛",
+      "team": "海棠酒满",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "114",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "刘洁",
+        "武根泽",
+        "王镜潼"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      },
+      "archive": {
+        "postId": 135,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "114",
+          "74",
+          "铜奖",
+          "大连理工大学",
+          "刘洁",
+          "武根泽",
+          "王镜潼",
+          "梁冰"
+        ],
+        "pageSha256": "b7a2a697cbb779e469af788b22e27195101fd223d6328673b0f1be55d04597d0",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      }
+    },
+    {
+      "id": "ccpc-official-f833abb6865cfe1fbdf9",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:秦皇岛:大连理工大学:熵",
+      "externalContestId": "ccpc2018:秦皇岛",
+      "event": "2018 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2018-09-28",
+      "location": "秦皇岛",
+      "team": "熵",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "149",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "归宇通",
+        "衣泽民",
+        "张添钰"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      },
+      "archive": {
+        "postId": 135,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "149",
+          "97",
+          "优胜奖",
+          "大连理工大学",
+          "归宇通",
+          "衣泽民",
+          "张添钰",
+          "陆坤"
+        ],
+        "pageSha256": "b7a2a697cbb779e469af788b22e27195101fd223d6328673b0f1be55d04597d0",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      }
+    },
+    {
+      "id": "ccpc-official-39b946265e8844261834",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:秦皇岛:大连理工大学:菜鸡互啄",
+      "externalContestId": "ccpc2018:秦皇岛",
+      "event": "2018 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2018-09-28",
+      "location": "秦皇岛",
+      "team": "菜鸡互啄",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "170",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "霍晨",
+        "梁家豪",
+        "吕嘉庆"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      },
+      "archive": {
+        "postId": 135,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "170",
+          "105",
+          "优胜奖",
+          "大连理工大学",
+          "霍晨",
+          "梁家豪",
+          "吕嘉庆",
+          "梁冰"
+        ],
+        "pageSha256": "b7a2a697cbb779e469af788b22e27195101fd223d6328673b0f1be55d04597d0",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      }
+    },
+    {
+      "id": "ccpc-official-80a8277cd2c40a411196",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:桂林:大连理工大学:冰菓",
+      "externalContestId": "ccpc2018:桂林",
+      "event": "2018 CCPC 桂林站",
+      "series": "CCPC",
+      "date": "2018-10-28",
+      "location": "桂林",
+      "team": "冰菓",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "84",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "傅心语",
+        "任奕舟",
+        "林俊贤"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/136"
+      },
+      "archive": {
+        "postId": 136,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "84",
+          "55",
+          "铜奖",
+          "大连理工大学",
+          "傅心语",
+          "任奕舟",
+          "林俊贤",
+          "陆坤"
+        ],
+        "pageSha256": "73490b69e8546744b2750a5b2d45ca7e73aac59644d784e9dcfafb31cd25c97e",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018guilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018guilin"
+      }
+    },
+    {
+      "id": "ccpc-official-f21b9612103594ae559e",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:桂林:大连理工大学:青歌行",
+      "externalContestId": "ccpc2018:桂林",
+      "event": "2018 CCPC 桂林站",
+      "series": "CCPC",
+      "date": "2018-10-28",
+      "location": "桂林",
+      "team": "青歌行",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "59",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "高凯",
+        "张航",
+        "杨飞"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/136"
+      },
+      "archive": {
+        "postId": 136,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "59",
+          "41",
+          "铜奖",
+          "大连理工大学",
+          "高凯",
+          "张航",
+          "杨飞",
+          "陆坤"
+        ],
+        "pageSha256": "73490b69e8546744b2750a5b2d45ca7e73aac59644d784e9dcfafb31cd25c97e",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018guilin",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018guilin"
+      }
+    },
+    {
+      "id": "ccpc-official-f8586862efe4ed61bdbe",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2018:总决赛:大连理工大学:overcoded",
+      "externalContestId": "ccpc2018:总决赛",
+      "event": "2018 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2018-11-25",
+      "location": "总决赛",
+      "team": "overcoded",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "58",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "傅心语",
+        "任奕舟",
+        "林俊贤"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/137"
+      },
+      "archive": {
+        "postId": 137,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "58",
+          "49",
+          "铜奖",
+          "大连理工大学",
+          "傅心语",
+          "任奕舟",
+          "林俊贤",
+          "陆坤"
+        ],
+        "pageSha256": "68b20b20198d10a676e066786ecf3b689437c69359d07da34ae67325f2996665",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2018final",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2018final"
+      }
+    },
+    {
+      "id": "ccpc-official-6df585a6e7e3003f8b94",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2019:秦皇岛:大连理工大学:l",
+      "externalContestId": "ccpc2019:秦皇岛",
+      "event": "2019 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2019-09-22",
+      "location": "秦皇岛",
+      "team": "L",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "70",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "吕嘉庆",
+        "刘易铖",
+        "梁家豪"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/190"
+      },
+      "archive": {
+        "postId": 190,
+        "rawAward": "银奖",
+        "rawCells": [
+          "70",
+          "55",
+          "银奖",
+          "大连理工大学",
+          "吕嘉庆",
+          "刘易铖",
+          "梁家豪",
+          "梁冰"
+        ],
+        "pageSha256": "b9b1d3f7d8b174efa3d0c75ac4f6bdbbf51b9926ff64618ec5f7148081edffb1",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2019qinhuangdao",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2019qinhuangdao"
+      }
+    },
+    {
+      "id": "ccpc-official-467529b0ba850c2c9e87",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2019:总决赛:大连理工大学:ttoughy",
+      "externalContestId": "ccpc2019:总决赛",
+      "event": "2019 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2019-11-17",
+      "location": "总决赛",
+      "team": "TToughy",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "96",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "归宇通",
+        "胡小涛",
+        "衣泽民"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/193"
+      },
+      "archive": {
+        "postId": 193,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "96",
+          "84",
+          "优胜奖",
+          "大连理工大学",
+          "归宇通",
+          "胡小涛",
+          "衣泽民",
+          "陆坤"
+        ],
+        "pageSha256": "250bbfb5514417bc193640c478a42ed89693ed5a3e3b180c3954d98c45fbb980",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2019final",
+        "teamNameReference": "https://rl.algoux.cn/ranklist/ccpc2019final"
+      }
+    },
+    {
+      "id": "ccpc-official-784aabad0fdfb7c33cc8",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:秦皇岛:大连理工大学:寒雨连江夜入吴",
+      "externalContestId": "ccpc2020:秦皇岛",
+      "event": "2020 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2020-10-18",
+      "location": "秦皇岛",
+      "team": "寒雨连江夜入吴",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "120",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "吴励宁",
+        "吴耀宗",
+        "黄承诺"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/221"
+      },
+      "archive": {
+        "postId": 221,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "120",
+          "大连理工大学",
+          "寒雨连江夜入吴",
+          "吴励宁",
+          "吴耀宗",
+          "黄承诺",
+          "陆坤",
+          "铜奖",
+          "4",
+          ""
+        ],
+        "pageSha256": "1689636c4e54b0f0a2a4144bd4d2c32a070378e3ad72aab01e88384b7bb8f312",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 2,
+        "pdfUrl": "https://ccpc.io/uploads/20201027/ca2d799750292e7698be4d8cc5b523ce.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-f05111386992fa652899",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:秦皇岛:大连理工大学:泥栽柑葚馍",
+      "externalContestId": "ccpc2020:秦皇岛",
+      "event": "2020 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2020-10-18",
+      "location": "秦皇岛",
+      "team": "泥栽柑葚馍",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "116",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "宋安洋",
+        "林海洋",
+        "刘政"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/221"
+      },
+      "archive": {
+        "postId": 221,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "116",
+          "大连理工大学",
+          "泥栽柑葚馍",
+          "宋安洋",
+          "林海洋",
+          "刘政",
+          "陆坤",
+          "铜奖",
+          "5",
+          ""
+        ],
+        "pageSha256": "1689636c4e54b0f0a2a4144bd4d2c32a070378e3ad72aab01e88384b7bb8f312",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 2,
+        "pdfUrl": "https://ccpc.io/uploads/20201027/ca2d799750292e7698be4d8cc5b523ce.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-87ec391f1f1adfb8d252",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:威海:大连理工大学:很有精神",
+      "externalContestId": "ccpc2020:威海",
+      "event": "2020 CCPC 威海站",
+      "series": "CCPC",
+      "date": "2020-10-25",
+      "location": "威海",
+      "team": "很有精神",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "46",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "夏鸿康",
+        "何泾",
+        "马凯"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/223"
+      },
+      "archive": {
+        "postId": 223,
+        "rawAward": "银奖",
+        "rawCells": [
+          "46",
+          "大连理工大学",
+          "很有精神",
+          "梁冰",
+          "夏鸿康",
+          "何泾",
+          "马凯",
+          "正式",
+          "6",
+          "银奖"
+        ],
+        "pageSha256": "68f56b64d39736335ef8bf85398c7d3b461d1f1709580a653caf74d594a1d176",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20201027/db60402e507760e42fbdf42d332ad8b4.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-689f78ce4f9140c82c76",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:威海:大连理工大学:暴力写挂乱搞ac",
+      "externalContestId": "ccpc2020:威海",
+      "event": "2020 CCPC 威海站",
+      "series": "CCPC",
+      "date": "2020-10-25",
+      "location": "威海",
+      "team": "暴力写挂乱搞AC",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "39",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "陈英奇",
+        "江雨桐",
+        "唐振宇"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/223"
+      },
+      "archive": {
+        "postId": 223,
+        "rawAward": "银奖",
+        "rawCells": [
+          "39",
+          "大连理工大学",
+          "暴力写挂乱搞AC",
+          "陆坤",
+          "陈英奇",
+          "江雨桐",
+          "唐振宇",
+          "正式",
+          "6",
+          "银奖"
+        ],
+        "pageSha256": "68f56b64d39736335ef8bf85398c7d3b461d1f1709580a653caf74d594a1d176",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20201027/db60402e507760e42fbdf42d332ad8b4.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-1a0063dac7cbc4fba94c",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:绵阳:大连理工大学:优哉游哉",
+      "externalContestId": "ccpc2020:绵阳",
+      "event": "2020 CCPC 绵阳站",
+      "series": "CCPC",
+      "date": "2020-11-01",
+      "location": "绵阳",
+      "team": "优哉游哉",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "41",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "卢品仁",
+        "杨朗",
+        "余澍莘"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/224"
+      },
+      "archive": {
+        "postId": 224,
+        "rawAward": "银奖",
+        "rawCells": [
+          "41",
+          "大连理工大学",
+          "优哉游哉",
+          "卢品仁",
+          "杨朗",
+          "余澍莘",
+          "梁冰",
+          "5",
+          "银奖"
+        ],
+        "pageSha256": "6ae3ed7d319f4fe39c3e1fb8af3a3395891174037cdc55162deec47fa1aa1903",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20201102/4867898a4946354bd069b2ba5ecee421.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-dfa250c03c70683bc7bc",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:绵阳:大连理工大学:惜年",
+      "externalContestId": "ccpc2020:绵阳",
+      "event": "2020 CCPC 绵阳站",
+      "series": "CCPC",
+      "date": "2020-11-01",
+      "location": "绵阳",
+      "team": "惜年",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "66",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "衣泽民",
+        "夏鸿康",
+        "李冠霖"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/224"
+      },
+      "archive": {
+        "postId": 224,
+        "rawAward": "银奖",
+        "rawCells": [
+          "66",
+          "大连理工大学",
+          "惜年",
+          "衣泽民",
+          "夏鸿康",
+          "李冠霖",
+          "陆坤",
+          "4",
+          "银奖"
+        ],
+        "pageSha256": "6ae3ed7d319f4fe39c3e1fb8af3a3395891174037cdc55162deec47fa1aa1903",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20201102/4867898a4946354bd069b2ba5ecee421.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-47147c96de1a899e04f2",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:长春:大连理工大学:l",
+      "externalContestId": "ccpc2020:长春",
+      "event": "2020 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "L",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "105",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "吕嘉庆",
+        "刘易铖",
+        "梁家豪"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/225"
+      },
+      "archive": {
+        "postId": 225,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "105",
+          "大连理工大学",
+          "L",
+          "吕嘉庆",
+          "刘易铖",
+          "梁家豪",
+          "梁冰",
+          "正式队伍",
+          "铜奖"
+        ],
+        "pageSha256": "e9d632910ab46116c9a6ac11c7f102c8d70a28171fce79343e69e57f862e4ec6",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 3,
+        "pdfUrl": "https://ccpc.io/uploads/20201125/74fa0aad60a63b948ad8901403556e1e.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-30d1a06fd4b7257ce811",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:长春:大连理工大学:coca粉丝团",
+      "externalContestId": "ccpc2020:长春",
+      "event": "2020 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "coca粉丝团",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "192",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "赖哲剑",
+        "钱坤",
+        "吴稼宇"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/225"
+      },
+      "archive": {
+        "postId": 225,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "192",
+          "大连理工大学",
+          "coca粉丝团",
+          "赖哲剑",
+          "钱坤",
+          "吴稼宇",
+          "陆坤",
+          "正式队伍",
+          "优胜奖"
+        ],
+        "pageSha256": "e9d632910ab46116c9a6ac11c7f102c8d70a28171fce79343e69e57f862e4ec6",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 5,
+        "pdfUrl": "https://ccpc.io/uploads/20201125/74fa0aad60a63b948ad8901403556e1e.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-2baa2f1630c6855d1e30",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:长春:大连理工大学:寒雨连江夜入吴",
+      "externalContestId": "ccpc2020:长春",
+      "event": "2020 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "寒雨连江夜入吴",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "68",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "吴励宁",
+        "黄承诺",
+        "吴耀宗"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/225"
+      },
+      "archive": {
+        "postId": 225,
+        "rawAward": "银奖",
+        "rawCells": [
+          "68",
+          "大连理工大学",
+          "寒雨连江夜入吴",
+          "吴励宁",
+          "黄承诺",
+          "吴耀宗",
+          "陆坤",
+          "正式队伍",
+          "银奖"
+        ],
+        "pageSha256": "e9d632910ab46116c9a6ac11c7f102c8d70a28171fce79343e69e57f862e4ec6",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 2,
+        "pdfUrl": "https://ccpc.io/uploads/20201125/74fa0aad60a63b948ad8901403556e1e.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-ffa8c22f114baaaef602",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2020:长春:大连理工大学:追星成功",
+      "externalContestId": "ccpc2020:长春",
+      "event": "2020 CCPC 长春站",
+      "series": "CCPC",
+      "date": "2020-11-08",
+      "location": "长春",
+      "team": "追星成功",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "63",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "陈英奇",
+        "归宇通",
+        "衣泽民"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/225"
+      },
+      "archive": {
+        "postId": 225,
+        "rawAward": "银奖",
+        "rawCells": [
+          "63",
+          "大连理工大学",
+          "追星成功",
+          "陈英奇",
+          "归宇通",
+          "衣泽民",
+          "陆坤",
+          "正式队伍",
+          "银奖"
+        ],
+        "pageSha256": "e9d632910ab46116c9a6ac11c7f102c8d70a28171fce79343e69e57f862e4ec6",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 2,
+        "pdfUrl": "https://ccpc.io/uploads/20201125/74fa0aad60a63b948ad8901403556e1e.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-a9c98b0053b247f17a00",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2021:总决赛:大连理工大学:多多跳",
+      "externalContestId": "ccpc2021:总决赛",
+      "event": "2021 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2022-07-27",
+      "location": "总决赛",
+      "team": "多多跳",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "35",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/261"
+      },
+      "archive": {
+        "postId": 261,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "35",
+          "32",
+          "大连理工大学",
+          "多多跳",
+          "铜奖"
+        ],
+        "pageSha256": "d11c5dae9528f5386c31b7a1762668c2a572ad02e6bc3b61dcaba3a1129b0e38",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2021final"
+      }
+    },
+    {
+      "id": "ccpc-official-49c429eb7dd91a26a14e",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2022:桂林:大连理工大学:鹏鹏今天吃什么",
+      "externalContestId": "ccpc2022:桂林",
+      "event": "2022 CCPC 桂林站",
+      "series": "CCPC",
+      "date": "2022-10-30",
+      "location": "桂林",
+      "team": "鹏鹏今天吃什么",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "126",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/276"
+      },
+      "archive": {
+        "postId": 276,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "126 铜奖 大连理工大学 鹏鹏今天吃什么"
+        ],
+        "pageSha256": "438a2b3473e825181345c0de3fad399b7c2961f32436f11d0e20414e4a854026",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 3,
+        "pdfUrl": "https://ccpc.io//uploads/20221117/2022中国大学生程序设计竞赛（桂林）获奖名单.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-240360637cd483a74368",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2022:威海:大连理工大学:暂无名",
+      "externalContestId": "ccpc2022:威海",
+      "event": "2022 CCPC 威海站",
+      "series": "CCPC",
+      "date": "2022-11-06",
+      "location": "威海",
+      "team": "暂无名",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "金牌",
+      "rank": "22",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/279"
+      },
+      "archive": {
+        "postId": 279,
+        "rawAward": "金奖",
+        "rawCells": [
+          "22 金奖 大连理工大学 暂无名"
+        ],
+        "pageSha256": "1353aaf18b3641faf5010e3d183bcf58a09dfeccf7969508c841a5c44423afd3",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20221111/CCPC威海站【获奖名单】.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-735310dcef29f2ff45d4",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2022:广州:大连理工大学:秋招没人要",
+      "externalContestId": "ccpc2022:广州",
+      "event": "2022 CCPC 广州站",
+      "series": "CCPC",
+      "date": "2022-11-13",
+      "location": "广州",
+      "team": "秋招没人要",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "28",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/282"
+      },
+      "archive": {
+        "postId": 282,
+        "rawAward": "银奖",
+        "rawCells": [
+          "28",
+          "银奖",
+          "大连理工大学",
+          "秋招没人要"
+        ],
+        "pageSha256": "fdff79ce2afba00a5dc3f1e104f279de413ca2b67533be9f085dfc64869dc1ab",
+        "pageComplete": false,
+        "dateReference": "existing-public-contest",
+        "pdfPage": 1,
+        "pdfUrl": "https://ccpc.io/uploads/20221117/2022中国大学生程序设计竞赛（广州）获奖名单.pdf"
+      }
+    },
+    {
+      "id": "ccpc-official-1c892ba76818ed2b8a06",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:秦皇岛:大连理工大学:欧拉高斯哥德巴赫",
+      "externalContestId": "ccpc2023:秦皇岛",
+      "event": "2023 CCPC 秦皇岛站",
+      "series": "CCPC",
+      "date": "2023-10-15",
+      "location": "秦皇岛",
+      "team": "欧拉高斯哥德巴赫",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "187",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "申永琦",
+        "潘健",
+        "欧阳东进"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/328"
+      },
+      "archive": {
+        "postId": 328,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "187",
+          "欧拉高斯哥德巴赫",
+          "申永琦",
+          "潘健",
+          "欧阳东进",
+          "陆坤",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "f1518593f4baeb790ea7962d4b6ffca74c4289f39bd5b03072752bb11f0d15ce",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-a291d6c720e89220c114",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:桂林:大连理工大学:新二保一",
+      "externalContestId": "ccpc2023:桂林",
+      "event": "2023 CCPC 桂林站",
+      "series": "CCPC",
+      "date": "2023-10-29",
+      "location": "桂林",
+      "team": "新二保一",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "39",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "袁振",
+        "陈常杰",
+        "高盛轩"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/329"
+      },
+      "archive": {
+        "postId": 329,
+        "rawAward": "银奖",
+        "rawCells": [
+          "39",
+          "新二保一",
+          "袁振",
+          "陈常杰",
+          "高盛轩",
+          "梁冰",
+          "银奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "8e173fafeeb1b55cacc1d3838132ed453dadff4fc4ea460b574b73dcdbe799f9",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-a43f6d840abb42286551",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:哈尔滨:大连理工大学:今天午饭吃了吗",
+      "externalContestId": "ccpc2023:哈尔滨",
+      "event": "2023 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2023-11-05",
+      "location": "哈尔滨",
+      "team": "今天午饭吃了吗",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "徐立",
+        "何立吾",
+        "谢喻荃"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/331"
+      },
+      "archive": {
+        "postId": 331,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "今天午饭吃了吗",
+          "徐立",
+          "何立吾",
+          "谢喻荃",
+          "梁冰",
+          "铜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "a1f116eba3181ecec69426f45cdd9724d84f476982e245d2730359f94f4c3a8d",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-2f237bde04d9194cc7ea",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:哈尔滨:大连理工大学:对无名",
+      "externalContestId": "ccpc2023:哈尔滨",
+      "event": "2023 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2023-11-05",
+      "location": "哈尔滨",
+      "team": "对无名",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "侯嘉贺",
+        "马硕达",
+        "张娄瑞"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/331"
+      },
+      "archive": {
+        "postId": 331,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "对无名",
+          "侯嘉贺",
+          "马硕达",
+          "张娄瑞",
+          "梁冰",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "a1f116eba3181ecec69426f45cdd9724d84f476982e245d2730359f94f4c3a8d",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-93d9be292f163c73a551",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:哈尔滨:大连理工大学:我的魔法国",
+      "externalContestId": "ccpc2023:哈尔滨",
+      "event": "2023 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2023-11-05",
+      "location": "哈尔滨",
+      "team": "我的魔法国",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "梁彦君",
+        "范辰一",
+        "金策扬"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/331"
+      },
+      "archive": {
+        "postId": 331,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "我的魔法国",
+          "梁彦君",
+          "范辰一",
+          "金策扬",
+          "陆坤",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "a1f116eba3181ecec69426f45cdd9724d84f476982e245d2730359f94f4c3a8d",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-d27e84395f1cd9fca219",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2023:深圳:大连理工大学:遇见彩虹吃定彩虹",
+      "externalContestId": "ccpc2023:深圳",
+      "event": "2023 CCPC 深圳站",
+      "series": "CCPC",
+      "date": "2023-11-12",
+      "location": "深圳",
+      "team": "遇见彩虹，吃定彩虹",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铜牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "赵一鹏",
+        "李泽与",
+        "谭傲"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/332"
+      },
+      "archive": {
+        "postId": 332,
+        "rawAward": "铜奖",
+        "rawCells": [
+          "遇见彩虹，吃定彩虹",
+          "赵一鹏",
+          "李泽与",
+          "谭傲",
+          "陆坤",
+          "铜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "5a2765da1feb5892d26a3eb51d20f28dedf4b20a6039e07350690cc9d4ea97df",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-b909aab70774ff7f01f6",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:哈尔滨:大连理工大学:关注带工喵关注带工谢谢喵",
+      "externalContestId": "ccpc2024:哈尔滨",
+      "event": "2024 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2024-10-20",
+      "location": "哈尔滨",
+      "team": "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "赵一鹏",
+        "李泽与",
+        "陈常杰"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/365"
+      },
+      "archive": {
+        "postId": 365,
+        "rawAward": "银奖",
+        "rawCells": [
+          "关注带工喵，关注带工谢谢喵(≧^.^≦)",
+          "赵一鹏",
+          "李泽与",
+          "陈常杰",
+          "陆坤",
+          "银奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "7d57ebd6c8619e9d256552355ef40602c475ac48b8405574def4fb6f78dc9873",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-290edb2d94ac2a2644e4",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:哈尔滨:大连理工大学:喵喵嘤",
+      "externalContestId": "ccpc2024:哈尔滨",
+      "event": "2024 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2024-10-20",
+      "location": "哈尔滨",
+      "team": "喵喵嘤",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "吴习哲",
+        "汪瀚声",
+        "刘晨旭"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/365"
+      },
+      "archive": {
+        "postId": 365,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "喵喵嘤",
+          "吴习哲",
+          "汪瀚声",
+          "刘晨旭",
+          "王雷",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "7d57ebd6c8619e9d256552355ef40602c475ac48b8405574def4fb6f78dc9873",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-4131df81739f96fad547",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:哈尔滨:大连理工大学:我将点燃大海",
+      "externalContestId": "ccpc2024:哈尔滨",
+      "event": "2024 CCPC 哈尔滨站",
+      "series": "CCPC",
+      "date": "2024-10-20",
+      "location": "哈尔滨",
+      "team": "我将点燃大海",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "金晟",
+        "蒋佳炀",
+        "时佳骏"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/365"
+      },
+      "archive": {
+        "postId": 365,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "我将点燃大海",
+          "金晟",
+          "蒋佳炀",
+          "时佳骏",
+          "梁冰",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "7d57ebd6c8619e9d256552355ef40602c475ac48b8405574def4fb6f78dc9873",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-fd3e74a9cc63994aeb17",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:济南:大连理工大学:不会取名",
+      "externalContestId": "ccpc2024:济南",
+      "event": "2024 CCPC 济南站",
+      "series": "CCPC",
+      "date": "2024-10-27",
+      "location": "济南",
+      "team": "不会取名",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "张娄瑞",
+        "马硕达",
+        "张傲凡"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/364"
+      },
+      "archive": {
+        "postId": 364,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "不会取名",
+          "张娄瑞",
+          "马硕达",
+          "张傲凡",
+          "梁冰",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "6e1b6acbe4527feb9a71c4b6faf75324dead6e6c40bc882749a59b64398b4ca5",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-c9ae62cfd1c0cbd21abf",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:济南:大连理工大学:我都玩皇室战争了",
+      "externalContestId": "ccpc2024:济南",
+      "event": "2024 CCPC 济南站",
+      "series": "CCPC",
+      "date": "2024-10-27",
+      "location": "济南",
+      "team": "我都玩皇室战争了",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "刘杰",
+        "梁蛟源",
+        "梁彦君"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/364"
+      },
+      "archive": {
+        "postId": 364,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "我都玩皇室战争了",
+          "刘杰",
+          "梁蛟源",
+          "梁彦君",
+          "陆坤",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "6e1b6acbe4527feb9a71c4b6faf75324dead6e6c40bc882749a59b64398b4ca5",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-e21d1f405ab3f434966e",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:重庆:大连理工大学:可持久化猫猫虫自动机",
+      "externalContestId": "ccpc2024:重庆",
+      "event": "2024 CCPC 重庆站",
+      "series": "CCPC",
+      "date": "2024-11-10",
+      "location": "重庆",
+      "team": "可持久化猫猫虫自动机",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "银牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "陈常杰",
+        "连茗暄",
+        "刘兆洲"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/363"
+      },
+      "archive": {
+        "postId": 363,
+        "rawAward": "银奖",
+        "rawCells": [
+          "可持久化猫猫虫自动机",
+          "陈常杰",
+          "连茗暄",
+          "刘兆洲",
+          "梁冰",
+          "银奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "fda4e6a37adc12d7d15e56dc4b83ae308f64c4e54389878c9d939c0a12ee428f",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-656e01b33c881cedeb43",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:郑州:大连理工大学:为美好的xcpc献上祝福",
+      "externalContestId": "ccpc2024:郑州",
+      "event": "2024 CCPC 郑州站",
+      "series": "CCPC",
+      "date": "2024-11-17",
+      "location": "郑州",
+      "team": "为美好的XCPC献上祝福",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "徐昊天",
+        "刘博文",
+        "毛谦韵"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/362"
+      },
+      "archive": {
+        "postId": 362,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "为美好的XCPC献上祝福",
+          "徐昊天",
+          "刘博文",
+          "毛谦韵",
+          "陆坤",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "6addbfd31523ca6d8b1b4836981352799e8e645553900695fdc213139c1a9517",
+        "pageComplete": true,
+        "dateReference": "existing-public-contest"
+      }
+    },
+    {
+      "id": "ccpc-official-e1d23a2563cca9866315",
+      "externalProvider": "ccpc-official",
+      "externalAwardId": "2024:总决赛:大连理工大学:逆元",
+      "externalContestId": "ccpc2024:总决赛",
+      "event": "2024 CCPC 总决赛",
+      "series": "CCPC",
+      "date": "2025-05-11",
+      "location": "总决赛",
+      "team": "逆元",
+      "teamAliases": [],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "medal": "铁牌",
+      "rank": "93",
+      "official": true,
+      "members": [],
+      "expectedMembers": 3,
+      "suggestedMembers": [
+        "刘博文",
+        "刘兆洲",
+        "连茗暄"
+      ],
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/366"
+      },
+      "archive": {
+        "postId": 366,
+        "rawAward": "优胜奖",
+        "rawCells": [
+          "93",
+          "逆元",
+          "刘博文",
+          "刘兆洲",
+          "连茗暄",
+          "梁冰",
+          "优胜奖",
+          "大连理工大学"
+        ],
+        "pageSha256": "e02755d402cd1f5b10cf4482a72d72f385183eae32362e635398a61600aeaa27",
+        "pageComplete": true,
+        "dateReference": "https://rl.algoux.cn/ranklist/ccpc2024final"
+      }
+    }
+  ]
+}

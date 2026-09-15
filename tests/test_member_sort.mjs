@@ -57,6 +57,17 @@ test('silver and iron text use clearly different hues with readable contrast', (
   }
 });
 
+test('result iron labels are transparent until selected without hiding member counts', () => {
+  const css = readFileSync(new URL('../web/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.result-table \.medal\.iron\s*\{\s*color: transparent;/);
+  assert.match(css, /\.result-table \.medal\.iron::selection\s*\{\s*color: #8b3a46;\s*background-color: #c5e2f4;/);
+  const html = context.honorPage({honors: [{date:'2025-11-30',event:'CCPC 重庆站',series:'CCPC',location:'重庆',
+    team:'队伍',school:'大连理工大学',members:[],medal:'铁牌',source:{}}],pendingHonors:[]});
+  assert.match(html, /honor-table result-table/);
+  assert.match(html, /class="medal iron">铁牌<\/td>/);
+  assert.match(context.honorRows([{date:'2025-11-30',members:[],medal:'铁牌',source:{}}]), /class="medal iron">铁牌/);
+});
+
 test('account management lists main and secondary accounts and scopes confirmation to one account', () => {
   const data = {members: [{id: 1, name: '杨君泓', accounts: {codeforces: [
     {handle: 'Farewell', rating: 1551, maxRating: 1595}, {handle: 'Other', rating: 1400, maxRating: 1500}]}},
