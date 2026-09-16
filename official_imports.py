@@ -51,10 +51,9 @@ def names(record: dict) -> set[str]:
 
 def ccpc_official_public_pair(left: dict, right: dict) -> bool:
     providers = {left.get("externalProvider"), right.get("externalProvider")}
-    official = left if left.get("externalProvider") == "ccpc-official" else right
     return (
         providers == {"ccpc-official", "cpcfinder"}
-        and official.get("series") == "CCPC"
+        and left.get("series") == right.get("series") == "CCPC"
         and bool(left.get("date"))
         and left.get("date") == right.get("date")
     )
@@ -280,17 +279,10 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
                                     json.dumps(record.get("archive", {}), ensure_ascii=False), json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)))
             existing.append({**record, "members": []})
         honor_id = outcome["honorId"]
-        correct_public_series = status == "merged" and ccpc_official_public_pair(record, target) and target.get("series") != "CCPC"
-        if correct_public_series:
-            target["series"] = "CCPC"
         fill_medal = status == "merged" and not target.get("medal") and record.get("medal")
         if fill_medal:
             target["medal"] = record["medal"]
         if not dry_run:
-            if correct_public_series:
-                connection.execute(
-                    "UPDATE honors SET series='CCPC',updated_at=CURRENT_TIMESTAMP WHERE id=?", (honor_id,)
-                )
             if fill_medal:
                 connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
                                    (record["medal"], honor_id))
