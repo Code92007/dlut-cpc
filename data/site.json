@@ -611,7 +611,7 @@
   "honors": [
     {
       "event": "第 11 届中国大学生程序设计竞赛总决赛",
-      "series": "ICPC",
+      "series": "CCPC",
       "date": "2026-04-26",
       "location": "南阳",
       "team": "顺元",
@@ -2763,7 +2763,7 @@
     },
     {
       "event": "第 10 届中国大学生程序设计竞赛总决赛",
-      "series": "ICPC",
+      "series": "CCPC",
       "date": "2025-05-11",
       "location": "广州",
       "team": "逆元",

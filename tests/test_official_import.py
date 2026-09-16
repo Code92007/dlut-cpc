@@ -47,6 +47,13 @@ class OfficialMatchingTests(unittest.TestCase):
         self.assertEqual(contest_key(new), contest_key(old))
         self.assertEqual(match_result(new, [old])[0], "merged")
 
+    def test_same_day_ccpc_official_and_cpcfinder_match_despite_title_and_series(self):
+        official = record(event="2024 CCPC 总决赛", date="2025-05-11", location="总决赛", team="逆元", rank="93")
+        public = record(id="public", externalProvider="cpcfinder", externalAwardId="22896",
+                        event="第 10 届中国大学生程序设计竞赛总决赛", series="ICPC",
+                        date="2025-05-11", location="广州", team="逆元", rank="93 / 124")
+        self.assertEqual(match_result(official, [public])[:2], ("merged", public))
+
     def test_independent_campuses_do_not_merge(self):
         for school in ("大连理工大学城市学院", "大连理工大学盘锦校区"):
             self.assertEqual(match_result(record(), [record(school=school)])[0], "added")
@@ -175,6 +182,36 @@ class OfficialDatabaseTests(unittest.TestCase):
         self.database.merge_official_batch(batch())
         self.assertEqual(self.database.merge_official_batch(batch(batch_id="ccpc-test-v2"))["merged"], 1)
         self.assertEqual(len(self.database.payload(self.seed)["honors"]), 1)
+
+    def test_initialize_backfills_same_day_ccpc_public_duplicate(self):
+        public = record(id="public", externalProvider="cpcfinder", externalAwardId="22896",
+                        event="第 10 届中国大学生程序设计竞赛总决赛", series="ICPC",
+                        date="2025-05-11", location="广州", team="逆元", rank="93 / 124",
+                        members=["甲", "乙", "丙"], source={"name": "CPC Finder", "url": "https://cpcfinder.com/source"})
+        self.seed["honors"] = [public]
+        self.database.initialize(self.seed)
+        self.database.merge_official_batch(batch(record(event="2024 CCPC 总决赛", date="2025-05-11",
+                                                        location="总决赛", team="逆元", rank="93")))
+        self.assertEqual(self.database.payload(self.seed)["honors"][0]["series"], "CCPC")
+        with self.database.connect() as connection:
+            connection.execute("UPDATE honors SET series='ICPC' WHERE id='public'")
+            connection.execute("INSERT INTO honors SELECT 'official-1',event,'CCPC',date,'总决赛',team,normalized_team,medal,'93','',official,"
+                               "'ccpc-official','2017:杭州:team1','ccpc2024:总决赛',NULL,primary_source_id,0,created_at,updated_at "
+                               "FROM honors WHERE id='public'")
+            connection.execute("UPDATE honor_source_records SET honor_id='official-1' WHERE provider='ccpc-official'")
+            connection.execute("DELETE FROM honor_sources WHERE honor_id='public' AND source_id IN "
+                               "(SELECT id FROM sources WHERE name='CCPC 官方获奖名单')")
+            source_id = connection.execute("SELECT id FROM sources WHERE name='CCPC 官方获奖名单'").fetchone()[0]
+            connection.execute("INSERT INTO honor_sources(honor_id,source_id,role) VALUES ('official-1',?,'archive')", (source_id,))
+            connection.execute("INSERT INTO honor_roster_reviews(honor_id,batch_id,school,suggested_members_json) "
+                               "VALUES ('official-1','legacy','大连理工大学','[\"甲\",\"乙\",\"丙\"]')")
+        self.database.initialize()
+        results = self.database.payload(self.seed)["honors"]
+        self.assertEqual(len(results), 1)
+        self.assertEqual((results[0]["id"], results[0]["series"], results[0]["members"]),
+                         ("public", "CCPC", ["甲", "乙", "丙"]))
+        self.assertEqual({source["name"] for source in results[0]["sources"]},
+                         {"CPC Finder", "CCPC 官方获奖名单"})
 
     def test_duplicates_within_batch_merge_with_the_just_added_result(self):
         report = self.database.merge_official_batch(batch(record(), record(id="official-2", externalAwardId="2017:杭州:team2")), dry_run=True)

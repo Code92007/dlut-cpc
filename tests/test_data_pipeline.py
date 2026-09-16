@@ -59,6 +59,19 @@ class DataPipelineTests(unittest.TestCase):
         self.assertEqual(awarded["cpcfinderContestId"], 22)
         self.assertEqual(next(row for row in result if row["team"] == "Team B")["medal"], "铁牌")
 
+    def test_chinese_ccpc_title_without_acronym_is_classified_correctly(self):
+        document = json.dumps({"data": [{
+            "awardId": 22896,
+            "contestName": "第 10 届中国大学生程序设计竞赛总决赛",
+            "teamName": "逆元",
+            "date": "2025-05-11",
+            "rank": 93,
+            "totalTeams": 124,
+        }]}, ensure_ascii=False)
+        row = MODULE.parse_cpcfinder_api(document, MODULE.DEFAULT_SOURCE_URL)[0]
+        self.assertEqual(row["series"], "CCPC")
+        self.assertEqual(MODULE.contest_series("第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站"), "ICPC")
+
     def test_iron_requires_real_rank_and_no_medal_not_unknown_result(self):
         self.assertEqual(MODULE.result_medal(None, 100, "NONE"), "铁牌")
         self.assertEqual(MODULE.result_medal("", "100 / 300"), "铁牌")

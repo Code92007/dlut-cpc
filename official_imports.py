@@ -49,15 +49,38 @@ def names(record: dict) -> set[str]:
     return {normalized(name) for name in [record.get("team", ""), *record.get("teamAliases", [])] if name}
 
 
+def ccpc_official_public_pair(left: dict, right: dict) -> bool:
+    providers = {left.get("externalProvider"), right.get("externalProvider")}
+    official = left if left.get("externalProvider") == "ccpc-official" else right
+    return (
+        providers == {"ccpc-official", "cpcfinder"}
+        and official.get("series") == "CCPC"
+        and bool(left.get("date"))
+        and left.get("date") == right.get("date")
+    )
+
+
 def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, list[str]]:
     key = contest_key(record)
     school = school_group(record.get("school", ""))
-    candidates = [item for item in existing if school_group(item.get("school", "大连理工大学")) == school
-                  and item.get("series") == record.get("series")
-                  and (item.get("official") is False) == (record.get("official") is False)
-                  and ((item.get("date") == record.get("date") and normalized(item.get("event", "")) == normalized(record.get("event", ""))) or
-                       (key and (contest_key(item) == key or (item.get("date") == record.get("date") and contest_key(item) and contest_key(item)[2] == key[2]))) or
-                       (not key and item.get("date") == record.get("date") and normalized(item.get("event", "")) == normalized(record.get("event", ""))))]
+    candidates = []
+    for item in existing:
+        same_day_official_public = ccpc_official_public_pair(record, item)
+        same_series = item.get("series") == record.get("series")
+        same_contest = (
+            same_day_official_public
+            or (item.get("date") == record.get("date") and normalized(item.get("event", "")) == normalized(record.get("event", "")))
+            or (key and (contest_key(item) == key or (
+                item.get("date") == record.get("date") and contest_key(item) and contest_key(item)[2] == key[2]
+            )))
+            or (not key and item.get("date") == record.get("date")
+                and normalized(item.get("event", "")) == normalized(record.get("event", "")))
+        )
+        if (school_group(item.get("school", "大连理工大学")) == school
+                and (same_series or same_day_official_public)
+                and (item.get("official") is False) == (record.get("official") is False)
+                and same_contest):
+            candidates.append(item)
     matches = [item for item in candidates if names(item) & names(record)]
     if not matches:
         roster = {normalized(name) for name in record.get("suggestedMembers", []) if name}
@@ -87,6 +110,109 @@ def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, 
     if target.get("members") and roster and roster != {normalized(name) for name in target["members"]}:
         warnings.append("roster-disagreement-existing-members-preserved")
     return "merged", target, warnings
+
+
+def _merge_duplicate_honor(connection, source_id: str, target_id: str) -> None:
+    source_review = connection.execute(
+        "SELECT * FROM honor_roster_reviews WHERE honor_id=?", (source_id,)
+    ).fetchone()
+    target_review = connection.execute(
+        "SELECT * FROM honor_roster_reviews WHERE honor_id=?", (target_id,)
+    ).fetchone()
+    source_members = connection.execute(
+        "SELECT * FROM honor_members WHERE honor_id=? ORDER BY position, member_id", (source_id,)
+    ).fetchall()
+    target_members = connection.execute(
+        "SELECT * FROM honor_members WHERE honor_id=? ORDER BY position, member_id", (target_id,)
+    ).fetchall()
+    source_confirmed = bool(source_review and source_review["confirmed_at"])
+    target_confirmed = bool(target_review and target_review["confirmed_at"])
+    source_manual = source_confirmed or any(row["is_manual"] for row in source_members)
+    adopt_source_roster = bool(source_members) and (not target_members or (source_manual and not target_confirmed))
+
+    connection.execute(
+        "INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role,is_manual) "
+        "SELECT ?,source_id,role,is_manual FROM honor_sources WHERE honor_id=?",
+        (target_id, source_id),
+    )
+    connection.execute("UPDATE honor_source_records SET honor_id=? WHERE honor_id=?", (target_id, source_id))
+
+    if adopt_source_roster:
+        connection.execute("DELETE FROM honor_members WHERE honor_id=?", (target_id,))
+        connection.execute(
+            "INSERT INTO honor_members(honor_id,member_id,position,source_id,is_manual) "
+            "SELECT ?,member_id,position,source_id,is_manual FROM honor_members WHERE honor_id=?",
+            (target_id, source_id),
+        )
+
+    if source_review:
+        if source_confirmed and not target_confirmed:
+            connection.execute("DELETE FROM honor_roster_reviews WHERE honor_id=?", (target_id,))
+            connection.execute("UPDATE honor_roster_reviews SET honor_id=? WHERE honor_id=?", (target_id, source_id))
+        elif not target_review and not target_members:
+            connection.execute("UPDATE honor_roster_reviews SET honor_id=? WHERE honor_id=?", (target_id, source_id))
+        else:
+            connection.execute("DELETE FROM honor_roster_reviews WHERE honor_id=?", (source_id,))
+
+    target_has_roster = bool(target_members or adopt_source_roster)
+    submissions = connection.execute(
+        "SELECT id,status,fingerprint FROM roster_submissions WHERE honor_id=? ORDER BY id", (source_id,)
+    ).fetchall()
+    for submission in submissions:
+        duplicate = submission["status"] == "pending" and connection.execute(
+            "SELECT 1 FROM roster_submissions WHERE honor_id=? AND fingerprint=? AND status='pending'",
+            (target_id, submission["fingerprint"]),
+        ).fetchone()
+        if submission["status"] == "pending" and (target_has_roster or duplicate):
+            connection.execute(
+                "UPDATE roster_submissions SET status='superseded',reviewed_at=CURRENT_TIMESTAMP,"
+                "review_note='重复成绩合并后名单已存在' WHERE id=?",
+                (submission["id"],),
+            )
+        connection.execute("UPDATE roster_submissions SET honor_id=? WHERE id=?", (target_id, submission["id"]))
+
+    override = connection.execute("SELECT value FROM metadata WHERE key=?", (f"roster_override:{source_id}",)).fetchone()
+    if override and adopt_source_roster:
+        connection.execute(
+            "INSERT INTO metadata(key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (f"roster_override:{target_id}", override["value"]),
+        )
+    connection.execute("DELETE FROM metadata WHERE key=?", (f"roster_override:{source_id}",))
+    connection.execute(
+        "UPDATE honors SET series='CCPC',updated_at=CURRENT_TIMESTAMP WHERE id=?", (target_id,)
+    )
+    connection.execute("DELETE FROM honors WHERE id=?", (source_id,))
+
+
+def reconcile_ccpc_public_duplicates(database, connection) -> int:
+    public_ids = {
+        row["id"] for row in connection.execute("SELECT id FROM honors WHERE external_provider='cpcfinder'")
+    }
+    public_ids.update(
+        row["honor_id"] for row in connection.execute(
+            "SELECT DISTINCT honor_id FROM honor_source_records WHERE provider='cpcfinder'"
+        )
+    )
+    if not public_ids:
+        return 0
+    payload = database._honors_payload(connection)
+    public_results = [item for item in payload if item["id"] in public_ids]
+    standalone = connection.execute(
+        "SELECT sr.honor_id,sr.record_json FROM honor_source_records sr "
+        "JOIN honors h ON h.id=sr.honor_id "
+        "WHERE sr.provider='ccpc-official' AND h.external_provider='ccpc-official' "
+        "ORDER BY h.date,h.id"
+    ).fetchall()
+    merged = 0
+    for row in standalone:
+        record = json.loads(row["record_json"])
+        status, target, _ = match_result(record, public_results)
+        if status != "merged" or target is None or target["id"] == row["honor_id"]:
+            continue
+        _merge_duplicate_honor(connection, row["honor_id"], target["id"])
+        target["series"] = "CCPC"
+        merged += 1
+    return merged
 
 
 def validate_batch(batch: dict) -> None:
@@ -154,10 +280,17 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
                                     json.dumps(record.get("archive", {}), ensure_ascii=False), json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)))
             existing.append({**record, "members": []})
         honor_id = outcome["honorId"]
+        correct_public_series = status == "merged" and ccpc_official_public_pair(record, target) and target.get("series") != "CCPC"
+        if correct_public_series:
+            target["series"] = "CCPC"
         fill_medal = status == "merged" and not target.get("medal") and record.get("medal")
         if fill_medal:
             target["medal"] = record["medal"]
         if not dry_run:
+            if correct_public_series:
+                connection.execute(
+                    "UPDATE honors SET series='CCPC',updated_at=CURRENT_TIMESTAMP WHERE id=?", (honor_id,)
+                )
             if fill_medal:
                 connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
                                    (record["medal"], honor_id))

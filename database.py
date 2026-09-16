@@ -273,6 +273,8 @@ class Database:
             self._merge_panjin_members(connection)
             if seed:
                 self._sync_site_data(connection, seed)
+            from official_imports import reconcile_ccpc_public_duplicates
+            reconcile_ccpc_public_duplicates(self, connection)
 
     @staticmethod
     def _ensure_schema(connection: sqlite3.Connection) -> None:

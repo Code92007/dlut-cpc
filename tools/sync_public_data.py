@@ -96,6 +96,12 @@ def result_medal(value: str | None, rank: object, medal_type: str | None = None)
     return None
 
 
+def contest_series(event: str) -> str:
+    if "CCPC" in event or ("中国大学生程序设计竞赛" in event and "国际大学生程序设计竞赛" not in event):
+        return "CCPC"
+    return "ICPC"
+
+
 def student_list_api_url(source_url: str, school_name: str = DEFAULT_SCHOOL_NAME) -> str:
     query = urllib.parse.urlencode({"school": school_name, "sort": "rating", "current": 1, "pageSize": 500})
     return f"{cpcfinder_origin(source_url)}/api/student?{query}"
@@ -165,7 +171,7 @@ def parse_cpcfinder_api(document: str, source_url: str, min_year: int = 2020) ->
         event = normalize_space(str(row.get("contestName", "")))
         record = {
             "event": event,
-            "series": "CCPC" if "CCPC" in event else "ICPC",
+            "series": contest_series(event),
             "date": date,
             "location": normalize_space(str(row.get("place", ""))),
             "team": normalize_space(str(row.get("teamName", ""))),
@@ -333,7 +339,7 @@ def parse_cpcfinder(document: str, source_url: str, min_year: int = 2020) -> lis
             continue
         record = {
             "event": event,
-            "series": "CCPC" if "CCPC" in event else "ICPC",
+            "series": contest_series(event),
             "date": date,
             "location": location,
             "team": team,
