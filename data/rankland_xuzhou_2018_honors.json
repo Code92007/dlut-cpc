@@ -1,0 +1,129 @@
+{
+  "batchId": "rankland-icpc2018xuzhou-dingguagua-20260916-v1",
+  "provider": "rankland",
+  "source": {
+    "name": "RankLand 2018 ICPC 徐州站官方榜单集合",
+    "url": "https://rl.algoux.cn/collection/official?rankId=icpc2018xuzhou"
+  },
+  "fetchedAt": "2026-09-16T22:46:16+08:00",
+  "contests": [
+    {
+      "key": "icpc2018xuzhou",
+      "title": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（徐州站） （中国矿业大学）",
+      "date": "2018-10-28",
+      "url": "https://rl.algoux.cn/ranklist/icpc2018xuzhou",
+      "officialCollection": "https://rl.algoux.cn/collection/official?rankId=icpc2018xuzhou",
+      "awards": 1,
+      "schools": [
+        "大连理工大学软件学院"
+      ]
+    }
+  ],
+  "honors": [
+    {
+      "id": "rankland-1346658c531861869f5a",
+      "event": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（徐州站） （中国矿业大学）",
+      "series": "ICPC",
+      "date": "2018-10-28",
+      "location": "徐州",
+      "team": "顶呱呱 (Dingguagua)",
+      "teamAliases": [
+        "顶呱呱",
+        "Dingguagua"
+      ],
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "188 / 278",
+      "overallRank": "197 / 288",
+      "official": true,
+      "source": {
+        "name": "RankLand 历史榜单",
+        "url": "https://rl.algoux.cn/ranklist/icpc2018xuzhou"
+      },
+      "sources": [
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2018xuzhou"
+        },
+        {
+          "name": "队内人工补充成员（2026-09-16）"
+        }
+      ],
+      "externalProvider": "rankland",
+      "externalAwardId": "icpc2018xuzhou:21721437:大连理工大学",
+      "externalContestId": "icpc2018xuzhou",
+      "externalTeamId": "21721437",
+      "archive": {
+        "fileId": "70792781727010816",
+        "score": {
+          "value": 0,
+          "time": [
+            0,
+            "min"
+          ]
+        },
+        "medalSeries": {
+          "title": "#",
+          "segments": [
+            {
+              "style": "gold",
+              "title": "Gold Award"
+            },
+            {
+              "style": "silver",
+              "title": "Silver Award"
+            },
+            {
+              "style": "bronze",
+              "title": "Bronze Award"
+            }
+          ],
+          "rule": {
+            "preset": "ICPC",
+            "options": {
+              "count": {
+                "value": [
+                  27,
+                  56,
+                  84
+                ]
+              }
+            }
+          }
+        },
+        "rankValue": {
+          "rank": 188,
+          "segmentIndex": null
+        },
+        "pageSha256": "582c212d85da0e53faf906f6962306642cf5493cb04674d76a0d5beea8bdf3c2",
+        "rawLinks": [
+          {
+            "title": {
+              "zh-CN": "原始榜单文件",
+              "fallback": "Raw Ranklist Files"
+            },
+            "link": "https://github.com/algoux/srk-collection-raw/tree/master/files/icpc2018xuzhou"
+          },
+          {
+            "title": {
+              "zh-CN": "赛题重现",
+              "fallback": "Reproduced Contest"
+            },
+            "link": "https://codeforces.com/gym/102012"
+          }
+        ],
+        "medalBoundariesKnown": true,
+        "sourceOfficial": true,
+        "rosterEvidence": "队内人工补充（2026-09-16）"
+      },
+      "suggestedMembers": [
+        "吴将凯",
+        "胡小涛",
+        "钱昕予"
+      ]
+    }
+  ]
+}

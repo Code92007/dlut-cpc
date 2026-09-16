@@ -27,6 +27,33 @@ test('annual medal chart groups three bars per year and excludes iron from chart
   assert.equal(html, context.medalChart(summary.map(({iron, ...item}) => item)));
 });
 
+test('annual medal chart supports stacked cumulative totals without counting iron', () => {
+  const summary = [{year: 2025, gold: 2, silver: 3, bronze: 4, iron: 99}];
+  const html = context.medalChart(summary, 'stacked');
+  assert.equal((html.match(/class="medal-bar medal-stack-segment"/g) || []).length, 3);
+  assert.ok(html.includes('年度奖牌累计柱状图'));
+  assert.ok(html.includes('金+银：5 枚'));
+  assert.ok(html.includes('金+银+铜：9 枚'));
+  assert.ok(!html.includes('99'));
+  const rects = [...html.matchAll(/<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"/g)]
+    .map(match => match.slice(1).map(Number));
+  assert.equal(rects.length, 3);
+  assert.ok(rects.every(([x]) => x === rects[0][0]));
+  assert.ok(Math.abs(rects.reduce((sum, rect) => sum + rect[3], 0) - (292 - rects[2][1])) < 0.00001);
+});
+
+test('home page exposes an accessible grouped and cumulative chart switch', () => {
+  const data = {meta: {updatedAt: '2026-09-16', firstYear: 2018, bestRank: 1, memberCoverage: 50}, honors: [],
+    medalSummary: [{year: 2025, gold: 1, silver: 2, bronze: 3}]};
+  vm.runInContext("state.medalChartMode = 'stacked'", context);
+  const html = context.homePage(data);
+  assert.ok(html.includes('aria-label="奖牌图表显示方式"'));
+  assert.ok(html.includes('data-chart-mode="grouped" aria-pressed="false"'));
+  assert.ok(html.includes('data-chart-mode="stacked" aria-pressed="true"'));
+  assert.ok(html.includes('年度奖牌累计柱状图'));
+  vm.runInContext("state.medalChartMode = 'grouped'", context);
+});
+
 test('annual bar chart handles no years, a single year, zero awards and long histories', () => {
   for (const summary of [[], [{year: 2000, gold: 0, silver: 0, bronze: 0}],
     Array.from({length: 50}, (_, index) => ({year: 1977 + index, gold: index % 4, silver: 3, bronze: 8}))]) {

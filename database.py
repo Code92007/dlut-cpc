@@ -23,7 +23,12 @@ def load_seed_file(path: Path | str) -> dict:
     archive = path.parent / "historical_honors.json"
     if archive.exists():
         data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]
-    for filename in ("ccpc_official_honors.json", "rankland_supplement_honors.json", "icpc_official_honors.json"):
+    for filename in (
+        "ccpc_official_honors.json",
+        "rankland_supplement_honors.json",
+        "rankland_xuzhou_2018_honors.json",
+        "icpc_official_honors.json",
+    ):
         official = path.parent / filename
         if official.exists():
             data.setdefault("officialImports", []).append(json.loads(official.read_text(encoding="utf-8")))

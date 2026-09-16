@@ -343,6 +343,50 @@ a:hover {
   font-weight: 700;
 }
 
+.section-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.chart-mode-switch {
+  display: inline-grid;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.chart-mode-switch button {
+  min-width: 58px;
+  height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-right: 1px solid var(--line-strong);
+  color: var(--muted);
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chart-mode-switch button:last-child {
+  border-right: 0;
+}
+
+.chart-mode-switch button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--blue);
+}
+
+.chart-mode-switch button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--blue-dark);
+  outline-offset: -3px;
+}
+
 .chart-panel {
   min-height: 330px;
   border-top: 1px solid var(--line);
@@ -1209,6 +1253,16 @@ a:hover {
   .page-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .season-layout,

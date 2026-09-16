@@ -23,6 +23,7 @@ const state = {
   memberStatus: "all",
   memberSchool: "all",
   memberSort: "recent",
+  medalChartMode: "grouped",
   trainingId: null,
   trainingSeries: "all",
   adminSession: null,
@@ -89,13 +90,16 @@ function navigate(route, push = true) {
   app.focus({ preventScroll: true });
 }
 
-function medalChart(summary) {
+function medalChart(summary, mode = "grouped") {
+  const stacked = mode === "stacked";
   const width = Math.max(1040, summary.length * 56 + 76);
   const height = 340;
   const margin = { top: 30, right: 32, bottom: 48, left: 44 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
-  const maxValue = Math.max(1, ...summary.flatMap((item) => [item.gold, item.silver, item.bronze]));
+  const maxValue = Math.max(1, ...summary.flatMap((item) => stacked
+    ? [(item.gold || 0) + (item.silver || 0) + (item.bronze || 0)]
+    : [item.gold, item.silver, item.bronze]));
   const maxY = Math.ceil(maxValue / 3) * 3;
   const groupWidth = chartWidth / Math.max(1, summary.length);
   const slotWidth = Math.min(22, groupWidth * 0.26);
@@ -109,16 +113,28 @@ function medalChart(summary) {
     grids.push(`<text x="${margin.left - 10}" y="${y(value) + 4}" text-anchor="end" fill="#7a838f" font-size="11">${value}</text>`);
   }
   const labels = {gold: '金牌', silver: '银牌', bronze: '铜牌'};
-  const series = summary.map((item, index) => ['gold', 'silver', 'bronze'].map((key, medalIndex) => {
-    const value = item[key] || 0;
-    const center = x(index) + (medalIndex - 1) * slotWidth;
-    return `<g class="medal-bar" data-year="${escapeHtml(item.year)}" data-medal="${key}"><title>${escapeHtml(item.year)} 年${labels[key]}：${escapeHtml(value)} 枚</title>
-      <rect x="${center - barWidth / 2}" y="${y(value)}" width="${barWidth}" height="${y(0) - y(value)}" fill="${colors[key]}" />
-      ${value > 0 ? `<text x="${center}" y="${y(value) - 7}" text-anchor="middle" fill="#505965" font-size="10">${escapeHtml(value)}</text>` : ''}</g>`;
-  }).join('')).join('');
+  const series = summary.map((item, index) => {
+    let cumulative = 0;
+    return ['gold', 'silver', 'bronze'].map((key, medalIndex) => {
+      const value = item[key] || 0;
+      const previous = cumulative;
+      cumulative += value;
+      const center = x(index) + (stacked ? 0 : (medalIndex - 1) * slotWidth);
+      const rectWidth = stacked ? Math.min(28, groupWidth * 0.52) : barWidth;
+      const top = stacked ? cumulative : value;
+      const bottom = stacked ? previous : 0;
+      const cumulativeLabel = key === 'gold' ? '金牌' : key === 'silver' ? '金+银' : '金+银+铜';
+      const title = stacked
+        ? `${item.year} 年${labels[key]}：${value} 枚；${cumulativeLabel}：${cumulative} 枚`
+        : `${item.year} 年${labels[key]}：${value} 枚`;
+      return `<g class="medal-bar${stacked ? ' medal-stack-segment' : ''}" data-year="${escapeHtml(item.year)}" data-medal="${key}"><title>${escapeHtml(title)}</title>
+        <rect x="${center - rectWidth / 2}" y="${y(top)}" width="${rectWidth}" height="${y(bottom) - y(top)}" fill="${colors[key]}" />
+        ${value > 0 ? `<text x="${center}" y="${y(top) - 7}" text-anchor="middle" fill="#505965" font-size="10">${escapeHtml(stacked ? cumulative : value)}</text>` : ''}</g>`;
+    }).join('');
+  }).join('');
   const years = summary.map((item, index) => `<text x="${x(index)}" y="${height - 18}" text-anchor="middle" fill="#68717e" font-size="11">${escapeHtml(item.year)}</text>`).join("");
   return `<div class="chart-legend"><span class="gold">金牌</span><span class="silver">银牌</span><span class="bronze">铜牌</span></div>
-    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="年度奖牌数量柱状图">${grids.join("")}${series}${years}</svg></div>`;
+    <div class="chart-scroller"><svg class="medal-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${stacked ? '年度奖牌累计柱状图' : '年度奖牌数量柱状图'}">${grids.join("")}${series}${years}</svg></div>`;
 }
 
 function honorRows(honors) {
@@ -155,8 +171,10 @@ function homePage(data) {
     </section>
     <div class="home-content">
       <section class="section-block">
-        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌统计</h2></div><div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div>
-        <div class="chart-panel">${medalChart(data.medalSummary)}</div>
+        <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌统计</h2></div><div class="section-actions">
+          <div class="chart-mode-switch" role="group" aria-label="奖牌图表显示方式"><button type="button" data-chart-mode="grouped" aria-pressed="${state.medalChartMode === 'grouped'}">分组</button><button type="button" data-chart-mode="stacked" aria-pressed="${state.medalChartMode === 'stacked'}">累计</button></div>
+          <div class="source-status"><i></i><span>更新于 ${escapeHtml(data.meta.updatedAt)}</span></div></div></div>
+        <div class="chart-panel">${medalChart(data.medalSummary, state.medalChartMode)}</div>
       </section>
       <section class="section-block">
         <div class="section-heading"><div><span class="eyebrow">Honor</span><h2>最近参赛</h2></div><a href="/honor" data-route="honor">查看全部成绩 ›</a></div>
@@ -934,6 +952,12 @@ function trainingPage(data) {
 }
 
 function bindPageEvents(route) {
+  if (route === "home") {
+    document.querySelectorAll('[data-chart-mode]').forEach((button) => button.addEventListener('click', () => {
+      state.medalChartMode = button.dataset.chartMode;
+      renderRoute('home');
+    }));
+  }
   if (route === "honor") {
     document.querySelectorAll("[data-year]").forEach((button) => button.addEventListener("click", () => {
       state.honorYear = button.dataset.year;

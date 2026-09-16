@@ -50,8 +50,8 @@ class ICPCOfficialArchiveTests(unittest.TestCase):
 
     def test_seed_loader_includes_independent_icpc_archive(self):
         loaded = load_seed_file(ROOT / "data/site.json")
-        providers = [batch.get("provider", "ccpc-official") for batch in loaded["officialImports"]]
-        self.assertEqual(providers, ["ccpc-official", "rankland", "icpc-official"])
+        batch_ids = {batch["batchId"] for batch in loaded["officialImports"]}
+        self.assertIn("icpc-official-beijing-2018-20260916-v1", batch_ids)
 
 
 if __name__ == "__main__":

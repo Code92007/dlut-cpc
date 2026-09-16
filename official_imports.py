@@ -37,11 +37,11 @@ def contest_key(record: dict) -> tuple[str, str, str] | None:
     else:
         region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "合肥", "南阳", "桂林", "吉林",
                                         "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州", "沈阳", "南京",
-                                        "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "乌鲁木齐") if name in text), None)
+                                        "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "徐州", "乌鲁木齐") if name in text), None)
         if not region:
             suffix = re.sub(r"^(?:icpc|ccpc)\d{4}", "", str(record.get("externalContestId") or ""))
             region = {"shenyang": "沈阳", "nanjing": "南京", "shanghai": "上海", "yinchuan": "银川", "nanchang": "南昌",
-                      "qingdao": "青岛", "jiaozuo": "焦作", "urumchi": "乌鲁木齐", "xi_an": "西安", "beijing": "北京"}.get(suffix)
+                      "qingdao": "青岛", "jiaozuo": "焦作", "xuzhou": "徐州", "urumchi": "乌鲁木齐", "xi_an": "西安", "beijing": "北京"}.get(suffix)
     return (record.get("series", ""), season, region) if region else None
 
 
