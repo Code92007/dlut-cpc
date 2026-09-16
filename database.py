@@ -8,6 +8,8 @@ import re
 import sqlite3
 from pathlib import Path
 from typing import Iterable
+
+from official_imports import ARCHIVE_PROVIDERS
 from schools import MAINTENANCE_GROUPS, school_group
 
 
@@ -21,12 +23,10 @@ def load_seed_file(path: Path | str) -> dict:
     archive = path.parent / "historical_honors.json"
     if archive.exists():
         data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]
-    official = path.parent / "ccpc_official_honors.json"
-    if official.exists():
-        data["officialImports"] = [json.loads(official.read_text(encoding="utf-8"))]
-    supplement = path.parent / "rankland_supplement_honors.json"
-    if supplement.exists():
-        data.setdefault("officialImports", []).append(json.loads(supplement.read_text(encoding="utf-8")))
+    for filename in ("ccpc_official_honors.json", "rankland_supplement_honors.json", "icpc_official_honors.json"):
+        official = path.parent / filename
+        if official.exists():
+            data.setdefault("officialImports", []).append(json.loads(official.read_text(encoding="utf-8")))
     return data
 
 
@@ -569,7 +569,7 @@ class Database:
             ).fetchone()
             if identity:
                 honor_id = identity["id"]
-            elif record.get("series") in {"ICPC", "CCPC"} and external_provider not in {"ccpc-official", "rankland"} and not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
+            elif record.get("series") in {"ICPC", "CCPC"} and external_provider not in ARCHIVE_PROVIDERS and not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
                 identity = connection.execute("SELECT honor_id FROM honor_source_records WHERE provider=? AND external_id=?",
                                               (external_provider, external_award_id)).fetchone()
                 if identity:
@@ -577,7 +577,12 @@ class Database:
                 else:
                     # A public provider may later collect a previously archived
                     # result. Reuse its local ID and preserve its curated roster.
-                    archived_ids = [row[0] for row in connection.execute("SELECT DISTINCT honor_id FROM honor_source_records WHERE provider IN ('ccpc-official', 'rankland')")]
+                    archive_providers = tuple(sorted(ARCHIVE_PROVIDERS))
+                    placeholders = ",".join("?" for _ in archive_providers)
+                    archived_ids = [row[0] for row in connection.execute(
+                        f"SELECT DISTINCT honor_id FROM honor_source_records WHERE provider IN ({placeholders})",
+                        archive_providers,
+                    )]
                     if archived_ids:
                         from official_imports import match_result
                         incoming = {**record, "suggestedMembers": record.get("members", [])}
@@ -1400,7 +1405,7 @@ class Database:
                 field = medal_fields.get(honor["medal"])
                 if field:
                     medals[field] += 1
-                    if (honor["is_manual"] or honor["external_provider"] in {"rankland", "ccpc-official"}) and not honor["public_covered"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
+                    if (honor["is_manual"] or honor["external_provider"] in ARCHIVE_PROVIDERS) and not honor["public_covered"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
                         manual_medals[field] += 1
             merged_identity = row["school"] == "大连理工大学盘锦校区" and (
                 connection.execute("SELECT 1 FROM member_redirects WHERE member_id=?", (row["id"],)).fetchone()
@@ -1416,7 +1421,7 @@ class Database:
                         if public_stats["iron_count"] is not None else None
                     ),
                 }
-            elif not public_stats and any(honor["external_provider"] in {"rankland", "ccpc-official"} for honor in honors):
+            elif not public_stats and any(honor["external_provider"] in ARCHIVE_PROVIDERS for honor in honors):
                 # Historical archives do not prove a complete participation
                 # record. Do not reward unknown lifetime iron totals as zero.
                 medals["iron"] = None

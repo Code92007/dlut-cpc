@@ -9,6 +9,19 @@ import unicodedata
 from schools import MAINTENANCE_GROUPS, school_group
 
 
+ARCHIVE_PROVIDERS = frozenset({"ccpc-official", "icpc-official", "rankland"})
+PROVIDER_SERIES = {
+    "ccpc-official": {"CCPC"},
+    "icpc-official": {"ICPC"},
+    "rankland": {"ICPC", "CCPC"},
+}
+PROVIDER_SOURCE_ORIGINS = {
+    "ccpc-official": ("https://ccpc.io/",),
+    "icpc-official": ("https://icpc.global/", "https://web.archive.org/"),
+    "rankland": ("https://rl.algoux.cn/",),
+}
+
+
 def normalized(value: str) -> str:
     return re.sub(r"[^\w\u4e00-\u9fff]", "", unicodedata.normalize("NFKC", value)).casefold()
 
@@ -80,13 +93,13 @@ def validate_batch(batch: dict) -> None:
     if not isinstance(batch.get("batchId"), str) or not re.fullmatch(r"[a-zA-Z0-9_-]{1,150}", batch["batchId"]):
         raise ValueError("Invalid official import batch ID")
     provider = batch.get("provider", "ccpc-official")
-    if provider not in {"ccpc-official", "rankland"}:
+    if provider not in ARCHIVE_PROVIDERS:
         raise ValueError("Invalid archive provider")
     identities = set()
     for record in batch.get("honors", []):
         dt.date.fromisoformat(record["date"])
         unknown = provider == "rankland" and record.get("medal") == "" and record.get("medalStatus") == "unknown"
-        if (record.get("medal") not in {"金牌", "银牌", "铜牌", "铁牌"} and not unknown) or record.get("series") not in ({"CCPC"} if provider == "ccpc-official" else {"ICPC", "CCPC"}):
+        if (record.get("medal") not in {"金牌", "银牌", "铜牌", "铁牌"} and not unknown) or record.get("series") not in PROVIDER_SERIES[provider]:
             raise ValueError("Invalid archived result")
         if record.get("school") not in MAINTENANCE_GROUPS or not record.get("team") or not record.get("event"):
             raise ValueError("Missing result identity or invalid maintenance group")
@@ -98,8 +111,7 @@ def validate_batch(batch: dict) -> None:
         identities.add(identity)
         if type(record.get("expectedMembers", 3)) is not int or not 1 <= record.get("expectedMembers", 3) <= 3:
             raise ValueError("Invalid official team size")
-        origin = "https://ccpc.io/" if provider == "ccpc-official" else "https://rl.algoux.cn/"
-        if not record.get("source", {}).get("url", "").startswith(origin):
+        if not record.get("source", {}).get("url", "").startswith(PROVIDER_SOURCE_ORIGINS[provider]):
             raise ValueError("Archived result must retain its source")
         if re.search(r"网络|选拔|预选|女生|女子|高职|热身|省赛|省竞赛|邀请赛|地区赛|挑战赛|preliminary|invitational|women|girls", record["event"], re.I):
             raise ValueError("Excluded contest type")

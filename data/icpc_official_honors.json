@@ -1,0 +1,124 @@
+{
+  "batchId": "icpc-official-beijing-2018-20260916-v1",
+  "provider": "icpc-official",
+  "source": {
+    "name": "北京大学 2018 ICPC 北京站官方获奖名单（历史快照）",
+    "url": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html"
+  },
+  "fetchedAt": "2026-09-16T00:00:00+08:00",
+  "contests": [
+    {
+      "key": "icpc2018beijing",
+      "officialContestId": 3722,
+      "title": "The 2018 ICPC Asia Beijing Regional Contest",
+      "date": "2018-11-11",
+      "host": "Peking University",
+      "url": "https://icpc.global/regionals/finder/Beijing-2019/standings",
+      "archivedAwardList": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html",
+      "awards": 2,
+      "schools": [
+        "Dalian University of Technology",
+        "School of Software Technology, Dalian University of Technology"
+      ]
+    }
+  ],
+  "honors": [
+    {
+      "id": "icpc-official-2018-beijing-thesedays",
+      "event": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（北京站） （北京大学）",
+      "series": "ICPC",
+      "date": "2018-11-11",
+      "location": "北京",
+      "team": "Thesedays",
+      "school": "大连理工大学",
+      "originalSchool": "School of Software Technology, Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "金牌",
+      "rank": "12 / 181",
+      "overallRank": "12 / 181",
+      "official": true,
+      "source": {
+        "name": "北京大学 2018 ICPC 北京站官方获奖名单（历史快照）",
+        "url": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html"
+      },
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-3722:12:thesedays",
+      "externalContestId": "icpc2018beijing",
+      "externalTeamId": "School of Software Technology, Dalian University of Technology:Thesedays",
+      "archive": {
+        "officialContestId": 3722,
+        "officialStandings": "https://icpc.global/regionals/finder/Beijing-2019/standings",
+        "originalAwardList": "http://acm.pku.edu.cn/icpc_pku2018/awardlist.html",
+        "archivedAwardList": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html",
+        "pageSha256": "3f408fd25725374b6df6504c4f0a99b767e1a8630048f4a4e89be78c99e7f040",
+        "teamRank": 12,
+        "universityRank": 10,
+        "problemsSolved": 5,
+        "rawSchool": "School of Software Technology, Dalian University of Technology",
+        "rawTeam": "Thesedays",
+        "rawCoach": "Kun Lu",
+        "rawContestants": [
+          "Yufan Huang",
+          "shoukui Zhang",
+          "hangyu jin"
+        ],
+        "rawAward": "Gold Medal",
+        "memberNameEvidence": "https://news.dlut.edu.cn/xjnry/yxfc_content.jsp?urltype=news.NewsContentUrl&wbnewsid=74856&wbtreeid=1071"
+      },
+      "suggestedMembers": [
+        "黄宇凡",
+        "张寿奎",
+        "金航宇"
+      ]
+    },
+    {
+      "id": "icpc-official-2018-beijing-rainbow",
+      "event": "第43届ACM-ICPC国际大学生程序设计竞赛亚洲区域赛（北京站） （北京大学）",
+      "series": "ICPC",
+      "date": "2018-11-11",
+      "location": "北京",
+      "team": "Rainbow",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "136 / 181",
+      "overallRank": "136 / 181",
+      "official": true,
+      "source": {
+        "name": "北京大学 2018 ICPC 北京站官方获奖名单（历史快照）",
+        "url": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html"
+      },
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-3722:136:rainbow",
+      "externalContestId": "icpc2018beijing",
+      "externalTeamId": "Dalian University of Technology:Rainbow",
+      "archive": {
+        "officialContestId": 3722,
+        "officialStandings": "https://icpc.global/regionals/finder/Beijing-2019/standings",
+        "originalAwardList": "http://acm.pku.edu.cn/icpc_pku2018/awardlist.html",
+        "archivedAwardList": "https://web.archive.org/web/20191017080040/http://acm.pku.edu.cn/icpc_pku2018/awardlist.html",
+        "pageSha256": "3f408fd25725374b6df6504c4f0a99b767e1a8630048f4a4e89be78c99e7f040",
+        "teamRank": 136,
+        "universityRank": null,
+        "problemsSolved": 2,
+        "rawSchool": "Dalian University of Technology",
+        "rawTeam": "Rainbow",
+        "rawCoach": "liang bing",
+        "rawContestants": [
+          "Yiming Deng",
+          "Yicheng Liu",
+          "xuting li"
+        ],
+        "rawAward": "Honorable Mention"
+      },
+      "suggestedMembers": [
+        "Yiming Deng",
+        "Yicheng Liu",
+        "xuting li"
+      ]
+    }
+  ]
+}
