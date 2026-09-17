@@ -10,6 +10,7 @@
 - `/honor`：按年份、成绩、关键词检索获牌及未获牌记录。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
 - `/training`：牛客暑期多校、杭电多校和队内训练榜单。
+- `/resources`：训练资料知识库，统一收录 PDF、GitHub 仓库和外部网页，可按关键词、类型、分类、难度与标签检索。
 - `/admin`：管理员登录与成员、账号、姓名别名、历史参赛成绩补录。访客只读。
 - `/pending`：获奖信息待确认成员，可按年份关键词、队伍及所属范围查找。
 
@@ -178,6 +179,39 @@ docker compose restart dlut-cpc
 
 访问 `/admin` 登录后可补录未被 CPC Finder 收录的古早成员、追加主副账号、设置中文名和别名、录入历史成绩（金银铜铁）。成员选择含独立 ID，同名选手不会被自动合并；补录姓名已存在时需显式确认是独立同名成员。账号归属不能同时绑定两人。人工数据写入 SQLite，重建容器和公开同步均不会删除。
 
+### 资料库与对象存储
+
+资料库只在 SQLite 保存标题、简介、分类、难度、标签、外链和对象键等轻量索引。PDF 不写入仓库、SQLite、`runtime` 或应用容器：管理员浏览器先从本站取得 15 分钟有效的单文件上传签名，再直接把文件 `PUT` 到支持 AWS Signature V4 的 S3 兼容对象存储。访客打开 PDF 时，本站只生成 5 分钟有效的下载地址并重定向，文件内容不经过这台服务器，存储桶可以保持私有。
+
+在 `.env` 配置对象存储；没有配置时 GitHub 与普通链接仍可正常维护，PDF 上传会在管理页禁用：
+
+```dotenv
+RESOURCE_S3_ENDPOINT=https://<account-or-service-endpoint>
+RESOURCE_S3_BUCKET=dlut-cpc-resources
+RESOURCE_S3_REGION=auto
+RESOURCE_S3_ACCESS_KEY_ID=<access-key-id>
+RESOURCE_S3_SECRET_ACCESS_KEY=<secret-access-key>
+RESOURCE_MAX_FILE_BYTES=52428800
+```
+
+`RESOURCE_S3_ENDPOINT` 填 S3 API 端点，不是公开下载域名。区域按服务商要求填写；Cloudflare R2 使用 `auto`，其他服务通常使用实际 region。访问凭据应只授权指定 bucket 下的 `resources/*` 前缀执行 `PutObject`、`GetObject` 和 `DeleteObject`，不要使用账户级密钥。删除资料时，应用会先删除远端 PDF，成功后再删除索引；远端失败则保留索引供管理员重试。
+
+浏览器直传需要给 bucket 配置 CORS。把域名替换为实际站点，只开放本站来源和 `PUT`：
+
+```json
+[
+  {
+    "AllowedOrigins": ["https://dlut-cpc.wannafly.cn"],
+    "AllowedMethods": ["PUT"],
+    "AllowedHeaders": ["Content-Type"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
+上传签名限定一个随机的 `.pdf` 对象键、`application/pdf` 类型和 15 分钟有效期；管理接口还会校验扩展名、MIME、文件大小、GitHub 域名、标签数量、管理员会话、同源请求和 CSRF。若浏览器上传成功但保存索引失败，管理端会明确报错；可定期用对象存储清单与 SQLite 中的对象键核对并清理孤立文件。
+
 管理 API 使用服务端八小时会话、HttpOnly/SameSite Cookie、HTTPS Secure Cookie、同源校验与 CSRF 令牌。未登录访客不能修改正式成员或成绩，也不能查看私有审核队列；登录失败有限流，退出立即撤销会话，服务重启后需重新登录。内部备注不进入公开成员接口。
 
 ### 游客补录与审核
@@ -190,7 +224,7 @@ docker compose restart dlut-cpc
 
 提交必须同源并使用 JSON，名单与 CF 账号申请共用每个来源 IP 十分钟最多 20 次的限流；每条成绩最多保留 5 份不同的待审核名单，每位成员最多保留 5 份不同的待审核账号申请，两类总待审核队列上限 1000 份。相同成员名单不计次序、空格、已知报名别名差异自动去重；相同成员的账号申请忽略账号大小写与两端空格去重。存在多个同名候选时要求指定成员 ID，城市学院与盘锦校区不能误合并到本部。限流计数保存在进程内，重启后重置；提案、审核历史和正式数据均持久化，重建容器或来源网站下线不会丢失。
 
-Compose 默认 `TRUST_PROXY_HEADERS=1`，用于读取 Caddy 设置的真实客户端 IP，宿主机端口必须保持 `127.0.0.1` 绑定且只由可信反向代理访问。直接将服务端口暴露到外网时应设置 `TRUST_PROXY_HEADERS=0`，不接受客户端伪造的转发头。此次更新不需要新端口或更改 Caddy 配置；更新前备份生产 SQLite，启动会自动升级到 v10。
+Compose 默认 `TRUST_PROXY_HEADERS=1`，用于读取 Caddy 设置的真实客户端 IP，宿主机端口必须保持 `127.0.0.1` 绑定且只由可信反向代理访问。直接将服务端口暴露到外网时应设置 `TRUST_PROXY_HEADERS=0`，不接受客户端伪造的转发头。此次更新不需要新端口或更改 Caddy 配置；更新前备份生产 SQLite，启动会自动升级到 v11。
 
 无法从公开网站找到的老成员直接写入 SQLite，不需要修改前端：
 

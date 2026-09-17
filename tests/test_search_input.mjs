@@ -32,7 +32,7 @@ function harness(selector, key, route) {
     detach() {input = element();}};
 }
 
-for (const [selector, key, route] of [['#memberQuery', 'memberQuery', 'rating'], ['#honorQuery', 'honorQuery', 'honor'], ['#pendingQuery', 'pendingQuery', 'pending']]) {
+for (const [selector, key, route] of [['#memberQuery', 'memberQuery', 'rating'], ['#honorQuery', 'honorQuery', 'honor'], ['#pendingQuery', 'pendingQuery', 'pending'], ['#resourceQuery', 'resourceQuery', 'resources']]) {
   test(`${route}: IME stays attached during composition and searches committed Chinese text`, () => {
     const h = harness(selector, key, route);
     const input = h.input();

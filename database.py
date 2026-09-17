@@ -14,7 +14,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 10
+SCHEMA_VERSION = 11
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -252,6 +252,27 @@ CREATE TABLE IF NOT EXISTS account_submissions (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_account_submissions_duplicate
 ON account_submissions(member_id, handle) WHERE status='pending';
 CREATE INDEX IF NOT EXISTS idx_account_submissions_queue ON account_submissions(status, id);
+
+CREATE TABLE IF NOT EXISTS resources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    resource_type TEXT NOT NULL CHECK(resource_type IN ('pdf', 'github', 'link')),
+    category TEXT NOT NULL DEFAULT '其他',
+    difficulty TEXT NOT NULL DEFAULT 'all' CHECK(difficulty IN ('all', 'beginner', 'intermediate', 'advanced')),
+    description TEXT NOT NULL DEFAULT '',
+    tags_json TEXT NOT NULL DEFAULT '[]',
+    url TEXT NOT NULL DEFAULT '',
+    object_key TEXT NOT NULL DEFAULT '',
+    original_filename TEXT NOT NULL DEFAULT '',
+    content_type TEXT NOT NULL DEFAULT '',
+    file_size INTEGER,
+    published INTEGER NOT NULL DEFAULT 1 CHECK(published IN (0, 1)),
+    created_by TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_resources_public ON resources(published, category, resource_type, updated_at);
 """
 
 
@@ -1273,6 +1294,97 @@ class Database:
                 "ON CONFLICT(honor_id, member_id) DO UPDATE SET source_id=excluded.source_id, is_manual=1",
                 (honor_id, member_id, int(position_row["position"]), source_id),
             )
+
+    def save_resource(self, resource: dict, *, resource_id: int | None = None, created_by: str = "") -> int:
+        tags = resource.get("tags", [])
+        if not isinstance(tags, list):
+            raise ValueError("资源标签无效")
+        values = (
+            str(resource.get("title", "")),
+            str(resource.get("resourceType", "")),
+            str(resource.get("category", "其他")),
+            str(resource.get("difficulty", "all")),
+            str(resource.get("description", "")),
+            json.dumps(tags, ensure_ascii=False, separators=(",", ":")),
+            str(resource.get("url", "")),
+            str(resource.get("objectKey", "")),
+            str(resource.get("originalFilename", "")),
+            str(resource.get("contentType", "")),
+            resource.get("fileSize"),
+            int(bool(resource.get("published", True))),
+        )
+        with self.connect() as connection:
+            if resource_id is None:
+                cursor = connection.execute(
+                    "INSERT INTO resources(title, resource_type, category, difficulty, description, tags_json, url, "
+                    "object_key, original_filename, content_type, file_size, published, created_by) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (*values, created_by),
+                )
+                return int(cursor.lastrowid)
+            if type(resource_id) is not int or resource_id <= 0:
+                raise ValueError("资源 ID 无效")
+            cursor = connection.execute(
+                "UPDATE resources SET title=?, resource_type=?, category=?, difficulty=?, description=?, tags_json=?, "
+                "url=?, object_key=?, original_filename=?, content_type=?, file_size=?, published=?, "
+                "updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                (*values, resource_id),
+            )
+            if not cursor.rowcount:
+                raise ValueError("资源不存在")
+            return resource_id
+
+    def list_resources(self, *, include_drafts: bool = False) -> list[dict]:
+        with self.connect() as connection:
+            where = "" if include_drafts else " WHERE published=1"
+            rows = connection.execute(
+                "SELECT * FROM resources" + where + " ORDER BY updated_at DESC, id DESC"
+            ).fetchall()
+        return [self._resource_payload(row, include_private=include_drafts) for row in rows]
+
+    def get_resource(self, resource_id: int, *, include_drafts: bool = False) -> dict | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM resources WHERE id=?" + ("" if include_drafts else " AND published=1"),
+                (resource_id,),
+            ).fetchone()
+        return self._resource_payload(row, include_private=include_drafts) if row else None
+
+    def delete_resource(self, resource_id: int) -> dict:
+        with self.connect() as connection:
+            row = connection.execute("SELECT * FROM resources WHERE id=?", (resource_id,)).fetchone()
+            if not row:
+                raise ValueError("资源不存在")
+            resource = self._resource_payload(row, include_private=True)
+            connection.execute("DELETE FROM resources WHERE id=?", (resource_id,))
+        return resource
+
+    @staticmethod
+    def _resource_payload(row: sqlite3.Row, *, include_private: bool) -> dict:
+        try:
+            tags = json.loads(row["tags_json"])
+        except (TypeError, json.JSONDecodeError):
+            tags = []
+        result = {
+            "id": row["id"],
+            "title": row["title"],
+            "resourceType": row["resource_type"],
+            "category": row["category"],
+            "difficulty": row["difficulty"],
+            "description": row["description"],
+            "tags": tags if isinstance(tags, list) else [],
+            "url": row["url"],
+            "originalFilename": row["original_filename"],
+            "fileSize": row["file_size"],
+            "published": bool(row["published"]),
+            "createdAt": row["created_at"],
+            "updatedAt": row["updated_at"],
+        }
+        if include_private:
+            result["objectKey"] = row["object_key"]
+            result["contentType"] = row["content_type"]
+            result["createdBy"] = row["created_by"]
+        return result
 
     def payload(self, base: dict) -> dict:
         result = copy.deepcopy(base)

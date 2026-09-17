@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from database import Database, load_seed_file
 from admin_auth import AdminAuth
+from object_storage import DEFAULT_MAX_FILE_BYTES, ObjectStorage, storage_status
 
 
 ROOT = Path(__file__).resolve().parent
@@ -28,7 +29,7 @@ DATA_PATH = Path(os.environ.get("SITE_DATA_PATH", ROOT / "data" / "site.json"))
 DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cpc.sqlite3"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
-SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/admin", "/pending"}
+SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/resources", "/admin", "/pending"}
 
 
 class SubmissionLimiter:
@@ -84,7 +85,17 @@ class SiteHandler(BaseHTTPRequestHandler):
             session = auth.session(self.headers.get("Cookie", ""))
             self._send_json({"enabled": auth.enabled, "authenticated": bool(session),
                              "username": session["username"] if session else None,
-                             "csrf": session["csrf"] if session else None})
+                             "csrf": session["csrf"] if session else None,
+                             "storage": storage_status() if session else None})
+            return
+        if path == "/api/admin/resources":
+            if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
+                self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
+                return
+            try:
+                self._send_json({"items": self._resources_payload(include_drafts=True), "storage": storage_status()})
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
         if path == "/api/admin/submissions":
             if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
@@ -107,6 +118,38 @@ class SiteHandler(BaseHTTPRequestHandler):
                 self._send_json(load_site_data())
             except (OSError, ValueError, json.JSONDecodeError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+        if path == "/api/resources":
+            try:
+                items = self._resources_payload(include_drafts=False)
+                categories: dict[str, int] = {}
+                tags: dict[str, int] = {}
+                for item in items:
+                    categories[item["category"]] = categories.get(item["category"], 0) + 1
+                    for tag in item["tags"]:
+                        tags[tag] = tags.get(tag, 0) + 1
+                self._send_json({
+                    "items": items,
+                    "categories": [{"name": name, "count": count} for name, count in sorted(categories.items())],
+                    "tags": [{"name": name, "count": count} for name, count in sorted(tags.items(), key=lambda item: (-item[1], item[0]))],
+                })
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+        resource_open = re.fullmatch(r"/api/resources/(\d+)/open", path)
+        if resource_open:
+            try:
+                resource = Database(DATABASE_PATH).get_resource(int(resource_open.group(1)))
+                if not resource or resource["resourceType"] != "pdf":
+                    self._send_json({"error": "资源不存在"}, HTTPStatus.NOT_FOUND)
+                    return
+                private = Database(DATABASE_PATH).get_resource(int(resource_open.group(1)), include_drafts=True)
+                storage = ObjectStorage.from_env()
+                if not storage:
+                    raise ValueError("PDF 对象存储尚未配置")
+                self._send_redirect(storage.download_url(private["objectKey"]))
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.SERVICE_UNAVAILABLE)
             return
 
         if path in SPA_ROUTES:
@@ -260,6 +303,41 @@ class SiteHandler(BaseHTTPRequestHandler):
                 from tools.sync_codeforces import sync_ratings
                 updates, errors = sync_ratings(database, load_seed_data())
                 self._send_json({"ok": True, "updated": len(updates), "warning": "; ".join(errors) or None})
+            elif path == "/api/admin/resource-upload":
+                storage = ObjectStorage.from_env()
+                if not storage:
+                    raise ValueError("PDF 对象存储尚未配置")
+                upload = storage.create_upload(
+                    self._text(body, "filename", 255, required=True),
+                    body.get("fileSize"),
+                    self._text(body, "contentType", 100),
+                )
+                self._send_json({"ok": True, **upload})
+            elif path == "/api/admin/resource":
+                resource_id = self._optional_id(body.get("resourceId"), "资源 ID")
+                resource = self._resource_body(body)
+                if resource_id:
+                    existing = database.get_resource(resource_id, include_drafts=True)
+                    if not existing:
+                        raise ValueError("资源不存在")
+                    if existing["resourceType"] == "pdf" and (
+                        resource["resourceType"] != "pdf" or resource["objectKey"] != existing["objectKey"]
+                    ):
+                        raise ValueError("已上传的 PDF 不能替换或改为链接；请删除后重新添加")
+                saved_id = database.save_resource(resource, resource_id=resource_id, created_by=session["username"])
+                self._send_json({"ok": True, "resourceId": saved_id}, HTTPStatus.CREATED if resource_id is None else HTTPStatus.OK)
+            elif path == "/api/admin/resource-delete":
+                resource_id = self._optional_id(body.get("resourceId"), "资源 ID", required=True)
+                resource = database.get_resource(resource_id, include_drafts=True)
+                if not resource:
+                    raise ValueError("资源不存在")
+                if resource["resourceType"] == "pdf" and resource.get("objectKey"):
+                    storage = ObjectStorage.from_env()
+                    if not storage:
+                        raise ValueError("对象存储未配置，无法同步删除 PDF")
+                    storage.delete_object(resource["objectKey"])
+                database.delete_resource(resource_id)
+                self._send_json({"ok": True})
             else:
                 self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
         except (OSError, ValueError, TypeError, sqlite3.Error) as exc:
@@ -316,6 +394,81 @@ class SiteHandler(BaseHTTPRequestHandler):
         return body
 
     @staticmethod
+    def _resources_payload(*, include_drafts: bool) -> list[dict]:
+        items = Database(DATABASE_PATH).list_resources(include_drafts=include_drafts)
+        for item in items:
+            if item["resourceType"] == "pdf":
+                item["openUrl"] = f"/api/resources/{item['id']}/open"
+        return items
+
+    @classmethod
+    def _resource_body(cls, body: dict) -> dict:
+        resource_type = cls._text(body, "resourceType", 20, required=True)
+        if resource_type not in {"pdf", "github", "link"}:
+            raise ValueError("资料类型无效")
+        difficulty = cls._text(body, "difficulty", 20) or "all"
+        if difficulty not in {"all", "beginner", "intermediate", "advanced"}:
+            raise ValueError("资料难度无效")
+        tags = body.get("tags", [])
+        if not isinstance(tags, list) or len(tags) > 12:
+            raise ValueError("资料标签无效")
+        normalized_tags = []
+        seen = set()
+        for tag in tags:
+            if not isinstance(tag, str) or not tag.strip() or len(tag.strip()) > 30:
+                raise ValueError("资料标签无效")
+            value = tag.strip()
+            if value.casefold() not in seen:
+                seen.add(value.casefold())
+                normalized_tags.append(value)
+        published = body.get("published", True)
+        if type(published) is not bool:
+            raise ValueError("发布状态无效")
+        result = {
+            "title": cls._text(body, "title", 200, required=True),
+            "resourceType": resource_type,
+            "category": cls._text(body, "category", 80, required=True),
+            "difficulty": difficulty,
+            "description": cls._text(body, "description", 2000),
+            "tags": normalized_tags,
+            "published": published,
+            "url": "",
+            "objectKey": "",
+            "originalFilename": "",
+            "contentType": "",
+            "fileSize": None,
+        }
+        if resource_type == "pdf":
+            object_key = cls._text(body, "objectKey", 300, required=True)
+            if not ObjectStorage.valid_object_key(object_key):
+                raise ValueError("PDF 对象键无效")
+            filename = cls._text(body, "originalFilename", 255, required=True)
+            if not filename.casefold().endswith(".pdf"):
+                raise ValueError("PDF 文件名无效")
+            file_size = body.get("fileSize")
+            maximum = storage_status().get("maxFileBytes", DEFAULT_MAX_FILE_BYTES)
+            if type(file_size) is not int or not 1 <= file_size <= maximum:
+                raise ValueError("PDF 文件大小无效")
+            result.update(objectKey=object_key, originalFilename=filename, contentType="application/pdf", fileSize=file_size)
+        else:
+            url = cls._text(body, "url", 2000, required=True)
+            parsed = urlsplit(url)
+            if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+                raise ValueError("资料链接必须使用 HTTP 或 HTTPS")
+            if resource_type == "github" and (parsed.hostname or "").casefold() not in {"github.com", "www.github.com"}:
+                raise ValueError("GitHub 资料必须使用 github.com 链接")
+            result["url"] = url
+        return result
+
+    @staticmethod
+    def _optional_id(value: object, label: str, *, required: bool = False) -> int | None:
+        if value in (None, "") and not required:
+            return None
+        if type(value) is not int or value <= 0:
+            raise ValueError(f"{label}无效")
+        return value
+
+    @staticmethod
     def _text(body: dict, field: str, maximum: int, *, required: bool = False) -> str:
         value = body.get(field, "")
         if not isinstance(value, str) or len(value) > maximum or (required and not value.strip()):
@@ -348,6 +501,14 @@ class SiteHandler(BaseHTTPRequestHandler):
         self.end_headers()
         if not getattr(self, "_head_only", False):
             self.wfile.write(body)
+
+    def _send_redirect(self, location: str) -> None:
+        self.send_response(HTTPStatus.FOUND)
+        self.send_header("Location", location)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def _send_file(self, path: Path, *, cache: bool) -> None:
         body = path.read_bytes()

@@ -44,6 +44,7 @@ class AdminTests(unittest.TestCase):
         handler.rfile = io.BytesIO(data)
         result = {}
         handler._send_json = lambda payload, status=200, headers=None: result.update(body=payload, status=status, headers=headers or {})
+        handler._send_redirect = lambda location: result.update(location=location, status=302)
         with patch.object(app, "DATABASE_PATH", self.database_path), patch.object(app, "DATA_PATH", self.seed_path):
             handler.do_GET() if method == "GET" else handler.do_POST()
         return result
@@ -55,7 +56,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource-upload", "resource", "resource-delete", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -78,6 +79,49 @@ class AdminTests(unittest.TestCase):
             self.assertEqual(self.request("account-delete", body, cookie=cookie, csrf=csrf)["status"], 200)
             fetch.assert_not_called()
         self.assertEqual(self.database.payload(self.seed)["members"][0]["accounts"], {})
+
+    def test_admin_manages_published_and_draft_resource_links(self):
+        cookie, csrf = self.login()
+        common = {"category": "图论", "difficulty": "intermediate", "description": "最短路模板",
+                  "tags": ["图论", "模板"], "published": True}
+        created = self.request("resource", {**common, "title": "算法仓库", "resourceType": "github",
+                                             "url": "https://github.com/example/algorithms"}, cookie=cookie, csrf=csrf)
+        self.assertEqual(created["status"], 201, created)
+        resource_id = created["body"]["resourceId"]
+        draft = self.request("resource", {**common, "title": "草稿", "resourceType": "link",
+                                           "url": "https://example.com/draft", "published": False}, cookie=cookie, csrf=csrf)
+        self.assertEqual(draft["status"], 201, draft)
+
+        public = self.request("/api/resources", method="GET")
+        self.assertEqual([item["title"] for item in public["body"]["items"]], ["算法仓库"])
+        admin = self.request("/api/admin/resources", cookie=cookie, method="GET")
+        self.assertEqual(len(admin["body"]["items"]), 2)
+        self.assertEqual(self.request("resource-delete", {"resourceId": resource_id}, cookie=cookie)["status"], 403)
+        self.assertEqual(self.request("resource-delete", {"resourceId": resource_id}, cookie=cookie, csrf=csrf)["status"], 200)
+        self.assertEqual(self.request("/api/resources", method="GET")["body"]["items"], [])
+
+    def test_public_pdf_uses_private_download_redirect_and_drafts_stay_closed(self):
+        cookie, csrf = self.login()
+        body = {"title": "讲义", "resourceType": "pdf", "category": "图论", "difficulty": "advanced",
+                "description": "", "tags": ["网络流"], "published": True,
+                "objectKey": "resources/2026/09/0123456789abcdef0123456789abcdef.pdf",
+                "originalFilename": "flow.pdf", "contentType": "application/pdf", "fileSize": 4096}
+        created = self.request("resource", body, cookie=cookie, csrf=csrf)
+        resource_id = created["body"]["resourceId"]
+        public = self.request("/api/resources", method="GET")["body"]["items"][0]
+        self.assertEqual(public["openUrl"], f"/api/resources/{resource_id}/open")
+        self.assertNotIn("objectKey", public)
+        storage = {"RESOURCE_S3_ENDPOINT": "https://account.r2.cloudflarestorage.com",
+                   "RESOURCE_S3_BUCKET": "resources", "RESOURCE_S3_REGION": "auto",
+                   "RESOURCE_S3_ACCESS_KEY_ID": "access", "RESOURCE_S3_SECRET_ACCESS_KEY": "secret"}
+        with patch.dict("os.environ", storage):
+            opened = self.request(f"/api/resources/{resource_id}/open", method="GET")
+        self.assertEqual(opened["status"], 302)
+        self.assertIn("X-Amz-Signature=", opened["location"])
+
+        self.assertEqual(self.request("resource", {**body, "resourceId": resource_id, "published": False},
+                                      cookie=cookie, csrf=csrf)["status"], 200)
+        self.assertEqual(self.request(f"/api/resources/{resource_id}/open", method="GET")["status"], 404)
 
     def test_edit_api_failure_saves_binding_without_wrong_old_rating(self):
         member_id = self.database.add_manual_member("杨君泓")

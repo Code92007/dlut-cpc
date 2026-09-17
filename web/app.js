@@ -1,7 +1,7 @@
 const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
-const routes = new Set(["home", "honor", "rating", "training", "admin", "pending"]);
+const routes = new Set(["home", "honor", "rating", "training", "resources", "admin", "pending"]);
 const schoolGroups = ["大连理工大学", "大连理工大学城市学院", "大连理工大学盘锦校区"];
 const state = {
   data: null,
@@ -26,6 +26,14 @@ const state = {
   medalChartMode: "grouped",
   trainingId: null,
   trainingSeries: "all",
+  resources: null,
+  resourcesLoading: false,
+  resourcesError: "",
+  resourceQuery: "",
+  resourceType: "all",
+  resourceCategory: "all",
+  resourceDifficulty: "all",
+  resourceTag: "all",
   adminSession: null,
   adminView: "members",
   adminMessage: "",
@@ -43,6 +51,10 @@ const state = {
   adminReviewPage: 1,
   adminReviewRequest: 0,
   adminReviewsLoading: false,
+  adminResources: null,
+  adminResourceEdit: null,
+  adminResourceDelete: null,
+  adminResourceKind: 'pdf',
 };
 
 const escapeHtml = (value) => String(value ?? "")
@@ -86,6 +98,7 @@ function navigate(route, push = true) {
   updateNav(route);
   renderRoute(route);
   if (route === "admin") loadAdminSession();
+  if (route === "resources" && !state.resources && !state.resourcesLoading) loadResources();
   window.scrollTo({ top: 0, behavior: "instant" });
   app.focus({ preventScroll: true });
 }
@@ -335,6 +348,95 @@ function bindSearchInput(selector, stateKey, route) {
     }
     schedule();
   });
+}
+
+const resourceTypeLabels = {pdf: 'PDF', github: 'GitHub', link: '网页'};
+const resourceDifficultyLabels = {all: '不限', beginner: '入门', intermediate: '进阶', advanced: '深入'};
+
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '';
+  if (bytes < 1024 * 1024) return `${Math.ceil(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1)} MB`;
+}
+
+async function loadResources() {
+  state.resourcesLoading = true;
+  state.resourcesError = '';
+  if (routeFromPath() === 'resources') renderRoute('resources');
+  try {
+    const response = await fetch('/api/resources', {cache: 'no-store'});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+    state.resources = result;
+  } catch (error) {
+    state.resourcesError = error.message;
+  } finally {
+    state.resourcesLoading = false;
+    if (routeFromPath() === 'resources') renderRoute('resources');
+  }
+}
+
+function resourcesPage() {
+  if (state.resourcesLoading && !state.resources) {
+    return '<div class="page-shell"><div class="page-heading"><div><span class="eyebrow">Knowledge Base</span><h1>训练资料库</h1></div></div><div class="empty-state">正在加载资料索引</div></div>';
+  }
+  if (state.resourcesError && !state.resources) {
+    return `<div class="page-shell"><div class="page-heading"><div><span class="eyebrow">Knowledge Base</span><h1>训练资料库</h1></div></div><div class="empty-state">资料加载失败：${escapeHtml(state.resourcesError)}</div></div>`;
+  }
+  const source = state.resources || {items: [], categories: [], tags: []};
+  const terms = state.resourceQuery.normalize('NFKC').toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
+  const items = source.items.filter(item => {
+    const haystack = [item.title, item.description, item.category, item.resourceType, item.originalFilename, ...(item.tags || [])]
+      .join(' ').normalize('NFKC').toLocaleLowerCase();
+    return (state.resourceType === 'all' || item.resourceType === state.resourceType)
+      && (state.resourceCategory === 'all' || item.category === state.resourceCategory)
+      && (state.resourceDifficulty === 'all' || item.difficulty === state.resourceDifficulty)
+      && (state.resourceTag === 'all' || item.tags?.includes(state.resourceTag))
+      && terms.every(term => haystack.includes(term));
+  });
+  const cards = items.map(item => {
+    const target = item.resourceType === 'pdf' ? item.openUrl : item.url;
+    const secondary = [item.category, resourceDifficultyLabels[item.difficulty], item.resourceType === 'pdf' ? formatFileSize(item.fileSize) : '']
+      .filter(Boolean).map(escapeHtml).join(' · ');
+    return `<article class="resource-card">
+      <div class="resource-card-main"><div class="resource-card-heading"><span class="resource-kind ${item.resourceType}">${escapeHtml(resourceTypeLabels[item.resourceType] || item.resourceType)}</span><h2>${escapeHtml(item.title)}</h2></div>
+      <p>${escapeHtml(item.description || '暂无简介')}</p>
+      <div class="resource-meta"><span>${secondary}</span><span>更新于 ${escapeHtml(item.updatedAt.slice(0, 10))}</span></div>
+      <div class="resource-tags">${(item.tags || []).map(tag => `<button type="button" data-resource-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join('')}</div></div>
+      <a class="resource-open" href="${escapeHtml(target)}" target="_blank" rel="noreferrer">${item.resourceType === 'pdf' ? '打开 PDF' : '访问资料'} <span aria-hidden="true">↗</span></a>
+    </article>`;
+  }).join('');
+  return `<div class="page-shell resource-page">
+    <div class="page-heading"><div><span class="eyebrow">Knowledge Base</span><h1>训练资料库</h1><p>讲义、题单、代码仓库与高质量外部资料的长期索引。</p></div><div class="resource-count"><strong>${items.length}</strong><span>份资料</span></div></div>
+    <div class="resource-search"><label><span class="sr-only">检索资料</span><input id="resourceQuery" type="search" value="${escapeHtml(state.resourceQuery)}" placeholder="搜索标题、简介、分类或标签"></label>
+      <select id="resourceType" aria-label="资料类型"><option value="all">全部类型</option>${Object.entries(resourceTypeLabels).map(([value, label]) => `<option value="${value}" ${state.resourceType === value ? 'selected' : ''}>${label}</option>`).join('')}</select>
+      <select id="resourceDifficulty" aria-label="资料难度"><option value="all">全部难度</option>${Object.entries(resourceDifficultyLabels).filter(([value]) => value !== 'all').map(([value, label]) => `<option value="${value}" ${state.resourceDifficulty === value ? 'selected' : ''}>${label}</option>`).join('')}</select></div>
+    <div class="resource-layout"><aside class="resource-facets" aria-label="资料分类"><strong>分类</strong>
+      <button type="button" data-resource-category="all" class="${state.resourceCategory === 'all' ? 'active' : ''}"><span>全部资料</span><small>${source.items.length}</small></button>
+      ${source.categories.map(category => `<button type="button" data-resource-category="${escapeHtml(category.name)}" class="${state.resourceCategory === category.name ? 'active' : ''}"><span>${escapeHtml(category.name)}</span><small>${category.count}</small></button>`).join('')}
+      ${source.tags.length ? `<strong>常用标签</strong><div class="resource-tag-filter"><button type="button" data-resource-tag="all" class="${state.resourceTag === 'all' ? 'active' : ''}">全部</button>${source.tags.slice(0, 16).map(tag => `<button type="button" data-resource-tag="${escapeHtml(tag.name)}" class="${state.resourceTag === tag.name ? 'active' : ''}">${escapeHtml(tag.name)} <small>${tag.count}</small></button>`).join('')}</div>` : ''}
+    </aside><section class="resource-results" aria-live="polite">${cards || '<div class="empty-state">没有符合当前条件的资料</div>'}</section></div>
+  </div>`;
+}
+
+function bindResourceEvents() {
+  bindSearchInput('#resourceQuery', 'resourceQuery', 'resources');
+  document.querySelector('#resourceType')?.addEventListener('change', event => {
+    state.resourceType = event.target.value;
+    renderRoute('resources');
+  });
+  document.querySelector('#resourceDifficulty')?.addEventListener('change', event => {
+    state.resourceDifficulty = event.target.value;
+    renderRoute('resources');
+  });
+  document.querySelectorAll('[data-resource-category]').forEach(button => button.addEventListener('click', () => {
+    state.resourceCategory = button.dataset.resourceCategory;
+    renderRoute('resources');
+  }));
+  document.querySelectorAll('[data-resource-tag]').forEach(button => button.addEventListener('click', () => {
+    state.resourceTag = button.dataset.resourceTag;
+    renderRoute('resources');
+  }));
 }
 
 function ratingColor(rating) {
@@ -623,6 +725,40 @@ function adminRosterPage(data) {
       <td>${escapeHtml(honor.school)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td><button type="button" class="admin-button secondary" data-roster-edit="${escapeHtml(honor.id)}">修改成员</button></td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无符合条件的已补录名单</td></tr>'}</tbody></table></div></section>`;
 }
 
+function adminResourcePage() {
+  if (!state.adminResources) return '<div class="empty-state">正在加载资料索引</div>';
+  const items = state.adminResources.items || [];
+  const editing = items.find(item => item.id === state.adminResourceEdit);
+  const kind = editing?.resourceType || state.adminResourceKind;
+  const storage = state.adminResources.storage || state.adminSession?.storage || {};
+  const value = (field, fallback = '') => escapeHtml(editing?.[field] ?? fallback);
+  const rows = items.map(item => {
+    const deleting = state.adminResourceDelete === item.id;
+    return `<tr><td><strong>${escapeHtml(item.title)}</strong><small class="result-status">${escapeHtml(item.description || '暂无简介')}</small></td>
+      <td>${escapeHtml(resourceTypeLabels[item.resourceType] || item.resourceType)}</td><td>${escapeHtml(item.category)}</td>
+      <td>${item.published ? '已发布' : '草稿'}</td><td><div class="account-actions">${deleting
+        ? `<button type="button" class="admin-button danger" data-resource-delete="confirm" data-resource-id="${item.id}">确认删除</button><button type="button" class="admin-button secondary" data-resource-delete-cancel>取消</button>`
+        : `<button type="button" class="admin-button secondary" data-resource-edit="${item.id}">编辑</button><button type="button" class="admin-button danger" data-resource-delete="ask" data-resource-id="${item.id}">删除</button>`}</div></td></tr>`;
+  }).join('');
+  const fileField = editing?.resourceType === 'pdf'
+    ? `<div class="resource-file-existing wide"><strong>${escapeHtml(editing.originalFilename)}</strong><span>${formatFileSize(editing.fileSize)} · 已存于对象存储，编辑资料不会重复上传</span></div>`
+    : `<label id="resourcePdfField" class="wide" ${kind === 'pdf' ? '' : 'hidden'}>PDF 文件<input name="file" type="file" accept="application/pdf,.pdf" ${kind === 'pdf' ? 'required' : ''}><small>文件由浏览器直传对象存储，不经过本站服务器。上限 ${formatFileSize(storage.maxFileBytes)}。</small></label>`;
+  return `<form id="adminResource" class="admin-form resource-admin-form"><h2>${editing ? '编辑资料' : '添加资料'}</h2>
+    ${!storage.enabled && !editing ? `<div id="resourceStorageMessage" class="admin-message error" ${kind === 'pdf' ? '' : 'hidden'}>${escapeHtml(storage.error || '尚未配置对象存储，暂时只能添加链接资料')}</div>` : ''}
+    <div class="admin-fields"><label>标题<input name="title" required maxlength="200" value="${value('title')}"></label>
+      <label>类型<select name="resourceType" ${editing?.resourceType === 'pdf' ? 'disabled' : ''}>${Object.entries(resourceTypeLabels).map(([type, label]) => `<option value="${type}" ${kind === type ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+      <label>分类<input name="category" required maxlength="80" list="resourceCategories" value="${value('category', '算法与数据结构')}"></label>
+      <label>难度<select name="difficulty">${Object.entries(resourceDifficultyLabels).map(([difficulty, label]) => `<option value="${difficulty}" ${(editing?.difficulty || 'all') === difficulty ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+      <label class="wide">简介<textarea name="description" rows="4" maxlength="2000">${value('description')}</textarea></label>
+      <label class="wide">标签<input name="tags" maxlength="500" value="${escapeHtml((editing?.tags || []).join(', '))}" placeholder="图论, 最短路, 模板"></label>
+      ${fileField}
+      <label id="resourceUrlField" class="wide" ${kind === 'pdf' ? 'hidden' : ''}>资料链接<input name="url" type="url" maxlength="2000" value="${value('url')}" ${kind === 'pdf' ? '' : 'required'} placeholder="https://github.com/..."></label>
+      <label class="admin-checkbox wide"><input name="published" type="checkbox" ${editing?.published === false ? '' : 'checked'}>立即公开</label>
+    </div><button id="adminResourceSave" class="admin-button" ${!storage.enabled && kind === 'pdf' && !editing ? 'disabled' : ''}>${editing ? '保存修改' : '保存资料'}</button>${editing ? '<button id="adminCancelResourceEdit" type="button" class="admin-button secondary">取消</button>' : ''}</form>
+    <datalist id="resourceCategories"><option>算法与数据结构</option><option>数学</option><option>图论</option><option>动态规划</option><option>字符串</option><option>竞赛经验</option><option>题单</option><option>工程与工具</option><option>其他</option></datalist>
+    <section class="admin-recent"><h2>资料索引</h2><div class="data-table-wrap"><table class="data-table resource-admin-table"><thead><tr><th>资料</th><th>类型</th><th>分类</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="table-empty">暂无资料</td></tr>'}</tbody></table></div></section>`;
+}
+
 function adminPage(data) {
   const session = state.adminSession;
   const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
@@ -661,14 +797,15 @@ function adminPage(data) {
   };
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
   forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${unknownMedalInput(pending)}${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
+  forms.resources = adminResourcePage();
   forms.reviews = adminReviewPage();
   forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
-    <section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${state.adminView === 'resources' ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
-    </tbody></table></div></section></div>`;
+    </tbody></table></div></section>`}</div>`;
 }
 
 async function loadAdminSession() {
@@ -676,9 +813,10 @@ async function loadAdminSession() {
     const response = await fetch('/api/admin/session', {cache: 'no-store'});
     if (!response.ok) throw new Error('登录状态加载失败');
     state.adminSession = await response.json();
-    if (state.adminSession.authenticated) await loadAdminReviews();
+    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources()]);
     else {
       state.adminReviews = null;
+      state.adminResources = null;
       state.adminReviewsLoading = false;
       ++state.adminReviewRequest;
     }
@@ -687,6 +825,19 @@ async function loadAdminSession() {
     state.adminError = true;
   }
   if (routeFromPath() === 'admin') renderRoute('admin');
+}
+
+async function loadAdminResources() {
+  try {
+    const response = await fetch('/api/admin/resources', {cache: 'no-store'});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || '资料索引加载失败');
+    state.adminResources = result;
+  } catch (error) {
+    state.adminMessage = error.message;
+    state.adminError = true;
+  }
+  if (routeFromPath() === 'admin' && state.adminView === 'resources') renderRoute('admin');
 }
 
 async function adminRequest(path, body) {
@@ -703,6 +854,126 @@ async function adminRequest(path, body) {
 }
 
 function bindAdminEvents() {
+  const resourceForm = document.querySelector('#adminResource');
+  const syncResourceFields = () => {
+    if (!resourceForm) return;
+    const kind = resourceForm.querySelector('[name="resourceType"]').value;
+    state.adminResourceKind = kind;
+    const pdf = resourceForm.querySelector('#resourcePdfField');
+    const url = resourceForm.querySelector('#resourceUrlField');
+    if (pdf) {
+      pdf.hidden = kind !== 'pdf';
+      const input = pdf.querySelector('input');
+      if (input) input.required = kind === 'pdf';
+    }
+    if (url) {
+      url.hidden = kind === 'pdf';
+      url.querySelector('input').required = kind !== 'pdf';
+    }
+    const storageUnavailable = kind === 'pdf' && !state.adminResources?.storage?.enabled && !state.adminResourceEdit;
+    const storageMessage = resourceForm.querySelector('#resourceStorageMessage');
+    if (storageMessage) storageMessage.hidden = !storageUnavailable;
+    const save = resourceForm.querySelector('#adminResourceSave');
+    if (save) save.disabled = storageUnavailable;
+  };
+  resourceForm?.querySelector('[name="resourceType"]')?.addEventListener('change', syncResourceFields);
+  document.querySelectorAll('[data-resource-edit]').forEach(button => button.addEventListener('click', () => {
+    const resource = state.adminResources?.items.find(item => item.id === Number(button.dataset.resourceEdit));
+    if (!resource) return;
+    state.adminResourceEdit = resource.id;
+    state.adminResourceKind = resource.resourceType;
+    state.adminResourceDelete = null;
+    state.adminMessage = '';
+    renderRoute('admin');
+    document.querySelector('#adminResource')?.scrollIntoView({block: 'start'});
+  }));
+  document.querySelector('#adminCancelResourceEdit')?.addEventListener('click', () => {
+    state.adminResourceEdit = null;
+    state.adminResourceKind = 'pdf';
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-resource-delete-cancel]').forEach(button => button.addEventListener('click', () => {
+    state.adminResourceDelete = null;
+    renderRoute('admin');
+  }));
+  document.querySelectorAll('[data-resource-delete]').forEach(button => button.addEventListener('click', async () => {
+    const resourceId = Number(button.dataset.resourceId);
+    if (button.dataset.resourceDelete !== 'confirm') {
+      state.adminResourceDelete = resourceId;
+      renderRoute('admin');
+      return;
+    }
+    button.closest('.account-actions').querySelectorAll('button').forEach(control => {control.disabled = true;});
+    try {
+      await adminRequest('resource-delete', {resourceId});
+      state.adminResourceDelete = null;
+      if (state.adminResourceEdit === resourceId) state.adminResourceEdit = null;
+      state.adminMessage = '资料已删除';
+      state.adminError = false;
+      await Promise.all([loadAdminResources(), loadResources()]);
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+      renderRoute('admin');
+    }
+  }));
+  resourceForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button');
+    const editing = state.adminResources?.items.find(item => item.id === state.adminResourceEdit);
+    const values = Object.fromEntries(new FormData(form));
+    const kind = form.querySelector('[name="resourceType"]').value;
+    button.disabled = true;
+    state.adminMessage = '';
+    try {
+      const body = {
+        ...(editing ? {resourceId: editing.id} : {}),
+        title: values.title,
+        resourceType: kind,
+        category: values.category,
+        difficulty: values.difficulty,
+        description: values.description,
+        tags: String(values.tags || '').split(/[,，\n]/).map(tag => tag.trim()).filter(Boolean),
+        published: values.published === 'on',
+      };
+      if (kind === 'pdf') {
+        if (editing?.resourceType === 'pdf') {
+          Object.assign(body, {objectKey: editing.objectKey, originalFilename: editing.originalFilename,
+            contentType: editing.contentType, fileSize: editing.fileSize});
+        } else {
+          const file = form.querySelector('[name="file"]')?.files?.[0];
+          if (!file) throw new Error('请选择 PDF 文件');
+          if (!file.name.toLocaleLowerCase().endsWith('.pdf')) throw new Error('只能上传 PDF 文件');
+          const upload = await adminRequest('resource-upload', {filename: file.name, fileSize: file.size, contentType: file.type});
+          const response = await fetch(upload.uploadUrl, {method: 'PUT', headers: upload.headers, body: file});
+          if (!response.ok) throw new Error(`PDF 上传失败（对象存储 HTTP ${response.status}）`);
+          Object.assign(body, {objectKey: upload.objectKey, originalFilename: file.name,
+            contentType: 'application/pdf', fileSize: file.size});
+        }
+      } else {
+        body.url = values.url;
+      }
+      const result = await adminRequest('resource', body);
+      state.adminResourceEdit = null;
+      state.adminResourceKind = 'pdf';
+      state.adminMessage = `资料已保存 · #${result.resourceId}`;
+      state.adminError = false;
+      await Promise.all([loadAdminResources(), loadResources()]);
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+      button.disabled = false;
+      let message = form.querySelector('.admin-message');
+      if (!message) {
+        message = document.createElement('div');
+        form.prepend(message);
+      }
+      message.className = 'admin-message error';
+      message.setAttribute('role', 'alert');
+      message.textContent = error.message;
+    }
+  });
   document.querySelector('#adminRosterFilter')?.addEventListener('submit', event => {
     event.preventDefault();
     state.adminRosterQuery = new FormData(event.currentTarget).get('query') || '';
@@ -778,6 +1049,7 @@ function bindAdminEvents() {
     state.adminMessage = '';
     renderRoute('admin');
     if (state.adminView === 'reviews') loadAdminReviews();
+    if (state.adminView === 'resources' && !state.adminResources) loadAdminResources();
   }));
   for (const [selector, field] of [['#reviewKind', 'adminReviewKind'], ['#reviewStatus', 'adminReviewStatus'], ['#reviewSchool', 'adminReviewSchool']]) {
     document.querySelector(selector)?.addEventListener('change', event => {
@@ -992,11 +1264,12 @@ function bindPageEvents(route) {
       renderRoute("training");
     }));
   }
+  if (route === "resources") bindResourceEvents();
 }
 
 function renderRoute(route) {
   if (!state.data) return;
-  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, admin: adminPage, pending: pendingPage };
+  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, resources: resourcesPage, admin: adminPage, pending: pendingPage };
   app.innerHTML = renderers[route](state.data);
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);
