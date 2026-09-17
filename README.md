@@ -192,9 +192,12 @@ RESOURCE_S3_REGION=auto
 RESOURCE_S3_ACCESS_KEY_ID=<access-key-id>
 RESOURCE_S3_SECRET_ACCESS_KEY=<secret-access-key>
 RESOURCE_MAX_FILE_BYTES=52428800
+RESOURCE_STORAGE_LIMIT_BYTES=9000000000
 ```
 
-`RESOURCE_S3_ENDPOINT` 填 S3 API 端点，不是公开下载域名。区域按服务商要求填写；Cloudflare R2 使用 `auto`，其他服务通常使用实际 region。访问凭据应只授权指定 bucket 下的 `resources/*` 前缀执行 `PutObject`、`GetObject` 和 `DeleteObject`，不要使用账户级密钥。删除资料时，应用会先删除远端 PDF，成功后再删除索引；远端失败则保留索引供管理员重试。
+`RESOURCE_STORAGE_LIMIT_BYTES` 是应用硬上限，默认 9,000,000,000 字节，且代码拒绝配置成更高值，给 Cloudflare R2 的 10 GB 免费存储额度留出约 1 GB 余量。每次签发上传地址前，应用会通过 `ListObjectsV2` 汇总 bucket 内全部对象并计入尚未完成的并发上传；上传后会超过上限时直接拒绝，用量查询失败时也会暂停 PDF 上传。管理页会显示实际占用、待上传预留和剩余空间。Cloudflare 的免费额度本身不是自动停用开关，这层限制才是本项目的防超额措施。
+
+`RESOURCE_S3_ENDPOINT` 填 S3 API 端点，不是公开下载域名。区域按服务商要求填写；Cloudflare R2 使用 `auto`，其他服务通常使用实际 region。访问凭据应仅授权指定 bucket 的对象读写和列举（`ListBucket` / `ListObjectsV2`、`PutObject`、`GetObject`、`DeleteObject`），不要使用账户级密钥。删除资料时，应用会先删除远端 PDF，成功后再删除索引；远端失败则保留索引供管理员重试。
 
 浏览器直传需要给 bucket 配置 CORS。把域名替换为实际站点，只开放本站来源和 `PUT`：
 
@@ -210,7 +213,7 @@ RESOURCE_MAX_FILE_BYTES=52428800
 ]
 ```
 
-上传签名限定一个随机的 `.pdf` 对象键、`application/pdf` 类型和 15 分钟有效期；管理接口还会校验扩展名、MIME、文件大小、GitHub 域名、标签数量、管理员会话、同源请求和 CSRF。若浏览器上传成功但保存索引失败，管理端会明确报错；可定期用对象存储清单与 SQLite 中的对象键核对并清理孤立文件。
+上传签名限定一个随机的 `.pdf` 对象键、`application/pdf` 类型、服务端核准的 `Content-Length` 和 15 分钟有效期，实际上传大小不同会导致签名校验失败；管理接口还会校验扩展名、MIME、文件大小、GitHub 域名、标签数量、管理员会话、同源请求和 CSRF。若浏览器上传成功但保存索引失败，管理端会明确报错；可定期用对象存储清单与 SQLite 中的对象键核对并清理孤立文件。
 
 管理 API 使用服务端八小时会话、HttpOnly/SameSite Cookie、HTTPS Secure Cookie、同源校验与 CSRF 令牌。未登录访客不能修改正式成员或成绩，也不能查看私有审核队列；登录失败有限流，退出立即撤销会话，服务重启后需重新登录。内部备注不进入公开成员接口。
 

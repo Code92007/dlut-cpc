@@ -93,7 +93,8 @@ class SiteHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
                 return
             try:
-                self._send_json({"items": self._resources_payload(include_drafts=True), "storage": storage_status()})
+                self._send_json({"items": self._resources_payload(include_drafts=True),
+                                 "storage": storage_status(include_usage=True)})
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
@@ -307,7 +308,7 @@ class SiteHandler(BaseHTTPRequestHandler):
                 storage = ObjectStorage.from_env()
                 if not storage:
                     raise ValueError("PDF 对象存储尚未配置")
-                upload = storage.create_upload(
+                upload = storage.prepare_upload(
                     self._text(body, "filename", 255, required=True),
                     body.get("fileSize"),
                     self._text(body, "contentType", 100),

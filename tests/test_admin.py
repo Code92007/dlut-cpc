@@ -123,6 +123,34 @@ class AdminTests(unittest.TestCase):
                                       cookie=cookie, csrf=csrf)["status"], 200)
         self.assertEqual(self.request(f"/api/resources/{resource_id}/open", method="GET")["status"], 404)
 
+    def test_pdf_upload_api_enforces_bucket_hard_limit(self):
+        cookie, csrf = self.login()
+        storage = app.ObjectStorage(
+            endpoint="https://test.r2.cloudflarestorage.com", bucket="hard-cap-admin", region="auto",
+            access_key_id="access", secret_access_key="secret", max_file_bytes=1000, storage_limit_bytes=1000,
+        )
+        usage = {"usedBytes": 950, "objectCount": 1, "_objectKeys": set()}
+        with patch.object(app.ObjectStorage, "from_env", return_value=storage), \
+             patch.object(app.ObjectStorage, "bucket_usage", return_value=usage):
+            result = self.request("resource-upload", {
+                "filename": "notes.pdf", "fileSize": 51, "contentType": "application/pdf",
+            }, cookie=cookie, csrf=csrf)
+        self.assertEqual(result["status"], 400)
+        self.assertIn("硬限制", result["body"]["error"])
+
+    def test_admin_resource_list_stays_available_when_usage_check_fails(self):
+        cookie, _csrf = self.login()
+        storage = app.ObjectStorage(
+            endpoint="https://test.r2.cloudflarestorage.com", bucket="offline-admin", region="auto",
+            access_key_id="access", secret_access_key="secret",
+        )
+        with patch.object(app.ObjectStorage, "from_env", return_value=storage), \
+             patch.object(app.ObjectStorage, "bucket_usage", side_effect=OSError("R2 暂不可用")):
+            result = self.request("/api/admin/resources", cookie=cookie, method="GET")
+        self.assertEqual(result["status"], 200)
+        self.assertFalse(result["body"]["storage"]["uploadEnabled"])
+        self.assertIn("R2 暂不可用", result["body"]["storage"]["error"])
+
     def test_edit_api_failure_saves_binding_without_wrong_old_rating(self):
         member_id = self.database.add_manual_member("杨君泓")
         self.database.set_handle(member_id, "codeforces", "Old", rating=2400)
