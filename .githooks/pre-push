@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+python3 tools/check_resource_pdfs.py
+git lfs pre-push "$@"

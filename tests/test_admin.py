@@ -56,7 +56,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource-upload", "resource", "resource-delete", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource", "resource-delete", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -100,56 +100,44 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(self.request("resource-delete", {"resourceId": resource_id}, cookie=cookie, csrf=csrf)["status"], 200)
         self.assertEqual(self.request("/api/resources", method="GET")["body"]["items"], [])
 
-    def test_public_pdf_uses_private_download_redirect_and_drafts_stay_closed(self):
+    def test_public_pdf_uses_github_lfs_redirect_and_drafts_stay_closed(self):
         cookie, csrf = self.login()
         body = {"title": "讲义", "resourceType": "pdf", "category": "图论", "difficulty": "advanced",
                 "description": "", "tags": ["网络流"], "published": True,
-                "objectKey": "resources/2026/09/0123456789abcdef0123456789abcdef.pdf",
-                "originalFilename": "flow.pdf", "contentType": "application/pdf", "fileSize": 4096}
+                "pdfPath": "resources/pdfs/图论/flow.pdf"}
         created = self.request("resource", body, cookie=cookie, csrf=csrf)
+        self.assertEqual(created["status"], 201, created)
         resource_id = created["body"]["resourceId"]
         public = self.request("/api/resources", method="GET")["body"]["items"][0]
         self.assertEqual(public["openUrl"], f"/api/resources/{resource_id}/open")
         self.assertNotIn("objectKey", public)
-        storage = {"RESOURCE_S3_ENDPOINT": "https://account.r2.cloudflarestorage.com",
-                   "RESOURCE_S3_BUCKET": "resources", "RESOURCE_S3_REGION": "auto",
-                   "RESOURCE_S3_ACCESS_KEY_ID": "access", "RESOURCE_S3_SECRET_ACCESS_KEY": "secret"}
-        with patch.dict("os.environ", storage):
-            opened = self.request(f"/api/resources/{resource_id}/open", method="GET")
+        opened = self.request(f"/api/resources/{resource_id}/open", method="GET")
         self.assertEqual(opened["status"], 302)
-        self.assertIn("X-Amz-Signature=", opened["location"])
+        self.assertEqual(
+            opened["location"],
+            "https://github.com/Code92007/dlut-cpc/blob/main/resources/pdfs/%E5%9B%BE%E8%AE%BA/flow.pdf?raw=1",
+        )
 
         self.assertEqual(self.request("resource", {**body, "resourceId": resource_id, "published": False},
                                       cookie=cookie, csrf=csrf)["status"], 200)
         self.assertEqual(self.request(f"/api/resources/{resource_id}/open", method="GET")["status"], 404)
 
-    def test_pdf_upload_api_enforces_bucket_hard_limit(self):
+    def test_pdf_paths_are_validated_and_can_be_updated(self):
         cookie, csrf = self.login()
-        storage = app.ObjectStorage(
-            endpoint="https://test.r2.cloudflarestorage.com", bucket="hard-cap-admin", region="auto",
-            access_key_id="access", secret_access_key="secret", max_file_bytes=1000, storage_limit_bytes=1000,
-        )
-        usage = {"usedBytes": 950, "objectCount": 1, "_objectKeys": set()}
-        with patch.object(app.ObjectStorage, "from_env", return_value=storage), \
-             patch.object(app.ObjectStorage, "bucket_usage", return_value=usage):
-            result = self.request("resource-upload", {
-                "filename": "notes.pdf", "fileSize": 51, "contentType": "application/pdf",
-            }, cookie=cookie, csrf=csrf)
-        self.assertEqual(result["status"], 400)
-        self.assertIn("硬限制", result["body"]["error"])
-
-    def test_admin_resource_list_stays_available_when_usage_check_fails(self):
-        cookie, _csrf = self.login()
-        storage = app.ObjectStorage(
-            endpoint="https://test.r2.cloudflarestorage.com", bucket="offline-admin", region="auto",
-            access_key_id="access", secret_access_key="secret",
-        )
-        with patch.object(app.ObjectStorage, "from_env", return_value=storage), \
-             patch.object(app.ObjectStorage, "bucket_usage", side_effect=OSError("R2 暂不可用")):
-            result = self.request("/api/admin/resources", cookie=cookie, method="GET")
-        self.assertEqual(result["status"], 200)
-        self.assertFalse(result["body"]["storage"]["uploadEnabled"])
-        self.assertIn("R2 暂不可用", result["body"]["storage"]["error"])
+        common = {"title": "讲义", "resourceType": "pdf", "category": "图论", "difficulty": "all",
+                  "description": "", "tags": [], "published": True}
+        for path in ("notes.pdf", "resources/pdfs/../notes.pdf", "resources/pdfs/notes.txt"):
+            result = self.request("resource", {**common, "pdfPath": path}, cookie=cookie, csrf=csrf)
+            self.assertEqual(result["status"], 400, result)
+        created = self.request("resource", {**common, "pdfPath": "resources/pdfs/old.pdf"}, cookie=cookie, csrf=csrf)
+        resource_id = created["body"]["resourceId"]
+        changed = self.request("resource", {
+            **common, "resourceId": resource_id, "pdfPath": "resources/pdfs/new.pdf",
+        }, cookie=cookie, csrf=csrf)
+        self.assertEqual(changed["status"], 200, changed)
+        admin = self.request("/api/admin/resources", cookie=cookie, method="GET")["body"]
+        self.assertEqual(admin["items"][0]["pdfPath"], "resources/pdfs/new.pdf")
+        self.assertEqual(admin["pdfRepository"]["repository"], "Code92007/dlut-cpc")
 
     def test_edit_api_failure_saves_binding_without_wrong_old_rating(self):
         member_id = self.database.add_manual_member("杨君泓")

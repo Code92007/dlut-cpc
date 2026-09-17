@@ -20,7 +20,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from database import Database, load_seed_file
 from admin_auth import AdminAuth
-from object_storage import DEFAULT_MAX_FILE_BYTES, ObjectStorage, storage_status
+from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
 
 
 ROOT = Path(__file__).resolve().parent
@@ -85,8 +85,7 @@ class SiteHandler(BaseHTTPRequestHandler):
             session = auth.session(self.headers.get("Cookie", ""))
             self._send_json({"enabled": auth.enabled, "authenticated": bool(session),
                              "username": session["username"] if session else None,
-                             "csrf": session["csrf"] if session else None,
-                             "storage": storage_status() if session else None})
+                             "csrf": session["csrf"] if session else None})
             return
         if path == "/api/admin/resources":
             if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
@@ -94,7 +93,7 @@ class SiteHandler(BaseHTTPRequestHandler):
                 return
             try:
                 self._send_json({"items": self._resources_payload(include_drafts=True),
-                                 "storage": storage_status(include_usage=True)})
+                                 "pdfRepository": github_lfs_status()})
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
@@ -144,11 +143,8 @@ class SiteHandler(BaseHTTPRequestHandler):
                 if not resource or resource["resourceType"] != "pdf":
                     self._send_json({"error": "资源不存在"}, HTTPStatus.NOT_FOUND)
                     return
-                private = Database(DATABASE_PATH).get_resource(int(resource_open.group(1)), include_drafts=True)
-                storage = ObjectStorage.from_env()
-                if not storage:
-                    raise ValueError("PDF 对象存储尚未配置")
-                self._send_redirect(storage.download_url(private["objectKey"]))
+                github_pdf_path(resource["url"])
+                self._send_redirect(resource["url"])
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.SERVICE_UNAVAILABLE)
             return
@@ -304,16 +300,6 @@ class SiteHandler(BaseHTTPRequestHandler):
                 from tools.sync_codeforces import sync_ratings
                 updates, errors = sync_ratings(database, load_seed_data())
                 self._send_json({"ok": True, "updated": len(updates), "warning": "; ".join(errors) or None})
-            elif path == "/api/admin/resource-upload":
-                storage = ObjectStorage.from_env()
-                if not storage:
-                    raise ValueError("PDF 对象存储尚未配置")
-                upload = storage.prepare_upload(
-                    self._text(body, "filename", 255, required=True),
-                    body.get("fileSize"),
-                    self._text(body, "contentType", 100),
-                )
-                self._send_json({"ok": True, **upload})
             elif path == "/api/admin/resource":
                 resource_id = self._optional_id(body.get("resourceId"), "资源 ID")
                 resource = self._resource_body(body)
@@ -321,10 +307,6 @@ class SiteHandler(BaseHTTPRequestHandler):
                     existing = database.get_resource(resource_id, include_drafts=True)
                     if not existing:
                         raise ValueError("资源不存在")
-                    if existing["resourceType"] == "pdf" and (
-                        resource["resourceType"] != "pdf" or resource["objectKey"] != existing["objectKey"]
-                    ):
-                        raise ValueError("已上传的 PDF 不能替换或改为链接；请删除后重新添加")
                 saved_id = database.save_resource(resource, resource_id=resource_id, created_by=session["username"])
                 self._send_json({"ok": True, "resourceId": saved_id}, HTTPStatus.CREATED if resource_id is None else HTTPStatus.OK)
             elif path == "/api/admin/resource-delete":
@@ -332,11 +314,6 @@ class SiteHandler(BaseHTTPRequestHandler):
                 resource = database.get_resource(resource_id, include_drafts=True)
                 if not resource:
                     raise ValueError("资源不存在")
-                if resource["resourceType"] == "pdf" and resource.get("objectKey"):
-                    storage = ObjectStorage.from_env()
-                    if not storage:
-                        raise ValueError("对象存储未配置，无法同步删除 PDF")
-                    storage.delete_object(resource["objectKey"])
                 database.delete_resource(resource_id)
                 self._send_json({"ok": True})
             else:
@@ -400,6 +377,11 @@ class SiteHandler(BaseHTTPRequestHandler):
         for item in items:
             if item["resourceType"] == "pdf":
                 item["openUrl"] = f"/api/resources/{item['id']}/open"
+                if include_drafts:
+                    try:
+                        item["pdfPath"] = github_pdf_path(item["url"])
+                    except ValueError:
+                        item["pdfPath"] = ""
         return items
 
     @classmethod
@@ -440,17 +422,8 @@ class SiteHandler(BaseHTTPRequestHandler):
             "fileSize": None,
         }
         if resource_type == "pdf":
-            object_key = cls._text(body, "objectKey", 300, required=True)
-            if not ObjectStorage.valid_object_key(object_key):
-                raise ValueError("PDF 对象键无效")
-            filename = cls._text(body, "originalFilename", 255, required=True)
-            if not filename.casefold().endswith(".pdf"):
-                raise ValueError("PDF 文件名无效")
-            file_size = body.get("fileSize")
-            maximum = storage_status().get("maxFileBytes", DEFAULT_MAX_FILE_BYTES)
-            if type(file_size) is not int or not 1 <= file_size <= maximum:
-                raise ValueError("PDF 文件大小无效")
-            result.update(objectKey=object_key, originalFilename=filename, contentType="application/pdf", fileSize=file_size)
+            pdf = github_pdf_record(cls._text(body, "pdfPath", 500, required=True))
+            result.update(url=pdf["url"], originalFilename=pdf["originalFilename"], contentType="application/pdf")
         else:
             url = cls._text(body, "url", 2000, required=True)
             parsed = urlsplit(url)

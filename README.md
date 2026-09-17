@@ -79,7 +79,7 @@ python3 -m venv /tmp/rankland-import-venv
 
 ```bash
 cd ~/dlut-cpc
-git pull --ff-only
+GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only
 python3 tools/merge_ccpc.py --dry-run \
   --backup "runtime/backups/before-ccpc-$(date +%Y%m%d-%H%M%S).sqlite3" \
   --report runtime/ccpc-preview.json
@@ -103,7 +103,7 @@ curl -fsS http://127.0.0.1:8021/healthz
 
 ```bash
 cd ~/dlut-cpc
-git pull --ff-only
+GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only
 python3 tools/merge_ccpc.py --snapshot data/rankland_supplement_honors.json --dry-run \
   --backup "runtime/backups/before-rankland-$(date +%Y%m%d-%H%M%S).sqlite3" \
   --report runtime/rankland-preview.json
@@ -179,41 +179,40 @@ docker compose restart dlut-cpc
 
 访问 `/admin` 登录后可补录未被 CPC Finder 收录的古早成员、追加主副账号、设置中文名和别名、录入历史成绩（金银铜铁）。成员选择含独立 ID，同名选手不会被自动合并；补录姓名已存在时需显式确认是独立同名成员。账号归属不能同时绑定两人。人工数据写入 SQLite，重建容器和公开同步均不会删除。
 
-### 资料库与对象存储
+### 资料库与 Git LFS
 
-资料库只在 SQLite 保存标题、简介、分类、难度、标签、外链和对象键等轻量索引。PDF 不写入仓库、SQLite、`runtime` 或应用容器：管理员浏览器先从本站取得 15 分钟有效的单文件上传签名，再直接把文件 `PUT` 到支持 AWS Signature V4 的 S3 兼容对象存储。访客打开 PDF 时，本站只生成 5 分钟有效的下载地址并重定向，文件内容不经过这台服务器，存储桶可以保持私有。
+PDF 放在仓库的 `resources/pdfs/` 目录并由 Git LFS 保存；普通 Git 历史只记录小型指针。网站数据库只保存标题、简介、分类、难度、标签和仓库路径，访客打开 PDF 时直接跳转到 GitHub，文件不经过应用服务器，也不会进入 Docker 镜像。GitHub Free 当前包含 10 GiB LFS 存储和每月 10 GiB 下载流量；没有付款方式或预算设为 0 时，超额会停止 LFS 服务而不是继续扣费。
 
-在 `.env` 配置对象存储；没有配置时 GitHub 与普通链接仍可正常维护，PDF 上传会在管理页禁用：
+首次在维护电脑安装并初始化：
+
+```bash
+brew install git-lfs
+git lfs install
+git config core.hooksPath .githooks
+git lfs track
+```
+
+`.gitattributes` 已将全部 `.pdf` 交给 LFS。添加课件时使用仓库内相对路径：
+
+```bash
+mkdir -p resources/pdfs/graph
+cp /path/to/network-flow.pdf resources/pdfs/graph/
+python3 tools/check_resource_pdfs.py
+git add .gitattributes resources/pdfs
+git commit -m "Add network flow courseware"
+git push origin main
+```
+
+预推送钩子会统计 `resources/pdfs/` 当前文件及 Git 历史中不同 PDF 对象的声明大小，超过 9,000,000,000 字节时拒绝推送。GitHub 的 LFS 配额按账号统计，其他仓库中的 LFS 对象仍会占用额度；删除或替换课件也不应视为立即释放远端历史对象。最终兜底是 GitHub 在没有付款方式或预算为 0 时停止超额使用。
+
+推送 PDF 后，在 `/admin` 的“资料库”中选择 PDF，填写类似 `resources/pdfs/graph/network-flow.pdf` 的路径。后端只接受 `resources/pdfs/` 下的 `.pdf`，拒绝绝对路径和目录穿越。删除资料索引不会删除 Git 历史中的课件；需要删除文件时另行提交 Git 变更。
+
+仓库和分支默认指向当前项目，也可以在 `.env` 显式配置：
 
 ```dotenv
-RESOURCE_S3_ENDPOINT=https://<account-or-service-endpoint>
-RESOURCE_S3_BUCKET=dlut-cpc-resources
-RESOURCE_S3_REGION=auto
-RESOURCE_S3_ACCESS_KEY_ID=<access-key-id>
-RESOURCE_S3_SECRET_ACCESS_KEY=<secret-access-key>
-RESOURCE_MAX_FILE_BYTES=52428800
-RESOURCE_STORAGE_LIMIT_BYTES=9000000000
+RESOURCE_GITHUB_REPOSITORY=Code92007/dlut-cpc
+RESOURCE_GITHUB_BRANCH=main
 ```
-
-`RESOURCE_STORAGE_LIMIT_BYTES` 是应用硬上限，默认 9,000,000,000 字节，且代码拒绝配置成更高值，给 Cloudflare R2 的 10 GB 免费存储额度留出约 1 GB 余量。每次签发上传地址前，应用会通过 `ListObjectsV2` 汇总 bucket 内全部对象并计入尚未完成的并发上传；上传后会超过上限时直接拒绝，用量查询失败时也会暂停 PDF 上传。管理页会显示实际占用、待上传预留和剩余空间。Cloudflare 的免费额度本身不是自动停用开关，这层限制才是本项目的防超额措施。
-
-`RESOURCE_S3_ENDPOINT` 填 S3 API 端点，不是公开下载域名。区域按服务商要求填写；Cloudflare R2 使用 `auto`，其他服务通常使用实际 region。访问凭据应仅授权指定 bucket 的对象读写和列举（`ListBucket` / `ListObjectsV2`、`PutObject`、`GetObject`、`DeleteObject`），不要使用账户级密钥。删除资料时，应用会先删除远端 PDF，成功后再删除索引；远端失败则保留索引供管理员重试。
-
-浏览器直传需要给 bucket 配置 CORS。把域名替换为实际站点，只开放本站来源和 `PUT`：
-
-```json
-[
-  {
-    "AllowedOrigins": ["https://dlut-cpc.wannafly.cn"],
-    "AllowedMethods": ["PUT"],
-    "AllowedHeaders": ["Content-Type"],
-    "ExposeHeaders": ["ETag"],
-    "MaxAgeSeconds": 3600
-  }
-]
-```
-
-上传签名限定一个随机的 `.pdf` 对象键、`application/pdf` 类型、服务端核准的 `Content-Length` 和 15 分钟有效期，实际上传大小不同会导致签名校验失败；管理接口还会校验扩展名、MIME、文件大小、GitHub 域名、标签数量、管理员会话、同源请求和 CSRF。若浏览器上传成功但保存索引失败，管理端会明确报错；可定期用对象存储清单与 SQLite 中的对象键核对并清理孤立文件。
 
 管理 API 使用服务端八小时会话、HttpOnly/SameSite Cookie、HTTPS Secure Cookie、同源校验与 CSRF 令牌。未登录访客不能修改正式成员或成绩，也不能查看私有审核队列；登录失败有限流，退出立即撤销会话，服务重启后需重新登录。内部备注不进入公开成员接口。
 
@@ -290,7 +289,7 @@ docker compose ps
 
 ```bash
 python3 tools/manage_data.py backup --output backups/dlut-cpc-before-update.sqlite3
-git pull --ff-only
+GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only origin main
 docker compose up -d --build
 curl -fsS http://127.0.0.1:8021/healthz
 ```

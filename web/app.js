@@ -361,13 +361,6 @@ function formatFileSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1)} MB`;
 }
 
-function formatStorageSize(bytes) {
-  if (!Number.isFinite(bytes) || bytes < 0) return '';
-  if (bytes < 1000 * 1000) return `${Math.ceil(bytes / 1000)} KB`;
-  if (bytes < 1000 * 1000 * 1000) return `${(bytes / (1000 * 1000)).toFixed(1)} MB`;
-  return `${(bytes / (1000 * 1000 * 1000)).toFixed(2)} GB`;
-}
-
 async function loadResources() {
   state.resourcesLoading = true;
   state.resourcesError = '';
@@ -739,17 +732,7 @@ function adminResourcePage() {
   const items = state.adminResources.items || [];
   const editing = items.find(item => item.id === state.adminResourceEdit);
   const kind = editing?.resourceType || state.adminResourceKind;
-  const storage = state.adminResources.storage || state.adminSession?.storage || {};
-  const storageUploadEnabled = storage.uploadEnabled ?? storage.enabled;
-  const occupiedBytes = (storage.usedBytes || 0) + (storage.reservedBytes || 0);
-  const storagePercent = storage.storageLimitBytes > 0
-    ? Math.min(100, Math.round(occupiedBytes / storage.storageLimitBytes * 100)) : 0;
-  const storageStatus = storage.enabled && Number.isFinite(storage.usedBytes)
-    ? `<div class="resource-storage-status" aria-label="对象存储用量">
-        <div><strong>R2 存储</strong><span>已占用 ${formatStorageSize(occupiedBytes)} / 硬上限 ${formatStorageSize(storage.storageLimitBytes)}</span></div>
-        <progress max="100" value="${storagePercent}">${storagePercent}%</progress>
-        <small>剩余 ${formatStorageSize(storage.remainingBytes)} · ${storage.objectCount || 0} 个对象${storage.reservedBytes ? ` · 待上传 ${formatStorageSize(storage.reservedBytes)}` : ''}</small>
-      </div>` : '';
+  const pdfRepository = state.adminResources.pdfRepository || {};
   const value = (field, fallback = '') => escapeHtml(editing?.[field] ?? fallback);
   const rows = items.map(item => {
     const deleting = state.adminResourceDelete === item.id;
@@ -759,12 +742,11 @@ function adminResourcePage() {
         ? `<button type="button" class="admin-button danger" data-resource-delete="confirm" data-resource-id="${item.id}">确认删除</button><button type="button" class="admin-button secondary" data-resource-delete-cancel>取消</button>`
         : `<button type="button" class="admin-button secondary" data-resource-edit="${item.id}">编辑</button><button type="button" class="admin-button danger" data-resource-delete="ask" data-resource-id="${item.id}">删除</button>`}</div></td></tr>`;
   }).join('');
-  const fileField = editing?.resourceType === 'pdf'
-    ? `<div class="resource-file-existing wide"><strong>${escapeHtml(editing.originalFilename)}</strong><span>${formatFileSize(editing.fileSize)} · 已存于对象存储，编辑资料不会重复上传</span></div>`
-    : `<label id="resourcePdfField" class="wide" ${kind === 'pdf' ? '' : 'hidden'}>PDF 文件<input name="file" type="file" accept="application/pdf,.pdf" ${kind === 'pdf' ? 'required' : ''}><small>文件由浏览器直传对象存储，不经过本站服务器。上限 ${formatFileSize(storage.maxFileBytes)}。</small></label>`;
+  const fileField = `<label id="resourcePdfField" class="wide" ${kind === 'pdf' ? '' : 'hidden'}>Git LFS 文件路径
+      <input name="pdfPath" maxlength="500" value="${value('pdfPath')}" placeholder="resources/pdfs/graph/network-flow.pdf" ${kind === 'pdf' ? 'required' : ''}>
+      <small>${pdfRepository.repositoryUrl ? `<a href="${escapeHtml(pdfRepository.repositoryUrl)}" target="_blank" rel="noreferrer">${escapeHtml(pdfRepository.repository)} · ${escapeHtml(pdfRepository.branch)}</a>` : 'GitHub LFS'}，仅保存仓库路径。</small>
+    </label>`;
   return `<form id="adminResource" class="admin-form resource-admin-form"><h2>${editing ? '编辑资料' : '添加资料'}</h2>
-    ${storageStatus}
-    ${!storageUploadEnabled && !editing ? `<div id="resourceStorageMessage" class="admin-message error" ${kind === 'pdf' ? '' : 'hidden'}>${escapeHtml(storage.error ? `为防止存储超额，PDF 上传已暂停：${storage.error}` : '尚未配置对象存储，暂时只能添加链接资料')}</div>` : ''}
     <div class="admin-fields"><label>标题<input name="title" required maxlength="200" value="${value('title')}"></label>
       <label>类型<select name="resourceType" ${editing?.resourceType === 'pdf' ? 'disabled' : ''}>${Object.entries(resourceTypeLabels).map(([type, label]) => `<option value="${type}" ${kind === type ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
       <label>分类<input name="category" required maxlength="80" list="resourceCategories" value="${value('category', '算法与数据结构')}"></label>
@@ -774,7 +756,7 @@ function adminResourcePage() {
       ${fileField}
       <label id="resourceUrlField" class="wide" ${kind === 'pdf' ? 'hidden' : ''}>资料链接<input name="url" type="url" maxlength="2000" value="${value('url')}" ${kind === 'pdf' ? '' : 'required'} placeholder="https://github.com/..."></label>
       <label class="admin-checkbox wide"><input name="published" type="checkbox" ${editing?.published === false ? '' : 'checked'}>立即公开</label>
-    </div><button id="adminResourceSave" class="admin-button" ${!storageUploadEnabled && kind === 'pdf' && !editing ? 'disabled' : ''}>${editing ? '保存修改' : '保存资料'}</button>${editing ? '<button id="adminCancelResourceEdit" type="button" class="admin-button secondary">取消</button>' : ''}</form>
+    </div><button id="adminResourceSave" class="admin-button">${editing ? '保存修改' : '保存资料'}</button>${editing ? '<button id="adminCancelResourceEdit" type="button" class="admin-button secondary">取消</button>' : ''}</form>
     <datalist id="resourceCategories"><option>算法与数据结构</option><option>数学</option><option>图论</option><option>动态规划</option><option>字符串</option><option>竞赛经验</option><option>题单</option><option>工程与工具</option><option>其他</option></datalist>
     <section class="admin-recent"><h2>资料索引</h2><div class="data-table-wrap"><table class="data-table resource-admin-table"><thead><tr><th>资料</th><th>类型</th><th>分类</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="table-empty">暂无资料</td></tr>'}</tbody></table></div></section>`;
 }
@@ -890,12 +872,6 @@ function bindAdminEvents() {
       url.hidden = kind === 'pdf';
       url.querySelector('input').required = kind !== 'pdf';
     }
-    const storage = state.adminResources?.storage;
-    const storageUnavailable = kind === 'pdf' && !(storage?.uploadEnabled ?? storage?.enabled) && !state.adminResourceEdit;
-    const storageMessage = resourceForm.querySelector('#resourceStorageMessage');
-    if (storageMessage) storageMessage.hidden = !storageUnavailable;
-    const save = resourceForm.querySelector('#adminResourceSave');
-    if (save) save.disabled = storageUnavailable;
   };
   resourceForm?.querySelector('[name="resourceType"]')?.addEventListener('change', syncResourceFields);
   document.querySelectorAll('[data-resource-edit]').forEach(button => button.addEventListener('click', () => {
@@ -959,19 +935,7 @@ function bindAdminEvents() {
         published: values.published === 'on',
       };
       if (kind === 'pdf') {
-        if (editing?.resourceType === 'pdf') {
-          Object.assign(body, {objectKey: editing.objectKey, originalFilename: editing.originalFilename,
-            contentType: editing.contentType, fileSize: editing.fileSize});
-        } else {
-          const file = form.querySelector('[name="file"]')?.files?.[0];
-          if (!file) throw new Error('请选择 PDF 文件');
-          if (!file.name.toLocaleLowerCase().endsWith('.pdf')) throw new Error('只能上传 PDF 文件');
-          const upload = await adminRequest('resource-upload', {filename: file.name, fileSize: file.size, contentType: file.type});
-          const response = await fetch(upload.uploadUrl, {method: 'PUT', headers: upload.headers, body: file});
-          if (!response.ok) throw new Error(`PDF 上传失败（对象存储 HTTP ${response.status}）`);
-          Object.assign(body, {objectKey: upload.objectKey, originalFilename: file.name,
-            contentType: 'application/pdf', fileSize: file.size});
-        }
+        body.pdfPath = values.pdfPath;
       } else {
         body.url = values.url;
       }
