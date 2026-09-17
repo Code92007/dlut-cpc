@@ -115,7 +115,7 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(opened["status"], 302)
         self.assertEqual(
             opened["location"],
-            "https://github.com/Code92007/dlut-cpc/blob/main/resources/pdfs/%E5%9B%BE%E8%AE%BA/flow.pdf?raw=1",
+            "https://github.com/Code92007/dlut-cpc-resources/blob/main/resources/pdfs/%E5%9B%BE%E8%AE%BA/flow.pdf?raw=1",
         )
 
         self.assertEqual(self.request("resource", {**body, "resourceId": resource_id, "published": False},
@@ -137,7 +137,24 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(changed["status"], 200, changed)
         admin = self.request("/api/admin/resources", cookie=cookie, method="GET")["body"]
         self.assertEqual(admin["items"][0]["pdfPath"], "resources/pdfs/new.pdf")
-        self.assertEqual(admin["pdfRepository"]["repository"], "Code92007/dlut-cpc")
+        self.assertEqual(admin["pdfRepository"]["repository"], "Code92007/dlut-cpc-resources")
+
+    def test_legacy_pdf_mapping_redirects_to_separate_resource_repository(self):
+        resource_id = self.database.save_resource({
+            "title": "CSP 讲义",
+            "resourceType": "pdf",
+            "category": "CSP",
+            "difficulty": "all",
+            "tags": [],
+            "url": "https://github.com/Code92007/dlut-cpc/blob/main/resources/pdfs/csp/csp43.pdf?raw=1",
+            "published": True,
+        })
+        opened = self.request(f"/api/resources/{resource_id}/open", method="GET")
+        self.assertEqual(opened["status"], 302)
+        self.assertEqual(
+            opened["location"],
+            "https://github.com/Code92007/dlut-cpc-resources/blob/main/resources/pdfs/csp/csp43.pdf?raw=1",
+        )
 
     def test_edit_api_failure_saves_binding_without_wrong_old_rating(self):
         member_id = self.database.add_manual_member("杨君泓")

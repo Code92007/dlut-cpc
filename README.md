@@ -179,38 +179,40 @@ docker compose restart dlut-cpc
 
 访问 `/admin` 登录后可补录未被 CPC Finder 收录的古早成员、追加主副账号、设置中文名和别名、录入历史成绩（金银铜铁）。成员选择含独立 ID，同名选手不会被自动合并；补录姓名已存在时需显式确认是独立同名成员。账号归属不能同时绑定两人。人工数据写入 SQLite，重建容器和公开同步均不会删除。
 
-### 资料库与 Git LFS
+### 独立资料库与 Git LFS
 
-PDF 放在仓库的 `resources/pdfs/` 目录并由 Git LFS 保存；普通 Git 历史只记录小型指针。网站数据库只保存标题、简介、分类、难度、标签和仓库路径，访客打开 PDF 时直接跳转到 GitHub，文件不经过应用服务器，也不会进入 Docker 镜像。GitHub Free 当前包含 10 GiB LFS 存储和每月 10 GiB 下载流量；没有付款方式或预算设为 0 时，超额会停止 LFS 服务而不是继续扣费。
+PDF 存放在独立公开仓库 [`Code92007/dlut-cpc-resources`](https://github.com/Code92007/dlut-cpc-resources)，不进入本代码仓库、应用服务器或 Docker 镜像。网站数据库只保存标题、简介、分类、难度、标签和资料仓库路径，访客打开 PDF 时直接跳转到 GitHub。GitHub Free 当前包含 10 GiB LFS 存储和每月 10 GiB 下载流量；没有付款方式或预算设为 0 时，超额会停止 LFS 服务而不是继续扣费。
 
-首次在维护电脑安装并初始化：
+首次在维护电脑克隆并初始化资料仓库：
 
 ```bash
 brew install git-lfs
 git lfs install
+cd ~/Documents
+git clone https://github.com/Code92007/dlut-cpc-resources.git
+cd dlut-cpc-resources
 git config core.hooksPath .githooks
-git lfs track
 ```
 
-`.gitattributes` 已将全部 `.pdf` 交给 LFS。添加课件时使用仓库内相对路径：
+添加课件只在资料仓库中操作：
 
 ```bash
 mkdir -p resources/pdfs/graph
 cp /path/to/network-flow.pdf resources/pdfs/graph/
 python3 tools/check_resource_pdfs.py
-git add .gitattributes resources/pdfs
+git add resources/pdfs
 git commit -m "Add network flow courseware"
 git push origin main
 ```
 
-预推送钩子会统计 `resources/pdfs/` 当前文件及 Git 历史中不同 PDF 对象的声明大小，超过 9,000,000,000 字节时拒绝推送。GitHub 的 LFS 配额按账号统计，其他仓库中的 LFS 对象仍会占用额度；删除或替换课件也不应视为立即释放远端历史对象。最终兜底是 GitHub 在没有付款方式或预算为 0 时停止超额使用。
+资料仓库的预推送钩子会统计 `resources/pdfs/` 当前文件及 Git 历史中不同 PDF 对象的声明大小，超过 9,000,000,000 字节时拒绝推送。GitHub 的 LFS 配额按账号统计，其他仓库中的 LFS 对象仍会占用额度；删除或替换课件也不应视为立即释放远端历史对象。最终兜底是 GitHub 在没有付款方式或预算为 0 时停止超额使用。
 
 推送 PDF 后，在 `/admin` 的“资料库”中选择 PDF，填写类似 `resources/pdfs/graph/network-flow.pdf` 的路径。后端只接受 `resources/pdfs/` 下的 `.pdf`，拒绝绝对路径和目录穿越。删除资料索引不会删除 Git 历史中的课件；需要删除文件时另行提交 Git 变更。
 
-仓库和分支默认指向当前项目，也可以在 `.env` 显式配置：
+仓库和分支默认指向独立资料库，也可以在 `.env` 显式配置：
 
 ```dotenv
-RESOURCE_GITHUB_REPOSITORY=Code92007/dlut-cpc
+RESOURCE_GITHUB_REPOSITORY=Code92007/dlut-cpc-resources
 RESOURCE_GITHUB_BRANCH=main
 ```
 

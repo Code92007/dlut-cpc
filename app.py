@@ -143,8 +143,8 @@ class SiteHandler(BaseHTTPRequestHandler):
                 if not resource or resource["resourceType"] != "pdf":
                     self._send_json({"error": "资源不存在"}, HTTPStatus.NOT_FOUND)
                     return
-                github_pdf_path(resource["url"])
-                self._send_redirect(resource["url"])
+                pdf_path = github_pdf_path(resource["url"])
+                self._send_redirect(github_pdf_record(pdf_path)["url"])
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.SERVICE_UNAVAILABLE)
             return

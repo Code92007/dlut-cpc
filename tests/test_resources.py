@@ -7,7 +7,6 @@ from unittest.mock import patch
 from app import SiteHandler
 from database import Database
 from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record, normalize_pdf_path
-from tools import check_resource_pdfs
 
 
 class ResourceDatabaseTests(unittest.TestCase):
@@ -65,15 +64,20 @@ class ResourceDatabaseTests(unittest.TestCase):
 
 class GitHubLfsTests(unittest.TestCase):
     def test_pdf_path_builds_and_recovers_scoped_github_url(self):
-        values = {"RESOURCE_GITHUB_REPOSITORY": "Code92007/dlut-cpc", "RESOURCE_GITHUB_BRANCH": "main"}
+        values = {"RESOURCE_GITHUB_REPOSITORY": "Code92007/dlut-cpc-resources", "RESOURCE_GITHUB_BRANCH": "main"}
         with patch.dict(os.environ, values, clear=False):
             record = github_pdf_record("resources/pdfs/图论/网络流 讲义.pdf")
             self.assertEqual(record["originalFilename"], "网络流 讲义.pdf")
             self.assertIn("%E5%9B%BE%E8%AE%BA", record["url"])
             self.assertEqual(github_pdf_path(record["url"]), record["pdfPath"])
             status = github_lfs_status()
-        self.assertEqual(status["repository"], "Code92007/dlut-cpc")
+        self.assertEqual(status["repository"], "Code92007/dlut-cpc-resources")
         self.assertEqual(status["directory"], "resources/pdfs")
+
+    def test_old_main_repository_url_is_mapped_to_resource_repository_path(self):
+        old_url = "https://github.com/Code92007/dlut-cpc/blob/main/resources/pdfs/csp/csp43.pdf?raw=1"
+        self.assertEqual(github_pdf_path(old_url), "resources/pdfs/csp/csp43.pdf")
+        self.assertIn("Code92007/dlut-cpc-resources", github_pdf_record(github_pdf_path(old_url))["url"])
 
     def test_pdf_paths_are_confined_to_resource_directory(self):
         for path in (
@@ -87,26 +91,6 @@ class GitHubLfsTests(unittest.TestCase):
         with patch.dict(os.environ, {"RESOURCE_GITHUB_REPOSITORY": "bad repository"}, clear=False), \
              self.assertRaisesRegex(ValueError, "REPOSITORY"):
             github_lfs_status()
-
-    def test_lfs_pointer_uses_represented_size_and_limit_fails_closed(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            pdf_root = root / "resources" / "pdfs"
-            pdf_root.mkdir(parents=True)
-            pointer = pdf_root / "notes.pdf"
-            pointer.write_text(
-                "version https://git-lfs.github.com/spec/v1\n"
-                f"oid sha256:{'a' * 64}\nsize 123456\n",
-                encoding="ascii",
-            )
-            self.assertEqual(check_resource_pdfs.represented_size(pointer), 123456)
-            with patch.object(check_resource_pdfs, "ROOT", root), \
-                 patch.object(check_resource_pdfs, "PDF_ROOT", pdf_root), \
-                 patch.object(check_resource_pdfs, "STORAGE_LIMIT_BYTES", 100_000), \
-                 patch.object(check_resource_pdfs, "historical_pdf_objects", return_value={}), \
-                 self.assertRaisesRegex(ValueError, "9 GB"):
-                check_resource_pdfs.check_resource_pdfs()
-
 
 if __name__ == "__main__":
     unittest.main()

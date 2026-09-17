@@ -6,8 +6,9 @@ import urllib.parse
 from pathlib import PurePosixPath
 
 
-DEFAULT_REPOSITORY = "Code92007/dlut-cpc"
+DEFAULT_REPOSITORY = "Code92007/dlut-cpc-resources"
 DEFAULT_BRANCH = "main"
+LEGACY_REPOSITORIES = ("Code92007/dlut-cpc",)
 PDF_ROOT = ("resources", "pdfs")
 REPOSITORY_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 BRANCH_PATTERN = re.compile(r"^[A-Za-z0-9._-]+$")
@@ -57,9 +58,13 @@ def github_pdf_path(url: str) -> str:
     if parsed.username or parsed.password or parsed.port:
         raise ValueError("PDF GitHub 地址无效")
     parts = urllib.parse.unquote(parsed.path).strip("/").split("/")
-    owner, repo = repository.split("/", 1)
-    expected = [owner.casefold(), repo.casefold(), "blob", branch]
-    if len(parts) < 7 or [part.casefold() for part in parts[:3]] + parts[3:4] != expected:
+    repositories = (repository, *LEGACY_REPOSITORIES)
+    prefixes = []
+    for candidate in repositories:
+        owner, repo = candidate.split("/", 1)
+        prefixes.append([owner.casefold(), repo.casefold(), "blob", branch])
+    actual = [part.casefold() for part in parts[:3]] + parts[3:4]
+    if len(parts) < 7 or actual not in prefixes:
         raise ValueError("PDF 地址不属于配置的 GitHub 仓库或分支")
     return normalize_pdf_path("/".join(parts[4:]))
 
