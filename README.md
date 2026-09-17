@@ -79,7 +79,7 @@ python3 -m venv /tmp/rankland-import-venv
 
 ```bash
 cd ~/dlut-cpc
-GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only
+git pull --ff-only
 python3 tools/merge_ccpc.py --dry-run \
   --backup "runtime/backups/before-ccpc-$(date +%Y%m%d-%H%M%S).sqlite3" \
   --report runtime/ccpc-preview.json
@@ -103,7 +103,7 @@ curl -fsS http://127.0.0.1:8021/healthz
 
 ```bash
 cd ~/dlut-cpc
-GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only
+git pull --ff-only
 python3 tools/merge_ccpc.py --snapshot data/rankland_supplement_honors.json --dry-run \
   --backup "runtime/backups/before-rankland-$(date +%Y%m%d-%H%M%S).sqlite3" \
   --report runtime/rankland-preview.json
@@ -291,7 +291,7 @@ docker compose ps
 
 ```bash
 python3 tools/manage_data.py backup --output backups/dlut-cpc-before-update.sqlite3
-GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only origin main
+git pull --ff-only origin main
 docker compose up -d --build
 curl -fsS http://127.0.0.1:8021/healthz
 ```
