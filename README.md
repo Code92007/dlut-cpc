@@ -118,6 +118,8 @@ curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:8021/h
 
 2018 ICPC 徐州站的“顶呱呱（Dingguagua）”以独立后续批次 `rankland-icpc2018xuzhou-dingguagua-20260916-v1` 补入，保留正式排名、原始校名和榜单证据。该队为正式参赛且在金银铜奖牌段之外，按本站口径记为铁牌；吴将凯、胡小涛、钱昕予仅作为待管理员确认的建议名单，不自动关联成员。核验详情见 [徐州站补录清单](docs/rankland-xuzhou-2018-followup-20260916.md)。
 
+2016 ICPC 青岛站另以 `icpc-official-qingdao-2016-honorable-mention-20260921-v1` 后续批次补充 SDUT 保存的 ICPC Global 官方榜单证据：大连理工大学 `winter is coming`，以及原始校名为大连理工大学软件学院的 `Innovator`、`lingering_sound` 均列入 Honorable Mention，站内按已确认但未获金银铜牌的正式参赛成绩记为铁牌。三队解题数、并列名次及总榜位置沿用 RankLand 原始榜单；成员均留空待人工确认。核验详情见 [青岛站补录清单](docs/icpc-qingdao-2016-followup-20260921.md)。
+
 铁牌指结果已确认但未获得金银铜牌的正式参赛成绩。打星队伍保留参赛记录与“打星 · 非正式”标记，但不计年度奖牌、个人奖牌、铁牌或获奖次数；来源明确注明金银铜时显示“打星银牌”等，否则成绩留空。没有奖项依据的正式记录显示“奖项待确认”，不按铁牌统计。铁牌次数来自选手逐场正式参赛记录，并与学校榜单核对；未查全的次数显示“铁待补”，不会当作 0。“奖牌榜顺序”依次按金、银、铜数量降序及铁牌数量升序排列；“获奖次数”不含铁牌。
 
 同步 CPC Finder 并执行归一化去重：

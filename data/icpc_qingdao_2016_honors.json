@@ -1,0 +1,166 @@
+{
+  "batchId": "icpc-official-qingdao-2016-honorable-mention-20260921-v1",
+  "provider": "icpc-official",
+  "source": {
+    "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+    "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+  },
+  "fetchedAt": "2026-09-21T02:52:44+08:00",
+  "contests": [
+    {
+      "key": "icpc2016qingdao",
+      "title": "The 2016 ACM-ICPC Asia QingDao Regional Contest",
+      "date": "2016-11-13",
+      "host": "China University of Petroleum",
+      "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html",
+      "rankedTeams": 184,
+      "honorableMentionTeams": 143,
+      "teams": 327,
+      "awards": 3,
+      "schools": [
+        "Dalian University of Technology",
+        "School of Software Technology, Dalian University of Technology"
+      ]
+    }
+  ],
+  "honors": [
+    {
+      "id": "icpc-official-2016-qingdao-winter-is-coming",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "青岛",
+      "team": "winter is coming",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "185 / 327",
+      "overallRank": "209 / 327",
+      "official": true,
+      "source": {
+        "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+        "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+      },
+      "sources": [
+        {
+          "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+          "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+        },
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "qingdao-2016:honorable-mention:dalian-university-of-technology:winter-is-coming",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "Dalian University of Technology:winter is coming",
+      "archive": {
+        "officialResultCategory": "Honorable Mention",
+        "officialStandingsSnapshot": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html",
+        "pageSha256": "dfd5ad6c23e2491277ce7dbf20d5ad1d9065e93117f32d0efdf7e6e1fafacac4",
+        "rankEvidence": "https://rl.algoux.cn/ranklist/icpc2016qingdao",
+        "problemsSolved": 0,
+        "formalRank": 185,
+        "overallRank": 209,
+        "rawSchool": "Dalian University of Technology",
+        "rawTeam": "winter is coming"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "icpc-official-2016-qingdao-innovator",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "青岛",
+      "team": "Innovator",
+      "school": "大连理工大学",
+      "originalSchool": "School of Software Technology, Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "185 / 327",
+      "overallRank": "272 / 327",
+      "official": true,
+      "source": {
+        "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+        "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+      },
+      "sources": [
+        {
+          "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+          "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+        },
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "qingdao-2016:honorable-mention:school-of-software-technology:innovator",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "School of Software Technology, Dalian University of Technology:Innovator",
+      "archive": {
+        "officialResultCategory": "Honorable Mention",
+        "officialStandingsSnapshot": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html",
+        "pageSha256": "dfd5ad6c23e2491277ce7dbf20d5ad1d9065e93117f32d0efdf7e6e1fafacac4",
+        "rankEvidence": "https://rl.algoux.cn/ranklist/icpc2016qingdao",
+        "problemsSolved": 0,
+        "formalRank": 185,
+        "overallRank": 272,
+        "rawSchool": "School of Software Technology, Dalian University of Technology",
+        "rawTeam": "Innovator"
+      },
+      "suggestedMembers": []
+    },
+    {
+      "id": "icpc-official-2016-qingdao-lingering-sound",
+      "event": "The 2016 ACM-ICPC Asia QingDao Regional Contest （中国石油大学）",
+      "series": "ICPC",
+      "date": "2016-11-13",
+      "location": "青岛",
+      "team": "lingering_sound",
+      "school": "大连理工大学",
+      "originalSchool": "School of Software Technology, Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "185 / 327",
+      "overallRank": "273 / 327",
+      "official": true,
+      "source": {
+        "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+        "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+      },
+      "sources": [
+        {
+          "name": "SDUT 保存的 ICPC Global 2016 青岛站官方榜单",
+          "url": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html"
+        },
+        {
+          "name": "RankLand 历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2016qingdao"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "qingdao-2016:honorable-mention:school-of-software-technology:lingering-sound",
+      "externalContestId": "icpc2016qingdao",
+      "externalTeamId": "School of Software Technology, Dalian University of Technology:lingering_sound",
+      "archive": {
+        "officialResultCategory": "Honorable Mention",
+        "officialStandingsSnapshot": "https://acm.sdut.edu.cn/acmss/icpc/2016/qingdao/index.html",
+        "pageSha256": "dfd5ad6c23e2491277ce7dbf20d5ad1d9065e93117f32d0efdf7e6e1fafacac4",
+        "rankEvidence": "https://rl.algoux.cn/ranklist/icpc2016qingdao",
+        "problemsSolved": 0,
+        "formalRank": 185,
+        "overallRank": 273,
+        "rawSchool": "School of Software Technology, Dalian University of Technology",
+        "rawTeam": "lingering_sound"
+      },
+      "suggestedMembers": []
+    }
+  ]
+}
