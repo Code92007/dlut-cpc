@@ -39,7 +39,7 @@ def contest_key(record: dict) -> tuple[str, str, str] | None:
     if re.search(r"总决赛|final", text, re.I):
         region = "总决赛"
     else:
-        region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "合肥", "南阳", "桂林", "吉林",
+        region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "成都", "合肥", "南阳", "桂林", "吉林",
                                         "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州", "沈阳", "南京",
                                         "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "徐州", "乌鲁木齐") if name in text), None)
         if not region:

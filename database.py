@@ -29,6 +29,7 @@ def load_seed_file(path: Path | str) -> dict:
         "rankland_xuzhou_2018_honors.json",
         "icpc_official_honors.json",
         "icpc_qingdao_2016_honors.json",
+        "icpc_early_2007_2008_honors.json",
     ):
         official = path.parent / filename
         if official.exists():

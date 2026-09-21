@@ -1,0 +1,406 @@
+{
+  "batchId": "icpc-official-dlut-2007-2008-recovery-20260921-v1",
+  "provider": "icpc-official",
+  "fetchedAt": "2026-09-21T00:00:00+08:00",
+  "source": {
+    "name": "大连理工大学 2007-2008 ACM 获奖记录复核",
+    "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+  },
+  "contests": [
+    {
+      "key": "icpc2007changchun",
+      "officialContestId": 877,
+      "title": "The 2007 ACM-ICPC Asia Changchun Regional Contest",
+      "date": "2007-11-05",
+      "host": "Jilin University",
+      "officialStandingsSnapshot": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877",
+      "originalScoreboardSnapshot": "https://web.archive.org/web/20071107110311id_/http://acm.jlu.edu.cn:80/cc2007/summary.html",
+      "awards": 2,
+      "notes": "原赛站榜单仅显示队号，ICPC Global 旧数据混有预选报名项，均不能可靠映射到两组校内名单；依据同期大工新闻统一按 Honorable Mention（站内铁牌）录入。"
+    },
+    {
+      "key": "icpc2007chengdu",
+      "officialContestId": 878,
+      "title": "The 2007 ACM-ICPC Asia Chengdu Regional Contest",
+      "date": "2007-11-18",
+      "host": "Xihua University",
+      "officialStandingsSnapshot": "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878",
+      "awards": 1
+    },
+    {
+      "key": "icpc2008harbin",
+      "title": "The 2008 Asia Harbin Contest",
+      "date": "2008-10-12",
+      "host": "Harbin Engineering University",
+      "url": "https://icpc.global/regionals/finder/harbin-2009",
+      "awards": 1,
+      "notes": "ICPC Global 当前比赛页未保留该队榜单详情，队名与名次待考。"
+    },
+    {
+      "key": "icpc2008hefei",
+      "title": "The 2008 Asia Hefei Contest",
+      "date": "2008-11-16",
+      "host": "University of Science and Technology of China",
+      "officialStandingsSnapshot": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html",
+      "awards": 2
+    }
+  ],
+  "honors": [
+    {
+      "id": "icpc-official-2007-changchun-cui-chao",
+      "event": "第32届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（长春站） （吉林大学）",
+      "series": "ICPC",
+      "date": "2007-11-05",
+      "location": "长春",
+      "team": "大连理工大学（崔超队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2007 长春站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2007 长春站官方历史榜单",
+          "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+        },
+        {
+          "name": "吉林大学 2007 长春站原始榜单历史快照",
+          "url": "https://web.archive.org/web/20071107110311id_/http://acm.jlu.edu.cn:80/cc2007/summary.html"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        },
+        {
+          "name": "大工新闻网 2007 赛季同期报道",
+          "url": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "changchun-2007:dlut:cui-chao-han-lei-tang-xiaomin",
+      "externalContestId": "icpc2007changchun",
+      "externalTeamId": "Dalian University of Technology:roster-cui-chao-han-lei-tang-xiaomin",
+      "archive": {
+        "officialContestId": 877,
+        "officialResultCategory": "Honorable Mention",
+        "normalizedMedal": "铁牌",
+        "rawSchoolAward": "二等奖",
+        "evidenceNote": "校内 2009 汇总页将本条写为二等奖，但 2007 年同期大工新闻明确称长春站获优胜奖；按人工复核结论统一映射为铁牌。原榜单未能可靠恢复队名和名次。",
+        "officialStandingsSnapshot": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877",
+        "originalScoreboardSnapshot": "https://web.archive.org/web/20071107110311id_/http://acm.jlu.edu.cn:80/cc2007/summary.html",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm",
+        "rawTeam": null,
+        "rawMembers": [
+          "崔超",
+          "韩磊",
+          "唐晓敏"
+        ]
+      },
+      "suggestedMembers": [
+        "崔超",
+        "韩磊",
+        "唐晓敏"
+      ]
+    },
+    {
+      "id": "icpc-official-2007-changchun-liu-yong",
+      "event": "第32届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（长春站） （吉林大学）",
+      "series": "ICPC",
+      "date": "2007-11-05",
+      "location": "长春",
+      "team": "大连理工大学（刘勇队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2007 长春站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2007 长春站官方历史榜单",
+          "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+        },
+        {
+          "name": "吉林大学 2007 长春站原始榜单历史快照",
+          "url": "https://web.archive.org/web/20071107110311id_/http://acm.jlu.edu.cn:80/cc2007/summary.html"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        },
+        {
+          "name": "大工新闻网 2007 赛季同期报道",
+          "url": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "changchun-2007:dlut:liu-yong-zhong-xin-chi-guoyi",
+      "externalContestId": "icpc2007changchun",
+      "externalTeamId": "Dalian University of Technology:roster-liu-yong-zhong-xin-chi-guoyi",
+      "archive": {
+        "officialContestId": 877,
+        "officialResultCategory": "Honorable Mention",
+        "normalizedMedal": "铁牌",
+        "rawSchoolAward": "二等奖",
+        "evidenceNote": "校内 2009 汇总页将本条写为二等奖，但 2007 年同期大工新闻明确称长春站获优胜奖；按人工复核结论统一映射为铁牌。原榜单未能可靠恢复队名和名次。",
+        "officialStandingsSnapshot": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877",
+        "originalScoreboardSnapshot": "https://web.archive.org/web/20071107110311id_/http://acm.jlu.edu.cn:80/cc2007/summary.html",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm",
+        "rawTeam": null,
+        "rawMembers": [
+          "刘勇",
+          "钟昕",
+          "池国熠"
+        ]
+      },
+      "suggestedMembers": [
+        "刘勇",
+        "钟昕",
+        "池国熠"
+      ]
+    },
+    {
+      "id": "icpc-official-2007-chengdu-cippus-acfly",
+      "event": "第32届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（成都站） （西华大学）",
+      "series": "ICPC",
+      "date": "2007-11-18",
+      "location": "成都",
+      "team": "Cippus_ACFly",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铜牌",
+      "rank": "29",
+      "overallRank": "29",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2007 成都站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2007 成都站官方历史榜单",
+          "url": "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        },
+        {
+          "name": "大工新闻网 2007 成都站报道",
+          "url": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-878:29:cippus-acfly",
+      "externalContestId": "icpc2007chengdu",
+      "externalTeamId": "Dalian University of Technology:Cippus_ACFly",
+      "archive": {
+        "officialContestId": 878,
+        "officialResultCategory": "Bronze Medal",
+        "officialStandingsSnapshot": "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878",
+        "teamRank": 29,
+        "problemsSolved": 3,
+        "rawSchool": "Dalian University of Technology",
+        "rawTeam": "Cippus_ACFly",
+        "rawMembers": [
+          "韩博",
+          "徐宁",
+          "李鹤"
+        ],
+        "memberNameEvidence": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm"
+      },
+      "suggestedMembers": [
+        "韩博",
+        "徐宁",
+        "李鹤"
+      ]
+    },
+    {
+      "id": "icpc-official-2008-harbin-dlut",
+      "event": "第33届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（哈尔滨站） （哈尔滨工程大学）",
+      "series": "ICPC",
+      "date": "2008-10-12",
+      "location": "哈尔滨",
+      "team": "大连理工大学（陈志源队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2008 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/harbin-2009"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2008 哈尔滨站比赛页",
+          "url": "https://icpc.global/regionals/finder/harbin-2009"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "harbin-2008:dlut:chen-zhiyuan-li-he-xu-ning",
+      "externalContestId": "icpc2008harbin",
+      "externalTeamId": "Dalian University of Technology:roster-chen-zhiyuan-li-he-xu-ning",
+      "archive": {
+        "officialContestPage": "https://icpc.global/regionals/finder/harbin-2009",
+        "rawSchoolAward": "二等奖",
+        "normalizedMedal": "银牌",
+        "evidenceNote": "ICPC Global 当前页未保留该队榜单详情；成员和奖项来自大连理工大学校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm",
+        "rawTeam": null,
+        "rawMembers": [
+          "陈志源",
+          "李鹤",
+          "徐宁"
+        ]
+      },
+      "suggestedMembers": [
+        "陈志源",
+        "李鹤",
+        "徐宁"
+      ]
+    },
+    {
+      "id": "icpc-official-2008-hefei-vipers",
+      "event": "第33届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（合肥站） （中国科学技术大学）",
+      "series": "ICPC",
+      "date": "2008-11-16",
+      "location": "合肥",
+      "team": "VIPers",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "16 / 103",
+      "overallRank": "16 / 103",
+      "official": true,
+      "source": {
+        "name": "中国科学技术大学 2008 合肥站官方榜单历史快照",
+        "url": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html"
+      },
+      "sources": [
+        {
+          "name": "中国科学技术大学 2008 合肥站官方榜单历史快照",
+          "url": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        },
+        {
+          "name": "大工新闻网 2008 合肥站报道",
+          "url": "https://news.dlut.edu.cn/xjnry/yxfc_content.jsp?urltype=news.NewsContentUrl&wbnewsid=24401&wbtreeid=1011"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "hefei-2008:16:vipers",
+      "externalContestId": "icpc2008hefei",
+      "externalTeamId": "Dalian University of Technology:VIPers",
+      "archive": {
+        "officialResultCategory": "Silver Medal",
+        "officialStandingsSnapshot": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html",
+        "teamRank": 16,
+        "universityRank": 10,
+        "problemsSolved": 3,
+        "penalty": 502,
+        "rawSchool": "Dalian University of Technology",
+        "rawTeam": "VIPers",
+        "rawMembers": [
+          "金鑫",
+          "李鹤",
+          "徐宁"
+        ],
+        "memberNameEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+      },
+      "suggestedMembers": [
+        "金鑫",
+        "李鹤",
+        "徐宁"
+      ]
+    },
+    {
+      "id": "icpc-official-2008-hefei-random",
+      "event": "第33届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（合肥站） （中国科学技术大学）",
+      "series": "ICPC",
+      "date": "2008-11-16",
+      "location": "合肥",
+      "team": "Random",
+      "school": "大连理工大学",
+      "originalSchool": "Dalian University of Technology",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铜牌",
+      "rank": "53 / 103",
+      "overallRank": "53 / 103",
+      "official": true,
+      "source": {
+        "name": "中国科学技术大学 2008 合肥站官方榜单历史快照",
+        "url": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html"
+      },
+      "sources": [
+        {
+          "name": "中国科学技术大学 2008 合肥站官方榜单历史快照",
+          "url": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html"
+        },
+        {
+          "name": "大连理工大学全国 ACM 获奖统计",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+        },
+        {
+          "name": "大工新闻网 2008 合肥站报道",
+          "url": "https://news.dlut.edu.cn/xjnry/yxfc_content.jsp?urltype=news.NewsContentUrl&wbnewsid=24401&wbtreeid=1011"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "hefei-2008:53:random",
+      "externalContestId": "icpc2008hefei",
+      "externalTeamId": "Dalian University of Technology:Random",
+      "archive": {
+        "officialResultCategory": "Bronze Medal",
+        "officialStandingsSnapshot": "https://web.archive.org/web/20090405174803/http://acm.ustc.edu.cn/standing.html",
+        "teamRank": 53,
+        "universityRank": 33,
+        "problemsSolved": null,
+        "penalty": null,
+        "rawSchool": "Dalian University of Technology",
+        "rawTeam": "Random",
+        "rawMembers": [
+          "陈志源",
+          "丁文超",
+          "牛亚男"
+        ],
+        "memberNameEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3888.htm"
+      },
+      "suggestedMembers": [
+        "陈志源",
+        "丁文超",
+        "牛亚男"
+      ]
+    }
+  ]
+}
