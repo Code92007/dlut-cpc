@@ -1,0 +1,417 @@
+{
+  "batchId": "icpc-official-dlut-2009-recovery-20260922-v1",
+  "provider": "icpc-official",
+  "fetchedAt": "2026-09-22T00:00:00+08:00",
+  "source": {
+    "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录复核",
+    "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+  },
+  "contests": [
+    {
+      "key": "icpc2009harbin",
+      "officialContestId": 495,
+      "officialSiteId": 2341,
+      "title": "The 2009 ACM-ICPC Asia Harbin Regional Contest",
+      "date": "2009-11-08",
+      "host": "Harbin Institute of Technology",
+      "url": "https://icpc.global/regionals/finder/Harbin-2010",
+      "awards": 3,
+      "notes": "ICPC Global 当前元数据确认现场赛日期为 2009-11-08；早期公布的 9 月档期已变更。历史完整榜单未恢复，队名与名次待考。"
+    },
+    {
+      "key": "icpc2009hefei",
+      "officialContestId": 496,
+      "officialSiteId": 2349,
+      "title": "The 2009 ACM-ICPC Asia Hefei Regional Contest",
+      "date": "2009-10-11",
+      "host": "University of Science and Technology of China",
+      "url": "https://icpc.global/regionals/finder/Hefei-2010",
+      "awards": 1
+    },
+    {
+      "key": "icpc2009ningbo",
+      "officialContestId": 506,
+      "officialSiteId": 2402,
+      "title": "The 2009 ACM-ICPC Asia Ningbo Regional Contest",
+      "date": "2009-10-18",
+      "host": "Ningbo Institute of Technology, Zhejiang University",
+      "url": "https://icpc.global/regionals/finder/Ningbo-2010",
+      "awards": 1
+    },
+    {
+      "key": "icpc2009shanghai",
+      "officialContestId": 509,
+      "officialSiteId": 2423,
+      "title": "The 2009 ACM-ICPC Asia Shanghai Regional Contest",
+      "date": "2009-10-25",
+      "host": "Donghua University",
+      "url": "https://icpc.global/regionals/finder/Shanghai-2010",
+      "awards": 1
+    },
+    {
+      "key": "icpc2009wuhan",
+      "officialContestId": 505,
+      "officialSiteId": 2397,
+      "title": "The 2009 ACM-ICPC Asia Wuhan Regional Contest",
+      "date": "2009-11-01",
+      "host": "Wuhan University",
+      "url": "https://icpc.global/regionals/finder/Wuhan-2010",
+      "scoreboard": "https://rl.algoux.cn/ranklist/icpc2009wuhan",
+      "awards": 1,
+      "notes": "RankLand 保存的原始榜单可将本校唯一记录对应到 Bombee，正式排名 27 / 124、总榜位置 33 / 132。"
+    }
+  ],
+  "honors": [
+    {
+      "id": "icpc-official-2009-harbin-chen-zhiyuan",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（哈尔滨站） （哈尔滨工业大学）",
+      "series": "ICPC",
+      "date": "2009-11-08",
+      "location": "哈尔滨",
+      "team": "大连理工大学（陈志源队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 哈尔滨站比赛页",
+          "url": "https://icpc.global/regionals/finder/Harbin-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-495:dlut:chen-zhiyuan-wang-jijie-tian-xiaochen",
+      "externalContestId": "icpc2009harbin",
+      "externalTeamId": "Dalian University of Technology:roster-chen-zhiyuan-wang-jijie-tian-xiaochen",
+      "archive": {
+        "officialContestId": 495,
+        "officialSiteId": 2341,
+        "officialContestPage": "https://icpc.global/regionals/finder/Harbin-2010",
+        "officialResultCategory": "Silver Medal",
+        "normalizedMedal": "银牌",
+        "rawSchoolAward": "银奖",
+        "evidenceNote": "ICPC Global 确认本站属于 2009 赛季且现场赛日期为 2009-11-08；成员和奖项来自校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["陈志源", "王季洁", "田晓辰"]
+      },
+      "suggestedMembers": ["陈志源", "王季洁", "田晓辰"]
+    },
+    {
+      "id": "icpc-official-2009-harbin-wu-changze",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（哈尔滨站） （哈尔滨工业大学）",
+      "series": "ICPC",
+      "date": "2009-11-08",
+      "location": "哈尔滨",
+      "team": "大连理工大学（吴昌泽队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 哈尔滨站比赛页",
+          "url": "https://icpc.global/regionals/finder/Harbin-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-495:dlut:wu-changze-chen-qi-wang-yue",
+      "externalContestId": "icpc2009harbin",
+      "externalTeamId": "Dalian University of Technology:roster-wu-changze-chen-qi-wang-yue",
+      "archive": {
+        "officialContestId": 495,
+        "officialSiteId": 2341,
+        "officialContestPage": "https://icpc.global/regionals/finder/Harbin-2010",
+        "officialResultCategory": "Silver Medal",
+        "normalizedMedal": "银牌",
+        "rawSchoolAward": "银奖",
+        "evidenceNote": "ICPC Global 确认本站属于 2009 赛季且现场赛日期为 2009-11-08；成员和奖项来自校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["吴昌泽", "陈奇", "王跃"]
+      },
+      "suggestedMembers": ["吴昌泽", "陈奇", "王跃"]
+    },
+    {
+      "id": "icpc-official-2009-harbin-chen-feng",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（哈尔滨站） （哈尔滨工业大学）",
+      "series": "ICPC",
+      "date": "2009-11-08",
+      "location": "哈尔滨",
+      "team": "大连理工大学（陈沣队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 哈尔滨站比赛页",
+          "url": "https://icpc.global/regionals/finder/Harbin-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-495:dlut:chen-feng-yang-kai-zhang-meng",
+      "externalContestId": "icpc2009harbin",
+      "externalTeamId": "Dalian University of Technology:roster-chen-feng-yang-kai-zhang-meng",
+      "archive": {
+        "officialContestId": 495,
+        "officialSiteId": 2341,
+        "officialContestPage": "https://icpc.global/regionals/finder/Harbin-2010",
+        "officialResultCategory": "Honorable Mention",
+        "normalizedMedal": "铁牌",
+        "rawSchoolAward": "荣誉奖",
+        "evidenceNote": "项目将正式参赛且未获金银铜的荣誉奖统一记为铁牌；成员和奖项来自校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["陈沣", "杨凯", "张萌"]
+      },
+      "suggestedMembers": ["陈沣", "杨凯", "张萌"]
+    },
+    {
+      "id": "icpc-official-2009-shanghai-liu-xiaojiang",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（上海站） （东华大学）",
+      "series": "ICPC",
+      "date": "2009-10-25",
+      "location": "上海",
+      "team": "大连理工大学（刘笑江队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 上海站比赛页",
+        "url": "https://icpc.global/regionals/finder/Shanghai-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 上海站比赛页",
+          "url": "https://icpc.global/regionals/finder/Shanghai-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        },
+        {
+          "name": "东华大学 2009 上海站主办方报道",
+          "url": "https://www.dhu.edu.cn/2009/1025/c7783a106789/pagem.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-509:dlut:liu-xiaojiang-li-ang-wang-yiwen",
+      "externalContestId": "icpc2009shanghai",
+      "externalTeamId": "Dalian University of Technology:roster-liu-xiaojiang-li-ang-wang-yiwen",
+      "archive": {
+        "officialContestId": 509,
+        "officialSiteId": 2423,
+        "officialContestPage": "https://icpc.global/regionals/finder/Shanghai-2010",
+        "officialResultCategory": "Honorable Mention",
+        "normalizedMedal": "铁牌",
+        "rawSchoolAward": "荣誉奖",
+        "evidenceNote": "ICPC Global 和主办方报道确认比赛日期；成员和荣誉奖来自校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["刘笑江", "李昂", "王意文"]
+      },
+      "suggestedMembers": ["刘笑江", "李昂", "王意文"]
+    },
+    {
+      "id": "icpc-official-2009-ningbo-chen-zhiyuan",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（宁波站） （浙江大学宁波理工学院）",
+      "series": "ICPC",
+      "date": "2009-10-18",
+      "location": "宁波",
+      "team": "大连理工大学（陈志源队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 宁波站比赛页",
+        "url": "https://icpc.global/regionals/finder/Ningbo-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 宁波站比赛页",
+          "url": "https://icpc.global/regionals/finder/Ningbo-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-506:dlut:chen-zhiyuan-wang-jijie-tian-xiaochen",
+      "externalContestId": "icpc2009ningbo",
+      "externalTeamId": "Dalian University of Technology:roster-chen-zhiyuan-wang-jijie-tian-xiaochen",
+      "archive": {
+        "officialContestId": 506,
+        "officialSiteId": 2402,
+        "officialContestPage": "https://icpc.global/regionals/finder/Ningbo-2010",
+        "officialResultCategory": "Silver Medal",
+        "normalizedMedal": "银牌",
+        "rawSchoolAward": "银奖",
+        "evidenceNote": "ICPC Global 确认本站属于 2009 赛季且现场赛日期为 2009-10-18；成员和奖项来自校内汇总，队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["陈志源", "王季洁", "田晓辰"]
+      },
+      "suggestedMembers": ["陈志源", "王季洁", "田晓辰"]
+    },
+    {
+      "id": "icpc-official-2009-wuhan-bombee",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（武汉站） （武汉大学）",
+      "series": "ICPC",
+      "date": "2009-11-01",
+      "location": "武汉",
+      "team": "Bombee",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "银牌",
+      "rank": "27 / 124",
+      "overallRank": "33 / 132",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 武汉站比赛页",
+        "url": "https://icpc.global/regionals/finder/Wuhan-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 武汉站比赛页",
+          "url": "https://icpc.global/regionals/finder/Wuhan-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        },
+        {
+          "name": "RankLand 2009 武汉站历史榜单",
+          "url": "https://rl.algoux.cn/ranklist/icpc2009wuhan"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-505:dlut:bombee",
+      "externalContestId": "icpc2009wuhan",
+      "externalTeamId": "Dalian University of Technology:Bombee",
+      "archive": {
+        "officialContestId": 505,
+        "officialSiteId": 2397,
+        "officialContestPage": "https://icpc.global/regionals/finder/Wuhan-2010",
+        "officialResultCategory": "Silver Medal",
+        "normalizedMedal": "银牌",
+        "rawSchoolAward": "银奖",
+        "teamRank": 27,
+        "officialTotal": 124,
+        "overallRank": 33,
+        "totalRows": 132,
+        "problemsSolved": 4,
+        "penalty": 436,
+        "scoreboardEvidence": "https://rl.algoux.cn/ranklist/icpc2009wuhan",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "evidenceNote": "RankLand 榜单中本校唯一记录为 Bombee；校内汇总给出本站唯一一组名单及银奖，因此可以对应。",
+        "rawTeam": "Bombee",
+        "rawMembers": ["黄宏韬", "周晨扬", "雷思宇"]
+      },
+      "suggestedMembers": ["黄宏韬", "周晨扬", "雷思宇"]
+    },
+    {
+      "id": "icpc-official-2009-hefei-huang-hongtao",
+      "event": "第34届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（合肥站） （中国科学技术大学）",
+      "series": "ICPC",
+      "date": "2009-10-11",
+      "location": "合肥",
+      "team": "大连理工大学（黄宏韬队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铜牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "ICPC Global 2009 合肥站比赛页",
+        "url": "https://icpc.global/regionals/finder/Hefei-2010"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2009 合肥站比赛页",
+          "url": "https://icpc.global/regionals/finder/Hefei-2010"
+        },
+        {
+          "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
+          "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "icpc-global-496:dlut:huang-hongtao-zhou-chenyang-lei-siyu",
+      "externalContestId": "icpc2009hefei",
+      "externalTeamId": "Dalian University of Technology:roster-huang-hongtao-zhou-chenyang-lei-siyu",
+      "archive": {
+        "officialContestId": 496,
+        "officialSiteId": 2349,
+        "officialContestPage": "https://icpc.global/regionals/finder/Hefei-2010",
+        "officialResultCategory": "Bronze Medal",
+        "normalizedMedal": "铜牌",
+        "rawSchoolAward": "铜奖",
+        "evidenceNote": "ICPC Global 确认本站属于 2009 赛季且现场赛日期为 2009-10-11；成员和奖项来自校内汇总。虽与武汉站名单相同，但没有可靠证据证明队名也相同，故队名与名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
+        "rawTeam": null,
+        "rawMembers": ["黄宏韬", "周晨扬", "雷思宇"]
+      },
+      "suggestedMembers": ["黄宏韬", "周晨扬", "雷思宇"]
+    }
+  ]
+}

@@ -39,7 +39,7 @@ def contest_key(record: dict) -> tuple[str, str, str] | None:
     if re.search(r"总决赛|final", text, re.I):
         region = "总决赛"
     else:
-        region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "成都", "合肥", "南阳", "桂林", "吉林",
+        region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "成都", "合肥", "宁波", "南阳", "桂林", "吉林",
                                         "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州", "沈阳", "南京",
                                         "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "徐州", "乌鲁木齐") if name in text), None)
         if not region:
@@ -278,20 +278,40 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
                 raise ValueError("Official source identity collides with an unrelated honor")
             if not dry_run:
                 honor_id = database._upsert_honor(connection, {**record, "members": [], "memberDetails": []})
-                connection.execute("INSERT INTO honor_roster_reviews(honor_id,batch_id,expected_members,school,original_school,archive_json,suggested_members_json) VALUES (?,?,?,?,?,?,?)",
-                                   (honor_id, batch["batchId"], record.get("expectedMembers", 3), record["school"], record.get("originalSchool", ""),
-                                    json.dumps(record.get("archive", {}), ensure_ascii=False), json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)))
             existing.append({**record, "members": []})
         honor_id = outcome["honorId"]
         fill_medal = status == "merged" and not target.get("medal") and record.get("medal")
+        fill_location = status == "merged" and not target.get("location") and record.get("location")
         if fill_medal:
             target["medal"] = record["medal"]
+        if fill_location:
+            target["location"] = record["location"]
         if not dry_run:
             if fill_medal:
                 connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
                                    (record["medal"], honor_id))
+            if fill_location:
+                connection.execute("UPDATE honors SET location=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND location=''",
+                                   (record["location"], honor_id))
+            # A later official source can identify the roster of an existing
+            # result. Keep it reviewable without replacing confirmed members.
+            needs_roster_review = status == "added" or (
+                status == "merged" and record.get("suggestedMembers") and not target.get("members")
+            )
+            if needs_roster_review:
+                connection.execute(
+                    "INSERT INTO honor_roster_reviews(honor_id,batch_id,expected_members,school,original_school,archive_json,suggested_members_json) "
+                    "VALUES (?,?,?,?,?,?,?) ON CONFLICT(honor_id) DO UPDATE SET "
+                    "batch_id=excluded.batch_id,expected_members=excluded.expected_members,school=excluded.school,"
+                    "original_school=excluded.original_school,archive_json=excluded.archive_json,"
+                    "suggested_members_json=excluded.suggested_members_json "
+                    "WHERE honor_roster_reviews.confirmed_at IS NULL "
+                    "AND honor_roster_reviews.suggested_members_json IN ('', '[]')",
+                    (honor_id, batch["batchId"], record.get("expectedMembers", 3), record["school"], record.get("originalSchool", ""),
+                     json.dumps(record.get("archive", {}), ensure_ascii=False), json.dumps(record.get("suggestedMembers", []), ensure_ascii=False)),
+                )
             # Archived evidence persists across public snapshot refreshes. Never
-            # replace known fields or the confirmed roster; only fill a missing award.
+            # replace known fields or the confirmed roster; only fill missing facts.
             for source in database._honor_sources(record):
                 source_id = database._source(connection, source)
                 connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role) VALUES (?,?,'archive')", (honor_id, source_id))
