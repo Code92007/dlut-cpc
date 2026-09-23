@@ -9,6 +9,38 @@
       "removeHandles": ["Lance_J"]
     }
   ],
+  "rosterCorrections": [
+    {
+      "id": "ccpc-2015-nanyang-excalibur-v1",
+      "honorId": "rankland-09f023fcdc3a926331bf",
+      "members": [
+        "许思航",
+        "邹家树",
+        "刘庆周"
+      ],
+      "source": {
+        "name": "CCPC 官方参赛队伍信息",
+        "url": "https://ccpc.io/post/78",
+        "kind": "public",
+        "priority": 80
+      }
+    },
+    {
+      "id": "ccpc-2015-nanyang-dream-v1",
+      "honorId": "rankland-c3f6dee6b9ed1c25e0b9",
+      "members": [
+        "马少楠",
+        "熊昆",
+        "刘小坤"
+      ],
+      "source": {
+        "name": "CCPC 官方参赛队伍信息",
+        "url": "https://ccpc.io/post/78",
+        "kind": "public",
+        "priority": 80
+      }
+    }
+  ],
   "accountBindings": [
     {
       "name": "徐昊天",
@@ -551,7 +583,7 @@
   ],
   "meta": {
     "school": "大连理工大学",
-    "updatedAt": "2026-09-21",
+    "updatedAt": "2026-09-23",
     "bestRank": 11,
     "verifiedTeams": 8,
     "scoreFormula": "金牌 10 分，银牌 6 分，铜牌 3 分",

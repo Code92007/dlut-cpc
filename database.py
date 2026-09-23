@@ -783,6 +783,38 @@ class Database:
         for batch in site.get("officialImports", []):
             from official_imports import merge_batch
             merge_batch(self, connection, batch)
+        for correction in site.get("rosterCorrections", []):
+            correction_id = correction.get("id")
+            honor_id = correction.get("honorId")
+            if not isinstance(correction_id, str) or not correction_id or len(correction_id) > 150:
+                raise ValueError("Invalid roster correction ID")
+            if not isinstance(honor_id, str) or not honor_id:
+                raise ValueError("Invalid roster correction honor ID")
+            marker = f"roster_correction:{correction_id}"
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            if not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
+                raise ValueError(f"Roster correction honor does not exist: {honor_id}")
+            existing = connection.execute(
+                "SELECT m.name FROM honor_members hm JOIN members m ON m.id=hm.member_id "
+                "WHERE hm.honor_id=? ORDER BY hm.position, m.id",
+                (honor_id,),
+            ).fetchall()
+            status = "preserved-existing"
+            if not existing:
+                source = correction.get("source")
+                self._confirm_honor_members(connection, honor_id, correction.get("members"), source)
+                source_id = self._source(connection, source, manual=True)
+                connection.execute(
+                    "INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role,is_manual) "
+                    "VALUES (?,?,'roster',1)",
+                    (honor_id, source_id),
+                )
+                status = "applied"
+            connection.execute(
+                "INSERT INTO metadata(key, value) VALUES (?, ?)",
+                (marker, json.dumps({"honorId": honor_id, "status": status}, ensure_ascii=False)),
+            )
         connection.execute(
             "INSERT INTO metadata(key, value) VALUES ('data_updated_at', ?) "
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
@@ -1395,6 +1427,7 @@ class Database:
         result.pop("historicalImports", None)
         result.pop("officialImports", None)
         result.pop("accountCorrections", None)
+        result.pop("rosterCorrections", None)
         result.pop("accountBindings", None)
         with self.connect() as connection:
             honors = self._honors_payload(connection)
