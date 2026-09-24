@@ -97,9 +97,17 @@ class RosterCorrectionTests(unittest.TestCase):
             ).fetchone()[0])
         self.assertEqual(value["status"], "preserved-existing")
 
-    def test_real_seed_targets_only_the_two_awarded_2015_teams(self):
+    def test_real_seed_targets_the_verified_2010_and_2015_teams(self):
         seed = load_seed_file(ROOT / "data/site.json")
         corrections = {item["honorId"]: item for item in seed["rosterCorrections"]}
+        self.assertEqual(
+            corrections["rankland-13536b6727b5c8344ba6"]["members"],
+            ["孙崇林", "王丰田", "裴立"],
+        )
+        self.assertEqual(
+            corrections["rankland-7d7c45a2270fcbfcd656"]["members"],
+            ["刘彬", "冷骞", "崔文锋"],
+        )
         self.assertEqual(
             corrections["rankland-09f023fcdc3a926331bf"]["members"],
             ["许思航", "邹家树", "刘庆周"],
@@ -108,7 +116,7 @@ class RosterCorrectionTests(unittest.TestCase):
             corrections["rankland-c3f6dee6b9ed1c25e0b9"]["members"],
             ["马少楠", "熊昆", "刘小坤"],
         )
-        self.assertEqual(len(corrections), 2)
+        self.assertEqual(len(corrections), 4)
 
 
 if __name__ == "__main__":

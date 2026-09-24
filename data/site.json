@@ -11,6 +11,36 @@
   ],
   "rosterCorrections": [
     {
+      "id": "icpc-2010-chengdu-dlut-phoebus-v1",
+      "honorId": "rankland-13536b6727b5c8344ba6",
+      "members": [
+        "孙崇林",
+        "王丰田",
+        "裴立"
+      ],
+      "source": {
+        "name": "大连理工大学 2010 年科技竞赛获奖统计（公开预览）",
+        "url": "https://max.book118.com/html/2014/1118/10350475.shtm",
+        "kind": "public",
+        "priority": 70
+      }
+    },
+    {
+      "id": "icpc-2010-chengdu-dlut-real-power-v1",
+      "honorId": "rankland-7d7c45a2270fcbfcd656",
+      "members": [
+        "刘彬",
+        "冷骞",
+        "崔文锋"
+      ],
+      "source": {
+        "name": "大连理工大学 2010 年科技竞赛获奖统计（公开预览）",
+        "url": "https://max.book118.com/html/2014/1118/10350475.shtm",
+        "kind": "public",
+        "priority": 70
+      }
+    },
+    {
       "id": "ccpc-2015-nanyang-excalibur-v1",
       "honorId": "rankland-09f023fcdc3a926331bf",
       "members": [
