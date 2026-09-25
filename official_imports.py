@@ -21,6 +21,7 @@ PROVIDER_SOURCE_ORIGINS = {
         "https://icpc.global/",
         "https://web.archive.org/",
         "https://acm.sdut.edu.cn/acmss/icpc/",
+        "https://chuangxin.dlut.edu.cn/",
     ),
     "rankland": ("https://rl.algoux.cn/",),
 }

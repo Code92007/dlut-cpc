@@ -1,0 +1,85 @@
+{
+  "batchId": "icpc-official-dlut-2006-xian-recovery-20260924-v1",
+  "provider": "icpc-official",
+  "fetchedAt": "2026-09-24T00:00:00+08:00",
+  "source": {
+    "name": "大连理工大学 2006 ACM-ICPC 西安站获奖记录复核",
+    "url": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm"
+  },
+  "contests": [
+    {
+      "key": "icpc2006xian",
+      "officialContestId": 1284,
+      "officialSiteId": 5182,
+      "title": "The 2006 ACM Asia Programming Contest - Xian",
+      "date": "2006-12-17",
+      "host": "Xidian University",
+      "url": "https://icpc.global/regionals/finder/Xian-2007",
+      "originalStandingsUrl": "http://acm.xidian.edu.cn/Standings.htm",
+      "awards": 1,
+      "notes": "ICPC Global 保留了赛事和现场站点元数据，但未保留结果明细；西安电子科技大学旧榜单链接已经失效，互联网档案馆也没有该页快照。队名和名次待考。"
+    }
+  ],
+  "honors": [
+    {
+      "id": "icpc-official-2006-xian-liu-jiong",
+      "event": "第31届 ACM-ICPC 国际大学生程序设计竞赛亚洲区域赛（西安站） （西安电子科技大学）",
+      "series": "ICPC",
+      "date": "2006-12-17",
+      "location": "西安",
+      "team": "大连理工大学（刘炯队，原队名待考）",
+      "school": "大连理工大学",
+      "originalSchool": "大连理工大学软件学院",
+      "members": [],
+      "expectedMembers": 3,
+      "medal": "铁牌",
+      "rank": "",
+      "overallRank": "",
+      "official": true,
+      "source": {
+        "name": "大连理工大学官方报道（2006 西安站）",
+        "url": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm"
+      },
+      "sources": [
+        {
+          "name": "ICPC Global 2006 西安站比赛页",
+          "url": "https://icpc.global/regionals/finder/Xian-2007"
+        },
+        {
+          "name": "大连理工大学官方报道（2006 西安站）",
+          "url": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm"
+        },
+        {
+          "name": "大工新闻网 2007 成都站回顾",
+          "url": "https://chuangxin.dlut.edu.cn/info/1017/1924.htm"
+        }
+      ],
+      "externalProvider": "icpc-official",
+      "externalAwardId": "xian-2006:dlut:liu-jiong-zhang-yue-zhang-jianfeng",
+      "externalContestId": "icpc2006xian",
+      "externalTeamId": "Dalian University of Technology:roster-liu-jiong-zhang-yue-zhang-jianfeng",
+      "archive": {
+        "officialContestId": 1284,
+        "officialSiteId": 5182,
+        "officialContestPage": "https://icpc.global/regionals/finder/Xian-2007",
+        "originalStandingsUrl": "http://acm.xidian.edu.cn/Standings.htm",
+        "rawSchoolAward": "优胜奖",
+        "normalizedMedal": "铁牌",
+        "evidenceNote": "同期校内报道明确记载三名队员于 2006-12-17 在西安获得第31届 ACM/ICPC 赛会优胜奖；次年校内报道再次称其为第31届西安赛区优胜奖。按项目口径映射为铁牌。官方旧榜单未恢复，队名和名次待考。",
+        "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm",
+        "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm",
+        "rawTeam": null,
+        "rawMembers": [
+          "刘炯",
+          "张岳",
+          "张剑峰"
+        ]
+      },
+      "suggestedMembers": [
+        "刘炯",
+        "张岳",
+        "张剑峰"
+      ]
+    }
+  ]
+}
