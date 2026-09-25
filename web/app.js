@@ -730,6 +730,8 @@ function adminRosterPage(data) {
 function adminResourcePage() {
   if (!state.adminResources) return '<div class="empty-state">正在加载资料索引</div>';
   const items = state.adminResources.items || [];
+  const categoryCounts = items.reduce((counts, item) => counts.set(item.category, (counts.get(item.category) || 0) + 1), new Map());
+  const categories = [...categoryCounts].sort(([left], [right]) => left.localeCompare(right, 'zh-CN'));
   const editing = items.find(item => item.id === state.adminResourceEdit);
   const kind = editing?.resourceType || state.adminResourceKind;
   const pdfRepository = state.adminResources.pdfRepository || {};
@@ -746,6 +748,12 @@ function adminResourcePage() {
       <input name="pdfPath" maxlength="500" value="${value('pdfPath')}" placeholder="resources/pdfs/graph/network-flow.pdf" ${kind === 'pdf' ? 'required' : ''}>
       <small>${pdfRepository.repositoryUrl ? `<a href="${escapeHtml(pdfRepository.repositoryUrl)}" target="_blank" rel="noreferrer">${escapeHtml(pdfRepository.repository)} · ${escapeHtml(pdfRepository.branch)}</a>` : 'GitHub LFS'}，仅保存仓库路径。</small>
     </label>`;
+  const categoryManager = categories.length ? `<section class="admin-recent"><h2>分类管理</h2>
+    <form id="adminResourceCategoryRename" class="admin-form"><div class="admin-fields">
+      <label>现有分类<select name="oldName" required>${categories.map(([name, count]) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}（${count}）</option>`).join('')}</select></label>
+      <label>新名称<input name="newName" required maxlength="80"></label>
+    </div><button class="admin-button">重命名</button></form></section>` : '';
+  const suggestedCategories = [...new Set(['算法与数据结构', '数学', '图论', '动态规划', '字符串', '竞赛经验', '题单', '工程与工具', '其他', ...categories.map(([name]) => name)])];
   return `<form id="adminResource" class="admin-form resource-admin-form"><h2>${editing ? '编辑资料' : '添加资料'}</h2>
     <div class="admin-fields"><label>标题<input name="title" required maxlength="200" value="${value('title')}"></label>
       <label>类型<select name="resourceType" ${editing?.resourceType === 'pdf' ? 'disabled' : ''}>${Object.entries(resourceTypeLabels).map(([type, label]) => `<option value="${type}" ${kind === type ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
@@ -757,7 +765,8 @@ function adminResourcePage() {
       <label id="resourceUrlField" class="wide" ${kind === 'pdf' ? 'hidden' : ''}>资料链接<input name="url" type="url" maxlength="2000" value="${value('url')}" ${kind === 'pdf' ? '' : 'required'} placeholder="https://github.com/..."></label>
       <label class="admin-checkbox wide"><input name="published" type="checkbox" ${editing?.published === false ? '' : 'checked'}>立即公开</label>
     </div><button id="adminResourceSave" class="admin-button">${editing ? '保存修改' : '保存资料'}</button>${editing ? '<button id="adminCancelResourceEdit" type="button" class="admin-button secondary">取消</button>' : ''}</form>
-    <datalist id="resourceCategories"><option>算法与数据结构</option><option>数学</option><option>图论</option><option>动态规划</option><option>字符串</option><option>竞赛经验</option><option>题单</option><option>工程与工具</option><option>其他</option></datalist>
+    <datalist id="resourceCategories">${suggestedCategories.map(name => `<option value="${escapeHtml(name)}"></option>`).join('')}</datalist>
+    ${categoryManager}
     <section class="admin-recent"><h2>资料索引</h2><div class="data-table-wrap"><table class="data-table resource-admin-table"><thead><tr><th>资料</th><th>类型</th><th>分类</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="table-empty">暂无资料</td></tr>'}</tbody></table></div></section>`;
 }
 
@@ -857,6 +866,7 @@ async function adminRequest(path, body) {
 
 function bindAdminEvents() {
   const resourceForm = document.querySelector('#adminResource');
+  const categoryRenameForm = document.querySelector('#adminResourceCategoryRename');
   const syncResourceFields = () => {
     if (!resourceForm) return;
     const kind = resourceForm.querySelector('[name="resourceType"]').value;
@@ -914,6 +924,25 @@ function bindAdminEvents() {
       renderRoute('admin');
     }
   }));
+  categoryRenameForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button');
+    const values = Object.fromEntries(new FormData(form));
+    button.disabled = true;
+    state.adminMessage = '';
+    try {
+      const result = await adminRequest('resource-category-rename', {oldName: values.oldName, newName: values.newName});
+      if (state.resourceCategory === values.oldName) state.resourceCategory = values.newName.trim();
+      state.adminMessage = `分类已重命名 · ${result.updated} 份资料`;
+      state.adminError = false;
+      await Promise.all([loadAdminResources(), loadResources()]);
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+      renderRoute('admin');
+    }
+  });
   resourceForm?.addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;

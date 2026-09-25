@@ -309,6 +309,11 @@ class SiteHandler(BaseHTTPRequestHandler):
                         raise ValueError("资源不存在")
                 saved_id = database.save_resource(resource, resource_id=resource_id, created_by=session["username"])
                 self._send_json({"ok": True, "resourceId": saved_id}, HTTPStatus.CREATED if resource_id is None else HTTPStatus.OK)
+            elif path == "/api/admin/resource-category-rename":
+                old_name = self._text(body, "oldName", 80, required=True)
+                new_name = self._text(body, "newName", 80, required=True)
+                updated = database.rename_resource_category(old_name, new_name)
+                self._send_json({"ok": True, "updated": updated})
             elif path == "/api/admin/resource-delete":
                 resource_id = self._optional_id(body.get("resourceId"), "资源 ID", required=True)
                 resource = database.get_resource(resource_id, include_drafts=True)

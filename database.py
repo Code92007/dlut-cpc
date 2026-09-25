@@ -1385,6 +1385,18 @@ class Database:
             ).fetchone()
         return self._resource_payload(row, include_private=include_drafts) if row else None
 
+    def rename_resource_category(self, old_name: str, new_name: str) -> int:
+        if old_name == new_name:
+            raise ValueError("新分类名称与原分类相同")
+        with self.connect() as connection:
+            cursor = connection.execute(
+                "UPDATE resources SET category=?, updated_at=CURRENT_TIMESTAMP WHERE category=?",
+                (new_name, old_name),
+            )
+            if not cursor.rowcount:
+                raise ValueError("原分类不存在")
+            return int(cursor.rowcount)
+
     def delete_resource(self, resource_id: int) -> dict:
         with self.connect() as connection:
             row = connection.execute("SELECT * FROM resources WHERE id=?", (resource_id,)).fetchone()

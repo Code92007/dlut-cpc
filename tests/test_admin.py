@@ -56,7 +56,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource", "resource-delete", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource", "resource-category-rename", "resource-delete", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -99,6 +99,34 @@ class AdminTests(unittest.TestCase):
         self.assertEqual(self.request("resource-delete", {"resourceId": resource_id}, cookie=cookie)["status"], 403)
         self.assertEqual(self.request("resource-delete", {"resourceId": resource_id}, cookie=cookie, csrf=csrf)["status"], 200)
         self.assertEqual(self.request("/api/resources", method="GET")["body"]["items"], [])
+
+    def test_admin_renames_resource_category_for_published_items_and_drafts(self):
+        cookie, csrf = self.login()
+        common = {"resourceType": "link", "difficulty": "all", "description": "", "tags": [],
+                  "url": "https://example.com/resource"}
+        for title, category, published in (("公开旧分类", "旧分类", True), ("草稿旧分类", "旧分类", False),
+                                           ("已有新分类", "新分类", True)):
+            self.database.save_resource({**common, "title": title, "category": category, "published": published})
+
+        self.assertEqual(self.request("resource-category-rename", {"oldName": "旧分类", "newName": "新分类"},
+                                      cookie=cookie)["status"], 403)
+        renamed = self.request("resource-category-rename", {"oldName": " 旧分类 ", "newName": " 新分类 "},
+                               cookie=cookie, csrf=csrf)
+        self.assertEqual(renamed["status"], 200, renamed)
+        self.assertEqual(renamed["body"]["updated"], 2)
+
+        admin_items = self.request("/api/admin/resources", cookie=cookie, method="GET")["body"]["items"]
+        self.assertEqual([item["category"] for item in admin_items], ["新分类", "新分类", "新分类"])
+        public = self.request("/api/resources", method="GET")["body"]
+        self.assertEqual(public["categories"], [{"name": "新分类", "count": 2}])
+        self.assertEqual(len(public["items"]), 2)
+
+        for body in ({"oldName": "新分类", "newName": "新分类"},
+                     {"oldName": "不存在", "newName": "其他"},
+                     {"oldName": "新分类", "newName": " "}):
+            with self.subTest(body=body):
+                self.assertEqual(self.request("resource-category-rename", body, cookie=cookie, csrf=csrf)["status"], 400)
+        self.assertTrue(all(item["category"] == "新分类" for item in self.database.list_resources(include_drafts=True)))
 
     def test_public_pdf_uses_github_lfs_redirect_and_drafts_stay_closed(self):
         cookie, csrf = self.login()
