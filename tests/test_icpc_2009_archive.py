@@ -1,3 +1,4 @@
+import copy
 import json
 import tempfile
 import unittest
@@ -57,7 +58,7 @@ class ICPC2009ArchiveTests(unittest.TestCase):
         self.assertIn("大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
                       {source["name"] for source in wuhan[0]["sources"]})
 
-    def test_rosters_preserve_source_spelling_and_unknown_team_names(self):
+    def test_rosters_preserve_source_spelling_and_resolved_team_names(self):
         records = {record["id"]: record for record in self.batch["honors"]}
         honorable = records["icpc-official-2009-harbin-chen-feng"]
         self.assertEqual(honorable["suggestedMembers"], ["陈沣", "杨凯", "张萌"])
@@ -65,9 +66,33 @@ class ICPC2009ArchiveTests(unittest.TestCase):
         self.assertEqual(honorable["medal"], "铁牌")
 
         hefei = records["icpc-official-2009-hefei-huang-hongtao"]
-        self.assertIn("原队名待考", hefei["team"])
+        self.assertEqual(hefei["team"], "Bombee")
         self.assertEqual(hefei["rank"], "")
-        self.assertNotEqual(hefei["team"], "Bombee")
+        self.assertEqual(hefei["archive"]["rawTeam"], "Bombee")
+        self.assertEqual(hefei["source"]["url"],
+                         "https://icpc.global/regionals/finder/Hefei-2010/standings")
+
+    def test_v2_corrects_hefei_team_in_an_existing_v1_database(self):
+        old_batch = copy.deepcopy(self.batch)
+        old_batch["batchId"] = "icpc-official-dlut-2009-recovery-20260922-v1"
+        hefei = next(record for record in old_batch["honors"] if record["location"] == "合肥")
+        hefei["team"] = "大连理工大学（黄宏韬队，原队名待考）"
+        hefei["externalTeamId"] = "Dalian University of Technology:roster-huang-hongtao-zhou-chenyang-lei-siyu"
+        hefei.pop("authoritativeCorrections")
+        hefei["archive"]["rawTeam"] = None
+
+        self.database.merge_official_batch(old_batch)
+        report = self.database.merge_official_batch(self.batch)
+        self.assertEqual((report["added"], report["merged"], report["conflict"]), (0, 7, 0))
+        correction = next(item for item in report["records"] if item["date"] == "2009-10-11")
+        self.assertEqual(correction["correctedFields"], ["team"])
+
+        payload = self.database.payload({"meta": {}})
+        hefei_result = next(item for item in payload["honors"] if item["location"] == "合肥")
+        self.assertEqual(hefei_result["team"], "Bombee")
+        self.assertEqual(hefei_result["externalTeamId"], "Dalian University of Technology:Bombee")
+        self.assertEqual(hefei_result["source"]["url"],
+                         "https://icpc.global/regionals/finder/Hefei-2010/standings")
 
     def test_seed_loader_and_ningbo_contest_key_include_the_archive(self):
         seed = load_seed_file(ROOT / "data/site.json")

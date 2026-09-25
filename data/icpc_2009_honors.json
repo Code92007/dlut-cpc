@@ -1,7 +1,7 @@
 {
-  "batchId": "icpc-official-dlut-2009-recovery-20260922-v1",
+  "batchId": "icpc-official-dlut-2009-recovery-20260924-v2",
   "provider": "icpc-official",
-  "fetchedAt": "2026-09-22T00:00:00+08:00",
+  "fetchedAt": "2026-09-24T00:00:00+08:00",
   "source": {
     "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录复核",
     "url": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm"
@@ -26,7 +26,8 @@
       "date": "2009-10-11",
       "host": "University of Science and Technology of China",
       "url": "https://icpc.global/regionals/finder/Hefei-2010",
-      "awards": 1
+      "awards": 1,
+      "notes": "ICPC Global 官方榜单将大连理工大学参赛队列为 Bombee。"
     },
     {
       "key": "icpc2009ningbo",
@@ -371,7 +372,7 @@
       "series": "ICPC",
       "date": "2009-10-11",
       "location": "合肥",
-      "team": "大连理工大学（黄宏韬队，原队名待考）",
+      "team": "Bombee",
       "school": "大连理工大学",
       "originalSchool": "大连理工大学",
       "members": [],
@@ -381,13 +382,13 @@
       "overallRank": "",
       "official": true,
       "source": {
-        "name": "ICPC Global 2009 合肥站比赛页",
-        "url": "https://icpc.global/regionals/finder/Hefei-2010"
+        "name": "ICPC Global 2009 合肥站官方榜单",
+        "url": "https://icpc.global/regionals/finder/Hefei-2010/standings"
       },
       "sources": [
         {
-          "name": "ICPC Global 2009 合肥站比赛页",
-          "url": "https://icpc.global/regionals/finder/Hefei-2010"
+          "name": "ICPC Global 2009 合肥站官方榜单",
+          "url": "https://icpc.global/regionals/finder/Hefei-2010/standings"
         },
         {
           "name": "大连理工大学 2009 ACM-ICPC 亚洲区域赛获奖记录",
@@ -397,18 +398,20 @@
       "externalProvider": "icpc-official",
       "externalAwardId": "icpc-global-496:dlut:huang-hongtao-zhou-chenyang-lei-siyu",
       "externalContestId": "icpc2009hefei",
-      "externalTeamId": "Dalian University of Technology:roster-huang-hongtao-zhou-chenyang-lei-siyu",
+      "externalTeamId": "Dalian University of Technology:Bombee",
+      "authoritativeCorrections": ["team"],
       "archive": {
         "officialContestId": 496,
         "officialSiteId": 2349,
-        "officialContestPage": "https://icpc.global/regionals/finder/Hefei-2010",
+        "officialContestPage": "https://icpc.global/regionals/finder/Hefei-2010/standings",
         "officialResultCategory": "Bronze Medal",
         "normalizedMedal": "铜牌",
         "rawSchoolAward": "铜奖",
-        "evidenceNote": "ICPC Global 确认本站属于 2009 赛季且现场赛日期为 2009-10-11；成员和奖项来自校内汇总。虽与武汉站名单相同，但没有可靠证据证明队名也相同，故队名与名次待考。",
+        "scoreboardEvidence": "https://icpc.global/regionals/finder/Hefei-2010/standings",
+        "evidenceNote": "ICPC Global 官方榜单将本校参赛队列为 Bombee；成员和铜奖来自校内汇总，名次仍待考。",
         "memberEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
         "awardEvidence": "https://chuangxin.dlut.edu.cn/info/1035/3891.htm",
-        "rawTeam": null,
+        "rawTeam": "Bombee",
         "rawMembers": ["黄宏韬", "周晨扬", "雷思宇"]
       },
       "suggestedMembers": ["黄宏韬", "周晨扬", "雷思宇"]

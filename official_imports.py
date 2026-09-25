@@ -238,6 +238,10 @@ def validate_batch(batch: dict) -> None:
         if identity in identities:
             raise ValueError("Duplicate source identity in official batch")
         identities.add(identity)
+        corrections = record.get("authoritativeCorrections", [])
+        if (not isinstance(corrections, list) or len(corrections) > 1
+                or any(field != "team" for field in corrections)):
+            raise ValueError("Invalid authoritative correction")
         if type(record.get("expectedMembers", 3)) is not int or not 1 <= record.get("expectedMembers", 3) <= 3:
             raise ValueError("Invalid official team size")
         if not record.get("source", {}).get("url", "").startswith(PROVIDER_SOURCE_ORIGINS[provider]):
@@ -258,14 +262,19 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
     for record in batch.get("honors", []):
         identity = connection.execute("SELECT honor_id FROM honor_source_records WHERE provider=? AND external_id=?",
                                       (record["externalProvider"], record["externalAwardId"])).fetchone()
+        matched_identity = identity is not None
         if identity:
             target = next(item for item in existing if item["id"] == identity["honor_id"])
             status, warnings = "merged", []
         else:
             status, target, warnings = match_result(record, existing)
+        corrected_fields = []
+        if (status == "merged" and matched_identity and "team" in record.get("authoritativeCorrections", [])
+                and target.get("team") != record["team"]):
+            corrected_fields.append("team")
         outcome = {"status": status, "sourceId": record["externalAwardId"], "honorId": target["id"] if target else record["id"],
                    "date": record["date"], "event": record["event"], "team": record["team"], "medal": record["medal"],
-                   "school": record["school"], "warnings": warnings}
+                   "school": record["school"], "warnings": warnings, "correctedFields": corrected_fields}
         report[status] += 1
         report["records"].append(outcome)
         if status == "conflict":
@@ -286,6 +295,8 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
             target["medal"] = record["medal"]
         if fill_location:
             target["location"] = record["location"]
+        if corrected_fields:
+            target["team"] = record["team"]
         if not dry_run:
             if fill_medal:
                 connection.execute("UPDATE honors SET medal=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND medal=''",
@@ -293,6 +304,14 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
             if fill_location:
                 connection.execute("UPDATE honors SET location=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND location=''",
                                    (record["location"], honor_id))
+            if corrected_fields:
+                correction_source_id = database._source(connection, record["source"])
+                connection.execute(
+                    "UPDATE honors SET team=?, normalized_team=?, external_team_id=COALESCE(?, external_team_id), "
+                    "primary_source_id=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                    (record["team"], database._normalize_team(record["team"]), record.get("externalTeamId"),
+                     correction_source_id, honor_id),
+                )
             # A later official source can identify the roster of an existing
             # result. Keep it reviewable without replacing confirmed members.
             needs_roster_review = status == "added" or (
@@ -317,6 +336,17 @@ def merge_batch(database, connection, batch: dict, *, dry_run: bool = False) -> 
                 connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role) VALUES (?,?,'archive')", (honor_id, source_id))
             connection.execute("INSERT OR IGNORE INTO honor_source_records(provider,external_id,honor_id,record_json) VALUES (?,?,?,?)",
                                (record["externalProvider"], record["externalAwardId"], honor_id, json.dumps(record, ensure_ascii=False)))
+            if matched_identity:
+                connection.execute(
+                    "UPDATE honor_source_records SET record_json=? WHERE provider=? AND external_id=? AND honor_id=?",
+                    (json.dumps(record, ensure_ascii=False), record["externalProvider"], record["externalAwardId"], honor_id),
+                )
+            if corrected_fields and record.get("archive"):
+                connection.execute(
+                    "UPDATE honor_roster_reviews SET batch_id=?, archive_json=? "
+                    "WHERE honor_id=? AND confirmed_at IS NULL",
+                    (batch["batchId"], json.dumps(record["archive"], ensure_ascii=False), honor_id),
+                )
     if not dry_run:
         connection.execute("INSERT INTO metadata(key,value) VALUES (?,?)", (marker, json.dumps(report, ensure_ascii=False)))
     return report
