@@ -76,6 +76,15 @@ class HistoricalTests(unittest.TestCase):
         self.assertEqual(records[1]["school"], "大连理工大学城市学院")
         self.assertTrue(all(not r["members"] for r in records))
 
+    def test_urumqi_regional_uses_normalized_contest_title(self):
+        state = ranklist()
+        state["ranklistData"]["info"]["uniqueKey"] = "icpc2017urumchi"
+        state["ranklistData"]["srk"]["contest"]["title"] = "ICPC xju onsite"
+        records, audit = parse_ranklist(page(state), convert=lambda value: value)
+        expected = "The 2017 ACM-ICPC Asia Urumqi Regional Contest （新疆大学）"
+        self.assertEqual(audit["title"], expected)
+        self.assertTrue(all(record["event"] == expected for record in records))
+
     def test_excludes_province_invitation_prelim_and_post2019(self):
         for title in ("2018 ICPC Invitational", "2018 CCPC 省赛", "2018 ICPC 网络预选赛"):
             state = ranklist()

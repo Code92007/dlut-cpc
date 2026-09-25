@@ -29,6 +29,9 @@ CCPC_REGIONAL_KEYS = {
 }
 # The official collection names this regional contest only "ICPC xju onsite".
 ICPC_REGIONAL_KEYS = {"icpc2017urumchi"}
+CONTEST_TITLE_OVERRIDES = {
+    "icpc2017urumchi": "The 2017 ACM-ICPC Asia Urumqi Regional Contest （新疆大学）",
+}
 
 class StateParser(HTMLParser):
     def __init__(self) -> None:
@@ -103,6 +106,7 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
     key = info["uniqueKey"]
     titles = srk["contest"].get("title", info["name"])
     title = titles.get("zh-CN") or titles.get("fallback") if isinstance(titles, dict) else titles
+    title = CONTEST_TITLE_OVERRIDES.get(key, title)
     all_titles = " ".join(str(value) for value in titles.values()) if isinstance(titles, dict) else str(titles)
     date = dt.datetime.fromisoformat(srk["contest"]["startAt"].replace("Z", "+00:00")).date().isoformat()
     audit = {"key": key, "title": title, "date": date, "url": f"{ORIGIN}/ranklist/{key}"}
