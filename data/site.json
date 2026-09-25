@@ -41,6 +41,51 @@
       }
     },
     {
+      "id": "icpc-2012-tianjin-solo-v1",
+      "honorId": "rankland-71b39051f76cb192770f",
+      "members": [
+        "孙木鑫",
+        "王琳",
+        "张璨"
+      ],
+      "source": {
+        "name": "大连理工大学教务处 2012 年科技竞赛获奖统计",
+        "url": "https://teach.dlut.edu.cn/2014/2012hjtj.doc",
+        "kind": "public",
+        "priority": 80
+      }
+    },
+    {
+      "id": "icpc-2012-tianjin-hsh-v1",
+      "honorId": "rankland-6cddf7e1f8c0f2154f86",
+      "members": [
+        "胡骏",
+        "孙崇林",
+        "洪祈泽"
+      ],
+      "source": {
+        "name": "大连理工大学教务处 2012 年科技竞赛获奖统计",
+        "url": "https://teach.dlut.edu.cn/2014/2012hjtj.doc",
+        "kind": "public",
+        "priority": 80
+      }
+    },
+    {
+      "id": "icpc-2012-chengdu-gospel-v1",
+      "honorId": "rankland-e16759d344c90d7241dc",
+      "members": [
+        "孙木鑫",
+        "王琳",
+        "张璨"
+      ],
+      "source": {
+        "name": "大连理工大学教务处 2012 年科技竞赛获奖统计",
+        "url": "https://teach.dlut.edu.cn/2014/2012hjtj.doc",
+        "kind": "public",
+        "priority": 80
+      }
+    },
+    {
       "id": "ccpc-2015-nanyang-excalibur-v1",
       "honorId": "rankland-09f023fcdc3a926331bf",
       "members": [

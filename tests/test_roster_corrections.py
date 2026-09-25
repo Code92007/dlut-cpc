@@ -97,7 +97,7 @@ class RosterCorrectionTests(unittest.TestCase):
             ).fetchone()[0])
         self.assertEqual(value["status"], "preserved-existing")
 
-    def test_real_seed_targets_the_verified_2010_and_2015_teams(self):
+    def test_real_seed_targets_the_verified_2010_2012_and_2015_teams(self):
         seed = load_seed_file(ROOT / "data/site.json")
         corrections = {item["honorId"]: item for item in seed["rosterCorrections"]}
         self.assertEqual(
@@ -108,6 +108,39 @@ class RosterCorrectionTests(unittest.TestCase):
             corrections["rankland-7d7c45a2270fcbfcd656"]["members"],
             ["刘彬", "冷骞", "崔文锋"],
         )
+        source = {
+            "name": "大连理工大学教务处 2012 年科技竞赛获奖统计",
+            "url": "https://teach.dlut.edu.cn/2014/2012hjtj.doc",
+            "kind": "public",
+            "priority": 80,
+        }
+        self.assertEqual(
+            corrections["rankland-71b39051f76cb192770f"],
+            {
+                "id": "icpc-2012-tianjin-solo-v1",
+                "honorId": "rankland-71b39051f76cb192770f",
+                "members": ["孙木鑫", "王琳", "张璨"],
+                "source": source,
+            },
+        )
+        self.assertEqual(
+            corrections["rankland-6cddf7e1f8c0f2154f86"],
+            {
+                "id": "icpc-2012-tianjin-hsh-v1",
+                "honorId": "rankland-6cddf7e1f8c0f2154f86",
+                "members": ["胡骏", "孙崇林", "洪祈泽"],
+                "source": source,
+            },
+        )
+        self.assertEqual(
+            corrections["rankland-e16759d344c90d7241dc"],
+            {
+                "id": "icpc-2012-chengdu-gospel-v1",
+                "honorId": "rankland-e16759d344c90d7241dc",
+                "members": ["孙木鑫", "王琳", "张璨"],
+                "source": source,
+            },
+        )
         self.assertEqual(
             corrections["rankland-09f023fcdc3a926331bf"]["members"],
             ["许思航", "邹家树", "刘庆周"],
@@ -116,7 +149,7 @@ class RosterCorrectionTests(unittest.TestCase):
             corrections["rankland-c3f6dee6b9ed1c25e0b9"]["members"],
             ["马少楠", "熊昆", "刘小坤"],
         )
-        self.assertEqual(len(corrections), 4)
+        self.assertEqual(len(corrections), 7)
 
 
 if __name__ == "__main__":

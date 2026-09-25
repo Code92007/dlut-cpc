@@ -8,3 +8,4 @@ data/*.tmp
 runtime/*
 !runtime/.gitkeep
 backups/
+/outputs/
