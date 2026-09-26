@@ -97,7 +97,7 @@ class RosterCorrectionTests(unittest.TestCase):
             ).fetchone()[0])
         self.assertEqual(value["status"], "preserved-existing")
 
-    def test_real_seed_targets_the_verified_2010_2012_and_2015_teams(self):
+    def test_real_seed_targets_the_verified_2010_2012_2014_and_2015_teams(self):
         seed = load_seed_file(ROOT / "data/site.json")
         corrections = {item["honorId"]: item for item in seed["rosterCorrections"]}
         self.assertEqual(
@@ -142,6 +142,20 @@ class RosterCorrectionTests(unittest.TestCase):
             },
         )
         self.assertEqual(
+            corrections["rankland-5f4d9073f152f3bb6e67"],
+            {
+                "id": "icpc-2014-beijing-temporary-variable-v1",
+                "honorId": "rankland-5f4d9073f152f3bb6e67",
+                "members": ["邵华", "刘博", "许思航"],
+                "source": {
+                    "name": "大连理工大学创新创业学院 2014 北京站银牌报道（搜索索引摘要）",
+                    "url": "http://chuangxin.dlut.edu.cn/info/1020/3113.htm",
+                    "kind": "public",
+                    "priority": 70,
+                },
+            },
+        )
+        self.assertEqual(
             corrections["rankland-09f023fcdc3a926331bf"]["members"],
             ["许思航", "邹家树", "刘庆周"],
         )
@@ -149,7 +163,7 @@ class RosterCorrectionTests(unittest.TestCase):
             corrections["rankland-c3f6dee6b9ed1c25e0b9"]["members"],
             ["马少楠", "熊昆", "刘小坤"],
         )
-        self.assertEqual(len(corrections), 7)
+        self.assertEqual(len(corrections), 8)
 
 
 if __name__ == "__main__":
