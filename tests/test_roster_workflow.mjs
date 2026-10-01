@@ -358,3 +358,35 @@ test('logout clears cached private reviews', async () => {
   assert.ok(!h.context.adminPage(seed).includes('private evidence'));
   assert.ok(h.context.adminPage(seed).includes('adminLogin'));
 });
+
+test('training portal offers all four destinations and replaces old standings', () => {
+  const h = harness('training', () => {});
+  const html = h.context.trainingPage({training: [{title: 'Old standings'}], trainingLinks: [
+    {kind: 'video', title: '<Lecture>', url: 'https://space.bilibili.com/396380763'},
+    {kind: 'oj', title: 'SSDUT OJ', url: 'https://hydro.ac/d/ssdut/'},
+  ]});
+  assert.match(html, /讲课视频/);
+  assert.match(html, /校赛与院赛/);
+  assert.match(html, /洛谷团队/);
+  assert.match(html, /https:\/\/hydro.ac\/d\/ssdut\//);
+  assert.match(html, /&lt;Lecture&gt;/);
+  assert.ok(!html.includes('Old standings'));
+});
+
+test('training admin saves cohort, ordering and hidden state with csrf', async () => {
+  const h = harness('admin', async path => response(path === '/api/site' ? seed : {items: [], ok: true}));
+  const button = element();
+  const form = element({fields: {title: 'Team', kind: 'team', url: 'https://www.luogu.com.cn/team/1',
+    cohort: '2025 级', description: '训练团队', sortOrder: '3'}, querySelector: () => button});
+  h.nodes.set('#adminTraining', form);
+  h.state().adminTrainingEdit = 7;
+  h.context.bindAdminEvents();
+  await form.handlers.submit({preventDefault() {}, currentTarget: form});
+  assert.equal(h.calls[0].path, '/api/admin/training');
+  assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+  const body = JSON.parse(h.calls[0].options.body);
+  assert.equal(body.id, 7);
+  assert.equal(body.cohort, '2025 级');
+  assert.equal(body.sortOrder, 3);
+  assert.equal(body.published, false);
+});

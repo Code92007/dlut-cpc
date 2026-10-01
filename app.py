@@ -102,6 +102,12 @@ class SiteHandler(BaseHTTPRequestHandler):
                              "username": session["username"] if session else None,
                              "csrf": session["csrf"] if session else None})
             return
+        if path == "/api/admin/training":
+            if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
+                self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
+                return
+            self._send_json({"items": Database(DATABASE_PATH).list_training_links(include_drafts=True)})
+            return
         if path == "/api/admin/resources":
             if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
                 self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
@@ -224,7 +230,9 @@ class SiteHandler(BaseHTTPRequestHandler):
                 return
             database = Database(DATABASE_PATH)
             source = {"name": f"管理员人工补录（{session['username']}）", "kind": "manual"}
-            if path == "/api/admin/member":
+            if path == "/api/admin/training":
+                self._send_json({"ok": True, "id": database.save_training_link(body)})
+            elif path == "/api/admin/member":
                 name = self._text(body, "name", 150, required=True)
                 school = self._text(body, "school", 100) or "大连理工大学"
                 from database import normalize_name

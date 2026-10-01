@@ -24,8 +24,8 @@ const state = {
   memberSchool: "all",
   memberSort: "recent",
   medalChartMode: "grouped",
-  trainingId: null,
-  trainingSeries: "all",
+  adminTraining: null,
+  adminTrainingEdit: null,
   resources: null,
   resourcesLoading: false,
   resourcesError: "",
@@ -810,12 +810,13 @@ function adminPage(data) {
   const pending = (data.pendingHonors || []).find(honor => honor.id === state.pendingId);
   forms.pending = `${pending ? `<form id="adminConfirmMembers" class="admin-form"><h2>${escapeHtml(pending.team)}</h2><p class="contest-caption">${escapeHtml(pending.date)} · ${escapeHtml(pending.event)} · ${escapeHtml(pending.school)}</p><p class="contest-caption">${sourceLink(pending.source)}${pending.suggestedMembers?.length ? ` · 榜单队员：${pending.suggestedMembers.map(escapeHtml).join('、')}` : ''}</p><input name="honorId" type="hidden" value="${escapeHtml(pending.id)}"><div class="admin-fields">${unknownMedalInput(pending)}${Array.from({length: pending.expectedMembers || 3}, (_, index) => memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, pending.suggestedMembers?.[index] || '')).join('')}</div><button class="admin-button">确认成员</button></form>` : ''}${pendingTable(data, true)}`;
   forms.resources = adminResourcePage();
+  forms.training = adminTrainingPage();
   forms.reviews = adminReviewPage();
   forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
-    ${state.adminView === 'resources' ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${['resources', 'training'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
     </tbody></table></div></section>`}</div>`;
 }
@@ -825,10 +826,12 @@ async function loadAdminSession() {
     const response = await fetch('/api/admin/session', {cache: 'no-store'});
     if (!response.ok) throw new Error('登录状态加载失败');
     state.adminSession = await response.json();
-    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources()]);
+    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources(), loadAdminTraining()]);
     else {
       state.adminReviews = null;
       state.adminResources = null;
+      state.adminTraining = null;
+      state.adminTrainingEdit = null;
       state.adminReviewsLoading = false;
       ++state.adminReviewRequest;
     }
@@ -837,6 +840,12 @@ async function loadAdminSession() {
     state.adminError = true;
   }
   if (routeFromPath() === 'admin') renderRoute('admin');
+}
+
+async function loadAdminTraining() {
+  const response = await fetch('/api/admin/training', {cache: 'no-store'});
+  if (!response.ok) throw new Error('训练入口加载失败');
+  state.adminTraining = await response.json();
 }
 
 async function loadAdminResources() {
@@ -1107,6 +1116,7 @@ function bindAdminEvents() {
     try {
       const values = Object.fromEntries(new FormData(form));
       const result = await adminRequest(path, buildBody(values));
+      if (path === 'training') await loadAdminTraining();
       const successMessage = success(result);
       state.adminMessage = result.warning || successMessage;
       state.adminError = false;
@@ -1131,6 +1141,20 @@ function bindAdminEvents() {
       message.textContent = error.message;
       if (!state.adminSession) await loadAdminSession();
     }
+  });
+  bindForm('#adminTraining', 'training', values => ({
+    ...(state.adminTrainingEdit ? {id: state.adminTrainingEdit} : {}),
+    title: values.title, kind: values.kind, url: values.url, description: values.description,
+    cohort: values.cohort, sortOrder: Number(values.sortOrder || 0), published: values.published === 'on',
+  }), () => { state.adminTrainingEdit = null; return '训练入口已保存'; });
+  document.querySelectorAll('[data-training-edit]').forEach(button => button.addEventListener('click', () => {
+    state.adminTrainingEdit = Number(button.dataset.trainingEdit);
+    renderRoute('admin');
+    document.querySelector('#adminTraining')?.scrollIntoView({block: 'center'});
+  }));
+  document.querySelector('#adminTrainingCancel')?.addEventListener('click', () => {
+    state.adminTrainingEdit = null;
+    renderRoute('admin');
   });
   bindForm('#adminLogin', 'login', values => values, () => '已登录');
   bindForm('#adminMember', 'member', values => ({...values, entryYear: values.entryYear ? Number(values.entryYear) : null,
@@ -1174,69 +1198,37 @@ function bindAdminEvents() {
   bindAction('#adminRefreshRatings', 'refresh-ratings', result => `已更新 ${result.updated} 个账号的 Rating`);
 }
 
-function standingsTable(contest) {
-  const showProblems = contest.problemDetailsAvailable !== false;
-  const problemHeaders = showProblems ? contest.problems.map((problem) => `<th>${escapeHtml(problem)}</th>`).join("") : "";
-  const rows = contest.teams.map((team, index) => `<tr class="${team.highlight ? "highlight" : ""}">
-      <td class="rank-cell">${escapeHtml(team.rank || index + 1)}</td><td class="who-cell">${escapeHtml(team.name)}</td><td class="solved-cell">${team.solved}</td><td class="penalty-cell">${team.penalty}</td>
-      ${showProblems ? contest.problems.map((problem) => {
-        const result = team.problems[problem];
-        if (!result) return "<td></td>";
-        if (!result.solved) return `<td class="problem-cell failed"><strong>-${result.tries || 1}</strong></td>`;
-        const tries = result.tries > 1 ? `+${result.tries - 1}` : "+";
-        return `<td class="problem-cell ${result.first ? "first" : ""}"><strong>${tries}</strong><small>${escapeHtml(result.time)}</small></td>`;
-      }).join("") : ""}
-    </tr>`).join("");
-  return `<div class="standings-wrap ${showProblems ? "" : "compact"}"><div class="standings-caption"><span>Standings</span><span>大连理工大学队伍 · ${escapeHtml(contest.rankScope || "榜内名次")}</span></div><table class="standings"><thead><tr><th class="rank-cell">#</th><th class="who-cell">Who</th><th class="solved-cell">=</th><th class="penalty-cell">Penalty</th>${problemHeaders}</tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-function rankChart(contest) {
-  const width = 960;
-  const height = 470;
-  const margin = { top: 24, right: 170, bottom: 48, left: 42 };
-  const plotWidth = width - margin.left - margin.right;
-  const plotHeight = height - margin.top - margin.bottom;
-  const maxRank = contest.teams.length;
-  const x = (time) => margin.left + (plotWidth * time) / contest.duration;
-  const y = (rank) => margin.top + (plotHeight * (rank - 1)) / Math.max(1, maxRank - 1);
-  const colors = ["#1769aa", "#9a315f", "#3e8516", "#a0683f", "#b64d36", "#245f85", "#8c3d94", "#657d2a", "#b47421", "#547e75"];
-  const vertical = [0, 60, 120, 180, 240, 300].filter((v) => v <= contest.duration).map((value) => `<line x1="${x(value)}" y1="${margin.top}" x2="${x(value)}" y2="${height - margin.bottom}" stroke="#e2e5e9"/><text x="${x(value)}" y="${height - 20}" text-anchor="middle" fill="#68717e" font-size="11">${value}</text>`).join("");
-  const horizontal = contest.teams.map((_, index) => `<line x1="${margin.left}" y1="${y(index + 1)}" x2="${width - margin.right}" y2="${y(index + 1)}" stroke="#eef0f2"/><text x="${margin.left - 10}" y="${y(index + 1) + 4}" text-anchor="end" fill="#68717e" font-size="10">${index + 1}</text>`).join("");
-  const lines = contest.teams.map((team, index) => {
-    const color = colors[index % colors.length];
-    const history = team.rankHistory || [{ time: 0, rank: index + 1 }, { time: contest.duration, rank: index + 1 }];
-    const points = history.map((point) => `${x(point.time)},${y(point.rank)}`).join(" ");
-    const last = history.at(-1);
-    return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/><circle cx="${x(last.time)}" cy="${y(last.rank)}" r="3" fill="${color}"/><text x="${width - margin.right + 16}" y="${margin.top + 17 * index}" fill="${color}" font-size="10">${escapeHtml(team.name.slice(0, 16))}</text>`;
-  }).join("");
-  return `<div class="rank-chart-wrap"><svg class="rank-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="训练赛排名变化图">${vertical}${horizontal}${lines}<text x="${margin.left + plotWidth / 2}" y="${height - 3}" text-anchor="middle" fill="#68717e" font-size="11">Time</text><text x="12" y="${margin.top + plotHeight / 2}" fill="#68717e" font-size="11">Rank</text></svg></div>`;
-}
+const trainingKinds = [
+  ['video', '讲课视频', '从队伍的讲课录像开始，学习算法与解题方法。', '观看视频'],
+  ['contest', '校赛与院赛', '重现我们举办过的比赛，限时练习，再回头补题。', '去重现比赛'],
+  ['team', '洛谷团队', '加入各届训练团队，跟进题单、作业与训练安排。', '加入团队'],
+  ['oj', 'Online Judge', '进入队伍的 OJ，动手做题，把学过的算法练熟。', '进入 OJ'],
+];
 
 function trainingPage(data) {
-  const allContests = data.training || [];
-  const series = [...new Set(allContests.map((item) => item.series).filter(Boolean))];
-  const contests = allContests.filter((item) => state.trainingSeries === "all" || item.series === state.trainingSeries);
-  if (!state.trainingId || !contests.some((item) => item.id === state.trainingId)) state.trainingId = contests[0]?.id;
-  const contest = contests.find((item) => item.id === state.trainingId);
-  if (!contest) return '<div class="page-shell"><div class="empty-state">暂无训练记录</div></div>';
-  const bestRank = Math.min(...contest.teams.map((team) => team.rank || Number.MAX_SAFE_INTEGER));
-  const totalSolved = contest.teams.reduce((sum, team) => sum + (team.solved || 0), 0);
-  const source = contest.source || {};
-  const chart = contest.rankHistoryAvailable ? rankChart(contest) : `<div class="training-data-note"><strong>最终榜数据</strong><span>${contest.problemDetailsAvailable === false ? "公开镜像仅保留最终名次、过题数和罚时。" : "公开接口未提供全场排名变化，不生成推测曲线。"}</span></div>`;
-  return `<div class="page-shell">
-      <div class="page-heading"><div><span class="eyebrow">Training</span><h1>训练记录</h1><p>牛客暑期多校、杭电多校与队内训练赛档案。</p></div><div class="source-status"><i></i>${sourceLink(source)}</div></div>
-      <div class="training-series" role="group" aria-label="训练系列">${["all", ...series].map((item) => `<button type="button" data-training-series="${escapeHtml(item)}" class="${state.trainingSeries === item ? "active" : ""}">${item === "all" ? "全部" : escapeHtml(item)}</button>`).join("")}</div>
-      <div class="training-layout">
-        <aside class="training-dates" aria-label="训练日期">${contests.map((item) => {
-          const round = item.title?.match(/Round\s*0?(\d+)/i)?.[1];
-          const label = item.date?.length >= 10 ? item.date.slice(5) : (round ? `R${round}` : item.series?.slice(0, 2) || "记录");
-          return `<button type="button" data-training-id="${escapeHtml(item.id)}" class="${item.id === contest.id ? "active" : ""}"><span>${escapeHtml(item.year)}</span><span>${escapeHtml(label)}</span></button>`;
-        }).join("")}</aside>
-        <div><div class="training-title"><span>${escapeHtml(contest.series || "训练赛")}</span><h1>${escapeHtml(contest.title)}</h1><p>${escapeHtml(contest.dateLabel || contest.date)}</p></div>
-          <section class="training-summary" aria-label="本场概览"><div><strong>${contest.teams.length}</strong><span>DLUT 队伍</span></div><div><strong>${bestRank === Number.MAX_SAFE_INTEGER ? "—" : bestRank}</strong><span>全榜最佳名次</span></div><div><strong>${totalSolved}</strong><span>合计过题</span></div><div><strong>${escapeHtml(contest.resultType || "最终榜")}</strong><span>数据粒度</span></div></section>
-          ${standingsTable(contest)}${chart}</div>
-      </div>
-    </div>`;
+  const links = data.trainingLinks || [];
+  return `<div class="page-shell training-portal"><div class="page-heading"><div><span class="eyebrow">Training</span><h1>去训练</h1><p>看讲课、练比赛、加入团队，在 OJ 上开始做题。</p></div></div>
+    <nav class="training-shortcuts" aria-label="训练入口">${trainingKinds.map(([kind, title]) => `<a href="#training-${kind}">${title}</a>`).join('')}</nav>
+    <div class="training-sections">${trainingKinds.map(([kind, title, description, action], index) => {
+      const items = links.filter(item => item.kind === kind);
+      return `<section id="training-${kind}" class="training-section"><div class="training-section-heading"><span class="training-number">0${index + 1}</span><div><h2>${title}</h2><p>${description}</p></div></div>
+        <div class="training-entry-list">${items.map(item => `<article class="training-entry"><div>${item.cohort ? `<span class="eyebrow">${escapeHtml(item.cohort)}</span>` : ''}<h3>${escapeHtml(item.title)}</h3>${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}</div><a class="admin-button secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${action} ↗</a></article>`).join('') || `<p class="training-empty">${kind === 'contest' ? '历届比赛入口整理中，后续会在这里更新。' : kind === 'team' ? '各届团队入口整理中，后续会在这里更新。' : '入口整理中。'}</p>`}</div></section>`;
+    }).join('')}</div></div>`;
+}
+
+function adminTrainingPage() {
+  const items = state.adminTraining?.items || [];
+  const selected = items.find(item => item.id === state.adminTrainingEdit);
+  return `<form id="adminTraining" class="admin-form"><h2>${selected ? '修改训练入口' : '添加训练入口'}</h2><div class="admin-fields">
+    <label>名称<input name="title" required maxlength="200" value="${escapeHtml(selected?.title || '')}"></label>
+    <label>栏目<select name="kind">${trainingKinds.map(([kind, title]) => `<option value="${kind}" ${selected?.kind === kind ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
+    <label class="wide">链接<input name="url" type="url" required maxlength="1500" value="${escapeHtml(selected?.url || '')}"></label>
+    <label>年份 / 届别<input name="cohort" maxlength="100" placeholder="例如：2025 级、第 20 届" value="${escapeHtml(selected?.cohort || '')}"></label>
+    <label>排序<input name="sortOrder" type="number" min="-10000" max="10000" value="${selected?.sortOrder || 0}"><small>数字越小越靠前</small></label>
+    <label class="wide">简介<textarea name="description" rows="3" maxlength="2000">${escapeHtml(selected?.description || '')}</textarea></label>
+    <label class="admin-checkbox wide"><input name="published" type="checkbox" ${selected?.published === false ? '' : 'checked'}>在 Training 页面显示</label>
+    </div><button class="admin-button">保存入口</button>${selected ? '<button id="adminTrainingCancel" type="button" class="admin-button secondary">取消</button>' : ''}</form>
+    <section class="admin-recent"><h2>训练入口</h2><p class="contest-caption">需要移除入口时，点击修改并取消勾选显示；以后可以重新公开。</p><div class="data-table-wrap"><table class="data-table"><thead><tr><th>名称</th><th>栏目</th><th>届别</th><th>状态</th><th>操作</th></tr></thead><tbody>${items.map(item => `<tr><td>${escapeHtml(item.title)}</td><td>${trainingKinds.find(([kind]) => kind === item.kind)?.[1] || ''}</td><td>${escapeHtml(item.cohort || '—')}</td><td>${item.published ? '公开' : '隐藏'}</td><td><button type="button" class="admin-button secondary" data-training-edit="${item.id}">修改</button></td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无训练入口</td></tr>'}</tbody></table></div></section>`;
 }
 
 function bindPageEvents(route) {
@@ -1268,17 +1260,6 @@ function bindPageEvents(route) {
       renderRoute("rating");
     });
     bindSearchInput('#memberQuery', 'memberQuery', 'rating');
-  }
-  if (route === "training") {
-    document.querySelectorAll("[data-training-series]").forEach((button) => button.addEventListener("click", () => {
-      state.trainingSeries = button.dataset.trainingSeries;
-      state.trainingId = null;
-      renderRoute("training");
-    }));
-    document.querySelectorAll("[data-training-id]").forEach((button) => button.addEventListener("click", () => {
-      state.trainingId = button.dataset.trainingId;
-      renderRoute("training");
-    }));
   }
   if (route === "resources") bindResourceEvents();
 }

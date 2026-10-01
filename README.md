@@ -9,7 +9,7 @@
 - `/home`：本地已收录的历年金、银、铜成绩，可切换分组柱状图与累计柱状图，并展示最近参赛；铁牌仍保存于成绩库。
 - `/honor`：按年份、成绩、关键词检索获牌及未获牌记录。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
-- `/training`：牛客暑期多校、杭电多校和队内训练榜单。
+- `/training`：去训练的入口，包含队伍 B 站讲课视频、历届校赛院赛、各届洛谷团队和队伍 OJ。
 - `/resources`：训练资料知识库，统一收录 PDF、GitHub 仓库和外部网页，可按关键词、类型、分类、难度与标签检索。
 - `/admin`：管理员登录与成员、账号、姓名别名、历史参赛成绩补录。访客只读。
 - `/pending`：获奖信息待确认成员，可按年份关键词、队伍及所属范围查找。
@@ -149,14 +149,9 @@ python3 tools/sync_public_data.py \
 
 补充记录字段与 `site.json` 中的 `honors` 项一致。比赛名次等结果字段可优先采用官方或经过核验的独立榜单，但 CPC Finder 按 `awardId` 返回的成员名单不会被普通补充来源覆盖；只有显式标记 `memberRosterManual: true` 的人工修订可覆盖。每次公开同步会清除已失效的非人工公开快照镜像链接；人工补录及一次性官方归档来源始终保留。
 
-同步牛客 2025 暑期多校公开榜单，并合并 QOJ 上可核验的 2023 杭电多校 DLUT 记录：
+### 训练入口
 
-```bash
-python3 tools/sync_training_data.py --dry-run
-python3 tools/sync_training_data.py
-```
-
-牛客记录按学校筛选并保留全榜名次、题目结果、通过时间与罚时；`data/hdu_training_2023.json` 保存 QOJ 公开镜像中的最终汇总记录。公开来源没有排名过程时，页面不会生成推测的排名变化曲线。
+Training 已替换旧多校榜单，分为讲课视频、校赛与院赛、洛谷团队、Online Judge 四个栏目。管理员在“训练入口”页添加或修改名称、链接、简介、年份 / 届别和排序，并可取消公开以隐藏入口。资料持久化保存在 SQLite，重建及公开同步不会覆盖管理员修改。首启一次性导入队伍 B 站和 Hydro OJ；校赛、院赛与团队链接确认后在后台补充。`trainingLinks` 的 `seedId` 是一次性导入标记，不应复用来覆盖线上条目。
 
 ### 人工补录
 
@@ -284,7 +279,7 @@ python3 tools/manage_data.py backup --output backups/dlut-cpc-$(date +%F).sqlite
 python3 tools/manage_data.py export --output backups/site-merged.json
 ```
 
-训练页不再包含演示场次。后续可继续从 DOMjudge、Codeforces Gym 或 QOJ 的公开榜单导入真实训练记录。
+旧训练榜单已从页面和当前公开快照移除，历史版本仍可通过 Git 查阅。
 
 ## Docker 部署
 

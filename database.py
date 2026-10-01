@@ -8,13 +8,14 @@ import re
 import sqlite3
 from pathlib import Path
 from typing import Iterable
+from urllib.parse import urlsplit
 
 from official_imports import ARCHIVE_PROVIDERS
 from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 11
+SCHEMA_VERSION = 12
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -277,6 +278,17 @@ CREATE TABLE IF NOT EXISTS resources (
 );
 
 CREATE INDEX IF NOT EXISTS idx_resources_public ON resources(published, category, resource_type, updated_at);
+
+CREATE TABLE IF NOT EXISTS training_links (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    kind TEXT NOT NULL CHECK(kind IN ('video','contest','team','oj')),
+    url TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    cohort TEXT NOT NULL DEFAULT '',
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    published INTEGER NOT NULL DEFAULT 1 CHECK(published IN (0,1))
+);
 """
 
 
@@ -833,6 +845,13 @@ class Database:
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
             (str(site.get("meta", {}).get("updatedAt") or dt.date.today().isoformat()),),
         )
+        for item in site.get("trainingLinks", []):
+            marker = "training_seed:" + item["seedId"]
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            connection.execute("INSERT INTO training_links(title,kind,url,description,cohort,sort_order,published) VALUES (?,?,?,?,?,?,1)",
+                               (item["title"], item["kind"], item["url"], item.get("description", ""), item.get("cohort", ""), item.get("sortOrder", 0)))
+            connection.execute("INSERT INTO metadata(key,value) VALUES (?, '1')", (marker,))
 
     def _import_historical_batch(self, connection: sqlite3.Connection, batch: dict) -> int:
         batch_id = batch.get("batchId")
@@ -1404,6 +1423,39 @@ class Database:
             ).fetchall()
         return [self._resource_payload(row, include_private=include_drafts) for row in rows]
 
+    def list_training_links(self, *, include_drafts: bool = False) -> list[dict]:
+        with self.connect() as connection:
+            rows = connection.execute("SELECT * FROM training_links" + ("" if include_drafts else " WHERE published=1") +
+                                      " ORDER BY sort_order, id").fetchall()
+        return [{"id": row["id"], "title": row["title"], "kind": row["kind"], "url": row["url"],
+                 "description": row["description"], "cohort": row["cohort"], "sortOrder": row["sort_order"],
+                 "published": bool(row["published"])} for row in rows]
+
+    def save_training_link(self, item: dict) -> int:
+        for field, limit in (("title", 200), ("url", 1500), ("description", 2000), ("cohort", 100)):
+            value = item.get(field, "")
+            if not isinstance(value, str) or len(value) > limit or (field in {"title", "url"} and not value.strip()):
+                raise ValueError(f"{field} 字段无效")
+        url = item["url"].strip()
+        if urlsplit(url).scheme not in {"https", "http"} or not urlsplit(url).hostname:
+            raise ValueError("链接必须使用 HTTP 或 HTTPS")
+        if item.get("kind") not in {"video", "contest", "team", "oj"}:
+            raise ValueError("训练入口类别无效")
+        if type(item.get("published", True)) is not bool or type(item.get("sortOrder", 0)) is not int or not -10000 <= item.get("sortOrder", 0) <= 10000:
+            raise ValueError("显示状态或排序无效")
+        values = (item["title"].strip(), item["kind"], url, item.get("description", "").strip(),
+                  item.get("cohort", "").strip(), item.get("sortOrder", 0), int(item.get("published", True)))
+        with self.connect() as connection:
+            if "id" not in item:
+                return int(connection.execute("INSERT INTO training_links(title,kind,url,description,cohort,sort_order,published) VALUES (?,?,?,?,?,?,?)", values).lastrowid)
+            if type(item["id"]) is not int or item["id"] <= 0:
+                raise ValueError("训练入口 ID 无效")
+            cursor = connection.execute("UPDATE training_links SET title=?,kind=?,url=?,description=?,cohort=?,sort_order=?,published=? WHERE id=?",
+                                        (*values, item["id"]))
+            if not cursor.rowcount:
+                raise ValueError("训练入口不存在")
+            return item["id"]
+
     def get_resource(self, resource_id: int, *, include_drafts: bool = False) -> dict | None:
         with self.connect() as connection:
             row = connection.execute(
@@ -1474,6 +1526,8 @@ class Database:
             members = self._members_payload(connection)
             updated = connection.execute("SELECT value FROM metadata WHERE key='data_updated_at'").fetchone()
         result["honors"] = honors
+        result["training"] = []
+        result["trainingLinks"] = self.list_training_links()
         result["members"] = members
         result["pendingHonors"] = [item for item in honors if not item["rosterConfirmed"]]
         result["medalSummary"] = self._medal_summary(honors)
