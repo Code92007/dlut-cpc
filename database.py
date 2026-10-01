@@ -853,6 +853,14 @@ class Database:
                                (item["title"], item["kind"], item["url"], item.get("description", ""), item.get("cohort", ""), item.get("sortOrder", 0)))
             connection.execute("INSERT INTO metadata(key,value) VALUES (?, '1')", (marker,))
 
+        for item in site.get("trainingLinkCorrections", []):
+            marker = "training_correction:" + item["id"]
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            connection.execute("UPDATE training_links SET title=?,kind=?,description=? WHERE url=?",
+                               (item["title"], item["kind"], item.get("description", ""), item["url"]))
+            connection.execute("INSERT INTO metadata(key,value) VALUES (?, '1')", (marker,))
+
     def _import_historical_batch(self, connection: sqlite3.Connection, batch: dict) -> int:
         batch_id = batch.get("batchId")
         if not isinstance(batch_id, str) or not batch_id or len(batch_id) > 150:
@@ -1520,6 +1528,7 @@ class Database:
         result.pop("accountCorrections", None)
         result.pop("rosterCorrections", None)
         result.pop("honorTeamCorrections", None)
+        result.pop("trainingLinkCorrections", None)
         result.pop("accountBindings", None)
         with self.connect() as connection:
             honors = self._honors_payload(connection)

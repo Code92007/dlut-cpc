@@ -367,7 +367,8 @@ test('training portal offers all four destinations and replaces old standings', 
   ]});
   assert.match(html, /讲课视频/);
   assert.match(html, /校赛与院赛/);
-  assert.match(html, /洛谷团队/);
+  assert.match(html, /Hydro 团队/);
+  assert.ok(!html.includes("洛谷"));
   assert.match(html, /https:\/\/hydro.ac\/d\/ssdut\//);
   assert.match(html, /&lt;Lecture&gt;/);
   assert.ok(!html.includes('Old standings'));

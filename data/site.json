@@ -15420,10 +15420,26 @@
     },
     {
       "seedId": "ssdut-hydro-v1",
-      "kind": "oj",
-      "title": "SSDUT Online Judge",
+      "kind": "team",
+      "title": "SSDUT · Hydro 训练团队",
       "url": "https://hydro.ac/d/ssdut/",
-      "description": "进入队伍的 Hydro OJ，练习题目、提交代码，完成日常训练。"
+      "description": "我们的 Hydro 团队，收录训练题目、作业与比赛。"
+    },
+    {
+      "seedId": "dlutoj-temporary-v1",
+      "kind": "oj",
+      "title": "DLUT OJ · 临时平台",
+      "url": "http://39.96.200.152/",
+      "description": "临时使用的 DLUT Online Judge，进入平台练习题目、提交代码。"
+    }
+  ],
+  "trainingLinkCorrections": [
+    {
+      "id": "hydro-team-20261001-v1",
+      "url": "https://hydro.ac/d/ssdut/",
+      "kind": "team",
+      "title": "SSDUT · Hydro 训练团队",
+      "description": "我们的 Hydro 团队，收录训练题目、作业与比赛。"
     }
   ]
 }
