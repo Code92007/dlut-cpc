@@ -66,6 +66,28 @@ class RosterEditTests(unittest.TestCase):
                 self.assertEqual(payload["honors"][0]["members"], ["甲", "乙", "丙"])
                 self.assertEqual(len(payload["members"]), 4)
 
+    def test_team_edit_survives_sync_and_invalid_team_rolls_back_roster(self):
+        self.database.confirm_honor_members("old", ["甲", "乙", "丙"])
+        self.database.edit_honor_members("old", ["甲", "乙", "丙"], team=" Geek ")
+        stale = copy.deepcopy(self.seed)
+        stale["honors"] = [self.honor]
+        self.database.initialize(stale)
+        self.assertEqual(self.payload()["honors"][0]["team"], "Geek")
+        for team in ("", " ", "x" * 201, 123):
+            with self.assertRaises(ValueError):
+                self.database.edit_honor_members("old", ["甲", "乙", "新成员"], team=team)
+            self.assertEqual(self.payload()["honors"][0]["team"], "Geek")
+            self.assertEqual(self.payload()["honors"][0]["members"], ["甲", "乙", "丙"])
+
+    def test_team_correction_applies_once_and_preserves_later_admin_edit(self):
+        self.database.confirm_honor_members("old", ["甲", "乙", "丙"])
+        seed = {**self.seed, "honorTeamCorrections": [{"id": "geek-v1", "honorId": "old", "team": "Geek"}]}
+        self.database.initialize(seed)
+        self.assertEqual(self.payload()["honors"][0]["team"], "Geek")
+        self.database.edit_honor_members("old", ["甲", "乙", "丙"], team="New Geek")
+        self.database.initialize(seed)
+        self.assertEqual(self.payload()["honors"][0]["team"], "New Geek")
+
     def test_pending_or_nonexistent_rosters_cannot_use_edit_endpoint(self):
         for honor_id in ("old", "missing"):
             with self.assertRaises(ValueError):

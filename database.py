@@ -626,7 +626,9 @@ class Database:
         sources = self._honor_sources(record)
         source_ids = [(self._source(connection, item, manual=manual), item) for item in sources]
         primary_source_id = max(source_ids, key=lambda pair: source_priority(str(pair[1].get("name") or "")))[0]
-        existing = connection.execute("SELECT is_manual FROM honors WHERE id=?", (honor_id,)).fetchone()
+        existing = connection.execute("SELECT is_manual, team FROM honors WHERE id=?", (honor_id,)).fetchone()
+        if existing and connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"team_override:{honor_id}",)).fetchone():
+            record = {**record, "team": existing["team"]}
         values = (
             str(record.get("event") or ""),
             str(record.get("series") or "其他"),
@@ -784,6 +786,16 @@ class Database:
         for batch in site.get("officialImports", []):
             from official_imports import merge_batch
             merge_batch(self, connection, batch)
+        for correction in site.get("honorTeamCorrections", []):
+            marker = "team_correction:" + correction["id"]
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            honor_id = correction["honorId"]
+            if not connection.execute("SELECT 1 FROM honors WHERE id=?", (honor_id,)).fetchone():
+                raise ValueError(f"Team correction honor does not exist: {honor_id}")
+            if not connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"team_override:{honor_id}",)).fetchone():
+                self._edit_honor_team(connection, honor_id, correction["team"], correction.get("source"))
+            connection.execute("INSERT INTO metadata(key,value) VALUES (?, '1')", (marker,))
         for correction in site.get("rosterCorrections", []):
             correction_id = correction.get("id")
             honor_id = correction.get("honorId")
@@ -969,11 +981,25 @@ class Database:
             self._confirm_honor_members(connection, honor_id, member_ids, source)
             self._confirm_unknown_medal(connection, honor_id, medal, source)
 
-    def edit_honor_members(self, honor_id: str, members: list[int | str], *, source: dict | None = None, medal: str | None = None) -> None:
+    def _edit_honor_team(self, connection: sqlite3.Connection, honor_id: str, team: str, source: dict | None) -> None:
+        if not isinstance(team, str) or not team.strip() or len(team.strip()) > 200:
+            raise ValueError("队名不能为空且最多 200 字")
+        team = team.strip()
+        source_id = self._source(connection, source, manual=True)
+        connection.execute("UPDATE honors SET team=?, normalized_team=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                           (team, self._normalize_team(team), honor_id))
+        connection.execute("INSERT INTO metadata(key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                           (f"team_override:{honor_id}", str(source_id)))
+        connection.execute("INSERT OR IGNORE INTO honor_sources(honor_id,source_id,role,is_manual) VALUES (?,?,'result',1)",
+                           (honor_id, source_id))
+
+    def edit_honor_members(self, honor_id: str, members: list[int | str], *, source: dict | None = None, medal: str | None = None, team: str | None = None) -> None:
         with self.connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
             self._confirm_honor_members(connection, honor_id, members, source, edit=True)
             self._confirm_unknown_medal(connection, honor_id, medal, source)
+            if team is not None:
+                self._edit_honor_team(connection, honor_id, team, source)
 
     def submit_roster(self, honor_id: str, members: list[int | str], *, note: str = "") -> tuple[int, bool]:
         if not isinstance(note, str) or len(note) > 2000:
@@ -1441,6 +1467,7 @@ class Database:
         result.pop("officialImports", None)
         result.pop("accountCorrections", None)
         result.pop("rosterCorrections", None)
+        result.pop("honorTeamCorrections", None)
         result.pop("accountBindings", None)
         with self.connect() as connection:
             honors = self._honors_payload(connection)

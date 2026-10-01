@@ -6,7 +6,9 @@
       "provider": "manual",
       "externalId": "yang-junhong-user-confirmed",
       "platform": "codeforces",
-      "removeHandles": ["Lance_J"]
+      "removeHandles": [
+        "Lance_J"
+      ]
     }
   ],
   "rosterCorrections": [
@@ -143,7 +145,7 @@
             "verified": true,
             "rating": 1754,
             "maxRating": 1754,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00"
           }
         ]
       }
@@ -159,7 +161,7 @@
             "verified": true,
             "rating": 1903,
             "maxRating": 2010,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00"
           }
         ]
       }
@@ -175,7 +177,7 @@
             "verified": true,
             "rating": 1822,
             "maxRating": 1822,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00"
           }
         ]
       }
@@ -189,9 +191,9 @@
           {
             "handle": "EternalEpic",
             "verified": true,
-            "rating": 2191,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
-            "maxRating": 2191
+            "rating": 2198,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
+            "maxRating": 2198
           }
         ]
       }
@@ -205,8 +207,8 @@
           {
             "handle": "International_River",
             "verified": true,
-            "rating": 2230,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 2233,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2264
           },
           {
@@ -214,7 +216,7 @@
             "verified": true,
             "rating": 2125,
             "maxRating": 2125,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00"
           }
         ]
       }
@@ -230,7 +232,7 @@
             "handle": "Farewell",
             "verified": true,
             "rating": 1551,
-            "ratingUpdatedAt": "2026-09-15T14:10:02+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1595
           }
         ]
@@ -245,8 +247,8 @@
           {
             "handle": "Astral_Plane",
             "verified": true,
-            "rating": 1896,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 1900,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1907
           }
         ]
@@ -261,8 +263,8 @@
           {
             "handle": "Emertyst",
             "verified": true,
-            "rating": 1796,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 1833,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1931
           }
         ]
@@ -277,8 +279,8 @@
           {
             "handle": "abhwolxq",
             "verified": true,
-            "rating": 1717,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 1630,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1877
           }
         ]
@@ -294,7 +296,7 @@
             "handle": "SorryNaCN",
             "verified": true,
             "rating": 2168,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2168
           }
         ]
@@ -310,7 +312,7 @@
             "handle": "Operation27",
             "verified": true,
             "rating": 2243,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2281
           }
         ]
@@ -326,7 +328,7 @@
             "handle": "paekae",
             "verified": true,
             "rating": 2101,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2101
           }
         ]
@@ -342,7 +344,7 @@
             "handle": "tanao_",
             "verified": true,
             "rating": 1980,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2041
           }
         ]
@@ -358,7 +360,7 @@
             "handle": "Chenyingqi",
             "verified": true,
             "rating": 1949,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1949
           }
         ]
@@ -374,7 +376,7 @@
             "handle": "poplpr",
             "verified": true,
             "rating": 1860,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1860
           }
         ]
@@ -390,7 +392,7 @@
             "handle": "ileln",
             "verified": true,
             "rating": 1748,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1822
           }
         ]
@@ -406,7 +408,7 @@
             "handle": "AwA_cc",
             "verified": true,
             "rating": 1713,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1873
           }
         ]
@@ -422,7 +424,7 @@
             "handle": "742949301",
             "verified": true,
             "rating": 1516,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1630
           }
         ]
@@ -438,7 +440,7 @@
             "handle": "Agakiss",
             "verified": true,
             "rating": 1476,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1493
           }
         ]
@@ -454,7 +456,7 @@
             "handle": "Jyt",
             "verified": true,
             "rating": 2494,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2494
           }
         ]
@@ -470,7 +472,7 @@
             "handle": "pufanyi",
             "verified": true,
             "rating": 2109,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2284
           }
         ]
@@ -486,7 +488,7 @@
             "handle": "LiGuanlin",
             "verified": true,
             "rating": 1556,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1556
           }
         ]
@@ -502,7 +504,7 @@
             "handle": "GJC_xj",
             "verified": true,
             "rating": 1690,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1839
           }
         ]
@@ -518,7 +520,7 @@
             "handle": "sher_wu",
             "verified": true,
             "rating": 2159,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2159
           }
         ]
@@ -534,7 +536,7 @@
             "handle": "DDDickWWW",
             "verified": true,
             "rating": 1916,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1916
           }
         ]
@@ -550,7 +552,7 @@
             "handle": "DuanYue",
             "verified": true,
             "rating": 1630,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1644
           }
         ]
@@ -566,7 +568,7 @@
             "handle": "OuOu",
             "verified": true,
             "rating": 1129,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1129
           }
         ]
@@ -582,7 +584,7 @@
             "handle": "L1bra",
             "verified": true,
             "rating": 1677,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1785
           }
         ]
@@ -598,7 +600,7 @@
             "handle": "911Boom",
             "verified": true,
             "rating": 1860,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1905
           }
         ]
@@ -613,8 +615,8 @@
           {
             "handle": "shining_qwq",
             "verified": true,
-            "rating": 1595,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 1596,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1724
           }
         ]
@@ -630,8 +632,8 @@
           {
             "handle": "tttfred",
             "verified": true,
-            "rating": 1508,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "rating": 1504,
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 1580
           }
         ]
@@ -647,7 +649,7 @@
             "handle": "Brilliance_Z",
             "verified": true,
             "rating": 2105,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00",
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00",
             "maxRating": 2105
           },
           {
@@ -655,7 +657,7 @@
             "verified": true,
             "rating": 1939,
             "maxRating": 2084,
-            "ratingUpdatedAt": "2026-09-15T04:56:01+00:00"
+            "ratingUpdatedAt": "2026-10-01T12:47:55+00:00"
           }
         ]
       }
@@ -19693,6 +19695,17 @@
       "source": {
         "name": "CPC Finder 选手库",
         "url": "https://cpcfinder.com/student/eb426174-544a-4044-ade7-2badda060283"
+      }
+    }
+  ],
+  "honorTeamCorrections": [
+    {
+      "id": "icpc-2009-ningbo-geek-20261001",
+      "honorId": "icpc-official-2009-ningbo-chen-zhiyuan",
+      "team": "Geek",
+      "source": {
+        "name": "ICPC Global 2009 宁波站官方榜单",
+        "url": "https://icpc.global/regionals/finder/Ningbo-2010/standings"
       }
     }
   ]

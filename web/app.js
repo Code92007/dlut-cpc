@@ -712,19 +712,20 @@ function adminRosterPage(data) {
   const form = selected ? `<form id="adminEditMembers" class="admin-form"><h2>${escapeHtml(selected.team)}</h2>
     <p class="contest-caption">${escapeHtml(selected.date)} · ${escapeHtml(selected.event)} · ${escapeHtml(selected.school)}</p>
     <input name="honorId" type="hidden" value="${escapeHtml(selected.id)}"><div class="admin-fields">
+    <label class="wide">队名<input name="team" required maxlength="200" value="${escapeHtml(selected.team)}"></label>
     ${unknownMedalInput(selected)}
     ${Array.from({length: selected.expectedMembers || selected.members.length}, (_, index) => {
       const detail = selected.memberDetails?.[index];
       const member = detail && data.members.find(item => item.id === detail.id);
       return memberInput(`member${index + 1}`, `参赛成员 ${index + 1}`, true, member ? adminMemberLabel(member) : selected.members[index] || '');
-    }).join('')}</div><button class="admin-button">保存名单修改</button><button id="adminCancelRosterEdit" type="button" class="admin-button secondary">取消</button></form>` : '';
+    }).join('')}</div><button class="admin-button">保存队名和名单修改</button><button id="adminCancelRosterEdit" type="button" class="admin-button secondary">取消</button></form>` : '';
   return `${form}<section class="admin-recent"><h2>已补录名单</h2><form id="adminRosterFilter" class="filters">
     <label class="filter-group"><span>所属范围</span><select id="adminRosterSchool">${[['all', '全部范围'], ...schoolGroups.map(school => [school, school])]
       .map(([value, label]) => `<option value="${value}" ${state.adminRosterSchool === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
     <label class="filter-group grow"><span>搜索</span><input name="query" value="${escapeHtml(state.adminRosterQuery)}" placeholder="比赛、队伍或成员"></label><button class="admin-button">搜索</button></form>
     <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期</th><th>比赛 / 队伍</th><th>所属范围</th><th>成员</th><th>操作</th></tr></thead>
     <tbody>${rows.map(honor => `<tr><td>${escapeHtml(honor.date)}</td><td><strong>${escapeHtml(honor.team)}</strong><small class="result-status">${escapeHtml(honor.event)}</small></td>
-      <td>${escapeHtml(honor.school)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td><button type="button" class="admin-button secondary" data-roster-edit="${escapeHtml(honor.id)}">修改成员</button></td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无符合条件的已补录名单</td></tr>'}</tbody></table></div></section>`;
+      <td>${escapeHtml(honor.school)}</td><td><div class="member-list">${renderMembers(honor.members)}</div></td><td><button type="button" class="admin-button secondary" data-roster-edit="${escapeHtml(honor.id)}">修改队名 / 成员</button></td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无符合条件的已补录名单</td></tr>'}</tbody></table></div></section>`;
 }
 
 function adminResourcePage() {
@@ -1146,10 +1147,11 @@ function bindAdminEvents() {
     ...(values.medal ? {medal: values.medal} : {}),
     members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => '成员已确认，参赛成绩已保留');
   bindForm('#adminEditMembers', 'edit-members', values => ({honorId: values.honorId,
+    ...(values.team !== undefined ? {team: values.team} : {}),
     ...(values.medal ? {medal: values.medal} : {}),
     members: [values.member1, values.member2, values.member3].filter(Boolean).map(adminRosterMember)}), () => {
     state.adminRosterId = null;
-    return '名单已修改，成员参赛记录和奖牌统计已更新';
+    return '队名和名单已修改，成员参赛记录和奖牌统计已更新';
   });
   const bindAction = (id, path, success) => document.querySelector(id)?.addEventListener('click', async event => {
     const button = event.currentTarget;

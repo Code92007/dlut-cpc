@@ -71,6 +71,21 @@ def load_site_data() -> dict:
     return database.payload(seed)
 
 
+def refresh_ratings_periodically(stop: threading.Event, interval: float) -> None:
+    from tools.sync_codeforces import sync_ratings
+
+    while not stop.is_set():
+        try:
+            updates, errors = sync_ratings(Database(DATABASE_PATH), load_seed_data())
+            print(f"Codeforces background refresh: {len(updates)} accounts updated", flush=True)
+            for error in errors:
+                print(f"Codeforces background refresh: {error}", flush=True)
+        except Exception as exc:
+            print(f"Codeforces background refresh failed; existing ratings retained: {exc}", flush=True)
+        if stop.wait(interval):
+            return
+
+
 class SiteHandler(BaseHTTPRequestHandler):
     server_version = "DLUTCPC/0.1"
 
@@ -280,8 +295,9 @@ class SiteHandler(BaseHTTPRequestHandler):
                 if "members" not in body:
                     members = [self._member_id(value) for value in members]
                 action = database.edit_honor_members if path.endswith("edit-members") else database.confirm_honor_members
+                extra = {"team": self._text(body, "team", 200, required=True)} if path.endswith("edit-members") and "team" in body else {}
                 action(self._text(body, "honorId", 150, required=True), members, source=source,
-                       medal=self._text(body, "medal", 20, required=True) if "medal" in body else None)
+                       medal=self._text(body, "medal", 20, required=True) if "medal" in body else None, **extra)
                 self._send_json({"ok": True})
             elif path == "/api/admin/review-submission":
                 if type(body.get("approve")) is not bool:
@@ -525,12 +541,19 @@ def main() -> None:
     server = ThreadingHTTPServer((HOST, PORT), SiteHandler)
     server.admin_auth = AdminAuth(ROOT)
     server.submission_limiter = SubmissionLimiter()
+    rating_interval = float(os.environ.get("CF_REFRESH_INTERVAL_SECONDS", "10800"))
+    rating_stop = threading.Event()
+    if rating_interval > 0:
+        threading.Thread(target=refresh_ratings_periodically,
+                         args=(rating_stop, rating_interval), daemon=True,
+                         name="codeforces-refresh").start()
     print(f"DLUT CPC listening on http://{HOST}:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
+        rating_stop.set()
         server.server_close()
 
 

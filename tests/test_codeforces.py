@@ -1,12 +1,26 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import Mock, patch
 
+from app import refresh_ratings_periodically
 from database import Database
 from tools.sync_codeforces import sync_ratings, validate_response
 
 
 class CodeforcesTests(unittest.TestCase):
+    def test_background_refresh_retries_after_failure_and_waits_between_runs(self):
+        stop = Mock()
+        stop.is_set.return_value = False
+        stop.wait.side_effect = [False, True]
+        with patch("app.load_seed_data", return_value={}), patch("app.Database"), \
+                patch("tools.sync_codeforces.sync_ratings", side_effect=[OSError("offline"), ([], [])]) as sync, \
+                patch("builtins.print"):
+            refresh_ratings_periodically(stop, 10800)
+        self.assertEqual(sync.call_count, 2)
+        self.assertEqual(stop.wait.call_count, 2)
+        stop.wait.assert_called_with(10800)
+
     def test_response_maps_by_handle_not_array_order(self):
         response = {"status": "OK", "result": [{"handle": "B", "rating": 1500, "maxRating": 2100}, {"handle": "A", "rating": 1800, "maxRating": 1800}]}
         users = validate_response(response, ["a", "b"])

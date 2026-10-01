@@ -197,14 +197,14 @@ test('local roster edit form preselects exact IDs and excludes untouched public 
   const html = h.context.adminRosterPage(data);
   assert.ok(html.includes('value="董霄然 · #68"'));
   assert.ok(html.includes('value="何泾 · #66"'));
-  assert.ok(html.includes('保存名单修改'));
+  assert.ok(html.includes('保存队名和名单修改'));
   assert.ok(!html.includes('Untouched Public'));
 });
 
 test('local roster edit submits mixed IDs and names with admin csrf and refreshes statistics', async () => {
   const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true}));
   const button = element();
-  const form = element({fields: {honorId: 'historic', member1: '董霄然', member2: '傅心语', member3: '何泾 · #66'},
+  const form = element({fields: {honorId: 'historic', team: 'Geek', member1: '董霄然', member2: '傅心语', member3: '何泾 · #66'},
     querySelector: () => button});
   h.nodes.set('#adminEditMembers', form);
   h.state().adminRosterId = 'historic';
@@ -212,7 +212,7 @@ test('local roster edit submits mixed IDs and names with admin csrf and refreshe
   await form.handlers.submit({preventDefault() {}, currentTarget: form});
   assert.equal(h.calls[0].path, '/api/admin/edit-members');
   assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
-  assert.deepEqual(JSON.parse(h.calls[0].options.body), {honorId: 'historic', members: ['董霄然', '傅心语', 66]});
+  assert.deepEqual(JSON.parse(h.calls[0].options.body), {honorId: 'historic', team: 'Geek', members: ['董霄然', '傅心语', 66]});
   assert.equal(h.state().adminRosterId, null);
   assert.match(h.state().adminMessage, /奖牌统计已更新/);
 });
