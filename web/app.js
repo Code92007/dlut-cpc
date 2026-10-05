@@ -21,6 +21,8 @@ const state = {
   guestAccountError: false,
   memberQuery: "",
   memberStatus: "all",
+  memberYearFrom: "",
+  memberYearTo: "",
   memberSchool: "all",
   memberSort: "recent",
   medalChartMode: "grouped",
@@ -533,10 +535,17 @@ function bindGuestAccountEvents() {
 function ratingPage(data) {
   const statusLabel = { current: "近年成员", alumni: "往届成员", unknown: "年代待补", manual: "人工补录" };
   const query = state.memberQuery.trim().toLowerCase();
+  const yearFrom = state.memberYearFrom ? Number(state.memberYearFrom) : -Infinity;
+  const yearTo = state.memberYearTo ? Number(state.memberYearTo) : Infinity;
+  const invalidYears = yearFrom > yearTo;
+  const years = [...new Set((data.members || []).flatMap(member => member.participationYears || []))].sort((a, b) => b - a);
+  const yearOptions = selected => years.map(year => `<option value="${year}" ${String(year) === selected ? 'selected' : ''}>${year} 年</option>`).join('');
   let members = (data.members || []).filter((member) => {
     if (state.memberSchool !== 'all' && (member.school || '大连理工大学') !== state.memberSchool) return false;
     if (state.memberStatus === "manual" && !member.manual) return false;
     if (state.memberStatus !== "all" && state.memberStatus !== "manual" && member.status !== state.memberStatus) return false;
+    if (invalidYears) return false;
+    if ((state.memberYearFrom || state.memberYearTo) && !(member.participationYears || []).some(year => year >= yearFrom && year <= yearTo)) return false;
     if (!query) return true;
     return [member.name, ...(member.aliases || []), ...(member.teams || []), ...memberAccounts(member).map(account => account.handle)].join(" ").toLowerCase().includes(query);
   });
@@ -592,9 +601,12 @@ function ratingPage(data) {
       <div class="filters member-filters">
         <label class="filter-group"><span>所属范围</span><select id="memberSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${state.memberSchool === school ? 'selected' : ''}>${school}</option>`).join('')}</select></label>
         <label class="filter-group"><span>范围</span><select id="memberStatus"><option value="all">全部成员</option><option value="current" ${state.memberStatus === "current" ? "selected" : ""}>近年成员</option><option value="alumni" ${state.memberStatus === "alumni" ? "selected" : ""}>往届成员</option><option value="unknown" ${state.memberStatus === "unknown" ? "selected" : ""}>年代待补</option><option value="manual" ${state.memberStatus === "manual" ? "selected" : ""}>人工补录</option></select></label>
+        <label class="filter-group member-year-filter"><span>参赛起始年份</span><select id="memberYearFrom"><option value="">不限</option>${yearOptions(state.memberYearFrom)}</select></label>
+        <label class="filter-group member-year-filter"><span>参赛截止年份</span><select id="memberYearTo"><option value="">不限</option>${yearOptions(state.memberYearTo)}</select></label>
         <label class="filter-group"><span>排序</span><select id="memberSort"><option value="recent">最近参赛</option><option value="medals" ${state.memberSort === "medals" ? "selected" : ""}>奖牌榜顺序</option><option value="honors" ${state.memberSort === "honors" ? "selected" : ""}>获奖次数</option><option value="cpcfinder" ${state.memberSort === "cpcfinder" ? "selected" : ""}>CPC Finder Rating</option><option value="maxrating" ${state.memberSort === "maxrating" ? "selected" : ""}>CF 最高 Rating</option><option value="rating" ${state.memberSort === "rating" ? "selected" : ""}>CF 当前 Rating</option></select></label>
         <label class="filter-group grow"><span>搜索</span><input id="memberQuery" type="search" value="${escapeHtml(state.memberQuery)}" placeholder="成员、队伍或 Codeforces 账号"></label>
       </div>
+      <p class="member-year-note" ${invalidYears ? 'role="alert"' : ''}>${invalidYears ? '起始年份不能晚于截止年份，请重新选择。' : '年份含起止年份；区间内有参赛记录即入选，奖牌、队伍与参赛年份仍展示全量成绩。'}</p>
       <div class="data-table-wrap"><table class="data-table member-directory-table">
         <thead><tr><th>成员</th><th>类别</th><th>参赛年份</th><th>队伍</th><th>奖牌</th><th>CPC Finder Rating</th><th>CF 主号</th><th>最高 Rating</th><th>当前 Rating</th><th>CF 副号</th></tr></thead>
         <tbody>${rows || '<tr><td colspan="10" class="table-empty">没有符合条件的成员</td></tr>'}</tbody>
@@ -1200,10 +1212,24 @@ function bindAdminEvents() {
 
 const trainingKinds = [
   ['video', '讲课视频', '从队伍的讲课录像开始，学习算法与解题方法。', '观看视频'],
-  ['contest', '校赛与院赛', '重现我们举办过的比赛，限时练习，再回头补题。', '去重现比赛'],
+  ['contest', '历史比赛与选拔赛', '回看历年省赛选拔赛、校赛与院赛的题目和榜单，按场次练习、补题。', '题目与榜单'],
   ['team', 'Hydro 团队', '进入我们的 Hydro 团队，跟进题单、作业与训练安排。', '进入团队'],
   ['oj', 'Online Judge', '进入队伍的 OJ，动手做题，把学过的算法练熟。', '进入 OJ'],
 ];
+
+function trainingEntries(items, action, showCohort = true) {
+  return items.map(item => `<article class="training-entry"><div>${showCohort && item.cohort ? `<span class="eyebrow">${escapeHtml(item.cohort)}</span>` : ''}<h3>${escapeHtml(item.title)}</h3>${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}</div><a class="admin-button secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${action} ↗</a></article>`).join('');
+}
+
+function trainingContestGroups(items, action) {
+  const groups = new Map();
+  items.forEach(item => {
+    const label = item.cohort || '其他历史比赛';
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push(item);
+  });
+  return Array.from(groups, ([label, entries]) => `<div class="training-contest-group"><h3 class="training-group-title">${escapeHtml(label)}</h3><div class="training-contest-entries">${trainingEntries(entries, action, false)}</div></div>`).join('');
+}
 
 function trainingPage(data) {
   const links = data.trainingLinks || [];
@@ -1212,7 +1238,7 @@ function trainingPage(data) {
     <div class="training-sections">${trainingKinds.map(([kind, title, description, action], index) => {
       const items = links.filter(item => item.kind === kind);
       return `<section id="training-${kind}" class="training-section"><div class="training-section-heading"><span class="training-number">0${index + 1}</span><div><h2>${title}</h2><p>${description}</p></div></div>
-        <div class="training-entry-list">${items.map(item => `<article class="training-entry"><div>${item.cohort ? `<span class="eyebrow">${escapeHtml(item.cohort)}</span>` : ''}<h3>${escapeHtml(item.title)}</h3>${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}</div><a class="admin-button secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${action} ↗</a></article>`).join('') || `<p class="training-empty">${kind === 'contest' ? '历届比赛入口整理中，后续会在这里更新。' : kind === 'team' ? '各届团队入口整理中，后续会在这里更新。' : '入口整理中。'}</p>`}</div></section>`;
+        <div class="training-entry-list">${(kind === 'contest' ? trainingContestGroups(items, action) : trainingEntries(items, action)) || `<p class="training-empty">${kind === 'contest' ? '历届比赛入口整理中，后续会在这里更新。' : kind === 'team' ? '各届团队入口整理中，后续会在这里更新。' : '入口整理中。'}</p>`}</div></section>`;
     }).join('')}</div></div>`;
 }
 
@@ -1258,6 +1284,12 @@ function bindPageEvents(route) {
     document.querySelector("#memberSort")?.addEventListener("change", (event) => {
       state.memberSort = event.target.value;
       renderRoute("rating");
+    });
+    ['memberYearFrom', 'memberYearTo'].forEach(key => {
+      document.querySelector(`#${key}`)?.addEventListener('change', event => {
+        state[key] = event.target.value;
+        renderRoute('rating');
+      });
     });
     bindSearchInput('#memberQuery', 'memberQuery', 'rating');
   }

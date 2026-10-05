@@ -15431,6 +15431,60 @@
       "title": "DLUT OJ · 临时平台",
       "url": "http://39.96.200.152/",
       "description": "临时使用的 DLUT Online Judge，进入平台练习题目、提交代码。"
+    },
+    {
+      "seedId": "provincial-selection-2025-1-v1",
+      "kind": "contest",
+      "title": "大一场",
+      "url": "https://codeforces.com/contestInvitation/3c280d7f9122e8d1b71149ec75fb1568fd1b833c",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2025 年省赛选拔赛",
+      "sortOrder": 100
+    },
+    {
+      "seedId": "provincial-selection-2025-2-v1",
+      "kind": "contest",
+      "title": "大二场",
+      "url": "https://codeforces.com/contestInvitation/025c2cf99813502b5b62f2f639642d5ce6d03871",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2025 年省赛选拔赛",
+      "sortOrder": 101
+    },
+    {
+      "seedId": "provincial-selection-2024-3-v1",
+      "kind": "contest",
+      "title": "第一场 · 大一场",
+      "url": "https://codeforces.com/contestInvitation/64545038aff8af38a0879332fa3606b1445d37ad",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2024 年省赛选拔赛",
+      "sortOrder": 102
+    },
+    {
+      "seedId": "provincial-selection-2024-4-v1",
+      "kind": "contest",
+      "title": "第一场 · 大二场",
+      "url": "https://codeforces.com/contestInvitation/6b88d0d01faed73970dec45f450b73d8d0594236",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2024 年省赛选拔赛",
+      "sortOrder": 103
+    },
+    {
+      "seedId": "provincial-selection-2024-5-v1",
+      "kind": "contest",
+      "title": "第二场 · 大一场",
+      "url": "https://codeforces.com/contestInvitation/702460446a8a4d2505190cf099585db33cccffd9",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2024 年省赛选拔赛",
+      "sortOrder": 104
+    },
+    {
+      "seedId": "provincial-selection-2024-6-v1",
+      "kind": "contest",
+      "title": "第二场 · 大二场",
+      "url": "https://codeforces.com/contestInvitation/1d93213b58aee50eb93123951ff1a4843176aca0",
+      "description": "Codeforces 比赛邀请入口，查看历史题目与榜单。",
+      "cohort": "2024 年省赛选拔赛",
+      "sortOrder": 105
     }
   ],
   "trainingLinkCorrections": [

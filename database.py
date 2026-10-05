@@ -1721,6 +1721,7 @@ class Database:
                     "graduationYear": row["graduation_year"],
                     "status": status,
                     "manual": bool(row["is_manual"]),
+                    "participationYears": sorted(set(activity_years)),
                     "firstYear": min(years) if years else row["entry_year"],
                     "lastYear": max(activity_years) if activity_years else row["graduation_year"],
                     "teams": teams,

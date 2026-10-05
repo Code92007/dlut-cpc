@@ -59,6 +59,19 @@ class DatabaseTests(unittest.TestCase):
         self.assertNotIn("notes", payload["members"][0])
         self.assertNotIn("ratingGroups", payload)
 
+    def test_participation_years_preserve_gaps_and_exclude_enrollment_years(self):
+        import copy
+        earlier = copy.deepcopy(self.seed['honors'][0])
+        earlier.update(id='award-earlier', date='2018-11-01')
+        self.seed['honors'].append(earlier)
+        self.database.initialize(self.seed)
+        member = next(item for item in self.database.payload(self.seed)['members'] if item['name'] == '张三')
+        self.assertEqual(member['participationYears'], [2018, 2025])
+        self.assertEqual(member['medals']['gold'], 2)
+        self.database.add_manual_member('无参赛记录', entry_year=2020, graduation_year=2024)
+        member = next(item for item in self.database.payload(self.seed)['members'] if item['name'] == '无参赛记录')
+        self.assertEqual(member['participationYears'], [])
+
     def test_manual_member_and_handle_survive_automatic_resync(self):
         member_id = self.database.add_manual_member(
             "远古成员",

@@ -1677,3 +1677,16 @@ a:hover {
   .training-section { padding: 22px; }
   .training-shortcuts a { padding: 9px 12px; }
 }
+
+.training-contest-group + .training-contest-group { margin-top: 30px; }
+.training-group-title { margin: 0 0 16px; font-size: 16px; color: var(--blue); }
+.training-contest-entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.training-contest-entries .training-entry { margin: 0; }
+@media (max-width: 600px) {
+  .training-contest-entries { grid-template-columns: 1fr; }
+}
+
+.member-filters { flex-wrap: wrap; }
+.member-year-filter { min-width: 125px; }
+.member-year-note { margin: -6px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.member-year-note[role="alert"] { color: #b42318; }
