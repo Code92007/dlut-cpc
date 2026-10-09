@@ -1,6 +1,6 @@
 # DLUT CPC 三工程联动说明
 
-2026-10-09 · v4.1。此文与本工程代码一同提交；后续调整保留 Git 历史，重大协议变更追加版本记录。
+2026-10-09 · v4.2。此文与本工程代码一同提交；后续调整保留 Git 历史，重大协议变更追加版本记录。
 
 ## 职责与数据流
 
@@ -41,13 +41,19 @@ docker compose exec -T dlut-cpc python tools/cpc_admin.py review 申请UUID appr
 
 浏览器管理接口是 GET `/api/admin/cpc-claims` 和 POST `/api/admin/review-cpc-claim`（`claimId`、`status`）；只接受本工程现有管理员会话，POST 另需同源及 `X-CSRF-Token`。核验材料与审核历史只通过管理接口提供，不加入服务间公开字段。
 
-OJ Wall 默认每 5 分钟拉取；失败保留上次成功数据，24 小时无法核验时暂停现场归属统计。现场榜单的比赛、队伍行与题序仍需 OJ Wall 管理员核对。
+OJ Wall 默认每 5 分钟拉取；失败保留上次成功数据，24 小时无法核验时暂停现场归属统计。OJ Wall 检测已批准认领后自动核对原榜单逐题成绩，正式与打星队伍的赛中 AC 同样同步。
+
+## 原榜单入口复用
+
+名单快照复用点击比赛名所用的 `data/contest_ranklists.json`，给每场已确认名单附可选 `ranklist_url`、原来源及原榜单行 ID、DLUT 校名别名、CPC Finder 比赛 ID；人员附稳定 CPC Finder 选手 ID。链接只指向来源，逐题抓取和 AC 证据由 OJ Wall 负责，不新增共享数据库或跨工程目录依赖。
+
+OJ Wall 遍历已认证成员的全部已确认参赛名单，因此没有 CPC Finder 选手页也可使用 DLUT 保存的 RankLand/XCPCIO 原榜单。名单包括打星及无奖牌记录；未确认队员的名单仍不发布。CPC Finder 只有总解题数时不能当作逐题通过。
 
 ## 持久数据与迁移
 
 新增 `cpc_ids`、`cpc_claims`、`cpc_claim_audit`，分别保存服务/成员/参赛 UUID、认领与审核历史。原成员和逐场名单表继续是业务信源；人员合并通过已有 `member_redirects` 传播。
 
-迁移保留整个运行 SQLite 库、`.env` 同步凭据及原运行配置。使用 SQLite 备份 API 或停写备份，不能漏掉 WAL。恢复后运行 `meta` 核对原 UUID，更新 OJ Wall 的地址，保持其预期 UUID不变；同一发布方不能同时有两个生产写入端。不需要重新审核已有认领。
+迁移保留整个运行 SQLite 库、`data/contest_ranklists.json` 与 seed/source 数据、`.env` 同步凭据及原运行配置。使用 SQLite 备份 API 或停写备份，不能漏掉 WAL。恢复后运行 `meta` 核对原 UUID，更新 OJ Wall 的地址，保持其预期 UUID不变；同一发布方不能同时有两个生产写入端。不需要重新审核已有认领。
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
@@ -57,6 +63,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
 
 ## 版本记录与相关方案
 
+- v4.2 / 2026-10-09：名单快照复用原榜单链接和学校别名，发布可选来源 ID，OJ Wall 在认证批准后自动抓取现场成绩；沿用 schema 1 和持久 UUID。
 - v4 / 2026-10-09：首版采用管理员命令审核、完整快照及持久 UUID；不引入 SSO、消息队列或共享数据库。
 - v4.1 / 2026-10-09：在现有 `/admin` 增加成员认证审核页，保留命令方式。共用原认领表和审核日志，服务间协议及迁移方式不变。
 

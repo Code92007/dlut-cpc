@@ -1,11 +1,14 @@
 """Internal member claims and read-only roster snapshots."""
 from __future__ import annotations
 import hmac
+import json
 import os
 import time
 import uuid
+from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
 from cpc_common import connect, uid
+from schools import SCHOOL_GROUPS
 
 
 class Integration:
@@ -30,11 +33,16 @@ class Integration:
         return db
 
     def roster(self):
+        # Reuse the same curated mapping as the clickable contest titles.
+        data_path = Path(os.environ.get('SITE_DATA_PATH', Path(__file__).parent / 'data/site.json'))
+        mapping_path = data_path.parent / 'contest_ranklists.json'
+        ranklists = json.loads(mapping_path.read_text())['contests'] if mapping_path.exists() else {}
         with self.db() as db:
             db.execute('begin immediate')
             members = [{
                 'id': uid(db, 'person', row['id']), 'name': row['display_name'] or row['name'],
                 'school': row['school'],
+                'cpcfinder_id': next((r[0] for r in db.execute("select external_id from member_identities where member_id=? and provider='cpcfinder' order by external_id", (row['id'],))), None),
             } for row in db.execute('select * from members order by id').fetchall()]
             participations = []
             for honor in self.database._honors_payload(db):
@@ -46,6 +54,13 @@ class Integration:
                     'date': honor['date'], 'school': honor['school'], 'official': honor['official'],
                     'members': [uid(db, 'person', m['id']) for m in honor['memberDetails']],
                     'sources': honor['sources'],
+                    'ranklist_url': ranklists.get(honor['event'], ''),
+                    'series': honor['series'], 'location': honor['location'],
+                    'school_names': sorted(({honor['school'], honor.get('originalSchool', '')} |
+                                            {name for name, group in SCHOOL_GROUPS.items() if group == honor['school']}) - {''}),
+                    'source_provider': honor['externalProvider'], 'source_contest_id': honor['externalContestId'],
+                    'source_team_id': honor['externalTeamId'],
+                    'cpcfinder_contest_id': honor['externalContestId'] if honor['externalProvider'] == 'cpcfinder' else None,
                 })
             redirects = {uid(db, 'person', r['old_id']): uid(db, 'person', r['member_id'])
                          for r in db.execute('select * from member_redirects').fetchall()}
