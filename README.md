@@ -7,7 +7,7 @@
 ## 页面
 
 - `/home`：本地已收录的历年金、银、铜成绩，可切换分组柱状图与累计柱状图，并展示最近参赛；铁牌仍保存于成绩库。
-- `/honor`：按年份、成绩、关键词检索获牌及未获牌记录。
+- `/honor`：按年份、成绩、关键词检索获牌及未获牌记录；点击每场比赛的标题，在新标签页打开对应榜单。
 - `/rating`：从历年获奖名单归并出的完整成员目录，以及已确认的 Codeforces 账号。
 - `/training`：去训练的入口，包含队伍 B 站讲课视频、按年份分组的历史省赛选拔赛与校赛院赛题目及榜单、Hydro 训练团队和队伍 OJ。
 - `/resources`：训练资料知识库，统一收录 PDF、GitHub 仓库和外部网页，可按关键词、类型、分类、难度与标签检索。
@@ -38,6 +38,8 @@ python3 -m unittest discover -s tests -v
 ## 数据
 
 `data/site.json` 是可版本控制的公开数据快照，`runtime/dlut_cpc.sqlite3` 是运行时主数据库。首次启动会将快照导入 SQLite，之后自动同步只更新公开数据，不会删除人工录入的成员、账号关联或历史奖项。数据库支持同一奖项和成员关联多个来源，并用 CPC Finder 学生 UUID 区分同名成员。
+
+`data/contest_ranklists.json` 单独维护按比赛标题核对过的榜单链接，来源为 RankLand、CPC Finder 比赛目录及 XCPCIO。没有单独配置时，标题复用该场比赛已有的榜单来源或 CPC Finder 比赛编号；尚无可用链接的历史比赛显示普通标题，后续可继续补充此文件。链接在本地读取，不依赖访客浏览时访问第三方目录。
 
 当前成绩与队员名单来自 [CPC Finder 的大连理工大学学校页](https://cpcfinder.com/school/9c417252-c487-4eae-8822-fcd1e74b9329)、学校获奖 API、选手目录 API、选手参赛 API 和各赛事榜单 API，仅保留 2020 年及以后的成绩。同步脚本会逐项关联 `awardId`、`contestId`、`teamId` 与稳定的 `studentId`，核对学校后导入榜单中的三位队员；也可以用 [ICPC 参赛公示](https://icpc.pku.edu.cn/docs/20230202164632701013.pdf)、[2024 上海站结果](https://icpc.pku.edu.cn/docs/20250313164218706132.pdf)、XCPCIO、Gym 或经过核验的 QOJ 镜像榜补充或覆盖。
 

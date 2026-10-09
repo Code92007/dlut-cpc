@@ -89,6 +89,21 @@ const sourceLink = (source) => source?.url
   ? `<a class="source-link" href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.name || "来源")}</a>`
   : '<span class="source-link">待补充</span>';
 
+function contestTitle(event, data) {
+  const honors = data.honors.filter(honor => honor.event === event);
+  const sources = honors.flatMap(honor => [honor.source, ...(honor.sources || [])]);
+  const sourceUrl = sources.find(source => /^https?:\/\/(?:rl\.algoux\.cn\/ranklist\/|(?:board\.)?xcpcio\.com\/(?:board\/)?(?:icpc|ccpc)\/|cpcfinder\.com\/contest\/)/i.test(source?.url || ''))?.url;
+  const contestId = honors.map(honor => honor.cpcfinderContestId
+    ?? (honor.externalProvider === 'cpcfinder' ? honor.externalContestId : null))
+    .find(id => id != null && /^\d+$/.test(String(id)));
+  const url = data.contestRanklists?.[event] || sourceUrl
+    || (contestId != null ? `https://cpcfinder.com/contest/${contestId}` : '');
+  const title = escapeHtml(event);
+  return /^https?:\/\//i.test(url)
+    ? `<a class="contest-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="查看比赛榜单（新标签页）">${title} <span aria-hidden="true">↗</span></a>`
+    : title;
+}
+
 function updateNav(route) {
   document.querySelectorAll("[data-route]").forEach((link) => {
     const active = link.dataset.route === route;
@@ -218,7 +233,7 @@ function honorPage(data) {
     ? Object.groupBy(filtered, (item) => item.event)
     : filtered.reduce((groups, item) => ((groups[item.event] ||= []).push(item), groups), {});
   const sections = Object.entries(grouped).map(([event, rows]) => `<section class="season-section">
-      <h2>${escapeHtml(event)}</h2>
+      <h2>${contestTitle(event, data)}</h2>
       <p class="contest-caption">${escapeHtml(rows[0].date)} · ${escapeHtml(rows[0].location)}</p>
       <div class="data-table-wrap"><table class="data-table honor-table result-table">
         <thead><tr><th>队伍</th><th>成员</th><th>成绩</th><th>排名</th><th>来源</th></tr></thead>

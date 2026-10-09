@@ -21,6 +21,9 @@ SCHEMA_VERSION = 12
 def load_seed_file(path: Path | str) -> dict:
     path = Path(path)
     data = json.loads(path.read_text(encoding="utf-8"))
+    ranklists = path.parent / "contest_ranklists.json"
+    if ranklists.exists():
+        data["contestRanklists"] = json.loads(ranklists.read_text(encoding="utf-8"))["contests"]
     archive = path.parent / "historical_honors.json"
     if archive.exists():
         data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]

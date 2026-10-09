@@ -652,6 +652,23 @@ a:hover {
   line-height: 1.3;
 }
 
+.contest-link {
+  color: inherit;
+}
+
+.contest-link:hover,
+.contest-link:focus-visible {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.contest-link span {
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
 .season-section .contest-caption {
   margin: 0 0 10px;
   color: var(--muted);
