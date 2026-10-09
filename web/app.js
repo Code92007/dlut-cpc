@@ -53,6 +53,11 @@ const state = {
   adminReviewPage: 1,
   adminReviewRequest: 0,
   adminReviewsLoading: false,
+  adminCpcClaims: null,
+  adminCpcStatus: 'pending',
+  adminCpcDecision: null,
+  adminCpcLoading: false,
+  adminCpcRequest: 0,
   adminResources: null,
   adminResourceEdit: null,
   adminResourceDelete: null,
@@ -634,6 +639,56 @@ function memberInput(name, label, required = true, value = '', listId = 'adminMe
   return `<label>${label}<input name="${name}" list="${listId}" autocomplete="off" ${required ? 'required' : ''} value="${escapeHtml(value)}" placeholder="姓名或成员 ID"></label>`;
 }
 
+const cpcStatusLabel = status => ({pending: '待审核', approved: '已通过', rejected: '已拒绝', revoked: '已撤销'}[status] || status);
+const cpcTime = stamp => stamp ? new Date(stamp * 1000).toLocaleString('zh-CN', {hour12: false}) : '—';
+
+function adminCpcPage() {
+  const data = state.adminCpcClaims;
+  const filters = `<p class="contest-caption">核对 OJ Wall 账号、所选成员及核验说明后审核。结果通常在 5 分钟内同步，也可在提交墙更新认证状态。</p>
+    <div class="filters"><label class="filter-group"><span>认证状态</span><select id="cpcClaimStatus">${['pending', 'approved', 'rejected', 'revoked', 'all'].map(status => `<option value="${status}" ${state.adminCpcStatus === status ? 'selected' : ''}>${status === 'all' ? '全部状态' : cpcStatusLabel(status)}</option>`).join('')}</select></label>
+    <button type="button" id="cpcClaimsRefresh" class="admin-button secondary" ${state.adminCpcLoading ? 'disabled' : ''}>刷新</button></div>`;
+  if (state.adminCpcLoading || !data) return `${filters}<div class="empty-state">${state.adminCpcLoading ? '正在加载成员认证' : '暂无认证数据'}</div>`;
+  const claims = data.claims.filter(claim => state.adminCpcStatus === 'all' || claim.status === state.adminCpcStatus);
+  const rows = claims.map(claim => {
+    const decision = state.adminCpcDecision?.id === claim.id ? state.adminCpcDecision : null;
+    const button = (status, label, confirm = false) => `<button type="button" class="admin-button ${status === 'approved' ? '' : 'secondary reject'}" data-cpc-claim="${escapeHtml(claim.id)}" data-cpc-status="${status}" data-cpc-confirm="${confirm}">${label}</button>`;
+    const actions = decision ? `${button(decision.status, `确认${{approved: '通过', rejected: '拒绝', revoked: '撤销'}[decision.status]}`, true)}<button type="button" class="admin-button secondary" data-cpc-cancel>取消</button>`
+      : claim.status === 'pending' ? `${button('approved', '通过')}${button('rejected', '拒绝')}` : claim.status === 'approved' ? button('revoked', '撤销认证') : '';
+    return `<article class="review-item"><div class="review-contest"><h3>${escapeHtml(claim.member_name)} · 成员认证</h3><p>${escapeHtml(claim.school)} · 成员 #${escapeHtml(claim.member_id ?? '—')}</p>
+      <p>OJ Wall 账号：<strong>${escapeHtml(claim.account_name)}</strong></p><p class="review-note">核验说明：${escapeHtml(claim.note)}</p>
+      <details><summary>申请标识与审核记录</summary><p>申请：${escapeHtml(claim.id)}</p><p>来源站点：${escapeHtml(claim.client)}</p><p>账号标识：${escapeHtml(claim.subject)}</p>
+      ${(claim.history || []).map(item => `<p>${escapeHtml(cpcTime(item.created))} · ${escapeHtml(item.reviewer)} · ${escapeHtml(cpcStatusLabel(item.status))}</p>`).join('') || '<p>尚无审核记录</p>'}</details></div>
+      <div class="review-roster"><strong>${escapeHtml(cpcStatusLabel(claim.status))}</strong><p>${escapeHtml(cpcTime(claim.updated))}</p>${claim.reviewer ? `<p>审核者：${escapeHtml(claim.reviewer)}</p>` : ''}</div>
+      <div class="review-actions">${actions}</div></article>`;
+  }).join('');
+  return `${filters}<p class="contest-caption">待审核 ${data.pending_count} 份 · 当前显示 ${claims.length} 份</p><div class="review-list">${rows || '<div class="empty-state">没有符合条件的成员认证申请</div>'}</div>`;
+}
+
+async function loadAdminCpcClaims() {
+  const request = ++state.adminCpcRequest;
+  state.adminCpcLoading = true;
+  if (routeFromPath() === 'admin' && state.adminView === 'cpc') renderRoute('admin');
+  try {
+    const response = await fetch('/api/admin/cpc-claims', {cache: 'no-store'});
+    const result = await response.json();
+    if (request !== state.adminCpcRequest) return;
+    if (!response.ok) {
+      if (response.status === 401) state.adminSession = null;
+      throw new Error(result.error || '成员认证加载失败');
+    }
+    state.adminCpcClaims = result;
+  } catch (error) {
+    if (request !== state.adminCpcRequest) return;
+    state.adminMessage = error.message;
+    state.adminError = true;
+  } finally {
+    if (request === state.adminCpcRequest) {
+      state.adminCpcLoading = false;
+      if (routeFromPath() === 'admin' && state.adminView === 'cpc') renderRoute('admin');
+    }
+  }
+}
+
 function adminReviewPage() {
   const data = state.adminReviews;
   const statuses = [['pending', '待审核'], ['approved', '已通过'], ['rejected', '不通过'], ['superseded', '已失效'], ['all', '全部状态']];
@@ -824,11 +879,12 @@ function adminPage(data) {
   forms.resources = adminResourcePage();
   forms.training = adminTrainingPage();
   forms.reviews = adminReviewPage();
+  forms.cpc = adminCpcPage();
   forms.rosters = adminRosterPage(data);
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['cpc',`成员认证${state.adminCpcClaims ? ` · ${state.adminCpcClaims.pending_count}` : ''}`],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
-    ${['resources', 'training'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${['resources', 'training', 'cpc'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
     </tbody></table></div></section>`}</div>`;
 }
@@ -838,7 +894,7 @@ async function loadAdminSession() {
     const response = await fetch('/api/admin/session', {cache: 'no-store'});
     if (!response.ok) throw new Error('登录状态加载失败');
     state.adminSession = await response.json();
-    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources(), loadAdminTraining()]);
+    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources(), loadAdminTraining(), loadAdminCpcClaims()]);
     else {
       state.adminReviews = null;
       state.adminResources = null;
@@ -846,6 +902,10 @@ async function loadAdminSession() {
       state.adminTrainingEdit = null;
       state.adminReviewsLoading = false;
       ++state.adminReviewRequest;
+      state.adminCpcClaims = null;
+      state.adminCpcDecision = null;
+      state.adminCpcLoading = false;
+      ++state.adminCpcRequest;
     }
   } catch (error) {
     state.adminMessage = error.message;
@@ -1085,7 +1145,41 @@ function bindAdminEvents() {
     state.adminMessage = '';
     renderRoute('admin');
     if (state.adminView === 'reviews') loadAdminReviews();
+    if (state.adminView === 'cpc') loadAdminCpcClaims();
     if (state.adminView === 'resources' && !state.adminResources) loadAdminResources();
+  }));
+  document.querySelector('#cpcClaimStatus')?.addEventListener('change', event => {
+    state.adminCpcStatus = event.target.value;
+    state.adminCpcDecision = null;
+    renderRoute('admin');
+  });
+  document.querySelector('#cpcClaimsRefresh')?.addEventListener('click', () => {
+    state.adminCpcDecision = null;
+    loadAdminCpcClaims();
+  });
+  document.querySelector('[data-cpc-cancel]')?.addEventListener('click', () => {
+    state.adminCpcDecision = null;
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-cpc-claim]').forEach(button => button.addEventListener('click', async () => {
+    const decision = {id: button.dataset.cpcClaim, status: button.dataset.cpcStatus};
+    if (button.dataset.cpcConfirm !== 'true') {
+      state.adminCpcDecision = decision;
+      renderRoute('admin');
+      return;
+    }
+    button.closest('.review-actions').querySelectorAll('button').forEach(control => {control.disabled = true;});
+    try {
+      await adminRequest('review-cpc-claim', {claimId: decision.id, status: decision.status});
+      state.adminMessage = `认证${cpcStatusLabel(decision.status)}，提交墙更新认证状态后生效`;
+      state.adminError = false;
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+    }
+    state.adminCpcDecision = null;
+    if (state.adminSession?.authenticated) await loadAdminCpcClaims();
+    else await loadAdminSession();
   }));
   for (const [selector, field] of [['#reviewKind', 'adminReviewKind'], ['#reviewStatus', 'adminReviewStatus'], ['#reviewSchool', 'adminReviewSchool']]) {
     document.querySelector(selector)?.addEventListener('change', event => {

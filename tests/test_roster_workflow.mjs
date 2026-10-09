@@ -42,6 +42,87 @@ function harness(route, fetcher) {
   return {context, nodes, arrays, calls, state: () => vm.runInContext('state', context)};
 }
 
+const cpcQueue = (status = 'pending') => ({pending_count: status === 'pending' ? 1 : 0, claims: [{id: 'claim-uuid',
+  member_id: 66, member_name: '何泾', school: '大连理工大学', account_name: '<img src=x onerror=bad>',
+  note: '<script>bad</script>', client: 'wall-uuid', subject: 'account-uuid', status, updated: 1700000000,
+  history: status === 'approved' ? [{status: 'approved', reviewer: '<admin>', created: 1700000000}] : []}]});
+
+test('member certification shows private evidence safely and offers actions only for the current state', () => {
+  const h = harness('admin', () => {});
+  h.state().adminCpcClaims = cpcQueue();
+  let html = h.context.adminCpcPage();
+  assert.ok(html.includes('何泾 · 成员认证'));
+  assert.ok(html.includes('&lt;script&gt;bad&lt;/script&gt;'));
+  assert.ok(html.includes('&lt;img src=x onerror=bad&gt;'));
+  assert.ok(!html.includes('<script>bad</script>'));
+  assert.ok(html.includes('data-cpc-status="approved"'));
+  assert.ok(html.includes('data-cpc-status="rejected"'));
+  assert.ok(!html.includes('data-cpc-status="revoked"'));
+  h.state().adminCpcDecision = {id: 'claim-uuid', status: 'approved'};
+  html = h.context.adminCpcPage();
+  assert.ok(html.includes('确认通过'));
+  assert.ok(html.includes('data-cpc-confirm="true"'));
+  h.state().adminCpcDecision = null;
+  h.state().adminCpcStatus = 'all';
+  h.state().adminCpcClaims = cpcQueue('approved');
+  html = h.context.adminCpcPage();
+  assert.ok(html.includes('撤销认证'));
+  assert.ok(html.includes('&lt;admin&gt;'));
+  assert.ok(!html.includes('data-cpc-status="approved"'));
+  for (const status of ['rejected', 'revoked']) {
+    h.state().adminCpcClaims = cpcQueue(status);
+    assert.ok(!h.context.adminCpcPage().includes('data-cpc-claim='));
+  }
+});
+
+for (const status of ['approved', 'rejected', 'revoked']) {
+  test(`member certification ${status} confirms before sending the session-protected decision`, async () => {
+    const h = harness('admin', async path => response(path.endsWith('cpc-claims') ? cpcQueue(status) : {ok: true}));
+    h.state().adminView = 'cpc';
+    const button = element({dataset: {cpcClaim: 'claim-uuid', cpcStatus: status, cpcConfirm: 'false'}});
+    button.closest = () => ({querySelectorAll: () => [button]});
+    h.arrays.set('[data-cpc-claim]', [button]);
+    h.context.bindAdminEvents();
+    await button.handlers.click();
+    assert.equal(h.calls.length, 0);
+    assert.equal(h.state().adminCpcDecision.status, status);
+    button.dataset.cpcConfirm = 'true';
+    await button.handlers.click();
+    assert.equal(h.calls[0].path, '/api/admin/review-cpc-claim');
+    assert.equal(h.calls[0].options.headers['X-CSRF-Token'], 'test-csrf');
+    assert.deepEqual(JSON.parse(h.calls[0].options.body), {claimId: 'claim-uuid', status});
+    assert.equal(h.calls[1].path, '/api/admin/cpc-claims');
+    assert.equal(h.state().adminCpcDecision, null);
+    assert.equal(h.state().adminError, false);
+  });
+}
+
+test('a conflicting member certification displays the backend error and refreshes the queue', async () => {
+  const h = harness('admin', async path => path.endsWith('cpc-claims') ? response(cpcQueue()) : response({error: '该成员或账号已有认证'}, false, 400));
+  h.state().adminView = 'cpc';
+  const button = element({dataset: {cpcClaim: 'claim-uuid', cpcStatus: 'approved', cpcConfirm: 'true'}});
+  button.closest = () => ({querySelectorAll: () => [button]});
+  h.arrays.set('[data-cpc-claim]', [button]);
+  h.context.bindAdminEvents();
+  await button.handlers.click();
+  assert.match(h.state().adminMessage, /已有认证/);
+  assert.equal(h.state().adminError, true);
+  assert.equal(h.calls.length, 2);
+  assert.equal(h.state().adminCpcLoading, false);
+});
+
+test('member certification status filter clears an unconfirmed decision without sending a request', () => {
+  const h = harness('admin', () => {throw new Error('unexpected request');});
+  const select = element();
+  h.nodes.set('#cpcClaimStatus', select);
+  h.state().adminCpcDecision = {id: 'claim-uuid', status: 'approved'};
+  h.context.bindAdminEvents();
+  select.handlers.change({target: {value: 'approved'}});
+  assert.equal(h.state().adminCpcStatus, 'approved');
+  assert.equal(h.state().adminCpcDecision, null);
+  assert.equal(h.calls.length, 0);
+});
+
 test('account deletion requires a separate confirmation and sends only the selected binding', async () => {
   const h = harness('admin', async path => response(path === '/api/site' ? seed : {ok: true}));
   const button = element({dataset: {memberId: '66', handle: 'Wrong', accountDelete: 'ask'}});
@@ -353,10 +434,25 @@ test('review history is escaped and has no decision controls', () => {
 
 test('logout clears cached private reviews', async () => {
   const h = harness('admin', async () => response({authenticated: false, enabled: true}));
+  h.state().adminCpcClaims = cpcQueue();
+  h.state().adminCpcDecision = {id: 'claim-uuid', status: 'approved'};
   await h.context.loadAdminSession();
   assert.equal(h.state().adminReviews, null);
+  assert.equal(h.state().adminCpcClaims, null);
+  assert.equal(h.state().adminCpcDecision, null);
   assert.ok(!h.context.adminPage(seed).includes('private evidence'));
   assert.ok(h.context.adminPage(seed).includes('adminLogin'));
+});
+
+test('an older certification response cannot restore private evidence after logout', async () => {
+  let resolveQueue;
+  const h = harness('admin', async path => path.endsWith('cpc-claims') ? await new Promise(resolve => {resolveQueue = resolve;}) : response({authenticated: false, enabled: true}));
+  const loading = h.context.loadAdminCpcClaims();
+  await h.context.loadAdminSession();
+  resolveQueue(response(cpcQueue()));
+  await loading;
+  assert.equal(h.state().adminCpcClaims, null);
+  assert.equal(h.state().adminCpcLoading, false);
 });
 
 test('training portal offers all four destinations and replaces old standings', () => {

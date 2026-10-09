@@ -82,6 +82,23 @@ class Integration:
         return {'schema_version': 1, 'authority_id': self.authority,
                 'snapshot_complete': True, 'client_id': client, 'record_count': len(rows), 'claims': rows}
 
+    def admin_claims(self):
+        """Private review material, available only through the existing admin session."""
+        with self.db() as db:
+            db.execute('begin immediate')
+            rows = [dict(r) for r in db.execute('select * from cpc_claims order by updated desc,id')]
+            history = {}
+            for audit in db.execute('select claim_id,status,reviewer,created from cpc_claim_audit order by id'):
+                history.setdefault(audit['claim_id'], []).append(dict(audit))
+            for row in rows:
+                person = self.canonical_person(db, row['person'])
+                member = db.execute("select m.id,m.name,m.display_name,m.school from cpc_ids i join members m on cast(m.id as text)=i.local_id where i.kind='person' and i.uid=?", (person,)).fetchone()
+                row['member_id'] = member['id'] if member else None
+                row['member_name'] = (member['display_name'] or member['name']) if member else '成员档案已移除'
+                row['school'] = member['school'] if member else ''
+                row['history'] = history.get(row['id'], [])
+        return {'claims': rows, 'pending_count': sum(row['status'] == 'pending' for row in rows)}
+
     @staticmethod
     def canonical_person(db, person):
         visited = set()

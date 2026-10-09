@@ -3,6 +3,7 @@ import json
 import tempfile
 import time
 import unittest
+import uuid
 from email.message import Message
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,6 +12,7 @@ from unittest.mock import patch
 import app
 from admin_auth import AdminAuth
 from database import Database
+from cpc_integration import Integration
 
 
 class AdminTests(unittest.TestCase):
@@ -56,9 +58,59 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "refresh-ratings", "resource", "resource-category-rename", "resource-delete", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "review-cpc-claim", "refresh-ratings", "resource", "resource-category-rename", "resource-delete", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
+
+    def cpc_claim(self, service):
+        body = {key: str(uuid.uuid4()) for key in ('id', 'client', 'subject')}
+        body.update(person=service.roster()['members'][0]['id'], account_name='wall-account', note='内部核验材料')
+        service.submit(body)
+        return body
+
+    def test_cpc_claim_review_requires_session_csrf_and_same_origin(self):
+        self.database.add_manual_member('测试成员')
+        service = Integration(self.database)
+        claim = self.cpc_claim(service)
+        self.assertEqual(self.request('cpc-claims', method='GET')['status'], 401)
+        # A service synchronization credential does not confer admin privileges.
+        with patch.dict('os.environ', {'CPC_SYNC_TOKEN': 'test-sync-token'}):
+            self.assertEqual(self.request('cpc-claims', method='GET', headers={'Authorization': 'Bearer test-sync-token'})['status'], 401)
+        cookie, csrf = self.login()
+        review = {'claimId': claim['id'], 'status': 'approved', 'reviewer': 'forged'}
+        self.assertEqual(self.request('review-cpc-claim', review, cookie=cookie)['status'], 403)
+        self.assertEqual(self.request('review-cpc-claim', review, cookie=cookie, csrf=csrf, origin='https://attacker.example')['status'], 403)
+        self.assertEqual(service.claims(claim['client'])['claims'][0]['status'], 'pending')
+        result = self.request('review-cpc-claim', review, cookie=cookie, csrf=csrf)
+        self.assertEqual(result['status'], 200, result)
+        listing = self.request('cpc-claims', cookie=cookie, method='GET')['body']
+        self.assertEqual(listing['pending_count'], 0)
+        row = listing['claims'][0]
+        self.assertEqual((row['member_name'], row['account_name'], row['note']), ('测试成员', 'wall-account', '内部核验材料'))
+        self.assertEqual(row['reviewer'], 'admin')
+        self.assertEqual([(r['status'], r['reviewer']) for r in row['history']], [('approved', 'admin')])
+        self.assertNotIn('note', service.claims(claim['client'])['claims'][0])
+        self.assertEqual(self.request('review-cpc-claim', review, cookie=cookie, csrf=csrf)['status'], 400)
+        review['status'] = 'revoked'
+        self.assertEqual(self.request('review-cpc-claim', review, cookie=cookie, csrf=csrf)['status'], 200)
+        row = service.admin_claims()['claims'][0]
+        self.assertEqual([r['status'] for r in row['history']], ['approved', 'revoked'])
+        self.assertEqual(service.claims(claim['client'])['claims'][0]['status'], 'revoked')
+
+    def test_cpc_web_review_enforces_identity_uniqueness_and_rejection(self):
+        self.database.add_manual_member('测试成员')
+        service = Integration(self.database)
+        first, second = self.cpc_claim(service), self.cpc_claim(service)
+        cookie, csrf = self.login()
+        def review(claim, status):
+            return self.request('review-cpc-claim', {'claimId': claim['id'], 'status': status}, cookie=cookie, csrf=csrf)
+        self.assertEqual(review(first, 'approved')['status'], 200)
+        self.assertEqual(review(second, 'approved')['status'], 400)
+        self.assertEqual(review(second, 'revoked')['status'], 400)
+        self.assertEqual(review(second, 'pending')['status'], 400)
+        self.assertEqual(review(second, 'rejected')['status'], 200)
+        self.assertEqual(review(second, 'approved')['status'], 400)
+        self.assertEqual(service.admin_claims()['pending_count'], 0)
 
     def test_admin_edits_and_deletes_accounts_with_auth_and_fresh_ratings(self):
         member_id = self.database.add_manual_member("杨君泓")

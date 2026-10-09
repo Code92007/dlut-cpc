@@ -1,6 +1,6 @@
 # DLUT CPC 三工程联动说明
 
-2026-10-09 · v4 首版。此文与本工程代码一同提交；后续调整保留 Git 历史，重大协议变更追加版本记录。
+2026-10-09 · v4.1。此文与本工程代码一同提交；后续调整保留 Git 历史，重大协议变更追加版本记录。
 
 ## 职责与数据流
 
@@ -10,9 +10,13 @@ DLUT CPC 是人员、已确认逐场队伍名单和真人认领审核的信源�
 
 ## 成员认领
 
-用户在 OJ Wall 登录正式账号，选择 DLUT CPC 成员并填写核验说明。OJ Wall 服务提交自己的持久发布方 UUID、该账号的持久主体 UUID及目标成员 UUID；管理员通过命令核验身份后批准、拒绝或撤销。登录归 OJ Wall，身份判断归本工程。
+用户在 OJ Wall 登录正式账号，选择 DLUT CPC 成员并填写核验说明。OJ Wall 服务提交自己的持久发布方 UUID、该账号的持久主体 UUID及目标成员 UUID；管理员登录本工程 `/admin`，进入“成员认证”页签，核验身份后批准、拒绝或撤销。登录归 OJ Wall，身份判断归本工程。
 
 同一成员只能有一个有效认证账号；同一客户端主体也只能有一个有效认证。审核材料不出现在对外审批快照中。批准、拒绝和撤销写入审核日志，不按同名自动认证。
+
+网页默认显示待审核申请，可按状态筛选，查看账号、成员、校区、核验说明与审核历史。操作时再次确认，审核者取当前登录管理员；结果由 OJ Wall 默认每 5 分钟同步，用户也可点击“更新认证状态”。网页复用原管理员会话、同源检查和 CSRF 校验，无新增管理员密码或跨站登录。服务同步凭据不能用于网页审核。
+
+管理员命令继续可用，与网页共用同一审核规则和日志：
 
 ```sh
 docker compose exec -T dlut-cpc python tools/cpc_admin.py meta
@@ -33,7 +37,9 @@ docker compose exec -T dlut-cpc python tools/cpc_admin.py review 申请UUID appr
 | GET `/api/integration/v1/claims/snapshot?client=发布方UUID` | 指定 OJ Wall 的审批完整快照 |
 | POST `/api/integration/v1/claims` | 提交认领申请，申请 UUID 支持幂等重试 |
 
-所有接口要求 `Authorization: Bearer 服务凭据`。快照使用 schema 1、发布方 UUID、完整标识与记录数量；OJ Wall 核对后事务替换缓存。只发布 `rosterConfirmed` 的逐场名单，不能把一个成员曾加入过某队推断为参加该队所有比赛。
+上表接口要求 `Authorization: Bearer 服务凭据`。快照使用 schema 1、发布方 UUID、完整标识与记录数量；OJ Wall 核对后事务替换缓存。只发布 `rosterConfirmed` 的逐场名单，不能把一个成员曾加入过某队推断为参加该队所有比赛。
+
+浏览器管理接口是 GET `/api/admin/cpc-claims` 和 POST `/api/admin/review-cpc-claim`（`claimId`、`status`）；只接受本工程现有管理员会话，POST 另需同源及 `X-CSRF-Token`。核验材料与审核历史只通过管理接口提供，不加入服务间公开字段。
 
 OJ Wall 默认每 5 分钟拉取；失败保留上次成功数据，24 小时无法核验时暂停现场归属统计。现场榜单的比赛、队伍行与题序仍需 OJ Wall 管理员核对。
 
@@ -52,5 +58,6 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
 ## 版本记录与相关方案
 
 - v4 / 2026-10-09：首版采用管理员命令审核、完整快照及持久 UUID；不引入 SSO、消息队列或共享数据库。
+- v4.1 / 2026-10-09：在现有 `/admin` 增加成员认证审核页，保留命令方式。共用原认领表和审核日志，服务间协议及迁移方式不变。
 
 完整设计及版本快照：[三工程方案](https://github.com/Code92007/qq-cf-bot/blob/main/docs/cpc-cross-project-integration.md)、[迭代记录](https://github.com/Code92007/qq-cf-bot/blob/main/docs/cpc-integration/CHANGELOG.md)、[统一运维说明](https://github.com/Code92007/qq-cf-bot/blob/main/docs/cpc-integration-operations.md)。

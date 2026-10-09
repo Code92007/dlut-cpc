@@ -19,7 +19,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 from database import Database, load_seed_file
-from cpc_integration import handle as cpc_handle
+from cpc_integration import Integration, handle as cpc_handle
 from admin_auth import AdminAuth
 from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
 
@@ -118,6 +118,15 @@ class SiteHandler(BaseHTTPRequestHandler):
             try:
                 self._send_json({"items": self._resources_payload(include_drafts=True),
                                  "pdfRepository": github_lfs_status()})
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+            return
+        if path == "/api/admin/cpc-claims":
+            if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
+                self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
+                return
+            try:
+                self._send_json(Integration(Database(DATABASE_PATH)).admin_claims())
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
@@ -311,6 +320,10 @@ class SiteHandler(BaseHTTPRequestHandler):
                 extra = {"team": self._text(body, "team", 200, required=True)} if path.endswith("edit-members") and "team" in body else {}
                 action(self._text(body, "honorId", 150, required=True), members, source=source,
                        medal=self._text(body, "medal", 20, required=True) if "medal" in body else None, **extra)
+                self._send_json({"ok": True})
+            elif path == "/api/admin/review-cpc-claim":
+                Integration(database).review(self._text(body, "claimId", 100, required=True),
+                                             self._text(body, "status", 20, required=True), session["username"])
                 self._send_json({"ok": True})
             elif path == "/api/admin/review-submission":
                 if type(body.get("approve")) is not bool:
