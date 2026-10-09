@@ -19,6 +19,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 from database import Database, load_seed_file
+from cpc_integration import handle as cpc_handle
 from admin_auth import AdminAuth
 from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
 
@@ -95,6 +96,8 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if cpc_handle(self, Database(DATABASE_PATH)):
+            return
         if path == "/api/admin/session":
             auth = self.server.admin_auth
             session = auth.session(self.headers.get("Cookie", ""))
@@ -187,6 +190,8 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if cpc_handle(self, Database(DATABASE_PATH), post=True):
+            return
         if path in {"/api/roster-submissions", "/api/account-submissions"}:
             self._submit_public_submission("account" if path.endswith("account-submissions") else "roster")
             return

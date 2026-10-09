@@ -10,6 +10,8 @@ ENV PYTHONUNBUFFERED=1 \
     DATABASE_PATH=/app/runtime/dlut_cpc.sqlite3
 
 COPY app.py /app/app.py
+COPY cpc_common.py /app/cpc_common.py
+COPY cpc_integration.py /app/cpc_integration.py
 COPY database.py /app/database.py
 COPY official_imports.py /app/official_imports.py
 COPY schools.py /app/schools.py

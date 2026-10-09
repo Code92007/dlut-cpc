@@ -306,3 +306,9 @@ curl -fsS http://127.0.0.1:8021/healthz
 ```
 
 公开数据同步后需要提交更新后的 `data/site.json` 并重建容器。生产环境中的人工补录只保存在已挂载的 `runtime/dlut_cpc.sqlite3`，应随服务器备份一并保留。
+
+## 可选三工程联动
+
+DLUT CPC 只提供已确认逐场名单及成员认领审核，不保存 OJ Wall 提交或 CF Bot 口胡。配置 `CPC_SYNC_TOKEN` 启用受保护接口；管理员用 `python tools/cpc_admin.py list` 查看申请，用 `review 申请UUID approved --reviewer 管理员名称` 审核。服务、成员和参赛 UUID 随运行数据库迁移。
+
+本工程的职责、接口、配置、持久数据及迁移步骤见 [联动方案说明](docs/cpc-integration.md)。完整方案与迭代快照统一维护于 [qq-cf-bot/docs](https://github.com/Code92007/qq-cf-bot/tree/main/docs)。
