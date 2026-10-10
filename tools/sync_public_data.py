@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from database import Database  # noqa: E402
+from contest_names import honor_contest_name  # noqa: E402
 from schools import SCHOOL_ALIASES, school_group  # noqa: E402
 
 
@@ -187,6 +188,7 @@ def parse_cpcfinder_api(document: str, source_url: str, min_year: int = 2020) ->
             "cpcfinderTeamId": row.get("teamId"),
         }
         record["id"] = record_key(record)
+        record["event"] = honor_contest_name(record)
         honors.append(record)
     return deduplicate(honors)
 
@@ -351,6 +353,7 @@ def parse_cpcfinder(document: str, source_url: str, min_year: int = 2020) -> lis
             "sources": [{"name": "CPC Finder", "url": public_source_url(source_url)}],
         }
         record["id"] = record_key(record)
+        record["event"] = honor_contest_name(record)
         honors.append(record)
     return deduplicate(honors)
 

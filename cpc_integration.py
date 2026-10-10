@@ -8,6 +8,7 @@ import uuid
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
 from cpc_common import connect, uid
+from contest_names import canonical_ranklists
 from schools import SCHOOL_GROUPS
 
 
@@ -36,7 +37,7 @@ class Integration:
         # Reuse the same curated mapping as the clickable contest titles.
         data_path = Path(os.environ.get('SITE_DATA_PATH', Path(__file__).parent / 'data/site.json'))
         mapping_path = data_path.parent / 'contest_ranklists.json'
-        ranklists = json.loads(mapping_path.read_text())['contests'] if mapping_path.exists() else {}
+        ranklists = canonical_ranklists(json.loads(mapping_path.read_text())['contests']) if mapping_path.exists() else {}
         with self.db() as db:
             db.execute('begin immediate')
             members = [{

@@ -6,6 +6,7 @@ import json
 import re
 import unicodedata
 
+from contest_names import SITES, honor_contest_name
 from schools import MAINTENANCE_GROUPS, school_group
 
 
@@ -32,17 +33,21 @@ def normalized(value: str) -> str:
 
 
 def contest_key(record: dict) -> tuple[str, str, str] | None:
-    text = record.get("event", "") + " " + record.get("location", "")
+    event = honor_contest_name(record)
+    text = event + " " + record.get("location", "")
     # Final events can be held in the next calendar year. Their season is explicit.
-    year = re.search(r"(?:19|20)\d{2}", record.get("event", ""))
-    edition = re.search(r"第\s*(\d+)\s*届", record.get("event", ""))
-    season = year[0] if year else str(2014 + int(edition[1])) if edition and record.get("series") == "CCPC" else record.get("date", "")[:4]
-    if re.search(r"总决赛|final", text, re.I):
+    year = re.search(r"(?:19|20)\d{2}", event)
+    edition = re.search(r"第\s*(\d+)\s*届", event)
+    if year:
+        season = year[0]
+    elif edition:
+        season = str((2014 if record.get("series") == "CCPC" else 1975) + int(edition[1]))
+    else:
+        season = record.get("date", "")[:4]
+    if re.search(r"总决赛|东亚区决赛|中国区决赛|final", text, re.I):
         region = "总决赛"
     else:
-        region = next((name for name in ("秦皇岛", "哈尔滨", "杭州", "长春", "成都", "合肥", "宁波", "南阳", "桂林", "吉林",
-                                        "厦门", "威海", "绵阳", "广州", "深圳", "重庆", "济南", "郑州", "沈阳", "南京",
-                                        "银川", "上海", "昆明", "武汉", "西安", "北京", "台北", "南昌", "青岛", "焦作", "徐州", "乌鲁木齐") if name in text), None)
+        region = next((name for name in SITES.values() if name in text), None)
         if not region:
             suffix = re.sub(r"^(?:icpc|ccpc)\d{4}", "", str(record.get("externalContestId") or ""))
             region = {"shenyang": "沈阳", "nanjing": "南京", "shanghai": "上海", "yinchuan": "银川", "nanchang": "南昌",

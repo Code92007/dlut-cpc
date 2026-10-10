@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Iterable
 from urllib.parse import urlsplit
 
+from contest_names import canonical_ranklists, honor_contest_name
 from official_imports import ARCHIVE_PROVIDERS
 from schools import MAINTENANCE_GROUPS, school_group
 
@@ -23,7 +24,7 @@ def load_seed_file(path: Path | str) -> dict:
     data = json.loads(path.read_text(encoding="utf-8"))
     ranklists = path.parent / "contest_ranklists.json"
     if ranklists.exists():
-        data["contestRanklists"] = json.loads(ranklists.read_text(encoding="utf-8"))["contests"]
+        data["contestRanklists"] = canonical_ranklists(json.loads(ranklists.read_text(encoding="utf-8"))["contests"])
     archive = path.parent / "historical_honors.json"
     if archive.exists():
         data["historicalImports"] = [json.loads(archive.read_text(encoding="utf-8"))]
@@ -315,6 +316,14 @@ class Database:
                 self._sync_site_data(connection, seed)
             from official_imports import reconcile_ccpc_public_duplicates
             reconcile_ccpc_public_duplicates(self, connection)
+            self._normalize_contest_names(connection)
+
+    @staticmethod
+    def _normalize_contest_names(connection: sqlite3.Connection) -> None:
+        for row in connection.execute("SELECT id,event,series,location,external_contest_id FROM honors").fetchall():
+            name = honor_contest_name({**dict(row), "externalContestId": row["external_contest_id"]})
+            if name != row["event"]:
+                connection.execute("UPDATE honors SET event=?,updated_at=CURRENT_TIMESTAMP WHERE id=?", (name, row["id"]))
 
     @staticmethod
     def _ensure_schema(connection: sqlite3.Connection) -> None:
@@ -645,7 +654,7 @@ class Database:
         if existing and connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"team_override:{honor_id}",)).fetchone():
             record = {**record, "team": existing["team"]}
         values = (
-            str(record.get("event") or ""),
+            honor_contest_name(record),
             str(record.get("series") or "其他"),
             str(record.get("date") or ""),
             str(record.get("location") or ""),
@@ -1353,7 +1362,7 @@ class Database:
         with self.connect() as connection:
             existing = connection.execute(
                 "SELECT id FROM honors WHERE date=? AND event=? AND normalized_team=? AND is_manual=0",
-                (record.get("date", ""), record.get("event", ""), self._normalize_team(record.get("team", ""))),
+                (record.get("date", ""), honor_contest_name(record), self._normalize_team(record.get("team", ""))),
             ).fetchone()
             if existing:
                 raise ValueError("该队伍的公开参赛成绩已存在，不能重复补录")

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-10-10",
   "sources": [
     {
       "name": "RankLand",
@@ -15,7 +15,7 @@
     }
   ],
   "contests": {
-    "第 11 届中国大学生程序设计竞赛总决赛": "https://pintia.cn/rankings/2046522266744168448",
+    "第 11 届 CCPC 中国大学生程序设计竞赛总决赛": "https://pintia.cn/rankings/2046522266744168448",
     "第 50 届 ICPC 国际大学生程序设计竞赛东亚区决赛": "https://xcpcio.com/board/icpc/50th/ecfinal",
     "第 11 届 CCPC 中国大学生程序设计竞赛重庆站": "https://xcpcio.com/board/ccpc/11th/chongqing",
     "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛香港站": "https://xcpcio.com/board/icpc/50th/hongkong",
@@ -28,7 +28,7 @@
     "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛武汉站": "https://xcpcio.com/board/icpc/50th/wuhan",
     "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站": "https://xcpcio.com/board/icpc/50th/chengdu",
     "第 50 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站": "https://rl.algoux.cn/collection/official?rankId=icpc2025xi_an",
-    "第 10 届中国大学生程序设计竞赛总决赛": "https://rl.algoux.cn/ranklist/ccpc2024final",
+    "第 10 届 CCPC 中国大学生程序设计竞赛总决赛": "https://rl.algoux.cn/ranklist/ccpc2024final",
     "第 49 届 ICPC 国际大学生程序设计竞赛东亚区决赛": "https://xcpcio.com/board/icpc/49th/ecfinal",
     "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛香港站": "https://xcpcio.com/board/icpc/49th/hongkong",
     "第 49 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站": "https://xcpcio.com/board/icpc/49th/kunming",
@@ -63,7 +63,7 @@
     "第 8 届 CCPC 中国大学生程序设计竞赛广州站": "https://xcpcio.com/board/ccpc/8th/guangzhou",
     "第 47 届 ICPC 国际大学生程序设计竞赛亚洲区域赛沈阳站": "https://xcpcio.com/board/icpc/47th/shenyang",
     "第 8 届 CCPC 中国大学生程序设计竞赛威海站": "https://xcpcio.com/board/ccpc/8th/weihai",
-    "第 8 届 CCPC 中国大学生程序设计竞赛桂林": "https://xcpcio.com/board/ccpc/8th/guilin",
+    "第 8 届 CCPC 中国大学生程序设计竞赛桂林站": "https://xcpcio.com/board/ccpc/8th/guilin",
     "第 7 届 CCPC 中国大学生程序设计竞赛总决赛": "https://xcpcio.com/board/ccpc/7th/final",
     "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛昆明站": "https://ac.nowcoder.com/acm/contest/32708#rank",
     "第 46 届 ICPC 国际大学生程序设计竞赛亚洲区域赛南京站": "https://xcpcio.com/board/icpc/46th/nanjing",
@@ -83,9 +83,9 @@
     "第 6 届 CCPC 中国大学生程序设计竞赛绵阳站": "https://xcpcio.com/board/ccpc/2020/mianyang",
     "第 6 届 CCPC 中国大学生程序设计竞赛威海站": "https://xcpcio.com/board/ccpc/2020/weihai",
     "第 6 届 CCPC 中国大学生程序设计竞赛秦皇岛站": "https://xcpcio.com/board/ccpc/2020/qinhuangdao",
-    "2019 CCPC 总决赛": "https://rl.algoux.cn/ranklist/ccpc2019final",
-    "2018 CCPC 秦皇岛站": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
-    "2017 CCPC 总决赛": "https://rl.algoux.cn/ranklist/ccpc2017final",
-    "2017 CCPC 杭州站": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
+    "第 5 届 CCPC 中国大学生程序设计竞赛总决赛": "https://rl.algoux.cn/ranklist/ccpc2019final",
+    "第 4 届 CCPC 中国大学生程序设计竞赛秦皇岛站": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
+    "第 3 届 CCPC 中国大学生程序设计竞赛总决赛": "https://rl.algoux.cn/ranklist/ccpc2017final",
+    "第 3 届 CCPC 中国大学生程序设计竞赛杭州站": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
   }
 }
