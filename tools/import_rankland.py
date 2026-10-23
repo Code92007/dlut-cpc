@@ -18,6 +18,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from schools import SCHOOL_GROUPS, school_group  # noqa: E402
+from contest_names import SITES  # noqa: E402
 ORIGIN = "https://rl.algoux.cn"
 BATCH_ID = "rankland-pre2020-v1"
 # CCPC calls its regional contests "Site" rather than "Regional".
@@ -112,7 +113,8 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
     audit = {"key": key, "title": title, "date": date, "url": f"{ORIGIN}/ranklist/{key}"}
     if (before_date and date >= before_date) or excluded_event(key, all_titles):
         return [], {**audit, "excluded": "date-or-event-type"}
-    if key not in CCPC_REGIONAL_KEYS | ICPC_REGIONAL_KEYS and not re.search(r"regional|区域|final|总决赛", all_titles, re.I):
+    site_key = re.sub(r"^(?:icpc|ccpc)\d{4}", "", key).replace("_", "").replace("-", "")
+    if key not in CCPC_REGIONAL_KEYS | ICPC_REGIONAL_KEYS and site_key not in SITES and not re.search(r"regional|区域|final|总决赛", all_titles, re.I):
         return [], {**audit, "excluded": "unverified-event-type"}
     medal_series = [i for i, series in enumerate(srk.get("series", []))
                     if any(segment.get("style") in {"gold", "silver", "bronze"} for segment in series.get("segments", []))]
@@ -124,6 +126,7 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
     if not boundaries_known and not include_participation:
         return [], {**audit, "excluded": "missing-medal-boundaries"}
     static = srk if srk.get("type") == "static" else convert(srk)
+    overall_series = [index for index, series in enumerate(srk.get("series", [])) if series.get("rule", {}).get("preset") == "Normal"]
     official_total = sum(row["user"].get("official", True) is not False for row in static["rows"])
     result = []
     matching_schools = set()
@@ -137,6 +140,8 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
             continue
         matching_schools.add(original_school)
         value = row["rankValues"][medal_index]
+        overall_rank = row["rankValues"][overall_series[0]].get("rank") if len(overall_series) == 1 else position
+        overall_rank = overall_rank or position
         segment = value.get("segmentIndex")
         official = user.get("official", True) is not False
         host_starred = key == "icpc2011dalian"
@@ -163,7 +168,7 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
             "team": team, "school": group, "originalSchool": original_school,
             "members": [], "expectedMembers": 3, "medal": medal,
             **({"medalStatus": "unknown"} if not medal else {}),
-            "rank": f"{value['rank']} / {official_total}" if official else f"{position} / {len(static['rows'])}", "overallRank": f"{position} / {len(static['rows'])}",
+            "rank": f"{value['rank']} / {official_total}" if official else f"{overall_rank} / {len(static['rows'])}", "overallRank": f"{overall_rank} / {len(static['rows'])}",
             "official": official, "source": {"name": "RankLand 历史榜单", "url": audit["url"]},
             **({"sources": [{"name": "RankLand 历史榜单", "url": audit["url"]}, {"name": "队内确认：2011 大连站主办校队伍打星"}]} if host_starred else {}),
             "externalProvider": "rankland", "externalAwardId": identity,

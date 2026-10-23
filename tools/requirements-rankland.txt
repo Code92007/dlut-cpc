@@ -1,2 +1,2 @@
-# Optional: needed only when creating a new historical archive, never by the website.
+# Required by the daily RankLand sync and historical archive tools.
 algoux-standard-ranklist-utils==0.3.3

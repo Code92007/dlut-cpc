@@ -1707,3 +1707,9 @@ a:hover {
 .member-year-filter { min-width: 125px; }
 .member-year-note { margin: -6px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
 .member-year-note[role="alert"] { color: #b42318; }
+.diff-table td { white-space: normal; min-width: 180px; vertical-align: top; }
+.diff-table td:nth-child(2) { background: #fff7ed; }
+.diff-table td:nth-child(3) { background: #f0fdf4; }
+.result-diff .review-actions { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; max-width: none; justify-content: flex-start; }
+.review-item.result-diff { display: block; }
+.result-diff .review-contest { margin-bottom: 14px; }

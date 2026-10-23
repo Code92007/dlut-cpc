@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import copy
 import datetime as dt
 import hashlib
 import html
@@ -479,6 +480,73 @@ def write_json_atomic(path: Path, payload: dict) -> None:
     temporary.replace(path)
 
 
+def build_public_snapshot(
+    site: dict, *, source_url: str = DEFAULT_SOURCE_URL, html_file: Path | None = None,
+    students_file: Path | None = None, skip_members: bool = False, skip_students: bool = False,
+    student_results_cache: Path | None = None, workers: int = 6, supplement: list[Path] | None = None,
+) -> tuple[dict, dict]:
+    site = copy.deepcopy(site)
+    document = html_file.read_text(encoding="utf-8") if html_file else fetch_text(source_url)
+    fetched = parse_cpcfinder(document, source_url)
+    if not fetched and site.get("honors"):
+        raise ValueError("CPC Finder returned no results; existing data retained")
+    for record in fetched:
+        record["schoolVerified"] = True
+    public_members = site.get("publicMembers", [])
+    old_member_stats = {member["externalId"]: member.get("cpcfinder", {}) for member in public_members}
+    directory_failed = False
+    if not skip_students and (not html_file or students_file):
+        try:
+            student_document = (
+                students_file.read_text(encoding="utf-8")
+                if students_file
+                else fetch_text(student_list_api_url(source_url))
+            )
+            students = parse_cpcfinder_students(student_document, source_url)
+            if not students and public_members:
+                raise ValueError("CPC Finder returned an empty student directory")
+            public_members = students
+            for member in public_members:
+                previous = old_member_stats.get(member["externalId"], {})
+                if "ironCount" in previous:
+                    member["cpcfinder"]["ironCount"] = previous["ironCount"]
+                    member["cpcfinder"]["ironExcludesUnofficial"] = previous.get("ironExcludesUnofficial", False)
+        except Exception as exc:
+            directory_failed = True
+            print(f"warning: student directory fetch failed, preserving existing data: {exc}", file=sys.stderr)
+    iron_awards: dict[str, set[str]] = {}
+    failed_students: list[str] = []
+    if not html_file and not skip_students and not skip_members:
+        student_records, iron_awards, failed_students = fetch_cpcfinder_student_results(
+            public_members, source_url, workers, student_results_cache,
+        )
+        fetched = deduplicate([*fetched, *student_records])
+    enriched = 0
+    failed: list[int] = []
+    if not html_file and not skip_members:
+        enriched, failed = enrich_cpcfinder_members(fetched, source_url, workers)
+    apply_iron_counts(public_members, fetched, iron_awards, failed)
+    fetched = [record for record in fetched if not record.get("requiresSchoolVerification") or record.get("schoolVerified")]
+    for record in fetched:
+        record.pop("requiresSchoolVerification", None)
+    supplements = load_supplements(supplement or [])
+    honors = merge_with_existing(fetched, site.get("honors", []), supplements)
+    site["honors"] = honors
+    site["publicMembers"] = public_members
+    site["medalSummary"] = medal_summary(honors)
+    site["meta"]["updatedAt"] = dt.date.today().isoformat()
+    site.pop("ratingGroups", None)
+
+    missing = sum(not item.get("members") for item in honors)
+    summary = {
+        "records": len(honors), "rosters": len(honors) - missing, "missing": missing,
+        "enriched": enriched, "publicMembers": len(public_members), "supplements": len(supplements),
+        "ironRecords": sum(row["medal"] == "铁牌" for row in honors),
+        "failedContests": failed, "failedStudents": failed_students, "studentDirectoryFailed": directory_failed,
+    }
+    return site, summary
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Sync and deduplicate DLUT public contest results")
     parser.add_argument("--source-url", default=DEFAULT_SOURCE_URL)
@@ -493,58 +561,13 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=6, help="concurrent CPC Finder contest requests")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
-
-    site = json.loads(args.site_data.read_text(encoding="utf-8"))
-    document = args.html_file.read_text(encoding="utf-8") if args.html_file else fetch_text(args.source_url)
-    fetched = parse_cpcfinder(document, args.source_url)
-    for record in fetched:
-        record["schoolVerified"] = True
-    public_members = site.get("publicMembers", [])
-    old_member_stats = {member["externalId"]: member.get("cpcfinder", {}) for member in public_members}
-    if not args.skip_students and (not args.html_file or args.students_file):
-        try:
-            student_document = (
-                args.students_file.read_text(encoding="utf-8")
-                if args.students_file
-                else fetch_text(student_list_api_url(args.source_url))
-            )
-            public_members = parse_cpcfinder_students(student_document, args.source_url)
-            for member in public_members:
-                previous = old_member_stats.get(member["externalId"], {})
-                if "ironCount" in previous:
-                    member["cpcfinder"]["ironCount"] = previous["ironCount"]
-                    member["cpcfinder"]["ironExcludesUnofficial"] = previous.get("ironExcludesUnofficial", False)
-        except Exception as exc:
-            print(f"warning: student directory fetch failed, preserving existing data: {exc}", file=sys.stderr)
-    iron_awards: dict[str, set[str]] = {}
-    failed_students: list[str] = []
-    if not args.html_file and not args.skip_students and not args.skip_members:
-        student_records, iron_awards, failed_students = fetch_cpcfinder_student_results(
-            public_members, args.source_url, args.workers, args.student_results_cache,
-        )
-        fetched = deduplicate([*fetched, *student_records])
-    enriched = 0
-    failed: list[int] = []
-    if not args.html_file and not args.skip_members:
-        enriched, failed = enrich_cpcfinder_members(fetched, args.source_url, args.workers)
-    apply_iron_counts(public_members, fetched, iron_awards, failed)
-    fetched = [record for record in fetched if not record.get("requiresSchoolVerification") or record.get("schoolVerified")]
-    for record in fetched:
-        record.pop("requiresSchoolVerification", None)
-    supplements = load_supplements(args.supplement)
-    honors = merge_with_existing(fetched, site.get("honors", []), supplements)
-    site["honors"] = honors
-    site["publicMembers"] = public_members
-    site["medalSummary"] = medal_summary(honors)
-    site["meta"]["updatedAt"] = dt.date.today().isoformat()
-    site.pop("ratingGroups", None)
-
-    missing = sum(not item.get("members") for item in honors)
+    options = {key: value for key, value in vars(args).items() if key not in {"site_data", "database", "dry_run"}}
+    site, summary = build_public_snapshot(json.loads(args.site_data.read_text(encoding="utf-8")), **options)
     print(
-        f"records={len(honors)} rosters={len(honors) - missing} missing={missing} "
-        f"enriched={enriched} public_members={len(public_members)} supplements={len(supplements)} "
-        f"iron_records={sum(row['medal'] == '铁牌' for row in honors)} "
-        f"failed_contests={len(failed)} failed_students={len(failed_students)}"
+        f"records={summary['records']} rosters={summary['rosters']} missing={summary['missing']} "
+        f"enriched={summary['enriched']} public_members={summary['publicMembers']} supplements={summary['supplements']} "
+        f"iron_records={summary['ironRecords']} "
+        f"failed_contests={len(summary['failedContests'])} failed_students={len(summary['failedStudents'])}"
     )
     if not args.dry_run:
         write_json_atomic(args.site_data, site)

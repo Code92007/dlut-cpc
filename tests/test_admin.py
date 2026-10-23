@@ -58,7 +58,7 @@ class AdminTests(unittest.TestCase):
         return cookie, self.auth.session(cookie)["csrf"]
 
     def test_anonymous_cannot_mutate_any_admin_endpoint(self):
-        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "review-cpc-claim", "refresh-ratings", "resource", "resource-category-rename", "resource-delete", "logout"):
+        for path in ("member", "account", "account-edit", "account-delete", "name", "honor", "confirm-members", "edit-members", "review-submission", "review-account-submission", "review-cpc-claim", "resolve-result-diff", "refresh-ratings", "resource", "resource-category-rename", "resource-delete", "logout"):
             self.assertEqual(self.request(path, {})["status"], 401)
         self.assertEqual(self.database.payload(self.seed)["members"], [])
 
@@ -67,6 +67,24 @@ class AdminTests(unittest.TestCase):
         body.update(person=service.roster()['members'][0]['id'], account_name='wall-account', note='内部核验材料')
         service.submit(body)
         return body
+
+    def test_result_diff_read_and_decision_require_admin_and_csrf(self):
+        from tools.public_updates import ingest_public_results
+        record = {"id": "diff-result", "event": "测试赛", "date": "2026-10-18", "team": "测试队", "series": "ICPC",
+                  "medal": "银牌", "rank": "10 / 100", "cpcfinderAwardId": 123}
+        self.database.initialize({**self.seed, "honors": [record]})
+        ingest_public_results(self.database, [{**record, "rank": "11 / 100"}])
+        self.assertEqual(self.request('result-diffs', method='GET')['status'], 401)
+        cookie, csrf = self.login()
+        result = self.request('result-diffs', method='GET', cookie=cookie)
+        self.assertEqual(result['status'], 200)
+        diff_id = result['body']['items'][0]['id']
+        body = {'diffId': diff_id, 'choice': 'b', 'reviewer': 'forged'}
+        self.assertEqual(self.request('resolve-result-diff', body, cookie=cookie)['status'], 403)
+        self.assertEqual(self.request('resolve-result-diff', body, cookie=cookie, csrf=csrf, origin='https://attacker.example')['status'], 403)
+        self.assertEqual(self.request('resolve-result-diff', body, cookie=cookie, csrf=csrf)['status'], 200)
+        with self.database.connect() as connection:
+            self.assertEqual(connection.execute('SELECT reviewer FROM public_result_diffs WHERE id=?', (diff_id,)).fetchone()[0], 'admin')
 
     def test_cpc_claim_review_requires_session_csrf_and_same_origin(self):
         self.database.add_manual_member('测试成员')

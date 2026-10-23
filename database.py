@@ -16,7 +16,7 @@ from schools import MAINTENANCE_GROUPS, school_group
 
 
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
-SCHEMA_VERSION = 12
+SCHEMA_VERSION = 13
 
 
 def load_seed_file(path: Path | str) -> dict:
@@ -292,6 +292,39 @@ CREATE TABLE IF NOT EXISTS training_links (
     cohort TEXT NOT NULL DEFAULT '',
     sort_order INTEGER NOT NULL DEFAULT 0,
     published INTEGER NOT NULL DEFAULT 1 CHECK(published IN (0,1))
+);
+
+CREATE TABLE IF NOT EXISTS public_result_sources (
+    provider TEXT NOT NULL,
+    external_id TEXT NOT NULL,
+    honor_id TEXT REFERENCES honors(id),
+    record_json TEXT NOT NULL,
+    observed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(provider, external_id)
+);
+
+CREATE TABLE IF NOT EXISTS public_result_diffs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    honor_id TEXT REFERENCES honors(id),
+    provider TEXT NOT NULL,
+    external_id TEXT NOT NULL,
+    fingerprint TEXT NOT NULL,
+    before_json TEXT NOT NULL,
+    after_json TEXT NOT NULL,
+    fields_json TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','kept','applied','superseded')),
+    reviewer TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TEXT,
+    UNIQUE(provider, external_id, fingerprint)
+);
+
+CREATE INDEX IF NOT EXISTS idx_public_result_diffs_status ON public_result_diffs(status, id);
+
+CREATE TABLE IF NOT EXISTS rankland_sync_catalog (
+    contest_key TEXT PRIMARY KEY,
+    file_id TEXT NOT NULL,
+    checked_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 """
 
@@ -647,6 +680,8 @@ class Database:
                             raise ValueError("Public result conflicts with the local result archive: " + "; ".join(warnings))
                         if status == "merged":
                             honor_id, archive_union = target["id"], True
+        if not manual and connection.execute("SELECT 1 FROM metadata WHERE key=?", (f"public_result_guard:{honor_id}",)).fetchone():
+            return honor_id
         sources = self._honor_sources(record)
         source_ids = [(self._source(connection, item, manual=manual), item) for item in sources]
         primary_source_id = max(source_ids, key=lambda pair: source_priority(str(pair[1].get("name") or "")))[0]
@@ -726,8 +761,11 @@ class Database:
 
     def _sync_site_data(self, connection: sqlite3.Connection, site: dict) -> None:
         self._merge_panjin_members(connection)
-        connection.execute("DELETE FROM member_public_stats WHERE provider='cpcfinder'")
-        for detail in site.get("publicMembers", []):
+        sync_managed = connection.execute("SELECT 1 FROM metadata WHERE key='public_sync_initialized'").fetchone()
+        public_members = site.get("publicMembers", []) if site.get("publicSyncRefresh") or not sync_managed else None
+        if public_members is not None:
+            connection.execute("DELETE FROM member_public_stats WHERE provider='cpcfinder'")
+        for detail in public_members or []:
             source_id = self._source(connection, detail.get("source"), manual=False)
             member_id = self._upsert_member(connection, detail, source_id, manual=False)
             stats = detail.get("cpcfinder") or {}
@@ -854,7 +892,7 @@ class Database:
             )
         connection.execute(
             "INSERT INTO metadata(key, value) VALUES ('data_updated_at', ?) "
-            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            "ON CONFLICT(key) DO UPDATE SET value=MAX(metadata.value,excluded.value)",
             (str(site.get("meta", {}).get("updatedAt") or dt.date.today().isoformat()),),
         )
         for item in site.get("trainingLinks", []):

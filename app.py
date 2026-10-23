@@ -22,6 +22,8 @@ from database import Database, load_seed_file
 from cpc_integration import Integration, handle as cpc_handle
 from admin_auth import AdminAuth
 from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
+from tools.public_sync import refresh_public_data_periodically
+from tools.public_updates import list_result_diffs, resolve_result_diff
 
 
 ROOT = Path(__file__).resolve().parent
@@ -118,6 +120,17 @@ class SiteHandler(BaseHTTPRequestHandler):
             try:
                 self._send_json({"items": self._resources_payload(include_drafts=True),
                                  "pdfRepository": github_lfs_status()})
+            except (OSError, ValueError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+            return
+        if path == "/api/admin/result-diffs":
+            if not self.server.admin_auth.session(self.headers.get("Cookie", "")):
+                self._send_json({"error": "请先以管理员身份登录"}, HTTPStatus.UNAUTHORIZED)
+                return
+            try:
+                query = parse_qs(urlsplit(self.path).query)
+                self._send_json(list_result_diffs(Database(DATABASE_PATH), status=query.get("status", ["pending"])[0],
+                                                  page=int(query.get("page", ["1"])[0])))
             except (OSError, ValueError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
@@ -320,6 +333,9 @@ class SiteHandler(BaseHTTPRequestHandler):
                 extra = {"team": self._text(body, "team", 200, required=True)} if path.endswith("edit-members") and "team" in body else {}
                 action(self._text(body, "honorId", 150, required=True), members, source=source,
                        medal=self._text(body, "medal", 20, required=True) if "medal" in body else None, **extra)
+                self._send_json({"ok": True})
+            elif path == "/api/admin/resolve-result-diff":
+                resolve_result_diff(database, self._member_id(body.get("diffId")), self._text(body, "choice", 1, required=True), session["username"])
                 self._send_json({"ok": True})
             elif path == "/api/admin/review-cpc-claim":
                 Integration(database).review(self._text(body, "claimId", 100, required=True),
@@ -569,6 +585,12 @@ def main() -> None:
     server.submission_limiter = SubmissionLimiter()
     rating_interval = float(os.environ.get("CF_REFRESH_INTERVAL_SECONDS", "10800"))
     rating_stop = threading.Event()
+    public_interval = float(os.environ.get("PUBLIC_SYNC_INTERVAL_SECONDS", "86400"))
+    public_retry = float(os.environ.get("PUBLIC_SYNC_RETRY_SECONDS", "3600"))
+    if public_interval > 0:
+        threading.Thread(target=refresh_public_data_periodically,
+                         args=(rating_stop, DATABASE_PATH, DATA_PATH, public_interval, max(60, public_retry)),
+                         daemon=True, name="public-data-refresh").start()
     if rating_interval > 0:
         threading.Thread(target=refresh_ratings_periodically,
                          args=(rating_stop, rating_interval), daemon=True,

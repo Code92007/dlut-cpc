@@ -22,6 +22,8 @@ COPY tools /app/tools
 COPY web /app/web
 COPY data /app/data
 
+RUN pip install --no-cache-dir -r tools/requirements-rankland.txt
+
 RUN mkdir -p /app/runtime
 
 EXPOSE 8000

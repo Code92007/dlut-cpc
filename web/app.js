@@ -58,6 +58,12 @@ const state = {
   adminCpcDecision: null,
   adminCpcLoading: false,
   adminCpcRequest: 0,
+  adminDiffs: null,
+  adminDiffStatus: 'pending',
+  adminDiffPage: 1,
+  adminDiffRequest: 0,
+  adminDiffLoading: false,
+  adminDiffDecision: null,
   adminResources: null,
   adminResourceEdit: null,
   adminResourceDelete: null,
@@ -853,6 +859,58 @@ function adminResourcePage() {
     <section class="admin-recent"><h2>资料索引</h2><div class="data-table-wrap"><table class="data-table resource-admin-table"><thead><tr><th>资料</th><th>类型</th><th>分类</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="table-empty">暂无资料</td></tr>'}</tbody></table></div></section>`;
 }
 
+function adminDiffPage() {
+  const data = state.adminDiffs;
+  const sync = data?.sync;
+  const labels = {event: '赛事', series: '系列', date: '日期', team: '队名', medal: '奖牌', rank: '正式排名', overallRank: '总榜排名', official: '正式参赛', members: '队员', identity: '记录身份需人工核对'};
+  const value = (record, field) => {
+    const item = field === 'members' ? (record.members?.length ? record.members : record.suggestedMembers) : record[field];
+    return Array.isArray(item) ? item.map(name => {
+      const detail = record.memberDetails?.find(member => member.name === name);
+      return detail?.externalId ? `${name}（${detail.externalId}）` : name;
+    }).join('、') || '未收录' : typeof item === 'boolean' ? (item ? '正式' : '打星') : item || '未收录';
+  };
+  const formatTime = stamp => stamp ? new Date(stamp).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', hour12: false}) : '尚未执行';
+  const summary = sync?.summary;
+  const header = `<section class="admin-recent"><h2>每日榜单同步与差异合并</h2><p class="contest-caption">每天检查 CPC Finder 和 RankLand。新增成绩直接补录；已有成绩绝不自动覆盖。下方逐字段比较，整条选择 A 或 B；来源没有名单时不清空现有名单。</p>
+    <p>最近执行：${escapeHtml(formatTime(sync?.lastFinishedAt))}（北京时间） · ${escapeHtml(({ok: '成功', partial: '部分来源失败，等待重试', failed: '失败，保留原数据', running: '正在同步'})[sync?.status] || '未执行')}${summary ? ` · 新增 ${summary.added} 条 · 新差异 ${summary.diffsCreated} 条` : ''}</p>
+    ${sync?.error ? `<p class="admin-message error">${escapeHtml(sync.error)}</p>` : ''}${Object.entries(sync?.sourceErrors || {}).map(([provider, error]) => `<p class="admin-message error">${escapeHtml(provider)}：${escapeHtml(error)}</p>`).join('')}
+    <div class="filters"><label class="filter-group"><span>差异状态</span><select id="diffStatus">${[['pending', '待取舍'], ['closed', '已处理'], ['all', '全部']].map(([status, label]) => `<option value="${status}" ${state.adminDiffStatus === status ? 'selected' : ''}>${label}</option>`).join('')}</select></label><button type="button" id="diffRefresh" class="admin-button secondary" ${state.adminDiffLoading ? 'disabled' : ''}>刷新</button></div></section>`;
+  if (!data || state.adminDiffLoading) return `${header}<div class="empty-state">${state.adminDiffLoading ? '加载差异中…' : '暂无差异数据'}</div>`;
+  const items = data.items.map(item => {
+    const decision = state.adminDiffDecision?.id === item.id ? state.adminDiffDecision.choice : null;
+    const choiceButton = (choice, label) => `<button type="button" class="admin-button ${choice === 'a' ? 'secondary' : ''}" data-diff-id="${item.id}" data-diff-choice="${choice}" data-diff-confirm="${decision === choice}">${label}</button>`;
+    const actions = item.status !== 'pending' ? `<p>处理结果：${escapeHtml(({kept: '保留 A', applied: '接受 B', superseded: '来源或当前数据已变化，此差异已过期'})[item.status] || item.status)} · ${escapeHtml(item.reviewer || '系统')} · ${escapeHtml(formatTime(item.reviewed_at ? item.reviewed_at.replace(' ', 'T') + 'Z' : null))}</p>` : decision
+      ? `${choiceButton(decision, decision === 'a' ? '确认保留 A' : '确认接受 B')}<button type="button" class="admin-button secondary" data-diff-cancel>取消</button>`
+      : `${choiceButton('a', 'A · 保留网站当前值')}${item.honor_id ? choiceButton('b', 'B · 接受来源变更') : '<span>请先在“参赛成绩”中核对或补录，再保留 A。</span>'}`;
+    return `<article class="review-item result-diff"><div class="review-contest"><h3>#${item.id} · ${escapeHtml(item.after.team)}</h3><p>${escapeHtml(item.after.date)} · ${escapeHtml(item.after.event)} · ${escapeHtml(item.provider)}</p><p>A：${sourceLink(item.before.source)}　B：${sourceLink(item.after.source)}</p>${!item.honor_id ? '<p class="admin-message error">身份匹配有歧义，已阻止自动新增。请先人工核对，避免制造重复记录。</p>' : ''}</div>
+      <div class="data-table-wrap"><table class="data-table diff-table"><thead><tr><th>变化字段</th><th>A · 网站当前值</th><th>B · 来源新值</th></tr></thead><tbody>${item.fields.map(field => `<tr><th>${escapeHtml(labels[field] || field)}</th><td>${escapeHtml(value(item.before, field))}</td><td>${escapeHtml(value(item.after, field))}</td></tr>`).join('')}</tbody></table></div><div class="review-actions">${actions}</div></article>`;
+  }).join('') || '<div class="empty-state">没有需要取舍的差异，网站当前数据保持不变。</div>';
+  return `${header}<div class="review-list">${items}</div><div class="review-pagination"><span>第 ${data.page} / ${data.pages} 页 · 共 ${data.total} 项</span>${data.page > 1 ? `<button type="button" class="admin-button secondary" data-diff-page="${data.page - 1}">上一页</button>` : ''}${data.page < data.pages ? `<button type="button" class="admin-button secondary" data-diff-page="${data.page + 1}">下一页</button>` : ''}</div>`;
+}
+
+async function loadAdminDiffs() {
+  const request = ++state.adminDiffRequest;
+  state.adminDiffLoading = true;
+  if (routeFromPath() === 'admin' && state.adminView === 'diffs') renderRoute('admin');
+  try {
+    const response = await fetch(`/api/admin/result-diffs?status=${state.adminDiffStatus}&page=${state.adminDiffPage}`, {cache: 'no-store'});
+    const result = await response.json();
+    if (request !== state.adminDiffRequest) return;
+    if (!response.ok) throw new Error(result.error || '差异队列加载失败');
+    state.adminDiffs = result;
+  } catch (error) {
+    if (request !== state.adminDiffRequest) return;
+    state.adminMessage = error.message;
+    state.adminError = true;
+  } finally {
+    if (request === state.adminDiffRequest) {
+      state.adminDiffLoading = false;
+      if (routeFromPath() === 'admin' && state.adminView === 'diffs') renderRoute('admin');
+    }
+  }
+}
+
 function adminPage(data) {
   const session = state.adminSession;
   const message = state.adminMessage ? `<div class="admin-message ${state.adminError ? 'error' : ''}" role="status">${escapeHtml(state.adminMessage)}</div>` : "";
@@ -896,10 +954,11 @@ function adminPage(data) {
   forms.reviews = adminReviewPage();
   forms.cpc = adminCpcPage();
   forms.rosters = adminRosterPage(data);
+  forms.diffs = adminDiffPage();
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`],['cpc',`成员认证${state.adminCpcClaims ? ` · ${state.adminCpcClaims.pending_count}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`],['diffs',`榜单差异${state.adminDiffs ? ` · ${state.adminDiffs.pendingCount}` : ''}`],['cpc',`成员认证${state.adminCpcClaims ? ` · ${state.adminCpcClaims.pending_count}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
-    ${['resources', 'training', 'cpc'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${['resources', 'training', 'cpc', 'diffs'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
     </tbody></table></div></section>`}</div>`;
 }
@@ -909,8 +968,12 @@ async function loadAdminSession() {
     const response = await fetch('/api/admin/session', {cache: 'no-store'});
     if (!response.ok) throw new Error('登录状态加载失败');
     state.adminSession = await response.json();
-    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources(), loadAdminTraining(), loadAdminCpcClaims()]);
+    if (state.adminSession.authenticated) await Promise.all([loadAdminReviews(), loadAdminResources(), loadAdminTraining(), loadAdminCpcClaims(), loadAdminDiffs()]);
     else {
+      state.adminDiffs = null;
+      state.adminDiffDecision = null;
+      state.adminDiffLoading = false;
+      ++state.adminDiffRequest;
       state.adminReviews = null;
       state.adminResources = null;
       state.adminTraining = null;
@@ -962,6 +1025,46 @@ async function adminRequest(path, body) {
 }
 
 function bindAdminEvents() {
+  document.querySelector('#diffRefresh')?.addEventListener('click', () => loadAdminDiffs());
+  document.querySelector('#diffStatus')?.addEventListener('change', event => {
+    state.adminDiffStatus = event.target.value;
+    state.adminDiffPage = 1;
+    state.adminDiffDecision = null;
+    loadAdminDiffs();
+  });
+  document.querySelectorAll('[data-diff-page]').forEach(button => button.addEventListener('click', () => {
+    state.adminDiffPage = Number(button.dataset.diffPage);
+    state.adminDiffDecision = null;
+    loadAdminDiffs();
+  }));
+  document.querySelector('[data-diff-cancel]')?.addEventListener('click', () => {
+    state.adminDiffDecision = null;
+    renderRoute('admin');
+  });
+  document.querySelectorAll('[data-diff-choice]').forEach(button => button.addEventListener('click', async () => {
+    const diffId = Number(button.dataset.diffId);
+    const choice = button.dataset.diffChoice;
+    if (button.dataset.diffConfirm !== 'true') {
+      state.adminDiffDecision = {id: diffId, choice};
+      renderRoute('admin');
+      return;
+    }
+    button.disabled = true;
+    try {
+      await adminRequest('resolve-result-diff', {diffId, choice});
+      state.adminMessage = choice === 'a' ? '已保留 A，来源不变时不会重复提醒' : '已接受 B，合并结果及审核记录已保存';
+      state.adminError = false;
+      const response = await fetch('/api/site', {cache: 'no-store'});
+      if (!response.ok) throw new Error('正式数据刷新失败');
+      state.data = await response.json();
+    } catch (error) {
+      state.adminMessage = error.message;
+      state.adminError = true;
+    }
+    state.adminDiffDecision = null;
+    if (state.adminSession?.authenticated) await loadAdminDiffs();
+    else await loadAdminSession();
+  }));
   const resourceForm = document.querySelector('#adminResource');
   const categoryRenameForm = document.querySelector('#adminResourceCategoryRename');
   const syncResourceFields = () => {
@@ -1161,6 +1264,7 @@ function bindAdminEvents() {
     renderRoute('admin');
     if (state.adminView === 'reviews') loadAdminReviews();
     if (state.adminView === 'cpc') loadAdminCpcClaims();
+    if (state.adminView === 'diffs') loadAdminDiffs();
     if (state.adminView === 'resources' && !state.adminResources) loadAdminResources();
   }));
   document.querySelector('#cpcClaimStatus')?.addEventListener('change', event => {

@@ -43,6 +43,15 @@ class SupplementTests(unittest.TestCase):
         records, _ = parse_ranklist(page(state), convert=lambda value: value)
         self.assertEqual(records[0]["suggestedMembers"], ["甲"])
 
+    def test_overall_rank_uses_source_tied_rank_not_list_position(self):
+        state = ranklist()
+        source = state["ranklistData"]["srk"]
+        source["series"].append({"rule": {"preset": "Normal"}})
+        for row in source["rows"]:
+            row["rankValues"].append({"rank": 1})
+        records, _ = parse_ranklist(page(state), convert=lambda value: value)
+        self.assertTrue(all(record["overallRank"] == "1 / 4" for record in records))
+
     def test_host_school_is_always_starred_even_when_source_official_flag_is_wrong(self):
         state = ranklist()
         state["ranklistData"]["info"]["uniqueKey"] = "icpc2011dalian"
