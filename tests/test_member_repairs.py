@@ -2,7 +2,9 @@ import copy
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from cpc_integration import Integration
 from database import Database
 
 
@@ -74,6 +76,78 @@ class MemberRepairTests(unittest.TestCase):
         panjin = next(m for m in members if m["school"] == PANJIN)
         self.assertEqual(panjin["medals"]["bronze"], 2)
         self.assertEqual(len([m for m in members if m["school"] == "大连理工大学"]), 2)
+
+    def fangyu_seed(self):
+        old = person("6330da69-2f64-475a-93f2-a8e50225f3df", "Fangyu Bu", "大连理工大学", 36)
+        new = person("56244b1b-3341-466d-a557-6939a33be6bf", "卜方昱", "大连理工大学", 92)
+        old["handles"] = {"codeforces": {"handle": "luobo215", "verified": True}}
+        return {"publicMembers": [old, new],
+                "memberOverrides": [{"provider": "cpcfinder", "externalId": old["externalId"],
+                                     "displayName": "卜方昱", "aliases": ["Fangyu Bu"]}],
+                "honors": [honor("hk-2025", old), honor("xian-2026", new), honor("chengdu-2026", new, "银牌")]}
+
+    def test_confirmed_fangyu_merge_preserves_rosters_account_and_old_person_uuid(self):
+        seed = self.fangyu_seed()
+        with patch("database.CONFIRMED_CPCFINDER_MERGES", ()):
+            self.db.initialize(seed)
+        service = Integration(self.db)
+        before = service.roster()
+        self.assertEqual(len(before["members"]), 2)
+        old_uuid, duplicate_uuid = [m["id"] for m in before["members"]]
+        with self.db.connect() as connection:
+            original_id = connection.execute("SELECT member_id FROM member_identities WHERE external_id=?",
+                                             (seed["publicMembers"][0]["externalId"],)).fetchone()[0]
+            honors_before = connection.execute("SELECT COUNT(*) FROM honors").fetchone()[0]
+
+        self.db.initialize(seed)
+        member = self.db.payload({"meta": {}})["members"][0]
+        self.assertEqual(member["id"], original_id)
+        self.assertEqual(member["name"], "卜方昱")
+        self.assertEqual(member["honorCount"], 3)
+        self.assertEqual(member["medals"], {"gold": 0, "silver": 1, "bronze": 2, "iron": 0})
+        self.assertIn("Fangyu Bu", member["aliases"])
+        self.assertEqual(member["accounts"]["codeforces"][0]["handle"], "luobo215")
+        after = service.roster()
+        self.assertEqual([m["id"] for m in after["members"]], [old_uuid])
+        self.assertEqual(after["redirects"][duplicate_uuid], old_uuid)
+        self.assertEqual({p["id"] for p in after["participations"]}, {p["id"] for p in before["participations"]})
+        self.assertTrue(all(p["members"] == [old_uuid] for p in after["participations"]))
+        with self.db.connect() as connection:
+            self.assertEqual(connection.execute("SELECT COUNT(*) FROM honors").fetchone()[0], honors_before)
+            self.assertEqual(connection.execute("PRAGMA foreign_key_check").fetchall(), [])
+
+        # A later daily refresh can deliver the lower-rated profile last.
+        seed["publicMembers"].reverse()
+        seed["publicSyncRefresh"] = True
+        for _ in range(2):
+            self.db.initialize(seed)
+        self.assertEqual(service.roster(), after)
+        self.assertEqual(self.db.payload({"meta": {}})["members"][0]["cpcfinder"]["rating"], 92)
+
+    def test_confirmed_source_ids_reuse_one_member_in_either_import_order(self):
+        from tools.public_updates import ingest_public_results
+        for reverse in (False, True):
+            with self.subTest(reverse=reverse):
+                database = Database(Path(self.temporary.name) / f"fresh-{reverse}.sqlite3")
+                database.initialize()
+                seed = self.fangyu_seed()
+                people = seed["publicMembers"][::(-1 if reverse else 1)]
+                for member in people:
+                    ingest_public_results(database, [], public_members=[member])
+                unrelated = person("unrelated-namesake", "卜方昱", "大连理工大学")
+                people.append(unrelated)
+                ingest_public_results(database, seed["honors"], public_members=people)
+                members = database.payload({"meta": {}})["members"]
+                self.assertEqual(len(members), 2)
+                merged = next(m for m in members if m["accounts"].get("codeforces"))
+                self.assertEqual(merged["medals"], {"gold": 0, "silver": 1, "bronze": 2, "iron": 0})
+                self.assertEqual(merged["cpcfinder"]["rating"], 92)
+                with database.connect() as connection:
+                    ids = [r[0] for r in connection.execute(
+                        "SELECT member_id FROM member_identities WHERE external_id IN (?,?)",
+                        tuple(m["externalId"] for m in seed["publicMembers"]),
+                    )]
+                self.assertEqual(ids, [merged["id"], merged["id"]])
 
     def test_merge_preserves_pending_approvals_and_supersedes_only_duplicate_accounts(self):
         first, second = self.legacy_duplicates()

@@ -18,6 +18,12 @@ from schools import MAINTENANCE_GROUPS, school_group
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
 SCHEMA_VERSION = 13
 
+# Explicitly confirmed by the team on 2026-10-26. The first ID is retained
+# when both profiles already exist; unrelated namesakes stay independent.
+CONFIRMED_CPCFINDER_MERGES = (
+    ("6330da69-2f64-475a-93f2-a8e50225f3df", "56244b1b-3341-466d-a557-6939a33be6bf"),  # 卜方昱 / Fangyu Bu
+)
+
 
 def load_seed_file(path: Path | str) -> dict:
     path = Path(path)
@@ -344,7 +350,7 @@ class Database:
     def initialize(self, seed: dict | None = None) -> None:
         with self.connect() as connection:
             self._ensure_schema(connection)
-            self._merge_panjin_members(connection)
+            self._merge_confirmed_members(connection)
             if seed:
                 self._sync_site_data(connection, seed)
             from official_imports import reconcile_ccpc_public_duplicates
@@ -420,6 +426,17 @@ class Database:
             ).fetchone()
             if row:
                 return int(row["member_id"])
+            if provider == "cpcfinder":
+                for identities in CONFIRMED_CPCFINDER_MERGES:
+                    if str(external_id) not in identities:
+                        continue
+                    for identity in identities:
+                        row = connection.execute(
+                            "SELECT member_id FROM member_identities WHERE provider='cpcfinder' AND external_id=?",
+                            (identity,),
+                        ).fetchone()
+                        if row:
+                            return int(row["member_id"])
         normalized = normalize_name(str(detail.get("name") or ""))
         school = school_group(detail.get("school", "大连理工大学")) or "大连理工大学"
         if provider and external_id and school != "大连理工大学盘锦校区":
@@ -442,14 +459,25 @@ class Database:
         row = connection.execute("SELECT member_id FROM member_redirects WHERE old_id=?", (member_id,)).fetchone()
         return int(row[0]) if row else member_id
 
-    def _merge_panjin_members(self, connection: sqlite3.Connection) -> None:
-        # The team confirmed that names within Panjin identify one person.
-        groups = connection.execute("SELECT normalized_name FROM members WHERE school='大连理工大学盘锦校区' "
-                                    "GROUP BY normalized_name HAVING COUNT(*)>1").fetchall()
-        for group in groups:
-            members = connection.execute("SELECT m.* FROM members m WHERE school='大连理工大学盘锦校区' AND normalized_name=? "
-                                         "ORDER BY is_manual DESC, (SELECT MAX(rating) FROM member_public_stats WHERE member_id=m.id) DESC, id",
-                                         (group[0],)).fetchall()
+    def _merge_confirmed_members(self, connection: sqlite3.Connection) -> None:
+        # Panjin names are team-confirmed; elsewhere merge only reviewed source IDs.
+        names = connection.execute("SELECT normalized_name FROM members WHERE school='大连理工大学盘锦校区' "
+                                   "GROUP BY normalized_name HAVING COUNT(*)>1").fetchall()
+        groups = [connection.execute("SELECT m.* FROM members m WHERE school='大连理工大学盘锦校区' AND normalized_name=? "
+                                     "ORDER BY is_manual DESC, (SELECT MAX(rating) FROM member_public_stats WHERE member_id=m.id) DESC, id",
+                                     (name[0],)).fetchall() for name in names]
+        for identities in CONFIRMED_CPCFINDER_MERGES:
+            members = []
+            for identity in identities:
+                member = connection.execute(
+                    "SELECT m.* FROM members m JOIN member_identities i ON i.member_id=m.id "
+                    "WHERE i.provider='cpcfinder' AND i.external_id=?", (identity,),
+                ).fetchone()
+                if member and member["id"] not in {row["id"] for row in members}:
+                    members.append(member)
+            if len(members) > 1:
+                groups.append(members)
+        for members in groups:
             target = members[0]["id"]
             for member in members[1:]:
                 old = member["id"]
@@ -760,7 +788,7 @@ class Database:
         return honor_id
 
     def _sync_site_data(self, connection: sqlite3.Connection, site: dict) -> None:
-        self._merge_panjin_members(connection)
+        self._merge_confirmed_members(connection)
         sync_managed = connection.execute("SELECT 1 FROM metadata WHERE key='public_sync_initialized'").fetchone()
         public_members = site.get("publicMembers", []) if site.get("publicSyncRefresh") or not sync_managed else None
         if public_members is not None:
@@ -771,7 +799,10 @@ class Database:
             stats = detail.get("cpcfinder") or {}
             if stats:
                 current = connection.execute("SELECT rating FROM member_public_stats WHERE member_id=? AND provider='cpcfinder'", (member_id,)).fetchone()
-                if current and detail.get("school") == "大连理工大学盘锦校区" and (current[0] or 0) > (stats.get("rating") or 0):
+                merged = detail.get("school") == "大连理工大学盘锦校区" or connection.execute(
+                    "SELECT COUNT(*) FROM member_identities WHERE member_id=? AND provider='cpcfinder'", (member_id,)
+                ).fetchone()[0] > 1
+                if current and merged and (current[0] or 0) > (stats.get("rating") or 0):
                     continue
                 connection.execute(
                     "INSERT INTO member_public_stats(member_id, provider, rating, provider_rank, champion_count, "
@@ -1715,7 +1746,7 @@ class Database:
                     medals[field] += 1
                     if (honor["is_manual"] or honor["external_provider"] in ARCHIVE_PROVIDERS) and not honor["public_covered"] and not (honor["external_provider"] == "cpcfinder" and honor["external_award_id"]):
                         manual_medals[field] += 1
-            merged_identity = row["school"] == "大连理工大学盘锦校区" and (
+            merged_identity = (
                 connection.execute("SELECT 1 FROM member_redirects WHERE member_id=?", (row["id"],)).fetchone()
                 or connection.execute("SELECT COUNT(*) FROM member_identities WHERE member_id=? AND provider='cpcfinder'", (row["id"],)).fetchone()[0] > 1)
             old_unofficial_iron = sum(h["official"] == 0 and h["medal"] == "铁牌" and h["external_provider"] == "cpcfinder" for h in honors)
