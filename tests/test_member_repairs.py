@@ -88,7 +88,7 @@ class MemberRepairTests(unittest.TestCase):
 
     def test_confirmed_fangyu_merge_preserves_rosters_account_and_old_person_uuid(self):
         seed = self.fangyu_seed()
-        with patch("database.CONFIRMED_CPCFINDER_MERGES", ()):
+        with patch("database.CONFIRMED_MEMBER_MERGES", ()):
             self.db.initialize(seed)
         service = Integration(self.db)
         before = service.roster()
@@ -160,6 +160,66 @@ class MemberRepairTests(unittest.TestCase):
         self.assertEqual(sum(s["status"] == "pending" for s in queue), 2)
         self.assertTrue(all(s["memberId"] == first for s in queue))
         self.db.review_account_submission(next(s["id"] for s in queue if s["handle"] == "different"), True, reviewer="admin")
+
+    def dai_seed(self):
+        public = person("b1dde0b3-83e4-4e15-a946-bfa950ef9433", "戴宁凯", "大连理工大学", 21.54)
+        public["cpcfinder"].update(ironCount=0)
+        binding = {"name": "戴宁凯", "provider": "manual", "externalId": "dai-ningkai-user-confirmed",
+                   "createMember": True, "accounts": {"codeforces": [{"handle": "tttfred", "verified": True}]}}
+        return {"publicMembers": [public], "honors": [honor("changchun-2026", public)],
+                "accountBindings": [binding]}
+
+    def test_dai_merge_keeps_manual_id_account_roster_and_redirect(self):
+        seed = self.dai_seed()
+        with patch("database.CONFIRMED_MEMBER_MERGES", ()):
+            self.db.initialize({"accountBindings": seed["accountBindings"]})
+            self.db.initialize(seed)
+        with self.db.connect() as connection:
+            manual_id = connection.execute("SELECT member_id FROM member_identities WHERE provider='manual'").fetchone()[0]
+            public_id = connection.execute("SELECT member_id FROM member_identities WHERE provider='cpcfinder'").fetchone()[0]
+        self.db.set_display_name(public_id, "戴宁凯", ["Ningkai Dai"])
+        service = Integration(self.db)
+        before = service.roster()
+        original_uuid, duplicate_uuid = [m["id"] for m in before["members"]]
+        self.db.initialize(seed)
+        payload = self.db.payload({"meta": {}})
+        self.assertEqual(len(payload["members"]), 1)
+        member = payload["members"][0]
+        self.assertEqual(member["id"], manual_id)
+        self.assertEqual(member["handles"]["codeforces"]["handle"], "tttfred")
+        self.assertEqual(member["medals"]["bronze"], 1)
+        self.assertEqual(member["honorCount"], 1)
+        self.assertIn("Ningkai Dai", member["aliases"])
+        self.assertEqual(payload["honors"][0]["memberDetails"][0]["id"], manual_id)
+        after = service.roster()
+        self.assertEqual(after["redirects"][duplicate_uuid], original_uuid)
+        self.assertEqual(after["participations"][0]["id"], before["participations"][0]["id"])
+        self.db.initialize(seed)
+        self.assertEqual(service.roster(), after)
+        with self.db.connect() as connection:
+            self.assertEqual(connection.execute("PRAGMA foreign_key_check").fetchall(), [])
+
+    def test_dai_identity_matches_in_both_import_orders_without_merging_namesakes(self):
+        from tools.public_updates import ingest_public_results
+        for public_first in (False, True):
+            with self.subTest(public_first=public_first):
+                database = Database(Path(self.temporary.name) / f"dai-{public_first}.sqlite3")
+                database.initialize()
+                seed = self.dai_seed()
+                if public_first:
+                    ingest_public_results(database, seed["honors"], public_members=seed["publicMembers"])
+                database.initialize({"accountBindings": seed["accountBindings"]})
+                unrelated = person("unrelated-dai", "戴宁凯", "大连理工大学")
+                for _ in range(2):
+                    ingest_public_results(database, seed["honors"], public_members=[*seed["publicMembers"], unrelated])
+                members = database.payload({"meta": {}})["members"]
+                self.assertEqual(len(members), 2)
+                merged = next(m for m in members if m["accounts"].get("codeforces"))
+                self.assertEqual(merged["honorCount"], 1)
+                with database.connect() as connection:
+                    ids = [r[0] for r in connection.execute("SELECT member_id FROM member_identities WHERE external_id IN (?,?)",
+                           ("dai-ningkai-user-confirmed", seed["publicMembers"][0]["externalId"]))]
+                self.assertEqual(ids, [merged["id"], merged["id"]])
 
     def test_merge_preserves_roster_approvals_and_deleted_account_tombstones(self):
         first, second = self.legacy_duplicates()

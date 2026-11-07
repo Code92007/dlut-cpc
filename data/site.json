@@ -1,4 +1,36 @@
 {
+  "honorMedalCorrections": [
+    {
+      "id": "icpc-2010-harbin-yuzhi-medal-20261108",
+      "honorId": "rankland-c38b37e59a63fadea260",
+      "medal": "银牌",
+      "source": {"name": "队内确认（2026-11-08）", "kind": "manual"}
+    },
+    {
+      "id": "icpc-2010-harbin-2012-medal-20261108",
+      "honorId": "rankland-04d6b782fb22e7cf6e2b",
+      "medal": "铜牌",
+      "source": {"name": "队内确认（2026-11-08）", "kind": "manual"}
+    },
+    {
+      "id": "icpc-2010-harbin-bugeili-medal-20261108",
+      "honorId": "rankland-706c363063fd15713dc7",
+      "medal": "铜牌",
+      "source": {"name": "队内确认（2026-11-08）", "kind": "manual"}
+    },
+    {
+      "id": "icpc-2018-ecfinal-shy-ghost-medal-20261108",
+      "honorId": "rankland-c74eeb3f52e1c01ed968",
+      "medal": "铜牌",
+      "source": {"name": "队内确认（2026-11-08）", "kind": "manual"}
+    },
+    {
+      "id": "icpc-2018-ecfinal-one-minute-lost-medal-20261108",
+      "honorId": "rankland-477cd9860b37a9555498",
+      "medal": "铁牌",
+      "source": {"name": "队内确认（2026-11-08）", "kind": "manual"}
+    }
+  ],
   "accountCorrections": [
     {
       "id": "yang-junhong-farewell-v1",

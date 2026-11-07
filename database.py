@@ -18,10 +18,13 @@ from schools import MAINTENANCE_GROUPS, school_group
 MEDAL_POINTS = {"金牌": 10, "银牌": 6, "铜牌": 3, "铁牌": 0}
 SCHEMA_VERSION = 13
 
-# Explicitly confirmed by the team on 2026-10-26. The first ID is retained
+# Explicitly confirmed by the team. The first identity is retained
 # when both profiles already exist; unrelated namesakes stay independent.
-CONFIRMED_CPCFINDER_MERGES = (
-    ("6330da69-2f64-475a-93f2-a8e50225f3df", "56244b1b-3341-466d-a557-6939a33be6bf"),  # 卜方昱 / Fangyu Bu
+CONFIRMED_MEMBER_MERGES = (
+    (("cpcfinder", "6330da69-2f64-475a-93f2-a8e50225f3df"),
+     ("cpcfinder", "56244b1b-3341-466d-a557-6939a33be6bf")),  # 卜方昱 / Fangyu Bu
+    (("manual", "dai-ningkai-user-confirmed"),
+     ("cpcfinder", "b1dde0b3-83e4-4e15-a946-bfa950ef9433")),  # 戴宁凯 / tttfred, 2026-11-08
 )
 
 
@@ -426,17 +429,16 @@ class Database:
             ).fetchone()
             if row:
                 return int(row["member_id"])
-            if provider == "cpcfinder":
-                for identities in CONFIRMED_CPCFINDER_MERGES:
-                    if str(external_id) not in identities:
-                        continue
-                    for identity in identities:
-                        row = connection.execute(
-                            "SELECT member_id FROM member_identities WHERE provider='cpcfinder' AND external_id=?",
-                            (identity,),
-                        ).fetchone()
-                        if row:
-                            return int(row["member_id"])
+            for identities in CONFIRMED_MEMBER_MERGES:
+                if (provider, str(external_id)) not in identities:
+                    continue
+                for identity in identities:
+                    row = connection.execute(
+                        "SELECT member_id FROM member_identities WHERE provider=? AND external_id=?",
+                        identity,
+                    ).fetchone()
+                    if row:
+                        return int(row["member_id"])
         normalized = normalize_name(str(detail.get("name") or ""))
         school = school_group(detail.get("school", "大连理工大学")) or "大连理工大学"
         if provider and external_id and school != "大连理工大学盘锦校区":
@@ -466,12 +468,12 @@ class Database:
         groups = [connection.execute("SELECT m.* FROM members m WHERE school='大连理工大学盘锦校区' AND normalized_name=? "
                                      "ORDER BY is_manual DESC, (SELECT MAX(rating) FROM member_public_stats WHERE member_id=m.id) DESC, id",
                                      (name[0],)).fetchall() for name in names]
-        for identities in CONFIRMED_CPCFINDER_MERGES:
+        for identities in CONFIRMED_MEMBER_MERGES:
             members = []
             for identity in identities:
                 member = connection.execute(
                     "SELECT m.* FROM members m JOIN member_identities i ON i.member_id=m.id "
-                    "WHERE i.provider='cpcfinder' AND i.external_id=?", (identity,),
+                    "WHERE i.provider=? AND i.external_id=?", identity,
                 ).fetchone()
                 if member and member["id"] not in {row["id"] for row in members}:
                     members.append(member)
@@ -879,6 +881,20 @@ class Database:
         for batch in site.get("officialImports", []):
             from official_imports import merge_batch
             merge_batch(self, connection, batch)
+        for correction in site.get("honorMedalCorrections", []):
+            marker = "medal_correction:" + correction["id"]
+            if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
+                continue
+            honor_id = correction["honorId"]
+            row = connection.execute("SELECT medal FROM honors WHERE id=?", (honor_id,)).fetchone()
+            if not row:
+                raise ValueError(f"Medal correction honor does not exist: {honor_id}")
+            status = "preserved-existing"
+            if not row["medal"]:
+                self._confirm_unknown_medal(connection, honor_id, correction["medal"], correction.get("source"))
+                status = "applied"
+            connection.execute("INSERT INTO metadata(key,value) VALUES (?, ?)",
+                               (marker, json.dumps({"honorId": honor_id, "status": status}, ensure_ascii=False)))
         for correction in site.get("honorTeamCorrections", []):
             marker = "team_correction:" + correction["id"]
             if connection.execute("SELECT 1 FROM metadata WHERE key=?", (marker,)).fetchone():
@@ -1609,6 +1625,7 @@ class Database:
         result.pop("accountCorrections", None)
         result.pop("rosterCorrections", None)
         result.pop("honorTeamCorrections", None)
+        result.pop("honorMedalCorrections", None)
         result.pop("trainingLinkCorrections", None)
         result.pop("accountBindings", None)
         with self.connect() as connection:
