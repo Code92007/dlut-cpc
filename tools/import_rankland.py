@@ -168,7 +168,7 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
         result.append({
             "id": "rankland-" + hashlib.sha256(identity.encode()).hexdigest()[:20],
             "event": title, "series": "CCPC" if key.startswith("ccpc") else "ICPC",
-            "date": date, "location": "总决赛" if re.search(r"final|总决赛", all_titles, re.I) else "",
+            "date": date, "location": "总决赛" if re.search(r"final|总决赛", all_titles, re.I) else SITES.get(site_key, ""),
             "team": team, "school": group, "originalSchool": original_school,
             "members": [], "expectedMembers": 3, "medal": medal,
             **({"medalStatus": "unknown"} if not medal else {}),

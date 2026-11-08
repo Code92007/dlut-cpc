@@ -62,6 +62,7 @@ class SupplementTests(unittest.TestCase):
                                   "队伍4": "铜牌", "队伍5": "铜牌", "队伍6": "铜牌",
                                   **{f"队伍{i}": "铁牌" for i in range(7, 12)}})
         self.assertTrue(all(record["archive"]["medalBoundariesKnown"] for record in records))
+        self.assertTrue(all(record["location"] == "乐山" for record in records))
 
     def test_zero_ratio_still_leaves_awards_unknown(self):
         state = ranklist()

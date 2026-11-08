@@ -84,6 +84,7 @@ class HistoricalTests(unittest.TestCase):
         expected = "The 2017 ACM-ICPC Asia Urumqi Regional Contest （新疆大学）"
         self.assertEqual(audit["title"], expected)
         self.assertTrue(all(record["event"] == expected for record in records))
+        self.assertTrue(all(record["location"] == "乌鲁木齐" for record in records))
 
     def test_excludes_province_invitation_prelim_and_post2019(self):
         for title in ("2018 ICPC Invitational", "2018 CCPC 省赛", "2018 ICPC 网络预选赛"):
