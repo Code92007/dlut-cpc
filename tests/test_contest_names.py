@@ -35,6 +35,7 @@ class ContestNameTests(unittest.TestCase):
 
     def test_season_ids_handle_postponements_and_host_only_titles(self):
         examples = [
+            ("第十二届中国大学生程序设计竞赛（乐山）", "ccpc2026leshan", "第 12 届 CCPC 中国大学生程序设计竞赛乐山站"),
             ("ICPC xju onsite", "icpc2017urumchi", "第 42 届 ICPC 国际大学生程序设计竞赛亚洲区域赛乌鲁木齐站"),
             ("The 2020 ICPC Asia-East Continent Final Contest", "icpc2020ecfinal", "第 45 届 ICPC 国际大学生程序设计竞赛东亚区决赛"),
             ("2018-2019 ACM-ICPC, Asia East Continent Finals", "icpc2018ecfinal", "第 43 届 ICPC 国际大学生程序设计竞赛东亚区决赛"),

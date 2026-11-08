@@ -9,7 +9,7 @@ SITES = {
     "chengdu": "成都", "chongqing": "重庆", "dalian": "大连", "fuzhou": "福州",
     "guangzhou": "广州", "guilin": "桂林", "haerbin": "哈尔滨", "harbin": "哈尔滨",
     "hangzhou": "杭州", "hefei": "合肥", "hongkong": "香港", "jiaozuo": "焦作",
-    "jilin": "吉林", "jinan": "济南", "jinhua": "金华", "kunming": "昆明",
+    "jilin": "吉林", "jinan": "济南", "jinhua": "金华", "kunming": "昆明", "leshan": "乐山",
     "mianyang": "绵阳", "mudanjiang": "牡丹江", "nanchang": "南昌", "nanjing": "南京",
     "nanning": "南宁", "nanyang": "南阳", "ningbo": "宁波", "qingdao": "青岛",
     "qinhuangdao": "秦皇岛", "shanghai": "上海", "shenyang": "沈阳", "shenzhen": "深圳",

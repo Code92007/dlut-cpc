@@ -121,8 +121,12 @@ def parse_ranklist(document: str, *, convert=None, before_date: str | None = "20
     if len(medal_series) != 1:
         return [], {**audit, "excluded": "missing-or-ambiguous-medal-configuration"}
     medal_index = medal_series[0]
-    count = srk["series"][medal_index].get("rule", {}).get("options", {}).get("count", {}).get("value")
-    boundaries_known = bool(count) and count != [0, 0, 0]
+    options = srk["series"][medal_index].get("rule", {}).get("options", {})
+    count = options.get("count", {}).get("value")
+    ratio = options.get("ratio", {}).get("value")
+    # SRK supports both fixed counts and ratios. The converter applies the
+    # source's denominator, rounding and tie rules when assigning segments.
+    boundaries_known = bool(count and any(count)) or bool(ratio and any(ratio))
     if not boundaries_known and not include_participation:
         return [], {**audit, "excluded": "missing-medal-boundaries"}
     static = srk if srk.get("type") == "static" else convert(srk)

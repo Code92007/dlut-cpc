@@ -1,3 +1,4 @@
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
@@ -36,6 +37,37 @@ class SupplementTests(unittest.TestCase):
         self.assertFalse(records[0]["official"])
         self.assertEqual(records[0]["medal"], "")
         self.assertEqual(records[1]["medal"], "铁牌")
+
+    @unittest.skipUnless(importlib.util.find_spec("standard_ranklist_utils"), "RankLand conversion library")
+    def test_ratio_awards_use_submitted_official_teams_and_source_rounding(self):
+        state = ranklist()
+        state["ranklistData"]["info"]["uniqueKey"] = "ccpc2026leshan"
+        srk = state["ranklistData"]["srk"]
+        srk.update(type="general", sorter={"algorithm": "ICPC", "config": {}})
+        srk["contest"].update(title="第十二届中国大学生程序设计竞赛（乐山）", startAt="2026-11-08T09:00:00+08:00")
+        srk["series"][0]["rule"]["options"] = {
+            "ratio": {"value": [0.1, 0.2, 0.3], "denominator": "submitted", "rounding": "ceil"},
+        }
+        srk["rows"] = [
+            {"user": {"id": str(i), "name": f"队伍{i}", "organization": "大连理工大学", "official": True},
+             "score": {"value": 5 if i <= 10 else 0, "time": [i * 100, "min"]},
+             "statuses": [{"result": "AC" if i <= 10 else None, "tries": 1 if i <= 10 else 0}]}
+            for i in range(1, 12)
+        ]
+        srk["rows"].append({"user": {"id": "star", "name": "打星队", "organization": "大连理工大学", "official": False},
+                            "score": {"value": 6, "time": [10, "min"]}, "statuses": [{"result": "AC", "tries": 1}]})
+        records, _ = parse_ranklist(page(state), before_date=None, include_participation=True)
+        medals = {record["team"]: record["medal"] for record in records}
+        self.assertEqual(medals, {"打星队": "", "队伍1": "金牌", "队伍2": "银牌", "队伍3": "银牌",
+                                  "队伍4": "铜牌", "队伍5": "铜牌", "队伍6": "铜牌",
+                                  **{f"队伍{i}": "铁牌" for i in range(7, 12)}})
+        self.assertTrue(all(record["archive"]["medalBoundariesKnown"] for record in records))
+
+    def test_zero_ratio_still_leaves_awards_unknown(self):
+        state = ranklist()
+        state["ranklistData"]["srk"]["series"][0]["rule"]["options"] = {"ratio": {"value": [0, 0, 0]}}
+        records, _ = parse_ranklist(page(state), convert=lambda value: value, include_participation=True)
+        self.assertTrue(all(record["medal"] == "" and record["medalStatus"] == "unknown" for record in records))
 
     def test_localized_source_member_names_are_plain_strings(self):
         state = ranklist()

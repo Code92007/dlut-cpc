@@ -188,6 +188,7 @@ class PublicUpdatesTests(unittest.TestCase):
 
     def test_rankland_discovery_ignores_preliminary_invitational_and_world_finals(self):
         self.assertTrue(eligible_ranklist({"uniqueKey": "ccpc2026changchun", "name": "长春正式赛"}))
+        self.assertTrue(eligible_ranklist({"uniqueKey": "ccpc2026leshan", "name": "第十二届中国大学生程序设计竞赛（乐山）"}))
         self.assertTrue(eligible_ranklist({"uniqueKey": "icpc2026xi_an", "name": "西安区域赛"}))
         for key in ("icpc2026preliminary-1", "icpc2026invitational-shenyang", "icpc2026worldfinal", "../../other"):
             self.assertFalse(eligible_ranklist({"uniqueKey": key, "name": key}))
