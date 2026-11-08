@@ -1783,6 +1783,9 @@ class Database:
                 medals["iron"] = None
             elif merged_identity and public_stats and public_stats["iron_count"] is None:
                 medals["iron"] = None
+            if row["is_manual"] and medals["iron"] is None:
+                # Manual profiles count confirmed iron results, defaulting to zero.
+                medals["iron"] = sum(h["official"] != 0 and h["medal"] == "铁牌" for h in honors)
             latest_public_year = None
             if public_stats and str(public_stats["latest_event_date"] or "")[:4].isdigit():
                 latest_public_year = int(str(public_stats["latest_event_date"])[:4])

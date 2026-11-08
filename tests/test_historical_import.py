@@ -291,11 +291,18 @@ class HistoricalTests(unittest.TestCase):
                                            "rank": rank, "official": official})
         self.assertEqual(self.database.payload(self.seed)["meta"]["bestRank"], 7)
 
-    def test_award_only_history_does_not_claim_zero_lifetime_iron(self):
+    def test_manual_history_defaults_to_zero_iron_and_counts_confirmed_results(self):
         ids = [self.database.add_manual_member(name) for name in ("甲", "乙", "丙")]
         self.database.confirm_honor_members("historic-1", ids)
         payload = self.database.payload(self.seed)
-        self.assertTrue(all(member["medals"]["iron"] is None for member in payload["members"]))
+        self.assertTrue(all(member["medals"]["iron"] == 0 for member in payload["members"]))
+        record = {"event": "2019 ICPC Regional", "date": "2019-11-01", "team": "历史参赛队", "medal": "铁牌"}
+        self.database.add_manual_honor_with_members({**record, "official": True}, ids)
+        self.database.add_manual_honor_with_members({**record, "team": "打星队", "official": False}, ids)
+        self.database.initialize(self.seed)
+        for member in self.database.payload(self.seed)["members"]:
+            self.assertEqual(member["medals"]["iron"], 1)
+            self.assertEqual(member["honorCount"], 1)
 
     @unittest.skipUnless(importlib.util.find_spec("standard_ranklist_utils"), "optional one-time import library")
     def test_official_srk_engine_excludes_unofficial_team_from_medal_ranking(self):
