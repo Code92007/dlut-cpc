@@ -17,11 +17,14 @@ const setData = (context, data) => {
 };
 const performance = JSON.parse(readFileSync(new URL('../data/team_performances.json', import.meta.url), 'utf8'));
 
-test('all screenshot records render with a source link and independent archive status', () => {
+test('full workbook and 2026 rows render, including missing ratings and campus filters', () => {
   const c = makeContext();
   setData(c, {performances: performance});
   const html = c.performancePage();
-  assert.equal((html.match(/class="problem-rating-number"/g) || []).length, 47);
+  assert.equal((html.match(/class="problem-rating-number"/g) || []).length, 183);
+  assert.ok(!/NaN|Infinity|>null</.test(html));
+  assert.ok(html.includes('0 AC'));
+  assert.ok(html.includes('Rating 暂缺'));
   assert.ok(html.includes('/assets/team-performance-20261114.png'));
   assert.ok(html.includes('档案暂未匹配'));
   assert.ok(html.includes('仅罚时'));
@@ -29,6 +32,8 @@ test('all screenshot records render with a source link and independent archive s
   assert.equal(c.performanceRows().length, 4);
   vm.runInContext("analyticsState.performanceStage = '金'", c);
   assert.equal(c.performanceRows().length, 2);
+  vm.runInContext("analyticsState.performanceStage = 'all'; analyticsState.performanceQuery = ''; analyticsState.performanceYear = '2026'; analyticsState.performanceSchool = '大连理工大学盘锦校区'", c);
+  assert.equal(c.performanceRows().length, 7);
 });
 
 test('qualified, provisional and no-data players stay distinct and ties remain tied', () => {

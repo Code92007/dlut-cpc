@@ -1,8 +1,7 @@
 """Versioned, deterministic Elo-scale ratings from confirmed local results.
 
-This is a percentile-anchored Elo model, not an estimate of absolute ability.
-No CF/problem rating, missing result, medal count, or external player rating
-enters the calculation. See docs/historical-rating.md for assumptions.
+Each result supplies an award/rank performance; a player's prior determines
+their signed update. No accumulated medal points or external rating is used.
 """
 from __future__ import annotations
 
@@ -14,11 +13,30 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-VERSION = "dlut-percentile-elo-v1"
+VERSION = "dlut-award-performance-v2"
 INITIAL = 1500
 SCALE = 400
 MIN_CONTESTS = 3
 ROOT = Path(__file__).resolve().parent
+
+# Actual awards select disjoint bands. Nominal percentile intervals only place
+# the official rank within that band; they never infer or override an award.
+PERFORMANCE_BANDS = {
+    "金牌": (2600, 3200, 0, .1), "银牌": (1900, 2400, .1, .3),
+    "铜牌": (1300, 1800, .3, .6), "铁牌": (800, 1200, .6, 1),
+}
+
+
+def result_performance(medal, rank, total):
+    low, high, start, end = PERFORMANCE_BANDS[medal]
+    position = max(0, min(1, ((rank - .5) / total - start) / (end - start)))
+    return high - (high - low) * position
+
+
+def event_adjustment(honor):
+    # A declared prior for qualification strength, not a fitted field estimate.
+    # Apply to every award, and before updating each person's prior rating.
+    return 300 if re.search(r"东亚区决赛|中国区决赛|总决赛", honor["event"]) else 0
 
 
 def rank_fraction(value):
@@ -56,6 +74,8 @@ def calculate_ratings(site):
             reason = "三人名单未完整确认"
         elif not ranks:
             reason = "缺少有效的正式名次 / 正式队总数"
+        elif honor.get("medal") not in PERFORMANCE_BANDS:
+            reason = "实际奖项未确认"
         key = (honor["date"], honor["event"], tuple(sorted(ids))) if not reason else None
         if key in seen:
             reason = "同场同名单重复记录"
@@ -77,28 +97,29 @@ def calculate_ratings(site):
             if any(appearances[i] > 1 for i in ids):
                 skipped.append(dict(id=honor["id"], event=honor["event"], date=date, team=honor["team"], reason="同日多队身份冲突，待核验"))
                 continue
-            observed = (total - rank + 0.5) / total
             prior = sum(players[i]["rating"] for i in ids) / 3
-            expected = 1 / (1 + 10 ** ((INITIAL - prior) / SCALE))
-            performance = INITIAL + SCALE * math.log10(observed / (1 - observed))
+            base_performance = result_performance(honor["medal"], rank, total)
+            adjustment = event_adjustment(honor)
+            performance = base_performance + adjustment
             for member_id in ids:
                 player = players[member_id]
                 count = len(player["history"])
-                step = 400 / math.sqrt(1 + count / 5)
+                step = .5 if count < 3 else .3
                 before = player["rating"]
-                player["rating"] += step * (observed - expected)
+                player["rating"] += step * (performance - before)
                 player["teams"].add(tuple(sorted(ids)))
                 player["history"].append(dict(
                     honorId=honor["id"], date=date, event=honor["event"], team=honor["team"],
                     members=[members[i]["name"] for i in ids], rank=rank, total=total,
                     percentile=round(100 * (rank - 0.5) / total, 2),
-                    performance=round(performance), teamPrior=round(prior),
-                    expected=round(expected, 6), observed=round(observed, 6),
+                    medal=honor["medal"], performance=round(performance, 2), teamPrior=round(prior),
+                    basePerformance=round(base_performance, 2), fieldAdjustment=adjustment,
+                    updateWeight=step,
                     before=round(before, 2), delta=round(player["rating"] - before, 2),
                     rating=round(player["rating"], 2), band=reference_band(count + 1),
                     source=honor.get("source"),
                 ))
-            inputs.append({k: honor.get(k) for k in ["id", "date", "event", "rank", "official", "memberDetails"]})
+            inputs.append({k: honor.get(k) for k in ["id", "date", "event", "rank", "medal", "official", "memberDetails"]})
             used += 1
     result = []
     for key, member in members.items():
@@ -113,6 +134,7 @@ def calculate_ratings(site):
         result.append(dict(
             id=key, name=member["name"], school=member["school"], status=member.get("status"),
             contests=count, teamCount=len(player["teams"]), provisional=count < MIN_CONTESTS,
+            medals=dict(Counter(h["medal"] for h in history)),
             current=round(player["rating"]) if count else None,
             peak=round(peak["rating"]) if peak else None, peakDate=peak["date"] if peak else None,
             conservative=round(player["rating"] - band) if count else None, band=band,
@@ -121,6 +143,8 @@ def calculate_ratings(site):
         ))
     digest = hashlib.sha256(json.dumps(inputs, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
     return dict(version=VERSION, initial=INITIAL, scale=SCALE, minContests=MIN_CONTESTS,
+                rules=dict(performanceBands=PERFORMANCE_BANDS, finalsAdjustment=300,
+                           provisionalWeight=.5, matureWeight=.3),
                 inputHash=digest, players=result, skipped=skipped,
                 coverage=dict(totalResults=len(site["honors"]), ratedResults=used,
                               ratedPlayers=sum(p["contests"] > 0 for p in result),
