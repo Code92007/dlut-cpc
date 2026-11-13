@@ -188,10 +188,24 @@ class PublicUpdatesTests(unittest.TestCase):
 
     def test_rankland_discovery_ignores_preliminary_invitational_and_world_finals(self):
         self.assertTrue(eligible_ranklist({"uniqueKey": "ccpc2026changchun", "name": "长春正式赛"}))
-        self.assertTrue(eligible_ranklist({"uniqueKey": "ccpc2026leshan", "name": "第十二届中国大学生程序设计竞赛（乐山）"}))
+        self.assertFalse(eligible_ranklist({"uniqueKey": "ccpc2026leshan", "name": "第十二届中国大学生程序设计竞赛（乐山）"}))
+        self.assertTrue(eligible_ranklist({"uniqueKey": "ccpc2027leshan", "name": "2027 CCPC 乐山站"}))
         self.assertTrue(eligible_ranklist({"uniqueKey": "icpc2026xi_an", "name": "西安区域赛"}))
         for key in ("icpc2026preliminary-1", "icpc2026invitational-shenyang", "icpc2026worldfinal", "../../other"):
             self.assertFalse(eligible_ranklist({"uniqueKey": key, "name": key}))
+
+    def test_retired_leshan_cache_is_not_replayed_or_fetched(self):
+        row = self.rankland_record(externalContestId="ccpc2026leshan", externalAwardId="ccpc2026leshan:Team1")
+        ingest_public_results(self.database, [row])
+        save_rankland_versions(self.database, [("ccpc2026leshan", "retired-version")])
+        state = {"ranklistIndex": {"ranks": [{"uniqueKey": "ccpc2026leshan", "fileID": "new-version", "name": "乐山正式赛"}]}}
+        with patch("tools.rankland_sync.fetch_text", return_value="catalog") as fetch, \
+                patch("tools.rankland_sync.parse_initial_state", return_value=state):
+            records, checked, summary = fetch_rankland_updates(self.database)
+        self.assertEqual(records, [])
+        self.assertEqual(checked, [])
+        self.assertEqual(summary["fetchedContests"], 0)
+        fetch.assert_called_once_with("https://rl.algoux.cn/search")
 
     def test_rankland_unchanged_content_reuses_observation_and_does_not_download_again(self):
         row = self.rankland_record(rank="104 / 402")

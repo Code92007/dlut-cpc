@@ -11,8 +11,14 @@ from tools.import_rankland import ORIGIN, parse_initial_state, parse_ranklist
 from tools.sync_public_data import fetch_text
 
 
+# CPC Finder now covers all four teams; the temporary Leshan import was retired.
+RETIRED_RANKLISTS = frozenset({"ccpc2026leshan"})
+
+
 def eligible_ranklist(entry: dict) -> bool:
     key = str(entry.get("uniqueKey", ""))
+    if key in RETIRED_RANKLISTS:
+        return False
     identity = re.fullmatch(r"(?:icpc|ccpc)((?:19|20)\d{2})([a-zA-Z0-9_-]+)", key)
     if not identity or EXCLUDED.search(str(entry.get("name", "")) + " " + key):
         return False
