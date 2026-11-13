@@ -1,7 +1,7 @@
 const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
-const routes = new Set(["home", "honor", "rating", "training", "resources", "admin", "pending"]);
+const routes = new Set(["home", "honor", "rating", "performance", "elo", "training", "resources", "admin", "pending"]);
 const schoolGroups = ["大连理工大学", "大连理工大学城市学院", "大连理工大学盘锦校区"];
 const state = {
   data: null,
@@ -127,6 +127,7 @@ function navigate(route, push = true) {
   renderRoute(route);
   if (route === "admin") loadAdminSession();
   if (route === "resources" && !state.resources && !state.resourcesLoading) loadResources();
+  if (['performance', 'elo'].includes(route)) loadAnalytics();
   window.scrollTo({ top: 0, behavior: "instant" });
   app.focus({ preventScroll: true });
 }
@@ -211,6 +212,10 @@ function homePage(data) {
       <div class="metric"><strong>${escapeHtml(data.meta.memberCoverage)}%</strong><span>参赛成员覆盖率</span></div>
     </section>
     <div class="home-content">
+      <div class="analytics-entries">
+        <a href="/performance" data-route="performance"><span class="eyebrow">Team Performance</span><strong>赛场表现 <span aria-hidden="true">↗</span></strong><span>已解题目最高 Rating、赛站与下一阶段目标</span></a>
+        <a href="/elo" data-route="elo"><span class="eyebrow">Historical Rating</span><strong>校史积分 <span aria-hidden="true">↗</span></strong><span>从历史正式成绩回放每位选手的积分轨迹</span></a>
+      </div>
       <section class="section-block">
         <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌统计</h2></div><div class="section-actions">
           <div class="chart-mode-switch" role="group" aria-label="奖牌图表显示方式"><button type="button" data-chart-mode="grouped" aria-pressed="${state.medalChartMode === 'grouped'}">分组</button><button type="button" data-chart-mode="stacked" aria-pressed="${state.medalChartMode === 'stacked'}">累计</button></div>
@@ -1507,11 +1512,12 @@ function bindPageEvents(route) {
     bindSearchInput('#memberQuery', 'memberQuery', 'rating');
   }
   if (route === "resources") bindResourceEvents();
+  if (['performance', 'elo'].includes(route)) bindAnalyticsEvents(route);
 }
 
 function renderRoute(route) {
   if (!state.data) return;
-  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, training: trainingPage, resources: resourcesPage, admin: adminPage, pending: pendingPage };
+  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, performance: () => performancePage(), elo: () => eloPage(), training: trainingPage, resources: resourcesPage, admin: adminPage, pending: pendingPage };
   app.innerHTML = renderers[route](state.data);
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);

@@ -24,6 +24,7 @@ from admin_auth import AdminAuth
 from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
 from tools.public_sync import refresh_public_data_periodically
 from tools.public_updates import list_result_diffs, resolve_result_diff
+from historical_rating import analytics_payload
 
 
 ROOT = Path(__file__).resolve().parent
@@ -32,7 +33,7 @@ DATA_PATH = Path(os.environ.get("SITE_DATA_PATH", ROOT / "data" / "site.json"))
 DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cpc.sqlite3"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
-SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/training", "/resources", "/admin", "/pending"}
+SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/performance", "/elo", "/training", "/resources", "/admin", "/pending"}
 
 
 class SubmissionLimiter:
@@ -162,6 +163,12 @@ class SiteHandler(BaseHTTPRequestHandler):
         if path == "/api/site":
             try:
                 self._send_json(load_site_data())
+            except (OSError, ValueError, json.JSONDecodeError, sqlite3.Error) as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+        if path == "/api/analytics":
+            try:
+                self._send_json(analytics_payload(load_site_data()))
             except (OSError, ValueError, json.JSONDecodeError, sqlite3.Error) as exc:
                 self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             return

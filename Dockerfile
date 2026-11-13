@@ -18,6 +18,7 @@ COPY official_imports.py /app/official_imports.py
 COPY schools.py /app/schools.py
 COPY admin_auth.py /app/admin_auth.py
 COPY github_lfs.py /app/github_lfs.py
+COPY historical_rating.py /app/historical_rating.py
 COPY tools /app/tools
 COPY web /app/web
 COPY data /app/data
