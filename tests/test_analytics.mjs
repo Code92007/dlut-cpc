@@ -21,7 +21,7 @@ test('full workbook and 2026 rows render, including missing ratings and campus f
   const c = makeContext();
   setData(c, {performances: performance});
   const html = c.performancePage();
-  assert.equal((html.match(/class="problem-rating-number"/g) || []).length, 183);
+  assert.equal((html.match(/class="problem-rating-number"/g) || []).length, 187);
   assert.ok(!/NaN|Infinity|>null</.test(html));
   assert.ok(html.includes('0 AC'));
   assert.ok(html.includes('Rating 暂缺'));
@@ -34,6 +34,16 @@ test('full workbook and 2026 rows render, including missing ratings and campus f
   assert.equal(c.performanceRows().length, 2);
   vm.runInContext("analyticsState.performanceStage = 'all'; analyticsState.performanceQuery = ''; analyticsState.performanceYear = '2026'; analyticsState.performanceSchool = '大连理工大学盘锦校区'", c);
   assert.equal(c.performanceRows().length, 7);
+});
+
+test('delayed EC Final is searchable by season and displays its actual date', () => {
+  const c = makeContext();
+  setData(c, {performances: performance});
+  vm.runInContext("analyticsState.performanceQuery = '2021'; analyticsState.performanceYear = '2022'", c);
+  assert.equal(c.performanceRows().filter(r => r.contestId === 'icpc-2021-ECFinal').length, 4);
+  const html = c.performancePage();
+  assert.ok(html.includes('2021 赛季 · 2022-07-20'));
+  assert.ok(html.includes('2021 赛季补录'));
 });
 
 test('qualified, provisional and no-data players stay distinct and ties remain tied', () => {

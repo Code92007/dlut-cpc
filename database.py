@@ -41,6 +41,7 @@ def load_seed_file(path: Path | str) -> dict:
         "ccpc_official_honors.json",
         "rankland_supplement_honors.json",
         "rankland_xuzhou_2018_honors.json",
+        "icpc_ecfinal_2021_honors.json",
         "icpc_official_honors.json",
         "icpc_qingdao_2016_honors.json",
         "icpc_2006_honors.json",

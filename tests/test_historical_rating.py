@@ -216,18 +216,18 @@ class HistoricalRatingTests(unittest.TestCase):
         self.assertEqual(target_plans(['A','B'], dict(A=800,B=900), stats)['速铜']['text'], '速铜·仅罚时')
         self.assertEqual(target_plans(['A'], dict(A=800), stats)['速铜']['text'], '')
 
-    def test_performance_archive_has_full_workbook_and_six_verified_new_stations(self):
+    def test_performance_archive_has_full_workbook_and_verified_supplements(self):
         path = Path(__file__).resolve().parents[1] / 'data/team_performances.json'
         archive = json.loads(path.read_text())
         rows = archive['records']
         self.assertEqual([r['sourceRow'] for r in rows if r['sourceKind']=='workbook'], list(range(2, 162)))
-        self.assertEqual(len({r['id'] for r in rows}), 183)
-        self.assertEqual(len(archive['stations']), 6)
+        self.assertEqual(len({r['id'] for r in rows}), 187)
+        self.assertEqual(len(archive['stations']), 7)
         self.assertEqual(sum(r['sourceKind']=='cf-bot-2026' for r in rows), 23)
         self.assertEqual(max(r['maxSolvedRating'] or 0 for r in rows), 2700)
         self.assertEqual(sum(r['maxSolvedRating'] is None for r in rows), 7)
         payload = analytics_payload(dict(members=members(), honors=[]))
-        self.assertEqual(len(payload['performances']['records']), 183)
+        self.assertEqual(len(payload['performances']['records']), 187)
         self.assertTrue(all(r['honor'] is None for r in payload['performances']['records']))
 
 

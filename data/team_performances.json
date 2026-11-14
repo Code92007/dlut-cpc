@@ -3,7 +3,7 @@
   "updatedAt": "2026-11-14",
   "source": {
     "name": "DLUT主校区区域赛_阶段速览_2020-2026.xlsx",
-    "note": "原工作簿全部 160 条主校区记录；另补 2026 年六个已完赛区域站，含盘锦校区。原表空白与打星标记保留。",
+    "note": "原工作簿全部 160 条主校区记录；另补 2026 年六站 23 条及 2021 赛季 EC Final 4 条（实际于 2022 年举办）。原表空白与打星标记保留。",
     "workbookHash": "0d1aa1ea694d3e3bede5863418f89e0fe1e333cffe6ce72416211f872c43a540",
     "reportHash": "387843e0705d0fb236acda52565d0d9d715d5a43b78397ae65e14ed0364f555f",
     "catalogHash": "3009faa674915473d85f706ef1f31d46283d047c5dfa57994618825c56374bde",
@@ -461,6 +461,82 @@
       },
       "anonymousHash": "5d50d152091681d3d4a9e7e001490f72857c25d94db7d65ec6528e5019211837",
       "boardUrl": "https://rank.iccpc.cn/r/8a3a28e3-f6b3-4a58-b4ac-fa8039fb2c72"
+    },
+    {
+      "id": "icpc-2021-ECFinal",
+      "date": "2022-07-20",
+      "ratings": {
+        "A": 900,
+        "B": 2000,
+        "C": 2800,
+        "D": 2600,
+        "E": 1900,
+        "F": 3300,
+        "G": 3000,
+        "H": 2900,
+        "I": 900,
+        "J": 2400,
+        "K": 3300,
+        "L": 1000,
+        "M": 3300
+      },
+      "statistics": {
+        "official_teams": 363,
+        "effective_teams": 355,
+        "excluded_teams": 4,
+        "unlisted_team_runs": 0,
+        "duration_seconds": 18000.0,
+        "medal_rule": "XCPCIO config.medal.official：金银铜分别枚数，累计为名次分界",
+        "medal_rank_limits": {
+          "gold": 36,
+          "silver": 108,
+          "bronze": 216
+        },
+        "medal_boundaries": {
+          "gold": {
+            "teams": 36,
+            "last_solved": 6,
+            "last_penalty_minutes": 950
+          },
+          "silver": {
+            "teams": 72,
+            "last_solved": 4,
+            "last_penalty_minutes": 341
+          },
+          "bronze": {
+            "teams": 108,
+            "last_solved": 3,
+            "last_penalty_minutes": 102
+          }
+        },
+        "medal_safety": {
+          "gold": {
+            "max_outside_solved": 6,
+            "safe_solved": 7
+          },
+          "silver": {
+            "max_outside_solved": 4,
+            "safe_solved": 5
+          },
+          "bronze": {
+            "max_outside_solved": 3,
+            "safe_solved": 4
+          }
+        },
+        "source_name": "The 46th ICPC Asia East Continent Final Contest",
+        "source_url": "https://github.com/xcpcio/board-data/tree/7d626ddad0b98e8f79ddca7072421cee0a9f00e8/data/icpc/46th/ec-final",
+        "sha256": {
+          "config": "f4537a05b8b34fd4e0933836883c0540add5442f4ad862299e113c7fd96b3eed",
+          "team": "0cb1879e8b17559b4bbcc0906a3764a881d9422e834e5ebcaeabc3f82df412d6",
+          "run": "fb23325881016845a709febe4c6edac51e5985a0ba8192b7070f413730b4ef9a"
+        }
+      },
+      "sourceHashes": {
+        "config": "f4537a05b8b34fd4e0933836883c0540add5442f4ad862299e113c7fd96b3eed",
+        "team": "0cb1879e8b17559b4bbcc0906a3764a881d9422e834e5ebcaeabc3f82df412d6",
+        "run": "fb23325881016845a709febe4c6edac51e5985a0ba8192b7070f413730b4ef9a"
+      },
+      "boardUrl": "https://board.xcpcio.com/icpc/46th/ec-final/"
     }
   ],
   "records": [
@@ -16357,6 +16433,448 @@
       },
       "contestId": "ccpc-2026-长春",
       "note": "赛时 AC 与 CF-Bot 完整正式/打星逐题快照全场多重集核对；阶段按正式队终榜门槛计算。"
+    },
+    {
+      "id": "performance-rankland-0f98a5b066603d54a268",
+      "honorId": "rankland-0f98a5b066603d54a268",
+      "sourceRow": null,
+      "sourceKind": "cf-bot-historical",
+      "season": 2022,
+      "contestSeason": 2021,
+      "series": "ICPC",
+      "location": "东亚决赛",
+      "school": "大连理工大学",
+      "date": "2022-07-20",
+      "team": "梦觉流莺时一声",
+      "maxSolvedRating": 1900,
+      "stage": "稳铜",
+      "nextStage": "速银·仅罚时",
+      "nextTwoStages": "稳银 2000",
+      "solved": 4,
+      "accepted": "A(900), E(1900), I(900), L(1000)",
+      "boardTeamId": "43",
+      "boardUrl": "https://rl.algoux.cn/ranklist/icpc2021ecfinal",
+      "allTargets": {
+        "速金": {
+          "count": 6,
+          "additional": 2,
+          "available": true,
+          "problems": [
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            }
+          ],
+          "text": "速金 2400"
+        },
+        "稳金": {
+          "count": 7,
+          "additional": 3,
+          "available": true,
+          "problems": [
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            },
+            {
+              "index": "D",
+              "rating": 2600
+            }
+          ],
+          "text": "稳金 2600"
+        },
+        "速银": {
+          "count": 4,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "速银·仅罚时"
+        },
+        "稳银": {
+          "count": 5,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "B",
+              "rating": 2000
+            }
+          ],
+          "text": "稳银 2000"
+        },
+        "速铜": {
+          "count": 3,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "速铜·仅罚时"
+        },
+        "稳铜": {
+          "count": 4,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "稳铜·仅罚时"
+        }
+      },
+      "contestId": "icpc-2021-ECFinal",
+      "note": "2021 赛季延期至 2022-07-20；367 队赛时 AC 与 RankLand 全场核对，XCPCIO 原始文件哈希与 CF-Bot 评级证据一致；363 支正式队。"
+    },
+    {
+      "id": "performance-rankland-42be69bc3379f8d2d547",
+      "honorId": "rankland-42be69bc3379f8d2d547",
+      "sourceRow": null,
+      "sourceKind": "cf-bot-historical",
+      "season": 2022,
+      "contestSeason": 2021,
+      "series": "ICPC",
+      "location": "东亚决赛",
+      "school": "大连理工大学",
+      "date": "2022-07-20",
+      "team": "三带一",
+      "maxSolvedRating": 1000,
+      "stage": "铁牌",
+      "nextStage": "速铜·仅罚时",
+      "nextTwoStages": "稳铜 1900",
+      "solved": 3,
+      "accepted": "A(900), I(900), L(1000)",
+      "boardTeamId": "41",
+      "boardUrl": "https://rl.algoux.cn/ranklist/icpc2021ecfinal",
+      "allTargets": {
+        "速金": {
+          "count": 6,
+          "additional": 3,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            }
+          ],
+          "text": "速金 2400"
+        },
+        "稳金": {
+          "count": 7,
+          "additional": 4,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            },
+            {
+              "index": "D",
+              "rating": 2600
+            }
+          ],
+          "text": "稳金 2600"
+        },
+        "速银": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "速银 1900"
+        },
+        "稳银": {
+          "count": 5,
+          "additional": 2,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            }
+          ],
+          "text": "稳银 2000"
+        },
+        "速铜": {
+          "count": 3,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "速铜·仅罚时"
+        },
+        "稳铜": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "稳铜 1900"
+        }
+      },
+      "contestId": "icpc-2021-ECFinal",
+      "note": "2021 赛季延期至 2022-07-20；367 队赛时 AC 与 RankLand 全场核对，XCPCIO 原始文件哈希与 CF-Bot 评级证据一致；363 支正式队。"
+    },
+    {
+      "id": "performance-rankland-d8d9fb809def725442ce",
+      "honorId": "rankland-d8d9fb809def725442ce",
+      "sourceRow": null,
+      "sourceKind": "cf-bot-historical",
+      "season": 2022,
+      "contestSeason": 2021,
+      "series": "ICPC",
+      "location": "东亚决赛",
+      "school": "大连理工大学",
+      "date": "2022-07-20",
+      "team": "Relaxing!",
+      "maxSolvedRating": 1000,
+      "stage": "铁牌",
+      "nextStage": "速铜·仅罚时",
+      "nextTwoStages": "稳铜 1900",
+      "solved": 3,
+      "accepted": "A(900), I(900), L(1000)",
+      "boardTeamId": "42",
+      "boardUrl": "https://rl.algoux.cn/ranklist/icpc2021ecfinal",
+      "allTargets": {
+        "速金": {
+          "count": 6,
+          "additional": 3,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            }
+          ],
+          "text": "速金 2400"
+        },
+        "稳金": {
+          "count": 7,
+          "additional": 4,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            },
+            {
+              "index": "D",
+              "rating": 2600
+            }
+          ],
+          "text": "稳金 2600"
+        },
+        "速银": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "速银 1900"
+        },
+        "稳银": {
+          "count": 5,
+          "additional": 2,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            }
+          ],
+          "text": "稳银 2000"
+        },
+        "速铜": {
+          "count": 3,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "速铜·仅罚时"
+        },
+        "稳铜": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "稳铜 1900"
+        }
+      },
+      "contestId": "icpc-2021-ECFinal",
+      "note": "2021 赛季延期至 2022-07-20；367 队赛时 AC 与 RankLand 全场核对，XCPCIO 原始文件哈希与 CF-Bot 评级证据一致；363 支正式队。"
+    },
+    {
+      "id": "performance-rankland-8e232f66aa715ce842f1",
+      "honorId": "rankland-8e232f66aa715ce842f1",
+      "sourceRow": null,
+      "sourceKind": "cf-bot-historical",
+      "season": 2022,
+      "contestSeason": 2021,
+      "series": "ICPC",
+      "location": "东亚决赛",
+      "school": "大连理工大学",
+      "date": "2022-07-20",
+      "team": "我们队没有GF",
+      "maxSolvedRating": 1000,
+      "stage": "铁牌",
+      "nextStage": "速铜·仅罚时",
+      "nextTwoStages": "稳铜 1900",
+      "solved": 3,
+      "accepted": "A(900), I(900), L(1000)",
+      "boardTeamId": "40",
+      "boardUrl": "https://rl.algoux.cn/ranklist/icpc2021ecfinal",
+      "allTargets": {
+        "速金": {
+          "count": 6,
+          "additional": 3,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            }
+          ],
+          "text": "速金 2400"
+        },
+        "稳金": {
+          "count": 7,
+          "additional": 4,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            },
+            {
+              "index": "J",
+              "rating": 2400
+            },
+            {
+              "index": "D",
+              "rating": 2600
+            }
+          ],
+          "text": "稳金 2600"
+        },
+        "速银": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "速银 1900"
+        },
+        "稳银": {
+          "count": 5,
+          "additional": 2,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            },
+            {
+              "index": "B",
+              "rating": 2000
+            }
+          ],
+          "text": "稳银 2000"
+        },
+        "速铜": {
+          "count": 3,
+          "additional": 0,
+          "available": true,
+          "problems": [],
+          "text": "速铜·仅罚时"
+        },
+        "稳铜": {
+          "count": 4,
+          "additional": 1,
+          "available": true,
+          "problems": [
+            {
+              "index": "E",
+              "rating": 1900
+            }
+          ],
+          "text": "稳铜 1900"
+        }
+      },
+      "contestId": "icpc-2021-ECFinal",
+      "note": "2021 赛季延期至 2022-07-20；367 队赛时 AC 与 RankLand 全场核对，XCPCIO 原始文件哈希与 CF-Bot 评级证据一致；363 支正式队。"
     }
   ]
 }

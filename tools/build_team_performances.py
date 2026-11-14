@@ -18,6 +18,7 @@ SITES = {'西安': 'xian', '长春': 'changchun', '成都': 'chengdu',
          '武汉': 'wuhan', '乐山': 'leshan', '南京': 'nanjing'}
 STAGES = ['铁牌', '速铜', '稳铜', '速银', '稳银', '速金', '稳金']
 MEDALS = {'gold': '金牌', 'silver': '银牌', 'bronze': '铜牌'}
+ARCHIVED_SUPPLEMENT = Path(__file__).resolve().parents[1] / 'data/icpc_ecfinal_2021_honors.json'
 
 
 def digest(path):
@@ -89,7 +90,42 @@ def target_plans(accepted, ratings, stats):
     return plans
 
 
-def build(workbook, report, live, catalog, evidence, anonymous):
+def append_archived_contests(archive, batch):
+    """Include reviewed late additions when rebuilding the workbook archive."""
+    existing = {row['honorId'] for row in archive['records']}
+    for contest in batch['contests']:
+        ratings, stats = contest['ratings'], contest['statistics']
+        if not any(s['id'] == contest['id'] for s in archive['stations']):
+            archive['stations'].append({k: contest[k] for k in
+                                       ('id', 'date', 'ratings', 'statistics', 'sourceHashes', 'boardUrl')})
+        for h in batch['honors']:
+            if h['externalContestId'] != contest['key'] or h['id'] in existing:
+                continue
+            accepted = h['archive']['accepted']
+            plans = target_plans(accepted, ratings, stats)
+            if h['medal'] == '铁牌':
+                stage = '铁牌'
+            else:
+                medal = next(k for k, cn in MEDALS.items() if cn == h['medal'])
+                stage = ('稳' if len(accepted) >= stats['medal_safety'][medal]['safe_solved'] else '速') + h['medal'][0]
+            index = STAGES.index(stage)
+            def following(offset):
+                return plans.get(STAGES[index + offset], {}).get('text', '') if index + offset < len(STAGES) else ''
+            archive['records'].append(dict(
+                id='performance-' + h['id'], honorId=h['id'], sourceRow=None,
+                sourceKind='cf-bot-historical', season=int(h['date'][:4]), contestSeason=contest['season'],
+                series=h['series'], location=h['location'], school=h['school'], date=h['date'], team=h['team'],
+                maxSolvedRating=max((ratings[p] for p in accepted), default=None), stage=stage,
+                nextStage=following(1), nextTwoStages=following(2), solved=len(accepted),
+                accepted=', '.join(f'{p}({ratings[p]})' for p in accepted), boardTeamId=h['externalTeamId'],
+                boardUrl=contest['url'], allTargets=plans, contestId=contest['id'],
+                note='2021 赛季延期至 2022-07-20；367 队赛时 AC 与 RankLand 全场核对，'
+                     'XCPCIO 原始文件哈希与 CF-Bot 评级证据一致；363 支正式队。'))
+            existing.add(h['id'])
+    return archive
+
+
+def build(workbook, report, live, catalog, evidence, anonymous, supplement=ARCHIVED_SUPPLEMENT):
     import openpyxl
     original = json.loads(report.read_text())
     site = json.loads(live.read_text())
@@ -172,17 +208,19 @@ def build(workbook, report, live, catalog, evidence, anonymous):
                                 boardTeamId=t['id'], boardUrl=contest['ranklist_url'], allTargets=plans, contestId=key,
                                 note='赛时 AC 与 CF-Bot 完整正式/打星逐题快照全场多重集核对；阶段按正式队终榜门槛计算。' +
                                 ('乐山原榜 300 支正式队，成绩库为 CPC Finder 299 支口径；此处升级门槛用原榜。' if slug == 'leshan' else '')))
-    return dict(version='team-performances-v2', updatedAt='2026-11-14',
-                source=dict(name=workbook.name, note='原工作簿全部 160 条主校区记录；另补 2026 年六个已完赛区域站，含盘锦校区。原表空白与打星标记保留。',
+    archive = dict(version='team-performances-v2', updatedAt='2026-11-14',
+                source=dict(name=workbook.name, note='原工作簿全部 160 条主校区记录；另补 2026 年六站 23 条及 2021 赛季 EC Final 4 条（实际于 2022 年举办）。原表空白与打星标记保留。',
                             workbookHash=digest(workbook), reportHash=digest(report), catalogHash=digest(catalog),
                             catalogUrl='https://cf-bot.wannafly.cn/api/regional-catalog', snapshotDate=original['as_of'],
                             sheet='阶段速览', workbookRecords=160), stations=stations, records=records)
+    return append_archived_contests(archive, json.loads(supplement.read_text()))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('workbook', 'report', 'live', 'catalog', 'evidence', 'anonymous', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--supplement', type=Path, default=ARCHIVED_SUPPLEMENT)
     args = vars(parser.parse_args())
     output = args.pop('output')
     archive = build(**args)
