@@ -1,7 +1,7 @@
 const analyticsState = {
   data: null, loading: false, error: '',
   performanceQuery: '', performanceYear: 'all', performanceStage: 'all', performanceSchool: 'all', performanceSort: 'rating',
-  eloQuery: '', eloSchool: 'all', eloScope: 'ranked', eloSort: 'conservative', eloPlayer: null,
+  eloQuery: '', eloSchool: 'all', eloScope: 'ranked', eloSort: 'conservative',
 };
 
 async function loadAnalytics(force = false) {
@@ -109,12 +109,12 @@ function eloDetail(player) {
   if (!player) return '';
   const cf = player.cfReference;
   const unrated = player.unratedHistory || [];
-  return `<section class="elo-detail" id="elo-detail"><div class="section-heading"><div><span class="eyebrow">Player History</span><h2>${escapeHtml(player.name)} <small>${escapeHtml(player.school)}</small></h2></div><button class="analysis-text-button" data-elo-close>收起 ×</button></div>
+  return `<section class="elo-detail"><div class="section-heading elo-dialog-heading"><div><span class="eyebrow">Player History</span><h2 id="elo-detail-title">${escapeHtml(player.name)} <small>${escapeHtml(player.school)}</small></h2></div><button type="button" class="elo-dialog-close" data-elo-close aria-label="关闭个人详情">关闭 ×</button></div><div class="elo-dialog-body">
     <p class="contest-caption">已收录 ${player.careerContests ?? player.contests} 场正式战绩（${eloMedals(player)}） · ${player.contests} 场计分 · ${unrated.length} 场待补计分依据 · ${player.teamCount} 套计分阵容${player.teamCount === 1 ? ' · 目前仅有一套阵容，无法从队伍成绩区分三人的独立贡献。' : ''}</p>
     ${cf?.verified && cf.handle ? `<p class="contest-caption">个人赛参考：<a href="https://codeforces.com/profile/${encodeURIComponent(cf.handle)}" target="_blank" rel="noopener noreferrer">CF ${escapeHtml(cf.handle)} ↗</a> · 当前 ${escapeHtml(String(cf.rating ?? '未评级'))} / 最高 ${escapeHtml(String(cf.maxRating ?? '未评级'))}。不参与历史积分回放。${cf.ratingUpdatedAt ? ` 更新于 ${escapeHtml(cf.ratingUpdatedAt.slice(0,10))}。` : ''}</p>` : ''}
     ${eloChart(player)}
     <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍 / 队友</th><th>正式名次</th><th>奖项 / 单场表现分</th><th>积分变化</th><th>赛后积分</th></tr></thead><tbody>${player.history.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}<small class="result-status">${escapeHtml(h.members.join(' / '))}</small></td><td>${h.rank} / ${h.total}<small class="result-status">前 ${h.percentile}%</small>${h.rankSource ? `<small class="result-status">${sourceLink(h.rankSource)}</small>` : ''}</td><td>${escapeHtml(h.medal)}<small class="result-status">P ${Math.round(h.performance)}${h.fieldAdjustment ? ` · ${h.event.includes('CCPC') ? 'CCPC Final' : 'EC Final'} +${h.fieldAdjustment}` : ''}</small></td><td class="${h.delta > 0 ? 'delta-up' : h.delta < 0 ? 'delta-down' : ''}">${h.delta > 0 ? '+' : ''}${h.delta.toFixed(1)}<small class="result-status">赛前 ${Math.round(h.before)}</small></td><td><strong>${Math.round(h.rating)}</strong></td></tr>`).join('') || '<tr><td colspan="6" class="table-empty">没有可计分记录</td></tr>'}</tbody></table></div>
-    ${unrated.length ? `<h3>已收录、暂未计分的正式战绩</h3><p class="contest-caption">这些奖项已计入上方战绩。补齐依据后才回放积分，不把资料缺失记作失利。</p><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>奖项 / 原始名次</th><th>待补依据</th></tr></thead><tbody>${unrated.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.medal)}<small class="result-status">${escapeHtml(h.rank || '名次待考')}</small></td><td>${escapeHtml(h.reason)}${h.auditNote ? `<small class="result-status">${escapeHtml(h.auditNote)}</small>` : ''}<small class="result-status">${sourceLink(h.source)}</small></td></tr>`).join('')}</tbody></table></div>` : ''}</section>`;
+    ${unrated.length ? `<h3>已收录、暂未计分的正式战绩</h3><p class="contest-caption">这些奖项已计入上方战绩。补齐依据后才回放积分，不把资料缺失记作失利。</p><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>奖项 / 原始名次</th><th>待补依据</th></tr></thead><tbody>${unrated.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.medal)}<small class="result-status">${escapeHtml(h.rank || '名次待考')}</small></td><td>${escapeHtml(h.reason)}${h.auditNote ? `<small class="result-status">${escapeHtml(h.auditNote)}</small>` : ''}<small class="result-status">${sourceLink(h.source)}</small></td></tr>`).join('')}</tbody></table></div>` : ''}</div></section>`;
 }
 
 function eloPage() {
@@ -122,7 +122,6 @@ function eloPage() {
   const elo = s.data?.elo;
   const rows = eloRows();
   const c = elo?.coverage;
-  const player = elo?.players.find(p => p.id === s.eloPlayer);
   return `<div class="page-shell analysis-page"><div class="page-heading"><div><span class="eyebrow">Historical Rating · v4</span><h1>Elo <span class="analysis-badge">试行</span></h1><p>让已确认的历史参赛记录，拥有一条可追溯的积分轨迹。</p></div><a href="#elo-method">计算规则 ↓</a></div>
     ${analyticsTabs('elo')}
     ${!elo ? analyticsEmpty() : `
@@ -134,9 +133,9 @@ function eloPage() {
     <label class="filter-group"><span>排序</span><select data-analysis-select="eloSort">${[['conservative','保守分 · 默认'],['peak','历史峰值'],['current','最后参赛积分'],['contests','计分场次']].map(([v,t]) => `<option value="${v}" ${s.eloSort === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label></div>
     <div class="analysis-table-heading"><span role="status">${rows.length} 位成员 · 点击姓名查看轨迹 · 同分并列</span><button class="analysis-text-button" data-analysis-export="elo">导出当前筛选 CSV ↓</button></div>
     <div class="data-table-wrap"><table class="data-table elo-table"><thead><tr><th>名次</th><th>成员</th><th>保守分</th><th>历史峰值</th><th>最后参赛积分</th><th>已收录战绩</th><th>计分 / 收录</th><th>最后参赛</th></tr></thead><tbody>
-    ${rows.map((p, i) => {const value = p[s.eloSort];const rank = rows.findIndex(other => other[s.eloSort] === value) + 1;return `<tr class="${p.id === s.eloPlayer ? 'selected-row' : ''}"><td>${p.provisional || value == null ? '—' : rank}</td><td><button class="elo-player" data-elo-player="${p.id}" aria-expanded="${p.id === s.eloPlayer}">${escapeHtml(p.name)}</button><small class="result-status">${escapeHtml(p.school)}${p.provisional ? ` · ${p.contests ? '暂定' : '无数据'}` : ''}</small></td><td class="elo-score">${p.conservative ?? '—'}</td><td>${p.peak ?? '—'}</td><td>${p.current ?? '—'}<small class="result-status">末场 ${p.history.length ? (p.history.at(-1).delta > 0 ? '+' : '') + p.history.at(-1).delta.toFixed(1) : '—'}</small></td><td>${eloMedals(p)}</td><td>${p.contests} / ${p.careerContests ?? p.contests}<small class="result-status">${p.teamCount} 套阵容${p.unratedHistory?.length ? ` · ${p.unratedHistory.length} 场未计分` : ''}</small></td><td>${escapeHtml(p.lastDate || '—')}</td></tr>`;}).join('') || '<tr><td colspan="8" class="table-empty">没有符合条件的成员</td></tr>'}
+    ${rows.map((p, i) => {const value = p[s.eloSort];const rank = rows.findIndex(other => other[s.eloSort] === value) + 1;return `<tr><td>${p.provisional || value == null ? '—' : rank}</td><td><button class="elo-player" data-elo-player="${p.id}" aria-haspopup="dialog" aria-controls="elo-dialog">${escapeHtml(p.name)}</button><small class="result-status">${escapeHtml(p.school)}${p.provisional ? ` · ${p.contests ? '暂定' : '无数据'}` : ''}</small></td><td class="elo-score">${p.conservative ?? '—'}</td><td>${p.peak ?? '—'}</td><td>${p.current ?? '—'}<small class="result-status">末场 ${p.history.length ? (p.history.at(-1).delta > 0 ? '+' : '') + p.history.at(-1).delta.toFixed(1) : '—'}</small></td><td>${eloMedals(p)}</td><td>${p.contests} / ${p.careerContests ?? p.contests}<small class="result-status">${p.teamCount} 套阵容${p.unratedHistory?.length ? ` · ${p.unratedHistory.length} 场未计分` : ''}</small></td><td>${escapeHtml(p.lastDate || '—')}</td></tr>`;}).join('') || '<tr><td colspan="8" class="table-empty">没有符合条件的成员</td></tr>'}
     </tbody></table></div>
-    ${eloDetail(player)}
+    <dialog class="elo-dialog" id="elo-dialog" aria-labelledby="elo-detail-title" aria-modal="true"></dialog>
     <details id="elo-method" class="analysis-method"><summary>计算规则、数据边界与维护机制</summary>
       <h3>奖项锚定的逐场 Rating · v4</h3><p>所有年代从 1500 起算，按实际比赛日期回放。实际金牌单场表现分为 2600–3200、银牌 1900–2400、铜牌 1300–1800、铁牌 800–1200。同奖项内，正式名次越靠前，表现分越高。实际奖项决定分档，不按名次比例反推奖项。</p>
       <p>令 q = (r − 0.5) / N，各奖项的名次参考区间依次为 [0, 0.1]、[0.1, 0.3]、[0.3, 0.6]、[0.6, 1]。在本档参考区间内线性映射至表现分上限→下限，超出则截到本档边界。每人按自己的赛前分 R 更新：R′ = R + 0.3(P − R)，所有人、所有场次都使用 0.3。比如个人赛前 2400、表现 2200，本场下降 60 分。共同参赛时，原有分差每场缩小为 70%，不会永久锁定，也不会因同场相同表现而交叉反超。</p>
@@ -192,11 +191,29 @@ function bindAnalyticsEvents(route) {
   input?.addEventListener('compositionstart', () => { composing = true; });
   input?.addEventListener('compositionend', () => { composing = false; update(); });
   input?.addEventListener('input', event => { if (!composing && !event.isComposing) update(); });
+  const dialog = document.querySelector('#elo-dialog');
+  let trigger = null;
+  let backdropPointerDown = false;
   document.querySelectorAll('[data-elo-player]').forEach(button => button.addEventListener('click', () => {
-    analyticsState.eloPlayer = Number(button.dataset.eloPlayer);
-    renderRoute('elo');
-    document.querySelector('#elo-detail')?.scrollIntoView({block: 'start'});
+    const player = analyticsState.data?.elo.players.find(p => p.id === Number(button.dataset.eloPlayer));
+    if (!dialog || !player) return;
+    trigger = button;
+    dialog.innerHTML = eloDetail(player);
+    dialog.querySelector('[data-elo-close]').addEventListener('click', () => dialog.close());
+    button.closest('tr')?.classList.add('selected-row');
+    dialog.showModal();
   }));
-  document.querySelector('[data-elo-close]')?.addEventListener('click', () => { analyticsState.eloPlayer = null; renderRoute('elo'); });
+  dialog?.addEventListener('close', () => {
+    trigger?.closest('tr')?.classList.remove('selected-row');
+    if (trigger?.isConnected) trigger.focus({preventScroll: true});
+    trigger = null;
+    backdropPointerDown = false;
+    dialog.innerHTML = '';
+  });
+  dialog?.addEventListener('pointerdown', event => { backdropPointerDown = event.target === dialog; });
+  dialog?.addEventListener('click', event => {
+    if (backdropPointerDown && event.target === dialog) dialog.close();
+    backdropPointerDown = false;
+  });
   document.querySelectorAll('[data-analysis-export]').forEach(button => button.addEventListener('click', () => downloadAnalysis(button.dataset.analysisExport)));
 }
