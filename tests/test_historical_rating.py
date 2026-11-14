@@ -33,7 +33,7 @@ class HistoricalRatingTests(unittest.TestCase):
 
     def test_equal_teammates_share_result_and_no_data_is_not_1500(self):
         data = self.calculate([result()])
-        self.assertEqual([p['current'] for p in data['players'][:3]], [2065] * 3)
+        self.assertEqual([p['current'] for p in data['players'][:3]], [1839] * 3)
         self.assertTrue(all(p['provisional'] and p['peak'] is None for p in data['players']))
         self.assertIsNone(data['players'][3]['current'])
         self.assertEqual(data['players'][0]['teamCount'], 1)
@@ -102,21 +102,43 @@ class HistoricalRatingTests(unittest.TestCase):
         self.assertLessEqual(p['current'], 2400)
         self.assertLess(abs(p['history'][-1]['delta']), .01)
 
-    def test_shared_team_delta_preserves_gap_and_new_member_has_no_extra_update_weight(self):
+    def test_same_observation_uses_individual_prior_with_no_newcomer_multiplier(self):
         honors = [result(), result('b', '2016-11-01'), result('c', '2017-11-01'),
                   result('d', '2018-11-01', ids=(1,4,5), medal='银牌', rank='30 / 100')]
         data = self.calculate(honors)
         a, b = data['players'][0]['history'][-1], data['players'][3]['history'][-1]
-        self.assertEqual(a['delta'], b['delta'])
+        self.assertLess(a['delta'], 0)
+        self.assertGreater(b['delta'], 0)
         self.assertEqual(a['updateWeight'], .3)
         self.assertEqual(b['updateWeight'], .3)
-        self.assertAlmostEqual(a['rating'] - b['rating'], a['before'] - b['before'], delta=.02)
-        self.assertAlmostEqual(a['delta'], .3 * (a['performance'] - (a['before'] + 3000) / 3), places=1)
-        # Below the team's prior makes everyone lose, regardless of sample size.
+        self.assertEqual(a['performance'], b['performance'])
+        self.assertAlmostEqual(a['rating'] - b['rating'], .7 * (a['before'] - b['before']), delta=.02)
+        self.assertGreater(a['rating'], b['rating'])
+        # A poor result makes both lose, without relying on teammates' old scores.
         honors[-1].update(medal='铁牌', rank='90 / 100')
         data = self.calculate(honors)
         self.assertLess(data['players'][0]['history'][-1]['delta'], 0)
-        self.assertEqual(data['players'][0]['history'][-1]['delta'], data['players'][3]['history'][-1]['delta'])
+        self.assertLess(data['players'][3]['history'][-1]['delta'], 0)
+
+    def test_teammate_history_cannot_create_a_bonus_or_change_ones_own_updates(self):
+        own = [result(), result('together', '2018-11-01', ids=(1,4,5), rank='15 / 100', medal='银牌')]
+        low_teammate_history = [result('low'+str(i), f'{2014+i}-01-01', ids=(4,5,6), rank='90 / 100', medal='铁牌') for i in range(3)]
+        high_teammate_history = [dict(h, medal='金牌', rank='1 / 100') for h in low_teammate_history]
+        baseline = self.calculate(own)['players'][0]
+        for teammate_history in [low_teammate_history, high_teammate_history]:
+            p = self.calculate(own + teammate_history)['players'][0]
+            self.assertEqual(p['history'], baseline['history'])
+            self.assertEqual(p['current'], baseline['current'])
+
+    def test_prior_gap_contracts_during_repeated_shared_results_instead_of_freezing(self):
+        initial = result('initial', '2010-01-01')
+        shared = [result('shared'+str(i), f'{2011+i}-01-01', ids=(1,4,5), rank='15 / 100', medal='银牌') for i in range(5)]
+        data = self.calculate([initial, *shared])
+        a, b = data['players'][0], data['players'][3]
+        before_gap = a['history'][1]['before'] - b['history'][0]['before']
+        for n, (ha,hb) in enumerate(zip(a['history'][1:], b['history']), 1):
+            self.assertAlmostEqual(ha['rating'] - hb['rating'], before_gap * .7**n, delta=.02)
+            self.assertGreater(ha['rating'], hb['rating'])
 
     def test_final_priors_are_separate_for_ec_and_ccpc_and_do_not_depend_on_raw_team_count(self):
         for series, event, adjustment in [('ICPC', '第 43 届 ICPC 国际大学生程序设计竞赛东亚区决赛', 200),
@@ -128,7 +150,7 @@ class HistoricalRatingTests(unittest.TestCase):
             h = self.calculate([final])['players'][0]['history'][0]
             self.assertEqual(h['performance'] - ordinary['performance'], adjustment)
             self.assertEqual(h['fieldAdjustment'], adjustment)
-            self.assertAlmostEqual(h['delta'] - ordinary['delta'], adjustment / 2)
+            self.assertAlmostEqual(h['delta'] - ordinary['delta'], adjustment * .3)
         unknown = result(medal='')
         self.assertEqual(self.calculate([unknown])['coverage']['ratedResults'], 0)
 

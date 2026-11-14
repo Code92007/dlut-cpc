@@ -113,7 +113,7 @@ function eloDetail(player) {
     <p class="contest-caption">已收录 ${player.careerContests ?? player.contests} 场正式战绩（${eloMedals(player)}） · ${player.contests} 场计分 · ${unrated.length} 场待补计分依据 · ${player.teamCount} 套计分阵容${player.teamCount === 1 ? ' · 目前仅有一套阵容，无法从队伍成绩区分三人的独立贡献。' : ''}</p>
     ${cf?.verified && cf.handle ? `<p class="contest-caption">个人赛参考：<a href="https://codeforces.com/profile/${encodeURIComponent(cf.handle)}" target="_blank" rel="noopener noreferrer">CF ${escapeHtml(cf.handle)} ↗</a> · 当前 ${escapeHtml(String(cf.rating ?? '未评级'))} / 最高 ${escapeHtml(String(cf.maxRating ?? '未评级'))}。不参与历史积分回放。${cf.ratingUpdatedAt ? ` 更新于 ${escapeHtml(cf.ratingUpdatedAt.slice(0,10))}。` : ''}</p>` : ''}
     ${eloChart(player)}
-    <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍 / 队友</th><th>正式名次</th><th>奖项 / 单场表现分</th><th>积分变化</th><th>赛后积分</th></tr></thead><tbody>${player.history.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}<small class="result-status">${escapeHtml(h.members.join(' / '))}</small></td><td>${h.rank} / ${h.total}<small class="result-status">前 ${h.percentile}%</small>${h.rankSource ? `<small class="result-status">${sourceLink(h.rankSource)}</small>` : ''}</td><td>${escapeHtml(h.medal)}<small class="result-status">P ${Math.round(h.performance)}${h.fieldAdjustment ? ` · ${h.event.includes('CCPC') ? 'CCPC Final' : 'EC Final'} +${h.fieldAdjustment}` : ''}</small></td><td class="${h.delta > 0 ? 'delta-up' : h.delta < 0 ? 'delta-down' : ''}">${h.delta > 0 ? '+' : ''}${h.delta.toFixed(1)}<small class="result-status">同队共同涨跌</small></td><td><strong>${Math.round(h.rating)}</strong></td></tr>`).join('') || '<tr><td colspan="6" class="table-empty">没有可计分记录</td></tr>'}</tbody></table></div>
+    <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍 / 队友</th><th>正式名次</th><th>奖项 / 单场表现分</th><th>积分变化</th><th>赛后积分</th></tr></thead><tbody>${player.history.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}<small class="result-status">${escapeHtml(h.members.join(' / '))}</small></td><td>${h.rank} / ${h.total}<small class="result-status">前 ${h.percentile}%</small>${h.rankSource ? `<small class="result-status">${sourceLink(h.rankSource)}</small>` : ''}</td><td>${escapeHtml(h.medal)}<small class="result-status">P ${Math.round(h.performance)}${h.fieldAdjustment ? ` · ${h.event.includes('CCPC') ? 'CCPC Final' : 'EC Final'} +${h.fieldAdjustment}` : ''}</small></td><td class="${h.delta > 0 ? 'delta-up' : h.delta < 0 ? 'delta-down' : ''}">${h.delta > 0 ? '+' : ''}${h.delta.toFixed(1)}<small class="result-status">赛前 ${Math.round(h.before)}</small></td><td><strong>${Math.round(h.rating)}</strong></td></tr>`).join('') || '<tr><td colspan="6" class="table-empty">没有可计分记录</td></tr>'}</tbody></table></div>
     ${unrated.length ? `<h3>已收录、暂未计分的正式战绩</h3><p class="contest-caption">这些奖项已计入上方战绩。补齐依据后才回放积分，不把资料缺失记作失利。</p><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>奖项 / 原始名次</th><th>待补依据</th></tr></thead><tbody>${unrated.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.medal)}<small class="result-status">${escapeHtml(h.rank || '名次待考')}</small></td><td>${escapeHtml(h.reason)}${h.auditNote ? `<small class="result-status">${escapeHtml(h.auditNote)}</small>` : ''}<small class="result-status">${sourceLink(h.source)}</small></td></tr>`).join('')}</tbody></table></div>` : ''}</section>`;
 }
 
@@ -123,11 +123,11 @@ function eloPage() {
   const rows = eloRows();
   const c = elo?.coverage;
   const player = elo?.players.find(p => p.id === s.eloPlayer);
-  return `<div class="page-shell analysis-page"><div class="page-heading"><div><span class="eyebrow">Historical Rating · v3</span><h1>Elo <span class="analysis-badge">试行</span></h1><p>让已确认的历史参赛记录，拥有一条可追溯的积分轨迹。</p></div><a href="#elo-method">计算规则 ↓</a></div>
+  return `<div class="page-shell analysis-page"><div class="page-heading"><div><span class="eyebrow">Historical Rating · v4</span><h1>Elo <span class="analysis-badge">试行</span></h1><p>让已确认的历史参赛记录，拥有一条可追溯的积分轨迹。</p></div><a href="#elo-method">计算规则 ↓</a></div>
     ${analyticsTabs('elo')}
     ${!elo ? analyticsEmpty() : `
     <div class="analysis-summary"><div><strong>${c.ratedPlayers}</strong><span>有计分记录的成员</span></div><div><strong>${c.ratedResults} / ${c.totalResults}</strong><span>有效队伍成绩 / 已收录</span></div><div><strong>${c.rankedPlayers}</strong><span>满 ${elo.minContests} 场进入正式榜</span></div><div><strong>${c.missingPlayers}</strong><span>尚缺有效记录的成员</span></div></div>
-    <div class="analysis-notice"><strong>奖项和正式名次决定单场表现，同队同场共同涨跌。</strong><p>以三人赛前均分作为本场预期，表现高于预期则一起涨分，低于则一起掉分。新队员不会因少参赛而获得更大的单场涨幅。EC Final 表现分 +200，CCPC Final +300，不累计奖牌积分。普通赛站强度及跨年代比较仍待校准；队伍成绩无法证明个人贡献；默认按扣除样本量参考带的保守分排名，原始积分与峰值可另行排序。</p></div>
+    <div class="analysis-notice"><strong>同场共享表现分，按各自赛前积分更新。</strong><p>每场统一更新 30% 的表现差距：表现高于个人赛前分就涨，低于就跌。全员使用相同系数，不设新人加速，也不因队友此前积分低而额外涨分。EC Final 表现分 +200，CCPC Final +300，不累计奖牌积分。普通赛站强度及跨年代比较仍待校准；队伍成绩无法证明个人贡献；默认按扣除样本量参考带的保守分排名，原始积分与峰值可另行排序。</p></div>
     <div class="filters analysis-filters"><label class="filter-group grow"><span>搜索姓名 / 队伍</span><input id="analyticsQuery" type="search" value="${escapeHtml(s.eloQuery)}" placeholder="输入成员姓名或历史队名"></label>
     <label class="filter-group"><span>榜单范围</span><select data-analysis-select="eloScope">${[['ranked','正式榜 · 至少三场'],['provisional','暂定 · 一至两场'],['all','全部成员 · 含无数据']].map(([v,t]) => `<option value="${v}" ${s.eloScope === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
     <label class="filter-group"><span>所属范围</span><select data-analysis-select="eloSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${s.eloSchool === school ? 'selected' : ''}>${escapeHtml(school)}</option>`).join('')}</select></label>
@@ -138,9 +138,9 @@ function eloPage() {
     </tbody></table></div>
     ${eloDetail(player)}
     <details id="elo-method" class="analysis-method"><summary>计算规则、数据边界与维护机制</summary>
-      <h3>奖项锚定的逐场 Rating · v3</h3><p>所有年代从 1500 起算，按实际比赛日期回放。实际金牌单场表现分为 2600–3200、银牌 1900–2400、铜牌 1300–1800、铁牌 800–1200。同奖项内，正式名次越靠前，表现分越高。实际奖项决定分档，不按名次比例反推奖项。</p>
-      <p>令 q = (r − 0.5) / N，各奖项的名次参考区间依次为 [0, 0.1]、[0.1, 0.3]、[0.3, 0.6]、[0.6, 1]。在本档参考区间内线性映射至表现分上限→下限，超出则截到本档边界。令 T 为三人赛前积分均值，所有队员使用同一个 Δ = α(P − T)，各自 R′ = R + Δ。仅当三人此前都不足三场时 α = 0.5，否则统一 α = 0.3。比如成熟队伍均分 2400、表现 2200，则三人各降 60 分。</p>
-      <p>新队员缺少早期参赛资格，不补造铜牌或失利，也不单独提高更新系数。同队共同结果维持赛前分差，防止同一场成绩因个人参赛次数不同而让新队员反超。固定队友履历相同则同分；混合阵容仍无法分离个人贡献，不能据此断言谁更强。已确认的 CF 当前 / 最高分在详情中独立展示，不将今天的 CF 分数代入历史。本站标尺与 CF 分数不直接对标。</p>
+      <h3>奖项锚定的逐场 Rating · v4</h3><p>所有年代从 1500 起算，按实际比赛日期回放。实际金牌单场表现分为 2600–3200、银牌 1900–2400、铜牌 1300–1800、铁牌 800–1200。同奖项内，正式名次越靠前，表现分越高。实际奖项决定分档，不按名次比例反推奖项。</p>
+      <p>令 q = (r − 0.5) / N，各奖项的名次参考区间依次为 [0, 0.1]、[0.1, 0.3]、[0.3, 0.6]、[0.6, 1]。在本档参考区间内线性映射至表现分上限→下限，超出则截到本档边界。每人按自己的赛前分 R 更新：R′ = R + 0.3(P − R)，所有人、所有场次都使用 0.3。比如个人赛前 2400、表现 2200，本场下降 60 分。共同参赛时，原有分差每场缩小为 70%，不会永久锁定，也不会因同场相同表现而交叉反超。</p>
+      <p>缺少参赛资格不补造铜牌或失利。单场队伍结果给三人同一个表现观测；队友的此前积分或场次数不会改变自己的更新。固定队友履历相同则同分；履历不同的队员允许涨跌不同，但相同系数使分差收敛。队伍结果仍不能分离个人贡献，不能据此断言谁更强。已确认的 CF 当前 / 最高分在详情中独立展示，不将今天的 CF 分数代入历史。本站标尺与 CF 分数不直接对标。</p>
       <p>正式队数用于计算本场分位，不代表阵容强度：百余支筛选队与三百余支普通赛站队伍不能只比较百分位。先对决赛做独立强度调整：EC Final +200，CCPC Final +300，适用于所有奖项。例如 EC 金牌 P=2800–3400，CCPC Final 金牌 P=2900–3500。两项是公开的初始先验，尚非统计拟合；普通赛站间及年代因素暂不额外调整。近年规则亦有奖励名额、多队名额，不能一概视为每校仅一队。<a href="https://icpc.pku.edu.cn/docs/2025-08/3e349141f2e6420aabb5aae82fbdb198.pdf" target="_blank" rel="noopener noreferrer">EC 名额规则 ↗</a> · <a href="https://ccpc.io/rules/369" target="_blank" rel="noopener noreferrer">CCPC 名额规则 ↗</a></p>
       <h3>峰值、样本量与参考带</h3><p>正式榜至少 ${elo.minContests} 场。历史峰值取第三场及之后的最高赛后积分；最后参赛积分保留最后一次结果，退役与不活跃不扣分。参考带 B = max(150, 400 / √(1 + n / 3))，保守分 = 最后参赛积分 − B。默认按保守分排名，履历短的成员先保留更大的不确定性，避免把少参赛当作更强的证据；可切换原始积分或历史峰值排序。参考带未做统计校准，不是置信区间，也没有消除固定队友的混淆。</p>
       <h3>只使用已经确认的数据</h3><p>仅纳入 ICPC / CCPC 正式区域赛与区决赛，要求有效完整日期、三位稳定成员 ID、已确认名单及实际奖项、正式名次 / 正式队总数。不按奖牌猜排名，不从总榜替代正式排名，不将缺失成绩记作失利。重复记录去重，同日跨队身份冲突暂停计分。无有效记录的成员保留在“全部成员”，显示无数据。</p>
@@ -157,7 +157,7 @@ function downloadAnalysis(kind) {
   let content, type, filename;
   if (kind === 'audit') {
     content = JSON.stringify(analyticsState.data.elo, null, 2);
-    type = 'application/json'; filename = 'dlut-historical-rating-v3.json';
+    type = 'application/json'; filename = 'dlut-historical-rating-v4.json';
   } else {
     const rows = kind === 'elo'
       ? [['姓名','所属范围','历史峰值','最后参赛积分','参考带','保守分','计分场次','已收录正式场次','已收录战绩','未计分场次','最后参赛'], ...eloRows().map(p => [p.name,p.school,p.peak,p.current,p.band,p.conservative,p.contests,p.careerContests ?? p.contests,eloMedals(p),p.unratedHistory?.length || 0,p.lastDate])]

@@ -1,7 +1,8 @@
 """Versioned, deterministic Elo-scale ratings from confirmed local results.
 
-Each result supplies one team observation and the same signed update for its
-three members. No accumulated medal points or external rating is used.
+Each result supplies the same performance observation for its three members.
+Each prior moves toward it at the same fixed rate, without teammate-rating or
+newcomer multipliers. No accumulated medal points or external rating is used.
 """
 from __future__ import annotations
 
@@ -13,10 +14,11 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-VERSION = "dlut-team-observation-v3"
+VERSION = "dlut-performance-replay-v4"
 INITIAL = 1500
 SCALE = 400
 MIN_CONTESTS = 3
+UPDATE_WEIGHT = .3
 FINALS_ADJUSTMENTS = {"ICPC": 200, "CCPC": 300}
 ROOT = Path(__file__).resolve().parent
 
@@ -137,25 +139,22 @@ def calculate_ratings(site):
                     players[member_id]["unrated"].append(dict(honorId=honor["id"], date=date, event=honor["event"],
                         team=honor["team"], medal=honor["medal"], rank=honor.get("rank"), source=honor.get("source"), reason="同日多队身份冲突，待核验"))
                 continue
-            prior = sum(players[i]["rating"] for i in ids) / 3
             base_performance = result_performance(honor["medal"], rank, total)
             adjustment = event_adjustment(honor)
             performance = base_performance + adjustment
-            step = .5 if max(len(players[i]["history"]) for i in ids) < 3 else .3
-            shared_delta = step * (performance - prior)
             for member_id in ids:
                 player = players[member_id]
                 count = len(player["history"])
                 before = player["rating"]
-                player["rating"] += shared_delta
+                player["rating"] += UPDATE_WEIGHT * (performance - before)
                 player["teams"].add(tuple(sorted(ids)))
                 player["history"].append(dict(
                     honorId=honor["id"], date=date, event=honor["event"], team=honor["team"],
                     members=[members[i]["name"] for i in ids], rank=rank, total=total,
                     percentile=round(100 * (rank - 0.5) / total, 2),
-                    medal=honor["medal"], performance=round(performance, 2), teamPrior=round(prior),
+                    medal=honor["medal"], performance=round(performance, 2),
                     basePerformance=round(base_performance, 2), fieldAdjustment=adjustment,
-                    updateWeight=step,
+                    updateWeight=UPDATE_WEIGHT,
                     before=round(before, 2), delta=round(player["rating"] - before, 2),
                     rating=round(player["rating"], 2), band=reference_band(count + 1),
                     source=honor.get("source"),
@@ -188,7 +187,7 @@ def calculate_ratings(site):
             history=history,
         ))
     rules = dict(performanceBands=PERFORMANCE_BANDS, finalsAdjustments=FINALS_ADJUSTMENTS,
-                 provisionalWeight=.5, matureWeight=.3, sharedTeamDelta=True)
+                 updateWeight=UPDATE_WEIGHT, sharedTeamDelta=False, individualPrior=True)
     digest = hashlib.sha256(json.dumps(dict(version=VERSION, rules=rules, results=inputs), ensure_ascii=False, sort_keys=True).encode()).hexdigest()
     return dict(version=VERSION, initial=INITIAL, scale=SCALE, minContests=MIN_CONTESTS,
                 rules=rules, evidenceVerifiedAt=archive["verifiedAt"], supplementedResults=sum(bool(r["rankSource"]) for r in inputs),
