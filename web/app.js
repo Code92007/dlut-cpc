@@ -213,8 +213,8 @@ function homePage(data) {
     </section>
     <div class="home-content">
       <div class="analytics-entries">
-        <a href="/performance" data-route="performance"><span class="eyebrow">Team Performance</span><strong>赛场表现 <span aria-hidden="true">↗</span></strong><span>已解题目最高 Rating、赛站与下一阶段目标</span></a>
-        <a href="/elo" data-route="elo"><span class="eyebrow">Historical Rating</span><strong>校史积分 <span aria-hidden="true">↗</span></strong><span>从历史正式成绩回放每位选手的积分轨迹</span></a>
+        <a href="/performance" data-route="performance"><span class="eyebrow">Team Performance</span><strong>Performance <span aria-hidden="true">↗</span></strong><span>已解题目最高 Rating、赛站与下一阶段目标</span></a>
+        <a href="/elo" data-route="elo"><span class="eyebrow">Historical Rating</span><strong>Elo <span aria-hidden="true">↗</span></strong><span>从历史正式成绩回放每位选手的积分轨迹</span></a>
       </div>
       <section class="section-block">
         <div class="section-heading"><div><span class="eyebrow">Summary</span><h2>年度奖牌统计</h2></div><div class="section-actions">

@@ -1,0 +1,3332 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-14",
+  "contests": [
+    {
+      "id": "ccpc2018qinhuangdao",
+      "date": "2018-09-28",
+      "sourceUrl": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao",
+      "sourceSha256": "d897fecb557a8a1a814e165f5cad593803c45e4b1436b3ffe38a788c7c75976e",
+      "totalTeams": 262,
+      "officialTeams": 245,
+      "rankRule": "正式队按题数降序、罚时升序；同题数同罚时同名次。",
+      "scoreEvidence": [
+        {
+          "official": false,
+          "solved": 8,
+          "penaltySeconds": 71186
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 59147
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 63388
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 85055
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 32131
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 37795
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 38249
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 39501
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 41109
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 42029
+        },
+        {
+          "official": false,
+          "solved": 6,
+          "penaltySeconds": 42556
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43446
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43484
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 45298
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 49836
+        },
+        {
+          "official": false,
+          "solved": 6,
+          "penaltySeconds": 51435
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 52434
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 58196
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 59267
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 62964
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 28739
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 32057
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 32118
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 34823
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 36792
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 37161
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 37773
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 37977
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 38931
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 39099
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41292
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41664
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41681
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 42234
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 42290
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 44254
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 44984
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 46070
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 47003
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 47518
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 47828
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 48551
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 48658
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 51632
+        },
+        {
+          "official": false,
+          "solved": 5,
+          "penaltySeconds": 52943
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 54785
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 57094
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 19223
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 22731
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 22745
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27049
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27516
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 29307
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30178
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30441
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30958
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 31259
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32834
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32854
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 34032
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 34801
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 35055
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 36287
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 36755
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 36887
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37240
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37411
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37450
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37840
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 38109
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 38134
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 38322
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 42410
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 43430
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 43837
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 47921
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 48360
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 54826
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 55882
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 58557
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 59203
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 60001
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 66064
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 67277
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 68439
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 12027
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 12755
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 13246
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 13320
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15206
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15279
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15585
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15599
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 17067
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 17774
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 17876
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18032
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18259
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19774
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19825
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20398
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20517
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20849
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21393
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22078
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22265
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22707
+        },
+        {
+          "official": false,
+          "solved": 3,
+          "penaltySeconds": 22820
+        },
+        {
+          "official": false,
+          "solved": 3,
+          "penaltySeconds": 22847
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22918
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 23820
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 24203
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 24498
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 26473
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 26638
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 27054
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 27235
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 27613
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 28052
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 28096
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 28211
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 28434
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 28496
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 29193
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 29927
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 30310
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 30491
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 32494
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 32971
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 33201
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 33287
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 33384
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 38349
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 38739
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 39224
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 39831
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 39976
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 41639
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 43010
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 44073
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 45037
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 45074
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 45992
+        },
+        {
+          "official": false,
+          "solved": 3,
+          "penaltySeconds": 49306
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 49916
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 57238
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 64199
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 85761
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 2778
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 3851
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 3940
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 4924
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5088
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5138
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5305
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5505
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5646
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 7293
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 7608
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8106
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8180
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8486
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8576
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 8593
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8594
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8761
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8843
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 9157
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 9551
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10219
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10394
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10432
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10484
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10846
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10906
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10913
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 11034
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11134
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11149
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11504
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11856
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11874
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12220
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12250
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12274
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12299
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12332
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12346
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12764
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 12861
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13056
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13081
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13246
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13323
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13536
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13701
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 13833
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13867
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13873
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13957
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14163
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14231
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14289
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14304
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14845
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15064
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 15144
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15769
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15786
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15958
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16125
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16336
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16558
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16781
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16831
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16852
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 17205
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 18523
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 18757
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 19431
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 19552
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 20090
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 22228
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 22654
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 22739
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 22865
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 23188
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 24220
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 24748
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 25469
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 26290
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 26871
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 27044
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 28539
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 29121
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 31112
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 34227
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 43137
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 565
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1152
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 2215
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 2860
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 3071
+        },
+        {
+          "official": false,
+          "solved": 1,
+          "penaltySeconds": 3512
+        },
+        {
+          "official": false,
+          "solved": 1,
+          "penaltySeconds": 4203
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 4357
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 4397
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 4626
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 4738
+        },
+        {
+          "official": false,
+          "solved": 1,
+          "penaltySeconds": 5015
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 5181
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 5368
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 5474
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 6533
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 6826
+        },
+        {
+          "official": false,
+          "solved": 1,
+          "penaltySeconds": 9395
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 10959
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 13571
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 14426
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 33755
+        },
+        {
+          "official": true,
+          "solved": 0,
+          "penaltySeconds": 0
+        },
+        {
+          "official": true,
+          "solved": 0,
+          "penaltySeconds": 0
+        }
+      ]
+    },
+    {
+      "id": "ccpc2019final",
+      "date": "2019-11-17",
+      "sourceUrl": "https://rl.algoux.cn/ranklist/ccpc2019final",
+      "sourceSha256": "34214e0886103c8dfc3105b2a3477c0f15773f2410e02de9068a026df5754e44",
+      "totalTeams": 119,
+      "officialTeams": 115,
+      "rankRule": "正式队按题数降序、罚时升序；同题数同罚时同名次。",
+      "scoreEvidence": [
+        {
+          "official": true,
+          "solved": 10,
+          "penaltySeconds": 97640
+        },
+        {
+          "official": false,
+          "solved": 7,
+          "penaltySeconds": 66272
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 72006
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 38797
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 50224
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 59494
+        },
+        {
+          "official": false,
+          "solved": 5,
+          "penaltySeconds": 24181
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41642
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 45552
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 46529
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 47296
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 58361
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 9862
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 10997
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 13194
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 13748
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 14973
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 16176
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 16915
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 19228
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 19613
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 20125
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 20268
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 21169
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 21267
+        },
+        {
+          "official": false,
+          "solved": 4,
+          "penaltySeconds": 22059
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 22314
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 22649
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 23619
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 23855
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 24730
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 24950
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 25088
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 25273
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 26305
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 26370
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 26811
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27121
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27254
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27299
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 28180
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 28388
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 28844
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 29256
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 29425
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30221
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30379
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30703
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30929
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30938
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 31186
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 31204
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32437
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32452
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32632
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 33526
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 33547
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 33967
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 34559
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 35329
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 35498
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 35766
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 36547
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37065
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37273
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37827
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37987
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 39297
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 40028
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 40923
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 42838
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 42970
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 44047
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 47203
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 48953
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 56983
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 61313
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 62798
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 64384
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 8269
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 8730
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 12658
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 12724
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 13111
+        },
+        {
+          "official": false,
+          "solved": 3,
+          "penaltySeconds": 14918
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15615
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15965
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 16714
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 17378
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18696
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19057
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19469
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19722
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20006
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21412
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21445
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22519
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22958
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 23276
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 24054
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 24927
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 25677
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 27696
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 32241
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 49681
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 50146
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 54661
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 5214
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8201
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 8666
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 13499
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14335
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 17411
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 20051
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 23628
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 29693
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1182
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 5945
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 17284
+        }
+      ]
+    },
+    {
+      "id": "ccpc2017hangzhou",
+      "date": "2017-11-05",
+      "sourceUrl": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou",
+      "sourceSha256": "237f8672fb88eb4f9c28f1615e2e49de51c10cf77c034a24fcd244fca2a18f99",
+      "totalTeams": 190,
+      "officialTeams": 183,
+      "rankRule": "正式队按题数降序、罚时升序；同题数同罚时同名次。",
+      "scoreEvidence": [
+        {
+          "official": false,
+          "solved": 11,
+          "penaltySeconds": 71040
+        },
+        {
+          "official": true,
+          "solved": 10,
+          "penaltySeconds": 62280
+        },
+        {
+          "official": true,
+          "solved": 10,
+          "penaltySeconds": 75480
+        },
+        {
+          "official": true,
+          "solved": 9,
+          "penaltySeconds": 48900
+        },
+        {
+          "official": true,
+          "solved": 9,
+          "penaltySeconds": 60660
+        },
+        {
+          "official": false,
+          "solved": 8,
+          "penaltySeconds": 58020
+        },
+        {
+          "official": true,
+          "solved": 8,
+          "penaltySeconds": 67740
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 27900
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 30120
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 30720
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 36360
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 39360
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 40860
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 44040
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 45540
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 45600
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 46740
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 48000
+        },
+        {
+          "official": false,
+          "solved": 7,
+          "penaltySeconds": 48060
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 48900
+        },
+        {
+          "official": true,
+          "solved": 7,
+          "penaltySeconds": 49260
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 19020
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 21900
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 24300
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 25200
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 25560
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 25680
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 27300
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 28560
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 29160
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 29400
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 30000
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 30060
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 30420
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 33000
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 33600
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 33780
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 35880
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 36000
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 37500
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 38460
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 40980
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 41520
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43020
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43320
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43380
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 43800
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 46260
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 46620
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 47460
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 51960
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 52260
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 54960
+        },
+        {
+          "official": true,
+          "solved": 6,
+          "penaltySeconds": 58320
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 21480
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 24960
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 25740
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 25980
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 26100
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 26580
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 28980
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 29760
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 29880
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 30180
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 31920
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 33720
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 34560
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 35040
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 35820
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 37260
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 38760
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 39480
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 39840
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 40260
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 40380
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 40620
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 40860
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 40920
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41220
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 41520
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 43740
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 44160
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 44640
+        },
+        {
+          "official": false,
+          "solved": 5,
+          "penaltySeconds": 44880
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 45000
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 45300
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 45960
+        },
+        {
+          "official": false,
+          "solved": 5,
+          "penaltySeconds": 46440
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 47100
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 51120
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 51780
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 54000
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 55560
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 58680
+        },
+        {
+          "official": true,
+          "solved": 5,
+          "penaltySeconds": 66360
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 13740
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 18180
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 19800
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 21480
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 22020
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 24000
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 24120
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 26040
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 26700
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27900
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 27900
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 29880
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30600
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 30840
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 32460
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 33000
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 33360
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 35520
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 36360
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 37320
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 38100
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 39240
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 40140
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 43260
+        },
+        {
+          "official": true,
+          "solved": 4,
+          "penaltySeconds": 53340
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 11220
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 14040
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 14880
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 15120
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 16740
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 17880
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18000
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18480
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 18780
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19620
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 19980
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20220
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 20700
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21240
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21660
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 21780
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 22620
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 25320
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 29580
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 32280
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 33300
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 34680
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 40620
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 44220
+        },
+        {
+          "official": true,
+          "solved": 3,
+          "penaltySeconds": 54600
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 4740
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 4920
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 6780
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 6900
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 9180
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 9180
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 9840
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10320
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 10680
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 10740
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11400
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 11760
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12000
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12180
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12360
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 12780
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 14580
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15000
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 15060
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16080
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 16620
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 18060
+        },
+        {
+          "official": false,
+          "solved": 2,
+          "penaltySeconds": 18720
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 19500
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 21180
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 22560
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 23760
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 25080
+        },
+        {
+          "official": true,
+          "solved": 2,
+          "penaltySeconds": 27600
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1200
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1260
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1380
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1440
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1500
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 1500
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 2340
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 3180
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 3960
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 5280
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 6000
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 7800
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 9360
+        },
+        {
+          "official": true,
+          "solved": 1,
+          "penaltySeconds": 14700
+        },
+        {
+          "official": true,
+          "solved": 0,
+          "penaltySeconds": 0
+        },
+        {
+          "official": true,
+          "solved": 0,
+          "penaltySeconds": 0
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "honorId": "ccpc-official-48d969beccd541320c18",
+      "contestId": "ccpc2018qinhuangdao",
+      "date": "2018-09-28",
+      "event": "第 4 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "school": "大连理工大学",
+      "team": "海棠酒满",
+      "medal": "铜牌",
+      "members": [
+        "刘洁",
+        "武根泽",
+        "王镜潼"
+      ],
+      "originalRank": "114",
+      "rank": 114,
+      "total": 245,
+      "boardTeamId": "Team090",
+      "solved": 3,
+      "penaltySeconds": 28096,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      }
+    },
+    {
+      "honorId": "ccpc-official-f833abb6865cfe1fbdf9",
+      "contestId": "ccpc2018qinhuangdao",
+      "date": "2018-09-28",
+      "event": "第 4 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "school": "大连理工大学",
+      "team": "熵",
+      "medal": "铁牌",
+      "members": [
+        "张添钰",
+        "归宇通",
+        "衣泽民"
+      ],
+      "originalRank": "149",
+      "rank": 149,
+      "total": 245,
+      "boardTeamId": "Team227",
+      "solved": 2,
+      "penaltySeconds": 5505,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      }
+    },
+    {
+      "honorId": "ccpc-official-39b946265e8844261834",
+      "contestId": "ccpc2018qinhuangdao",
+      "date": "2018-09-28",
+      "event": "第 4 届 CCPC 中国大学生程序设计竞赛秦皇岛站",
+      "school": "大连理工大学",
+      "team": "菜鸡互啄",
+      "medal": "铁牌",
+      "members": [
+        "吕嘉庆",
+        "梁家豪",
+        "霍晨"
+      ],
+      "originalRank": "170",
+      "rank": 170,
+      "total": 245,
+      "boardTeamId": "Team185",
+      "solved": 2,
+      "penaltySeconds": 11149,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2018qinhuangdao"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/135"
+      }
+    },
+    {
+      "honorId": "ccpc-official-467529b0ba850c2c9e87",
+      "contestId": "ccpc2019final",
+      "date": "2019-11-17",
+      "event": "第 5 届 CCPC 中国大学生程序设计竞赛总决赛",
+      "school": "大连理工大学",
+      "team": "TToughy",
+      "medal": "铁牌",
+      "members": [
+        "归宇通",
+        "胡小涛",
+        "衣泽民"
+      ],
+      "originalRank": "96",
+      "rank": 96,
+      "total": 115,
+      "boardTeamId": "TToughy",
+      "solved": 3,
+      "penaltySeconds": 24054,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2019final"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/193"
+      }
+    },
+    {
+      "honorId": "ccpc-official-1e6351b86d426d619d9f",
+      "contestId": "ccpc2017hangzhou",
+      "date": "2017-11-05",
+      "event": "第 3 届 CCPC 中国大学生程序设计竞赛杭州站",
+      "school": "大连理工大学",
+      "team": "对不队",
+      "medal": "铜牌",
+      "members": [
+        "李煜峰",
+        "杨飞",
+        "高凯"
+      ],
+      "originalRank": "69",
+      "rank": 69,
+      "total": 183,
+      "boardTeamId": "152",
+      "boardTeamName": "right or not",
+      "identityNote": "CCPC 官方中英文队名与 RankLand 对应；名单采用已确认档案。",
+      "solved": 5,
+      "penaltySeconds": 39480,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/97"
+      },
+      "awardCells": [
+        "69",
+        "铜牌",
+        "大连理工大学软件学院",
+        "对不队",
+        "right or not",
+        "李煜峰",
+        "杨飞",
+        "高凯",
+        "路慧"
+      ]
+    },
+    {
+      "honorId": "ccpc-official-310099724e83aec1bd88",
+      "contestId": "ccpc2017hangzhou",
+      "date": "2017-11-05",
+      "event": "第 3 届 CCPC 中国大学生程序设计竞赛杭州站",
+      "school": "大连理工大学",
+      "team": "嘟嘟噜嘟噜",
+      "medal": "铜牌",
+      "members": [
+        "史博文",
+        "沈书晗",
+        "胡天翼"
+      ],
+      "originalRank": "56",
+      "rank": 56,
+      "total": 183,
+      "boardTeamId": "21",
+      "boardTeamName": "duduruduru",
+      "identityNote": "CCPC 官方中英文队名与 RankLand 对应；名单采用已确认档案。",
+      "solved": 5,
+      "penaltySeconds": 26100,
+      "source": {
+        "name": "RankLand 完整正式榜补证",
+        "url": "https://rl.algoux.cn/ranklist/ccpc2017hangzhou"
+      },
+      "awardSource": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/97"
+      },
+      "awardCells": [
+        "56",
+        "铜牌",
+        "大连理工大学软件学院",
+        "嘟嘟噜嘟噜",
+        "duduruduru",
+        "胡天翼",
+        "史博文",
+        "沈书晗",
+        "路慧"
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "date": "2006-12-17",
+      "event": "第 31 届 ICPC 国际大学生程序设计竞赛亚洲区域赛西安站",
+      "team": "大连理工大学（刘炯队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2006-xian-liu-jiong",
+      "source": {
+        "name": "大连理工大学官方报道（2006 西安站）",
+        "url": "https://chuangxin.dlut.edu.cn/info/1017/2246.htm"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "同期校内报道确认铁牌；原队名、正式名次及正式队总数尚未恢复，原报道链接本次返回 404。",
+      "checkedSources": [
+        "https://chuangxin.dlut.edu.cn/info/1017/2246.htm"
+      ]
+    },
+    {
+      "date": "2007-11-05",
+      "event": "第 32 届 ICPC 国际大学生程序设计竞赛亚洲区域赛长春站",
+      "team": "大连理工大学（崔超队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2007-changchun-cui-chao",
+      "source": {
+        "name": "ICPC Global 2007 长春站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "名单与铁牌已确认；旧榜队号尚不能对应本队，存档本次不可访问，正式名次与现场正式队总数仍待恢复。",
+      "checkedSources": [
+        "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      ]
+    },
+    {
+      "date": "2007-11-05",
+      "event": "第 32 届 ICPC 国际大学生程序设计竞赛亚洲区域赛长春站",
+      "team": "大连理工大学（刘勇队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2007-changchun-liu-yong",
+      "source": {
+        "name": "ICPC Global 2007 长春站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "名单与铁牌已确认；旧榜队号尚不能对应本队，存档本次不可访问，正式名次与现场正式队总数仍待恢复。",
+      "checkedSources": [
+        "https://web.archive.org/web/20080424030013/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=877"
+      ]
+    },
+    {
+      "date": "2007-11-18",
+      "event": "第 32 届 ICPC 国际大学生程序设计竞赛亚洲区域赛成都站",
+      "team": "Cippus_ACFly",
+      "rank": "29",
+      "honorId": "icpc-official-2007-chengdu-cippus-acfly",
+      "source": {
+        "name": "ICPC Global 2007 成都站官方历史榜单",
+        "url": "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "已收录第 29 名；官方旧榜存档本次不可访问，当前比赛页混有网络预选 / 校赛等报名，不能把报名队数当现场正式队总数。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://web.archive.org/web/20080424030020/http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878",
+        "https://icpc.global/api/contest/public/Chengdu-2008",
+        "http://icpc.baylor.edu/icpc/regionals/ViewRegionalStandings.asp?ContestID=878",
+        "http://acm.xhu.edu.cn/English-index.htm"
+      ],
+      "publicContestId": 1151
+    },
+    {
+      "date": "2008-10-12",
+      "event": "第 33 届 ICPC 国际大学生程序设计竞赛亚洲区域赛哈尔滨站",
+      "team": "大连理工大学（陈志源队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2008-harbin-dlut",
+      "source": {
+        "name": "ICPC Global 2008 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/harbin-2009"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/harbin-2009",
+        "https://icpc.global/api/contest/public/harbin-2009",
+        "http://icpc.asia/Result/2008HarbinResults.htm"
+      ],
+      "publicContestId": 12
+    },
+    {
+      "date": "2009-10-11",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛合肥站",
+      "team": "Bombee",
+      "rank": "",
+      "honorId": "icpc-official-2009-hefei-huang-hongtao",
+      "source": {
+        "name": "ICPC Global 2009 合肥站官方榜单",
+        "url": "https://icpc.global/regionals/finder/Hefei-2010/standings"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Hefei-2010/standings",
+        "https://icpc.global/api/contest/public/Hefei-2010",
+        "http://icpc.asia/Result/2009HefeiResult.txt",
+        "http://acm.ustc.edu.cn/icpc2009/"
+      ],
+      "publicContestId": 496
+    },
+    {
+      "date": "2009-10-18",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛宁波站",
+      "team": "Geek",
+      "rank": "",
+      "honorId": "icpc-official-2009-ningbo-chen-zhiyuan",
+      "source": {
+        "name": "ICPC Global 2009 宁波站比赛页",
+        "url": "https://icpc.global/regionals/finder/Ningbo-2010"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Ningbo-2010",
+        "https://icpc.global/api/contest/public/Ningbo-2010",
+        "http://acmasia09.nit.net.cn",
+        "http://acmasia09.nit.net.cn/inter/jg.html"
+      ],
+      "publicContestId": 506
+    },
+    {
+      "date": "2009-10-25",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛上海站",
+      "team": "大连理工大学（刘笑江队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2009-shanghai-liu-xiaojiang",
+      "source": {
+        "name": "ICPC Global 2009 上海站比赛页",
+        "url": "https://icpc.global/regionals/finder/Shanghai-2010"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Shanghai-2010",
+        "https://icpc.global/api/contest/public/Shanghai-2010",
+        "http://acm.dhu.edu.cn/erank.html",
+        "http://acm.dhu.edu.cn/files/shanghai-icpc-2009-report.pdf"
+      ],
+      "publicContestId": 509
+    },
+    {
+      "date": "2009-11-08",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛哈尔滨站",
+      "team": "大连理工大学（陈沣队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2009-harbin-chen-feng",
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Harbin-2010",
+        "https://icpc.global/api/contest/public/Harbin-2010",
+        "http://acm.hit.edu.cn/icpc-regional-2009/page.php?id=5"
+      ],
+      "publicContestId": 495
+    },
+    {
+      "date": "2009-11-08",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛哈尔滨站",
+      "team": "大连理工大学（陈志源队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2009-harbin-chen-zhiyuan",
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Harbin-2010",
+        "https://icpc.global/api/contest/public/Harbin-2010",
+        "http://acm.hit.edu.cn/icpc-regional-2009/page.php?id=5"
+      ],
+      "publicContestId": 495
+    },
+    {
+      "date": "2009-11-08",
+      "event": "第 34 届 ICPC 国际大学生程序设计竞赛亚洲区域赛哈尔滨站",
+      "team": "大连理工大学（吴昌泽队，原队名待考）",
+      "rank": "",
+      "honorId": "icpc-official-2009-harbin-wu-changze",
+      "source": {
+        "name": "ICPC Global 2009 哈尔滨站比赛页",
+        "url": "https://icpc.global/regionals/finder/Harbin-2010"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "现有档案缺少可核验的正式名次与正式队总数；公开比赛信息不能代替现场完整正式榜。 官方比赛元数据仍在，原结果页 / 历史存档本次未能恢复可核验完整榜。",
+      "checkedSources": [
+        "https://icpc.global/regionals/finder/Harbin-2010",
+        "https://icpc.global/api/contest/public/Harbin-2010",
+        "http://acm.hit.edu.cn/icpc-regional-2009/page.php?id=5"
+      ],
+      "publicContestId": 495
+    },
+    {
+      "date": "2017-12-03",
+      "event": "第 3 届 CCPC 中国大学生程序设计竞赛总决赛",
+      "team": "一步之遥",
+      "rank": "29",
+      "honorId": "ccpc-official-e0408e2dcbeda0f990f3",
+      "source": {
+        "name": "CCPC 官方获奖名单",
+        "url": "https://ccpc.io/post/99"
+      },
+      "checkedAt": "2026-11-14",
+      "status": "unresolved",
+      "note": "官方获奖名单为第 29 名；RankLand 与原始榜含 117 队，但缺少可靠正式资格标记，按该榜直接排序为第 31 名。两种口径不一致，不能拼成 29/117；待补正式完整榜。",
+      "checkedSources": [
+        "https://ccpc.io/post/99",
+        "https://rl.algoux.cn/ranklist/ccpc2017final",
+        "https://github.com/algoux/srk-collection-raw/blob/master/files/ccpc2017final/index.html"
+      ]
+    }
+  ],
+  "auditScope": {
+    "missingBefore": 18,
+    "supplemented": 6,
+    "remaining": 12,
+    "note": "逐条检查原先因缺少正式名次或总数未计分的记录；原成绩和已确认身份不变。"
+  }
+}

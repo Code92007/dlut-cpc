@@ -39,7 +39,7 @@ test('full workbook and 2026 rows render, including missing ratings and campus f
 test('qualified, provisional and no-data players stay distinct and ties remain tied', () => {
   const c = makeContext();
   const p = (id, name, contests, current, peak) => ({id,name,school:'大连理工大学',contests,current,peak,
-    provisional:contests < 3,history:[],band:200,teamCount:1});
+    conservative:current == null ? null : current - 200,provisional:contests < 3,history:[],band:200,teamCount:1});
   setData(c, {elo:{version:'test',inputHash:'test',minContests:3,skipped:[],coverage:{},players:[
     p(1,'<img onerror=alert(1)>',5,1700,1800),p(2,'B',3,1700,1800),p(3,'暂定',1,1650,null),p(4,'无数据',0,null,null)]}});
   assert.equal(c.eloRows().length, 2);
@@ -53,6 +53,26 @@ test('qualified, provisional and no-data players stay distinct and ties remain t
   assert.equal(c.eloRows().length, 4);
   html = c.eloPage();
   assert.ok(html.includes('无数据'));
+});
+
+test('recorded irons and unrated reasons remain visible alongside independently verified CF references', () => {
+  const c = makeContext();
+  const p = {id:1,name:'A',school:'大连理工大学',contests:3,careerContests:5,provisional:false,
+    teamCount:2,current:2000,peak:2100,conservative:1700,history:[],medals:{银牌:3},careerMedals:{银牌:3,铁牌:2},
+    cfReference:{handle:'a"/><img>',rating:1549,maxRating:1722,verified:true},
+    unratedHistory:[{date:'2018-10-01',event:'CCPC 区域赛',team:'未计分队',medal:'铁牌',rank:'149',reason:'缺少正式队总数',auditNote:'<核验说明>'}]};
+  setData(c, {elo:{version:'test',inputHash:'test',minContests:3,skipped:[],coverage:{},players:[p]}});
+  assert.ok(c.eloPage().includes('0金 / 3银 / 0铜 / 2铁'));
+  assert.ok(c.eloPage().includes('3 / 5'));
+  const html = c.eloDetail(p);
+  assert.ok(html.includes('已收录、暂未计分的正式战绩'));
+  assert.ok(html.includes('缺少正式队总数'));
+  assert.ok(html.includes('&lt;核验说明&gt;'));
+  assert.ok(html.includes('不参与历史积分回放'));
+  assert.ok(!html.includes('<img>'));
+  assert.ok(html.includes('https://codeforces.com/profile/a%22%2F%3E%3Cimg%3E'));
+  p.cfReference.verified = false;
+  assert.ok(!c.eloDetail(p).includes('codeforces.com/profile/'));
 });
 
 test('one-contest and flat rating charts stay finite and state their time scale', () => {
@@ -73,4 +93,6 @@ test('new routes expose loading errors with a retry, and have SPA navigation', (
   const index = readFileSync(new URL('../web/index.html', import.meta.url),'utf8');
   assert.ok(index.includes('href="/elo" data-route="elo"'));
   assert.ok(index.includes('href="/performance" data-route="performance"'));
+  assert.ok(index.includes('data-route="performance">Performance</a>'));
+  assert.ok(index.includes('data-route="elo">Elo</a>'));
 });

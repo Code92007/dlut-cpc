@@ -1,7 +1,7 @@
 const analyticsState = {
   data: null, loading: false, error: '',
   performanceQuery: '', performanceYear: 'all', performanceStage: 'all', performanceSchool: 'all', performanceSort: 'rating',
-  eloQuery: '', eloSchool: 'all', eloScope: 'ranked', eloSort: 'peak', eloPlayer: null,
+  eloQuery: '', eloSchool: 'all', eloScope: 'ranked', eloSort: 'conservative', eloPlayer: null,
 };
 
 async function loadAnalytics(force = false) {
@@ -27,7 +27,7 @@ function analyticsEmpty() {
 }
 
 function analyticsTabs(active) {
-  return `<nav class="analytics-tabs" aria-label="实力分析"><a href="/performance" data-route="performance" ${active === 'performance' ? 'aria-current="page"' : ''}>赛场表现</a><a href="/elo" data-route="elo" ${active === 'elo' ? 'aria-current="page"' : ''}>校史积分 <small>试行</small></a></nav>`;
+  return `<nav class="analytics-tabs" aria-label="实力分析"><a href="/performance" data-route="performance" ${active === 'performance' ? 'aria-current="page"' : ''}>Performance</a><a href="/elo" data-route="elo" ${active === 'elo' ? 'aria-current="page"' : ''}>Elo <small>试行</small></a></nav>`;
 }
 
 function analysisStage(text) {
@@ -55,7 +55,7 @@ function performancePage() {
   const rows = performanceRows();
   const years = [...new Set((archive?.records || []).map(row => row.season))].sort((a, b) => b - a);
   return `<div class="page-shell analysis-page">
-    <div class="page-heading"><div><span class="eyebrow">Team Performance</span><h1>赛场表现</h1><p>把解题上限与赛场结果放在一起，看队伍在不同赛站的发挥。</p></div><a href="/home" data-route="home">返回首页 ›</a></div>
+    <div class="page-heading"><div><span class="eyebrow">Team Performance</span><h1>Performance</h1><p>把解题上限与赛场结果放在一起，看队伍在不同赛站的发挥。</p></div><a href="/home" data-route="home">返回首页 ›</a></div>
     ${analyticsTabs('performance')}
     ${!archive ? analyticsEmpty() : `
     <div class="analysis-summary"><div><strong>${archive.records.length}</strong><span>已核验记录</span></div><div><strong>${new Set(archive.records.map(r => `${r.season}-${r.series}-${r.location}`)).size}</strong><span>赛站</span></div><div><strong>${Math.max(...archive.records.map(r => r.maxSolvedRating))}</strong><span>已解最高 R</span></div><div><strong>${Math.min(...years)}–${Math.max(...years)}</strong><span>实际比赛年份</span></div></div>
@@ -100,12 +100,21 @@ function eloChart(player) {
     </svg></div>`;
 }
 
+function eloMedals(player) {
+  const medals = player.careerMedals ?? player.medals;
+  return ['金牌','银牌','铜牌','铁牌'].map(m => `${medals?.[m] || 0}${m[0]}`).join(' / ');
+}
+
 function eloDetail(player) {
   if (!player) return '';
+  const cf = player.cfReference;
+  const unrated = player.unratedHistory || [];
   return `<section class="elo-detail" id="elo-detail"><div class="section-heading"><div><span class="eyebrow">Player History</span><h2>${escapeHtml(player.name)} <small>${escapeHtml(player.school)}</small></h2></div><button class="analysis-text-button" data-elo-close>收起 ×</button></div>
-    <p class="contest-caption">${player.contests} 场有效比赛 · ${player.teamCount} 套三人阵容 · ${player.contests ? `${escapeHtml(player.firstDate)} — ${escapeHtml(player.lastDate)}` : '未计分'}${player.teamCount === 1 ? ' · 目前仅有一套阵容，无法从队伍成绩区分三人的独立贡献。' : ''}</p>
+    <p class="contest-caption">已收录 ${player.careerContests ?? player.contests} 场正式战绩（${eloMedals(player)}） · ${player.contests} 场计分 · ${unrated.length} 场待补计分依据 · ${player.teamCount} 套计分阵容${player.teamCount === 1 ? ' · 目前仅有一套阵容，无法从队伍成绩区分三人的独立贡献。' : ''}</p>
+    ${cf?.verified && cf.handle ? `<p class="contest-caption">个人赛参考：<a href="https://codeforces.com/profile/${encodeURIComponent(cf.handle)}" target="_blank" rel="noopener noreferrer">CF ${escapeHtml(cf.handle)} ↗</a> · 当前 ${escapeHtml(String(cf.rating ?? '未评级'))} / 最高 ${escapeHtml(String(cf.maxRating ?? '未评级'))}。不参与历史积分回放。${cf.ratingUpdatedAt ? ` 更新于 ${escapeHtml(cf.ratingUpdatedAt.slice(0,10))}。` : ''}</p>` : ''}
     ${eloChart(player)}
-    <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍 / 队友</th><th>正式名次</th><th>奖项 / 单场表现分</th><th>积分变化</th><th>赛后积分</th></tr></thead><tbody>${player.history.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}<small class="result-status">${escapeHtml(h.members.join(' / '))}</small></td><td>${h.rank} / ${h.total}<small class="result-status">前 ${h.percentile}%</small></td><td>${escapeHtml(h.medal)}<small class="result-status">P ${Math.round(h.performance)}${h.fieldAdjustment ? ` · 决赛 +${h.fieldAdjustment}` : ''}</small></td><td class="${h.delta > 0 ? 'delta-up' : h.delta < 0 ? 'delta-down' : ''}">${h.delta > 0 ? '+' : ''}${h.delta.toFixed(1)}</td><td><strong>${Math.round(h.rating)}</strong></td></tr>`).join('') || '<tr><td colspan="6" class="table-empty">没有可计分记录</td></tr>'}</tbody></table></div></section>`;
+    <div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍 / 队友</th><th>正式名次</th><th>奖项 / 单场表现分</th><th>积分变化</th><th>赛后积分</th></tr></thead><tbody>${player.history.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}<small class="result-status">${escapeHtml(h.members.join(' / '))}</small></td><td>${h.rank} / ${h.total}<small class="result-status">前 ${h.percentile}%</small>${h.rankSource ? `<small class="result-status">${sourceLink(h.rankSource)}</small>` : ''}</td><td>${escapeHtml(h.medal)}<small class="result-status">P ${Math.round(h.performance)}${h.fieldAdjustment ? ` · ${h.event.includes('CCPC') ? 'CCPC Final' : 'EC Final'} +${h.fieldAdjustment}` : ''}</small></td><td class="${h.delta > 0 ? 'delta-up' : h.delta < 0 ? 'delta-down' : ''}">${h.delta > 0 ? '+' : ''}${h.delta.toFixed(1)}<small class="result-status">同队共同涨跌</small></td><td><strong>${Math.round(h.rating)}</strong></td></tr>`).join('') || '<tr><td colspan="6" class="table-empty">没有可计分记录</td></tr>'}</tbody></table></div>
+    ${unrated.length ? `<h3>已收录、暂未计分的正式战绩</h3><p class="contest-caption">这些奖项已计入上方战绩。补齐依据后才回放积分，不把资料缺失记作失利。</p><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>奖项 / 原始名次</th><th>待补依据</th></tr></thead><tbody>${unrated.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.medal)}<small class="result-status">${escapeHtml(h.rank || '名次待考')}</small></td><td>${escapeHtml(h.reason)}${h.auditNote ? `<small class="result-status">${escapeHtml(h.auditNote)}</small>` : ''}<small class="result-status">${sourceLink(h.source)}</small></td></tr>`).join('')}</tbody></table></div>` : ''}</section>`;
 }
 
 function eloPage() {
@@ -114,32 +123,33 @@ function eloPage() {
   const rows = eloRows();
   const c = elo?.coverage;
   const player = elo?.players.find(p => p.id === s.eloPlayer);
-  return `<div class="page-shell analysis-page"><div class="page-heading"><div><span class="eyebrow">Historical Rating · v2</span><h1>校史积分 <span class="analysis-badge">试行</span></h1><p>让已确认的历史参赛记录，拥有一条可追溯的积分轨迹。</p></div><a href="#elo-method">计算规则 ↓</a></div>
+  return `<div class="page-shell analysis-page"><div class="page-heading"><div><span class="eyebrow">Historical Rating · v3</span><h1>Elo <span class="analysis-badge">试行</span></h1><p>让已确认的历史参赛记录，拥有一条可追溯的积分轨迹。</p></div><a href="#elo-method">计算规则 ↓</a></div>
     ${analyticsTabs('elo')}
     ${!elo ? analyticsEmpty() : `
     <div class="analysis-summary"><div><strong>${c.ratedPlayers}</strong><span>有计分记录的成员</span></div><div><strong>${c.ratedResults} / ${c.totalResults}</strong><span>有效队伍成绩 / 已收录</span></div><div><strong>${c.rankedPlayers}</strong><span>满 ${elo.minContests} 场进入正式榜</span></div><div><strong>${c.missingPlayers}</strong><span>尚缺有效记录的成员</span></div></div>
-    <div class="analysis-notice"><strong>奖项和正式名次决定单场表现，赛前积分决定涨跌。</strong><p>每打一场，积分向该场表现分靠近：表现高于赛前分则上涨，低于则下降。实际奖项先确定表现档，再按正式名次细分；EC Final / CCPC Final 另加决赛强度调整，不累计奖牌积分。普通赛站强度及跨年代比较仍待校准；固定队友的个人贡献无法分离。</p></div>
+    <div class="analysis-notice"><strong>奖项和正式名次决定单场表现，同队同场共同涨跌。</strong><p>以三人赛前均分作为本场预期，表现高于预期则一起涨分，低于则一起掉分。新队员不会因少参赛而获得更大的单场涨幅。EC Final 表现分 +200，CCPC Final +300，不累计奖牌积分。普通赛站强度及跨年代比较仍待校准；队伍成绩无法证明个人贡献；默认按扣除样本量参考带的保守分排名，原始积分与峰值可另行排序。</p></div>
     <div class="filters analysis-filters"><label class="filter-group grow"><span>搜索姓名 / 队伍</span><input id="analyticsQuery" type="search" value="${escapeHtml(s.eloQuery)}" placeholder="输入成员姓名或历史队名"></label>
     <label class="filter-group"><span>榜单范围</span><select data-analysis-select="eloScope">${[['ranked','正式榜 · 至少三场'],['provisional','暂定 · 一至两场'],['all','全部成员 · 含无数据']].map(([v,t]) => `<option value="${v}" ${s.eloScope === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
     <label class="filter-group"><span>所属范围</span><select data-analysis-select="eloSchool"><option value="all">全部范围</option>${schoolGroups.map(school => `<option ${s.eloSchool === school ? 'selected' : ''}>${escapeHtml(school)}</option>`).join('')}</select></label>
-    <label class="filter-group"><span>排序</span><select data-analysis-select="eloSort">${[['peak','历史峰值'],['current','最后参赛积分'],['conservative','保守分'],['contests','计分场次']].map(([v,t]) => `<option value="${v}" ${s.eloSort === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label></div>
+    <label class="filter-group"><span>排序</span><select data-analysis-select="eloSort">${[['conservative','保守分 · 默认'],['peak','历史峰值'],['current','最后参赛积分'],['contests','计分场次']].map(([v,t]) => `<option value="${v}" ${s.eloSort === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label></div>
     <div class="analysis-table-heading"><span role="status">${rows.length} 位成员 · 点击姓名查看轨迹 · 同分并列</span><button class="analysis-text-button" data-analysis-export="elo">导出当前筛选 CSV ↓</button></div>
-    <div class="data-table-wrap"><table class="data-table elo-table"><thead><tr><th>名次</th><th>成员</th><th>历史峰值</th><th>最后参赛积分</th><th>计分战绩</th><th>计分场次</th><th>最后参赛</th></tr></thead><tbody>
-    ${rows.map((p, i) => {const value = p[s.eloSort];const rank = rows.findIndex(other => other[s.eloSort] === value) + 1;return `<tr class="${p.id === s.eloPlayer ? 'selected-row' : ''}"><td>${p.provisional || value == null ? '—' : rank}</td><td><button class="elo-player" data-elo-player="${p.id}" aria-expanded="${p.id === s.eloPlayer}">${escapeHtml(p.name)}</button><small class="result-status">${escapeHtml(p.school)}${p.provisional ? ` · ${p.contests ? '暂定' : '无数据'}` : ''}</small></td><td class="elo-score">${p.peak ?? '—'}</td><td>${p.current ?? '—'}<small class="result-status">末场 ${p.history.length ? (p.history.at(-1).delta > 0 ? '+' : '') + p.history.at(-1).delta.toFixed(1) : '—'}</small></td><td>${['金牌','银牌','铜牌','铁牌'].map(m => `${p.medals?.[m] || 0}${m[0]}`).join(' / ')}</td><td>${p.contests}<small class="result-status">${p.teamCount} 套阵容</small></td><td>${escapeHtml(p.lastDate || '—')}</td></tr>`;}).join('') || '<tr><td colspan="7" class="table-empty">没有符合条件的成员</td></tr>'}
+    <div class="data-table-wrap"><table class="data-table elo-table"><thead><tr><th>名次</th><th>成员</th><th>保守分</th><th>历史峰值</th><th>最后参赛积分</th><th>已收录战绩</th><th>计分 / 收录</th><th>最后参赛</th></tr></thead><tbody>
+    ${rows.map((p, i) => {const value = p[s.eloSort];const rank = rows.findIndex(other => other[s.eloSort] === value) + 1;return `<tr class="${p.id === s.eloPlayer ? 'selected-row' : ''}"><td>${p.provisional || value == null ? '—' : rank}</td><td><button class="elo-player" data-elo-player="${p.id}" aria-expanded="${p.id === s.eloPlayer}">${escapeHtml(p.name)}</button><small class="result-status">${escapeHtml(p.school)}${p.provisional ? ` · ${p.contests ? '暂定' : '无数据'}` : ''}</small></td><td class="elo-score">${p.conservative ?? '—'}</td><td>${p.peak ?? '—'}</td><td>${p.current ?? '—'}<small class="result-status">末场 ${p.history.length ? (p.history.at(-1).delta > 0 ? '+' : '') + p.history.at(-1).delta.toFixed(1) : '—'}</small></td><td>${eloMedals(p)}</td><td>${p.contests} / ${p.careerContests ?? p.contests}<small class="result-status">${p.teamCount} 套阵容${p.unratedHistory?.length ? ` · ${p.unratedHistory.length} 场未计分` : ''}</small></td><td>${escapeHtml(p.lastDate || '—')}</td></tr>`;}).join('') || '<tr><td colspan="8" class="table-empty">没有符合条件的成员</td></tr>'}
     </tbody></table></div>
     ${eloDetail(player)}
     <details id="elo-method" class="analysis-method"><summary>计算规则、数据边界与维护机制</summary>
-      <h3>奖项锚定的逐场 Rating · v2</h3><p>所有年代从 1500 起算，按实际比赛日期回放。实际金牌单场表现分为 2600–3200、银牌 1900–2400、铜牌 1300–1800、铁牌 800–1200。同奖项内，正式名次越靠前，表现分越高。实际奖项决定分档，不按名次比例反推奖项。</p>
-      <p>令 q = (r − 0.5) / N，各奖项的名次参考区间依次为 [0, 0.1]、[0.1, 0.3]、[0.3, 0.6]、[0.6, 1]。在本档参考区间内线性映射至表现分上限→下限，超出则截到本档边界。每位成员 R′ = R + α(P − R)：前三场 α = 0.5，此后 α = 0.3。比如赛前 2400、银牌表现 2200，则本场下降 60 分；多参赛不会自动涨分，同一次银牌也可能让不同赛前分的队员分别涨或跌。</p>
-      <p>这是本站独立的战绩 Rating，采用逐场表现平滑更新，未照搬 CF 的公式，也不与 CF 分数对标。队伍成绩是三人的共同观测；同赛前积分、同参赛履历的固定队友会同分。EC Final 与 CCPC Final 的参赛资格和阵容更强，单场表现分在上述奖项基准上统一加 300（所有奖项均适用），再计算个人涨跌。例如决赛金牌为 2900–3500。+300 是公开的初始强度参数，尚非统计拟合；普通区域站之间及年代因素暂不额外调整。</p>
-      <h3>峰值、样本量与参考带</h3><p>正式榜至少 ${elo.minContests} 场。历史峰值取第三场及之后的最高赛后积分；最后参赛积分保留最后一次结果，退役与不活跃不扣分。参考带 B = max(150, 400 / √(1 + n / 3))，保守分 = 最后参赛积分 − B。参考带仅提示样本量，未做统计校准，不是置信区间，也没有消除固定队友的混淆。</p>
+      <h3>奖项锚定的逐场 Rating · v3</h3><p>所有年代从 1500 起算，按实际比赛日期回放。实际金牌单场表现分为 2600–3200、银牌 1900–2400、铜牌 1300–1800、铁牌 800–1200。同奖项内，正式名次越靠前，表现分越高。实际奖项决定分档，不按名次比例反推奖项。</p>
+      <p>令 q = (r − 0.5) / N，各奖项的名次参考区间依次为 [0, 0.1]、[0.1, 0.3]、[0.3, 0.6]、[0.6, 1]。在本档参考区间内线性映射至表现分上限→下限，超出则截到本档边界。令 T 为三人赛前积分均值，所有队员使用同一个 Δ = α(P − T)，各自 R′ = R + Δ。仅当三人此前都不足三场时 α = 0.5，否则统一 α = 0.3。比如成熟队伍均分 2400、表现 2200，则三人各降 60 分。</p>
+      <p>新队员缺少早期参赛资格，不补造铜牌或失利，也不单独提高更新系数。同队共同结果维持赛前分差，防止同一场成绩因个人参赛次数不同而让新队员反超。固定队友履历相同则同分；混合阵容仍无法分离个人贡献，不能据此断言谁更强。已确认的 CF 当前 / 最高分在详情中独立展示，不将今天的 CF 分数代入历史。本站标尺与 CF 分数不直接对标。</p>
+      <p>正式队数用于计算本场分位，不代表阵容强度：百余支筛选队与三百余支普通赛站队伍不能只比较百分位。先对决赛做独立强度调整：EC Final +200，CCPC Final +300，适用于所有奖项。例如 EC 金牌 P=2800–3400，CCPC Final 金牌 P=2900–3500。两项是公开的初始先验，尚非统计拟合；普通赛站间及年代因素暂不额外调整。近年规则亦有奖励名额、多队名额，不能一概视为每校仅一队。<a href="https://icpc.pku.edu.cn/docs/2025-08/3e349141f2e6420aabb5aae82fbdb198.pdf" target="_blank" rel="noopener noreferrer">EC 名额规则 ↗</a> · <a href="https://ccpc.io/rules/369" target="_blank" rel="noopener noreferrer">CCPC 名额规则 ↗</a></p>
+      <h3>峰值、样本量与参考带</h3><p>正式榜至少 ${elo.minContests} 场。历史峰值取第三场及之后的最高赛后积分；最后参赛积分保留最后一次结果，退役与不活跃不扣分。参考带 B = max(150, 400 / √(1 + n / 3))，保守分 = 最后参赛积分 − B。默认按保守分排名，履历短的成员先保留更大的不确定性，避免把少参赛当作更强的证据；可切换原始积分或历史峰值排序。参考带未做统计校准，不是置信区间，也没有消除固定队友的混淆。</p>
       <h3>只使用已经确认的数据</h3><p>仅纳入 ICPC / CCPC 正式区域赛与区决赛，要求有效完整日期、三位稳定成员 ID、已确认名单及实际奖项、正式名次 / 正式队总数。不按奖牌猜排名，不从总榜替代正式排名，不将缺失成绩记作失利。重复记录去重，同日跨队身份冲突暂停计分。无有效记录的成员保留在“全部成员”，显示无数据。</p>
-      <p>早年档案存在仅收录获牌队的选择偏差，历史峰值也受参赛次数影响。因此现阶段适合查阅轨迹与相对表现，校史总排名为试行参考。下一步需补全未获牌成绩及完整榜单，建立跨赛事队员关联和场强校准，并用留出比赛检验预测，再发布新版本。</p>
+      <p>主表战绩统计已收录且身份确认的正式奖项，包括暂缺计分依据的铁牌；不是完整生涯总数。详情列出未计分场次与原因。${escapeHtml(elo.evidenceVerifiedAt || '')} 已复查缺少名次口径的记录，本次补证 ${elo.supplementedResults ?? 0} 条；补证链接见逐场明细，仍待考的记录见下方核验说明。早年只收录获牌队的选择偏差仍存在，历史峰值也受参赛次数影响。后续需继续补全全国榜、校准场强，并用留出比赛检验预测。</p>
       <h3>后续维护</h3><p>使用本站实时成绩库；每日同步、管理员补录或纠错后，下次打开本页即从历史重算。按成员 ID 关联，不按同名猜人。规则带版本号和输入指纹，历史补录可改变后续积分。<button class="analysis-text-button" data-analysis-export="audit">下载完整计算记录 JSON ↓</button></p>
       <p><code>${escapeHtml(elo.version)}</code> · 输入指纹 <code class="input-hash">${escapeHtml(elo.inputHash)}</code></p>
       <p>参考项目：<a href="https://zzzzzzyt.github.io/xcpc-elo/" target="_blank" rel="noopener noreferrer">XCPC Elo ↗</a>、<a href="https://junjiecharles.github.io/xcpc-sight/?series=2026-2027" target="_blank" rel="noopener noreferrer">XCPC Sight ↗</a>。当前积分由本站独立计算，未导入外部分数。</p>
     </details>
-    <details class="analysis-method"><summary>未计分记录 · ${elo.skipped.length} 条（查看原因）</summary><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>未计分原因</th></tr></thead><tbody>${elo.skipped.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.reason)}</td></tr>`).join('')}</tbody></table></div></details>`}
+    <details class="analysis-method"><summary>未计分记录 · ${elo.skipped.length} 条（查看原因）</summary><div class="data-table-wrap"><table class="data-table"><thead><tr><th>日期 / 比赛</th><th>队伍</th><th>未计分原因</th></tr></thead><tbody>${elo.skipped.map(h => `<tr><td>${escapeHtml(h.date)}<small class="result-status">${escapeHtml(h.event)}</small></td><td>${escapeHtml(h.team)}</td><td>${escapeHtml(h.reason)}${h.auditNote ? `<small class="result-status">${escapeHtml(h.auditNote)}</small>` : ''}<small class="result-status">${sourceLink(h.source)}</small></td></tr>`).join('')}</tbody></table></div></details>`}
     </div>`;
 }
 
@@ -147,10 +157,10 @@ function downloadAnalysis(kind) {
   let content, type, filename;
   if (kind === 'audit') {
     content = JSON.stringify(analyticsState.data.elo, null, 2);
-    type = 'application/json'; filename = 'dlut-historical-rating-v2.json';
+    type = 'application/json'; filename = 'dlut-historical-rating-v3.json';
   } else {
     const rows = kind === 'elo'
-      ? [['姓名','所属范围','历史峰值','最后参赛积分','参考带','保守分','计分场次','最后参赛'], ...eloRows().map(p => [p.name,p.school,p.peak,p.current,p.band,p.conservative,p.contests,p.lastDate])]
+      ? [['姓名','所属范围','历史峰值','最后参赛积分','参考带','保守分','计分场次','已收录正式场次','已收录战绩','未计分场次','最后参赛'], ...eloRows().map(p => [p.name,p.school,p.peak,p.current,p.band,p.conservative,p.contests,p.careerContests ?? p.contests,eloMedals(p),p.unratedHistory?.length || 0,p.lastDate])]
       : [['比赛年份','赛事','赛站','队伍','已解最高R','当前阶段','下一阶段R','下两阶段R','来源行','校区','赛时AC','原榜'], ...performanceRows().map(r => [r.season,r.series,r.location,r.team,r.maxSolvedRating,r.stage,r.nextStage,r.nextTwoStages,r.sourceRow,r.school,r.accepted,r.boardUrl])];
     content = '\uFEFF' + rows.map(row => row.map(value => {
       let text = String(value ?? '');
