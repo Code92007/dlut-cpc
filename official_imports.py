@@ -121,7 +121,7 @@ def match_result(record: dict, existing: list[dict]) -> tuple[str, dict | None, 
     return "merged", target, warnings
 
 
-def _merge_duplicate_honor(connection, source_id: str, target_id: str) -> None:
+def _merge_duplicate_honor(connection, source_id: str, target_id: str, *, series: str = "CCPC") -> None:
     source_review = connection.execute(
         "SELECT * FROM honor_roster_reviews WHERE honor_id=?", (source_id,)
     ).fetchone()
@@ -145,6 +145,8 @@ def _merge_duplicate_honor(connection, source_id: str, target_id: str) -> None:
         (target_id, source_id),
     )
     connection.execute("UPDATE honor_source_records SET honor_id=? WHERE honor_id=?", (target_id, source_id))
+    connection.execute("UPDATE public_result_sources SET honor_id=? WHERE honor_id=?", (target_id, source_id))
+    connection.execute("UPDATE public_result_diffs SET honor_id=? WHERE honor_id=?", (target_id, source_id))
 
     if adopt_source_roster:
         connection.execute("DELETE FROM honor_members WHERE honor_id=?", (target_id,))
@@ -188,7 +190,7 @@ def _merge_duplicate_honor(connection, source_id: str, target_id: str) -> None:
         )
     connection.execute("DELETE FROM metadata WHERE key=?", (f"roster_override:{source_id}",))
     connection.execute(
-        "UPDATE honors SET series='CCPC',updated_at=CURRENT_TIMESTAMP WHERE id=?", (target_id,)
+        "UPDATE honors SET series=?,updated_at=CURRENT_TIMESTAMP WHERE id=?", (series, target_id)
     )
     connection.execute("DELETE FROM honors WHERE id=?", (source_id,))
 

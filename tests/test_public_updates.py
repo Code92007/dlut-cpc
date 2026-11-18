@@ -8,7 +8,7 @@ from unittest.mock import Mock, patch
 
 from database import Database
 from tools.public_sync import refresh_public_data, refresh_public_data_periodically
-from tools.public_updates import ingest_public_results, list_result_diffs, resolve_result_diff
+from tools.public_updates import ingest_public_results, list_result_diffs, merge_duplicate_result, resolve_result_diff
 from tools.rankland_sync import eligible_ranklist, fetch_rankland_updates, save_rankland_versions
 from tools.sync_public_data import build_public_snapshot
 
@@ -92,6 +92,74 @@ class PublicUpdatesTests(unittest.TestCase):
         self.assertEqual((report["added"], report["diffsCreated"]), (0, 1))
         self.assertEqual(len(self.honors()), 1)
         self.assertEqual(self.honors()[0]["rank"], self.record["rank"])
+
+    def campus_result(self):
+        with self.database.connect() as connection:
+            connection.execute("UPDATE honors SET external_provider='xcpcio',external_award_id='xi-an:Team1',"
+                               "external_contest_id='icpc2026xi_an' WHERE id='old-result'")
+            connection.execute("UPDATE members SET school='大连理工大学盘锦校区'")
+        return self.changed(school="大连理工大学")
+
+    def test_complete_member_ids_match_campus_result_despite_source_school(self):
+        incoming = self.campus_result()
+        report = ingest_public_results(self.database, [incoming])
+        self.assertEqual((report["added"], report["diffsCreated"]), (0, 0))
+        self.assertEqual(len(self.honors()), 1)
+        self.assertEqual(self.honors()[0]["school"], "大连理工大学盘锦校区")
+        self.assertEqual(ingest_public_results(self.database, [incoming])["added"], 0)
+        self.database.initialize(self.seed)
+        self.assertEqual(len(self.honors()), 1)
+
+    def test_campus_roster_match_still_reviews_changed_award(self):
+        incoming = self.campus_result()
+        report = ingest_public_results(self.database, [{**incoming, "medal": "铜牌"}])
+        self.assertEqual((report["added"], report["diffsCreated"]), (0, 1))
+        self.assertEqual(self.pending()[0]["fields"], ["medal"])
+        self.assertEqual(self.honors()[0]["medal"], "银牌")
+
+    def test_names_without_complete_ids_do_not_merge_across_campuses(self):
+        incoming = self.campus_result()
+        incoming.update(id="other-campus", cpcfinderAwardId=2)
+        incoming["memberDetails"] = [{"name": name, "school": "大连理工大学"} for name in incoming["members"]]
+        report = ingest_public_results(self.database, [incoming])
+        self.assertEqual(report["added"], 1)
+        self.assertEqual(len(self.honors()), 2)
+
+    def duplicate_result(self):
+        incoming = self.campus_result()
+        incoming.update(id="duplicate", cpcfinderAwardId=2)
+        with self.database.connect() as connection:
+            # Reproduce the old school-based matching that created the duplicate.
+            self.database._upsert_honor(connection, incoming)
+        ingest_public_results(self.database, [incoming])
+        return incoming
+
+    def test_duplicate_merge_preserves_icpc_sources_and_sync_mapping(self):
+        incoming = self.duplicate_result()
+        with self.database.connect() as connection:
+            report = merge_duplicate_result(self.database, connection, "duplicate", "old-result")
+            self.assertTrue(report["merged"])
+            self.assertEqual(connection.execute("SELECT honor_id FROM public_result_sources WHERE external_id='2'").fetchone()[0], "old-result")
+            self.assertFalse(connection.execute("PRAGMA foreign_key_check").fetchall())
+        self.assertEqual(len(self.honors()), 1)
+        self.assertEqual(self.honors()[0]["series"], "ICPC")
+        self.assertEqual(self.honors()[0]["members"], self.record["members"])
+        self.assertEqual(ingest_public_results(self.database, [incoming])["added"], 0)
+        with self.database.connect() as connection:
+            self.assertFalse(merge_duplicate_result(self.database, connection, "duplicate", "old-result")["merged"])
+
+    def test_duplicate_merge_rejects_different_roster_or_result_fields(self):
+        self.duplicate_result()
+        with self.database.connect() as connection:
+            connection.execute("UPDATE honors SET medal='铜牌' WHERE id='duplicate'")
+        with self.database.connect() as connection:
+            with self.assertRaisesRegex(ValueError, "identical"):
+                merge_duplicate_result(self.database, connection, "duplicate", "old-result")
+            connection.execute("UPDATE honors SET medal='银牌' WHERE id='duplicate'")
+            connection.execute("DELETE FROM honor_members WHERE honor_id='duplicate' AND position=2")
+            with self.assertRaisesRegex(ValueError, "identical"):
+                merge_duplicate_result(self.database, connection, "duplicate", "old-result")
+        self.assertEqual(len(self.honors()), 2)
 
     def rankland_record(self, **changes):
         row = {key: value for key, value in self.record.items() if not key.startswith("cpcfinder")}

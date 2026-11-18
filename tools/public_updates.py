@@ -7,7 +7,7 @@ from collections import Counter
 
 from contest_names import honor_contest_name
 from database import Database
-from official_imports import contest_key, match_result, normalized
+from official_imports import _merge_duplicate_honor, contest_key, match_result, normalized
 from schools import school_group
 
 
@@ -119,6 +119,19 @@ def _target_for_record(connection, record: dict, existing: list[dict]) -> tuple[
     targets = [item for item in existing if item["id"] in {row[0] for row in identity}]
     if targets:
         return (targets[0], False) if len(targets) == 1 else (None, True)
+    # Student award APIs can label Panjin teams as the main campus. A complete
+    # roster of resolved member IDs identifies the team without guessing from names.
+    roster = _local_roster(record)
+    if roster:
+        key = contest_key(record)
+        targets = [item for item in existing if _local_roster(item) == roster
+                   and record.get("date") and item.get("date") == record["date"]
+                   and item.get("series") == record.get("series")
+                   and normalized(item.get("team", "")) == normalized(record.get("team", ""))
+                   and ((key and contest_key(item) == key)
+                        or normalized(item.get("event", "")) == normalized(honor_contest_name(record)))]
+        if targets:
+            return (targets[0], False) if len(targets) == 1 else (None, True)
     match, target, _ = match_result({"school": "大连理工大学", **record}, existing)
     if not target:
         related = [item for item in existing if normalized(item.get("team", "")) == normalized(record.get("team", ""))
@@ -131,6 +144,38 @@ def _target_for_record(connection, record: dict, existing: list[dict]) -> tuple[
         if len(related) > 1:
             return None, True
     return target, match == "conflict" and target is None
+
+
+def _local_roster(record: dict) -> frozenset | None:
+    details = record.get("memberDetails", [])
+    ids = {detail.get("id") for detail in details}
+    return frozenset(ids) if len(details) == len(ids) == 3 and None not in ids else None
+
+
+def merge_duplicate_result(database: Database, connection, source_id: str, target_id: str) -> dict:
+    """Merge an explicitly selected pair only when all result fields and IDs agree."""
+    if source_id == target_id:
+        raise ValueError("Choose two different results")
+    payload = {item["id"]: item for item in database._honors_payload(connection, honor_ids=[source_id, target_id])}
+    target = payload.get(target_id)
+    if not target:
+        raise ValueError("Target result does not exist")
+    redirect = connection.execute("SELECT value FROM metadata WHERE key=?", (f"public_result_redirect:{source_id}",)).fetchone()
+    if source_id not in payload:
+        if redirect and redirect[0] == target_id:
+            return {"removed": source_id, "retained": target_id, "merged": False}
+        raise ValueError("Source result does not exist")
+    source = payload[source_id]
+    if (not _local_roster(source) or _local_roster(source) != _local_roster(target)
+            or different_fields(target, source) or different_fields(source, target)):
+        raise ValueError("Results must have identical contest, team, rankings, award, status and three member IDs")
+    # Preserve the removed record's stable source ID even if it came from a seed.
+    _attach_source(database, connection, source_id, source)
+    _merge_duplicate_honor(connection, source_id, target_id, series=target["series"])
+    _guard(connection, target_id)
+    connection.execute("DELETE FROM metadata WHERE key=?", (f"public_result_guard:{source_id}",))
+    connection.execute("INSERT INTO metadata(key,value) VALUES (?,?)", (f"public_result_redirect:{source_id}", target_id))
+    return {"team": target["team"], "removed": source_id, "retained": target_id, "merged": True}
 
 
 def _member_contributions(record: dict, identities: dict | None = None) -> Counter:
