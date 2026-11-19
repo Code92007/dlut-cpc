@@ -11,6 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 COPY app.py /app/app.py
 COPY competition_photos.py /app/competition_photos.py
+COPY photo_lfs.py /app/photo_lfs.py
 COPY cpc_common.py /app/cpc_common.py
 COPY cpc_integration.py /app/cpc_integration.py
 COPY contest_names.py /app/contest_names.py
@@ -25,6 +26,8 @@ COPY web /app/web
 COPY data /app/data
 
 RUN pip install --no-cache-dir -r tools/requirements-rankland.txt
+RUN apt-get update && apt-get install -y --no-install-recommends git openssh-client \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app/runtime
 

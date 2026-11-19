@@ -11,10 +11,12 @@ from http.client import HTTPConnection
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
+from unittest.mock import MagicMock
 
 from PIL import Image
 import app
 from competition_photos import Photos, digest
+from photo_lfs import StorageUnavailable
 from database import Database
 from test_database import seed_data
 
@@ -141,6 +143,41 @@ class PhotoAccessTests(unittest.TestCase):
         state = headers['Set-Cookie'].split(';')[0].split('=')[1]
         with patch('competition_photos.fetch', return_value={'authority_id': str(uuid.uuid4()), 'subject': self.subject}):
             self.assertEqual(self.request('/api/photos/callback?state=' + state + '&code=x', cookie='dlut_photo_state=' + state)[1]['Location'], '/photos?auth=expired')
+
+    def test_remote_upload_and_read_leave_no_local_image_and_auth_precedes_storage(self):
+        import hashlib
+        store = MagicMock(repository='fixture/private-photos')
+        blobs = {}
+        def upload(photo, full, thumb):
+            result = {}
+            for variant, data in [('full', full), ('thumb', thumb)]:
+                oid = hashlib.sha256(data).hexdigest(); blobs[oid] = data
+                result[variant] = {'oid': oid, 'size': len(data), 'commit': 'fixture-commit'}
+            return result
+        store.put.side_effect = upload
+        store.get.side_effect = lambda row: blobs[row['oid']]
+        before = sorted(self.service.root.iterdir())
+        with patch.dict(os.environ, {'PHOTO_STORAGE': 'github-lfs'}), patch('competition_photos.GitHubLFS', return_value=store):
+            photo = self.service.upload(self.album, 'remote only', self.raw)['id']
+            self.assertEqual(sorted(self.service.root.iterdir()), before)
+            self.assertFalse(self.service.file(photo).exists())
+            self.assertEqual(self.request('/api/photos/image/' + photo)[0], 401)
+            store.get.assert_not_called()
+            status, headers, data = self.request('/api/photos/image/' + photo, cookie=self.cookie)
+            self.assertEqual(status, 200)
+            self.assertNotIn('Location', headers)
+            self.assertEqual(headers['Cache-Control'], 'private, no-store')
+            self.assertTrue(data.startswith(b'\xff\xd8'))
+            self.assertEqual(self.request('/api/photos/image/' + photo + '?thumb=1', cookie=self.cookie)[0], 200)
+            store.get.side_effect = StorageUnavailable('private remote unavailable')
+            self.assertEqual(self.request('/api/photos/image/' + photo, cookie=self.cookie)[0], 503)
+            store.put.side_effect = StorageUnavailable('private remote unavailable')
+            with self.assertRaises(StorageUnavailable): self.service.upload(self.album, '', self.raw)
+            self.assertEqual(sorted(self.service.root.iterdir()), before)
+            self.service.integration.review(self.claim, 'revoked', 'admin')
+            store.get.reset_mock()
+            self.assertEqual(self.request('/api/photos/image/' + photo, cookie=self.cookie)[0], 401)
+            store.get.assert_not_called()
 
 
 if __name__ == '__main__':

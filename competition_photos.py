@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, urlencode, urlsplit
 
 from cpc_common import fetch
 from cpc_integration import Integration
+from photo_lfs import GitHubLFS, StorageUnavailable
 
 
 def digest(value):
@@ -55,12 +56,24 @@ class Photos:
           create table if not exists competition_photos(
             id text primary key, album text not null, caption text not null, created integer not null);
           create index if not exists photo_album_index on competition_photos(album,created);
+          create table if not exists photo_blobs(
+            photo text not null, variant text not null, repository text not null,
+            oid text not null, size integer not null, git_commit text not null,
+            primary key(photo,variant));
           create table if not exists photo_sessions(
             hash text primary key, claim text not null, expires integer not null, csrf text not null);
           create table if not exists photo_login_states(
             hash text primary key, verifier text not null, expires integer not null);
         ''')
         return db
+
+    def remote_store(self):
+        backend = os.environ.get('PHOTO_STORAGE', 'local')
+        if backend == 'local':
+            return None
+        if backend != 'github-lfs':
+            raise StorageUnavailable('照片存储配置无效')
+        return GitHubLFS(self.database.path.parent)
 
     def identity(self, handler):
         token = cookie_value(handler, 'dlut_photos')
@@ -136,8 +149,21 @@ class Photos:
         except (UnidentifiedImageError, OSError, Image.DecompressionBombError, Image.DecompressionBombWarning):
             raise ValueError('请上传有效的 JPEG、PNG 或 WebP 照片') from None
         image.thumbnail((6000, 6000))
-        self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         photo = str(uuid.uuid4())
+        store = self.remote_store()
+        if store:
+            full_data, thumb_data = io.BytesIO(), io.BytesIO()
+            image.save(full_data, 'JPEG', quality=92)
+            image.thumbnail((720, 720))
+            image.save(thumb_data, 'JPEG', quality=85)
+            records = store.put(photo, full_data.getvalue(), thumb_data.getvalue())
+            with self.db() as db:
+                db.execute('insert into competition_photos values (?,?,?,?)', (photo, album, caption.strip(), time.time_ns()))
+                for variant, record in records.items():
+                    db.execute('insert into photo_blobs values (?,?,?,?,?,?)',
+                               (photo, variant, store.repository, record['oid'], record['size'], record['commit']))
+            return {'ok': True, 'id': photo}
+        self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         full, thumb = self.file(photo), self.file(photo, True)
         try:
             image.save(full, 'JPEG', quality=92)
@@ -248,6 +274,8 @@ def handle(handler, database, post=False):
             if not post and path == '/api/admin/photos/albums':
                 album = query.get('album', [''])[0]
                 result = service.album(album, int(query.get('page', ['1'])[0]), True) if album else {'albums': service.albums(True)}
+                if result:
+                    result['storage'] = os.environ.get('PHOTO_STORAGE', 'local')
                 respond(result or {'error': '相册不存在'}, 200 if result else 404)
             elif post and path == '/api/admin/photos/album':
                 respond(service.save_album(handler._read_json()))
@@ -266,7 +294,15 @@ def handle(handler, database, post=False):
                 photo = handler._read_json().get('id', '')
                 uuid.UUID(photo)
                 with service.db() as db:
+                    remote = db.execute('select 1 from photo_blobs where photo=?', (photo,)).fetchone()
+                if remote:
+                    store = service.remote_store()
+                    if not store:
+                        raise StorageUnavailable('私有照片存储尚未配置')
+                    store.remove(photo)
+                with service.db() as db:
                     db.execute('delete from competition_photos where id=?', (photo,))
+                    db.execute('delete from photo_blobs where photo=?', (photo,))
                 service.file(photo).unlink(missing_ok=True)
                 service.file(photo, True).unlink(missing_ok=True)
                 respond({'ok': True})
@@ -292,24 +328,50 @@ def handle(handler, database, post=False):
             photo = path.rsplit('/', 1)[1]
             with service.db() as db:
                 row = db.execute('select p.id from competition_photos p join photo_albums a on a.id=p.album where p.id=? and (? or a.published=1)', (photo, bool(admin))).fetchone()
-            file = service.file(photo, query.get('thumb', [''])[0] == '1')
-            if not row or not file.is_file():
+                blob = db.execute('select * from photo_blobs where photo=? and variant=?',
+                                  (photo, 'thumb' if query.get('thumb', [''])[0] == '1' else 'full')).fetchone()
+            if not row:
                 respond({'error': '照片不存在'}, 404)
                 return True
+            data = None
+            file = None
+            if blob:
+                store = service.remote_store()
+                if not store or blob['repository'] != store.repository:
+                    raise StorageUnavailable('私有照片存储尚未配置')
+                if getattr(handler, '_head_only', False):
+                    store.ensure_private()
+                    length = blob['size']
+                else:
+                    data = store.get(dict(blob))
+                    length = len(data)
+            else:
+                if service.remote_store():
+                    raise StorageUnavailable('照片尚未迁移至私有存储')
+                file = service.file(photo, query.get('thumb', [''])[0] == '1')
+                if not file.is_file():
+                    respond({'error': '照片不存在'}, 404)
+                    return True
+                length = file.stat().st_size
             handler.send_response(200)
-            for name, value in [('Content-Type', 'image/jpeg'), ('Content-Length', str(file.stat().st_size)),
+            for name, value in [('Content-Type', 'image/jpeg'), ('Content-Length', str(length)),
                                 ('Cache-Control', 'private, no-store'), ('Vary', 'Cookie'), ('X-Content-Type-Options', 'nosniff'),
                                 ('Cross-Origin-Resource-Policy', 'same-origin'), ('Referrer-Policy', 'no-referrer')]:
                 handler.send_header(name, value)
             handler.end_headers()
             if not getattr(handler, '_head_only', False):
-                with file.open('rb') as source:
-                    while chunk := source.read(128 * 1024):
-                        handler.wfile.write(chunk)
+                if data is not None:
+                    handler.wfile.write(data)
+                else:
+                    with file.open('rb') as source:
+                        while chunk := source.read(128 * 1024):
+                            handler.wfile.write(chunk)
         else:
             respond({'error': 'not found'}, 404)
     except (ValueError, TypeError, KeyError, OverflowError):
         respond({'error': '请求无效，请检查相册、日期或照片格式'}, 400)
+    except StorageUnavailable as exc:
+        respond({'error': str(exc)}, 503)
     except (OSError, sqlite3.Error):
         respond({'error': '照片服务暂不可用，请稍后重试'}, 503)
     return True
