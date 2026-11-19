@@ -7,6 +7,9 @@ services:
       - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-8021}:8000"
     environment:
       CPC_SYNC_TOKEN: ${CPC_SYNC_TOKEN:-}
+      PHOTO_PUBLIC_URL: ${PHOTO_PUBLIC_URL:-}
+      OJ_WALL_URL: ${OJ_WALL_URL:-}
+      OJ_WALL_AUTHORITY_ID: ${OJ_WALL_AUTHORITY_ID:-}
       HOST: 0.0.0.0
       PORT: 8000
       SITE_DATA_PATH: ${SITE_DATA_PATH:-/app/data/site.json}

@@ -1801,3 +1801,45 @@ html:has(.elo-dialog[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .elo-detail h2 { font-size: 20px; }
   .elo-detail h2 small { display: block; margin-top: 4px; }
 }
+/* Private competition albums */
+.photo-gate { max-width: 700px; margin: 48px auto 100px; padding: 48px; border: 1px solid #dfe5eb; border-radius: 14px; background: #f8fafc; text-align: center; }
+.photo-gate h2 { margin: 18px 0; font-size: 28px; }
+.photo-gate p { color: #68717e; line-height: 1.8; margin-bottom: 26px; }
+.photo-gate .admin-button { display: inline-block; text-decoration: none; }
+.photo-help { display: block; margin-top: 22px; font-size: 14px; }
+.photo-session, .photo-admin-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin: 20px 0 28px; }
+.photo-session { color: #68717e; font-size: 14px; }
+.photo-search { display: block; max-width: 460px; margin: 28px 0; font-size: 13px; color: #68717e; }
+.photo-search input, .photo-admin-toolbar select { display: block; width: 100%; margin-top: 8px; padding: 11px 14px; border: 1px solid #dfe3e8; border-radius: 6px; background: white; color: #303946; font: inherit; font-size: 15px; }
+.photo-admin-toolbar label { max-width: 100%; min-width: min(400px, 100%); }
+.photo-albums { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px; }
+.photo-album { padding: 0; overflow: hidden; text-align: left; color: inherit; border: 1px solid #e1e6eb; border-radius: 10px; background: white; cursor: pointer; font: inherit; }
+.photo-album > img, .photo-cover-empty { width: 100%; height: 210px; object-fit: cover; background: #edf1f5; }
+.photo-cover-empty { display: grid; place-items: center; color: #8793a3; font-size: 20px; letter-spacing: 4px; }
+.photo-album > div:last-child { padding: 24px; }
+.photo-album h2 { font-size: 20px; line-height: 1.5; margin: 12px 0 8px; }
+.photo-album p, .photo-album-heading p { color: #68717e; line-height: 1.8; white-space: pre-line; overflow-wrap: anywhere; }
+.photo-album-heading { margin: 32px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 18px; margin: 24px 0; }
+.photo-tile { background: #f4f6f8; border: 1px solid #e1e6eb; border-radius: 8px; padding: 0; overflow: hidden; cursor: pointer; font: inherit; text-align: left; }
+.photo-tile img { display: block; width: 100%; height: 220px; object-fit: cover; }
+.photo-tile span { display: block; padding: 12px 16px; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+.photo-viewer { position: fixed; width: min(1200px, 96vw); max-width: 96vw; max-height: 95vh; padding: 16px; border: none; border-radius: 10px; background: #171c23; color: white; }
+.photo-viewer::backdrop { background: #060b12d9; }
+.photo-viewer > img { display: block; width: 100%; height: 72vh; object-fit: contain; }
+.photo-viewer > p { margin: 14px 4px 4px; text-align: center; overflow-wrap: anywhere; }
+.photo-viewer-bar { display: flex; gap: 14px; justify-content: flex-end; align-items: center; margin-bottom: 12px; }
+.photo-viewer-bar span { margin-right: auto; }
+.photo-viewer-bar button { padding: 9px 16px; border: 1px solid #647183; border-radius: 5px; background: transparent; color: white; cursor: pointer; }
+.photo-viewer-bar button:disabled { opacity: .3; cursor: default; }
+.photo-remove-list > div { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 10px 0; border-bottom: 1px solid #e5e9ef; font-size: 14px; }
+.photo-remove-list span { overflow-wrap: anywhere; }
+@media (max-width: 680px) {
+  .photo-gate { padding: 28px 20px; margin: 24px 0 60px; }
+  .photo-gate h2 { font-size: 23px; }
+  .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .photo-tile img { height: 160px; }
+  .photo-tile span { padding: 10px; font-size: 12px; }
+  .photo-viewer { padding: 10px; }
+  .photo-viewer > img { height: 65vh; }
+}

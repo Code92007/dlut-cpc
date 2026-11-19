@@ -1,2 +1,3 @@
 # Required by the daily RankLand sync and historical archive tools.
 algoux-standard-ranklist-utils==0.3.3
+Pillow>=12.0,<14

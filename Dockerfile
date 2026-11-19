@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED=1 \
     DATABASE_PATH=/app/runtime/dlut_cpc.sqlite3
 
 COPY app.py /app/app.py
+COPY competition_photos.py /app/competition_photos.py
 COPY cpc_common.py /app/cpc_common.py
 COPY cpc_integration.py /app/cpc_integration.py
 COPY contest_names.py /app/contest_names.py

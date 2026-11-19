@@ -1,7 +1,7 @@
 const app = document.querySelector("#app");
 const nav = document.querySelector(".nav-links");
 const navToggle = document.querySelector(".nav-toggle");
-const routes = new Set(["home", "honor", "rating", "performance", "elo", "training", "resources", "admin", "pending"]);
+const routes = new Set(["home", "honor", "rating", "performance", "elo", "training", "resources", "photos", "admin", "pending"]);
 const schoolGroups = ["大连理工大学", "大连理工大学城市学院", "大连理工大学盘锦校区"];
 const state = {
   data: null,
@@ -960,10 +960,11 @@ function adminPage(data) {
   forms.cpc = adminCpcPage();
   forms.rosters = adminRosterPage(data);
   forms.diffs = adminDiffPage();
+  forms.photos = '<div id="adminPhotosRoot"></div>';
   return `<div class="page-shell">${heading}${message}<div class="admin-tabs" role="tablist" aria-label="管理项目">
-    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`],['diffs',`榜单差异${state.adminDiffs ? ` · ${state.adminDiffs.pendingCount}` : ''}`],['cpc',`成员认证${state.adminCpcClaims ? ` · ${state.adminCpcClaims.pending_count}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
+    ${[['members','成员'],['accounts','账号'],['names','姓名映射'],['honors','参赛成绩'],['resources','资料库'],['photos','比赛照片'],['training','训练入口'],['pending',`待确认成员 · ${(data.pendingHonors || []).length}`],['rosters','已补录名单'],['reviews',`游客审核${state.adminReviews ? ` · ${state.adminReviews.totalPendingCount ?? state.adminReviews.pendingCount}` : ''}`],['diffs',`榜单差异${state.adminDiffs ? ` · ${state.adminDiffs.pendingCount}` : ''}`],['cpc',`成员认证${state.adminCpcClaims ? ` · ${state.adminCpcClaims.pending_count}` : ''}`]].map(([view,label]) => `<button type="button" role="tab" aria-selected="${state.adminView === view}" data-admin-view="${view}">${label}</button>`).join('')}
     </div><datalist id="adminMembers">${options}</datalist>${forms[state.adminView]}
-    ${['resources', 'training', 'cpc', 'diffs'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
+    ${['resources', 'training', 'cpc', 'diffs', 'photos'].includes(state.adminView) ? '' : `<section class="admin-recent"><h2>人工补录成员</h2><div class="data-table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>姓名</th><th>入学年份</th><th>毕业年份</th><th>Codeforces</th></tr></thead><tbody>
     ${data.members.filter(member => member.manual).map(member => `<tr><td>${member.id}</td><td>${escapeHtml(member.name)}</td><td>${escapeHtml(member.entryYear || '—')}</td><td>${escapeHtml(member.graduationYear || '—')}</td><td>${memberAccounts(member).map(accountLink).join(' / ') || '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="table-empty">暂无人工补录成员</td></tr>'}
     </tbody></table></div></section>`}</div>`;
 }
@@ -1517,11 +1518,13 @@ function bindPageEvents(route) {
 
 function renderRoute(route) {
   if (!state.data) return;
-  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, performance: () => performancePage(), elo: () => eloPage(), training: trainingPage, resources: resourcesPage, admin: adminPage, pending: pendingPage };
+  const renderers = { home: homePage, honor: honorPage, rating: ratingPage, performance: () => performancePage(), elo: () => eloPage(), training: trainingPage, resources: resourcesPage, photos: () => '<div class="page-shell" id="photosRoot"></div>', admin: adminPage, pending: pendingPage };
   app.innerHTML = renderers[route](state.data);
   document.title = `${route === "home" ? "DLUT CPC" : `${route[0].toUpperCase()}${route.slice(1)} · DLUT CPC`}`;
   bindPageEvents(route);
   if (route === 'admin') bindAdminEvents();
+  if (route === 'photos') window.competitionPhotos?.mount(document.querySelector('#photosRoot'));
+  if (route === 'admin' && state.adminSession?.authenticated && state.adminView === 'photos') window.competitionPhotos?.mountAdmin(document.querySelector('#adminPhotosRoot'), state.adminSession.csrf);
   if (route === 'pending') {
     bindPendingEvents('pending');
     bindGuestRosterEvents();

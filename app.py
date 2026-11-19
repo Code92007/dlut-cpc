@@ -25,6 +25,7 @@ from github_lfs import github_lfs_status, github_pdf_path, github_pdf_record
 from tools.public_sync import refresh_public_data_periodically
 from tools.public_updates import list_result_diffs, resolve_result_diff
 from historical_rating import analytics_payload
+from competition_photos import handle as photos_handle
 
 
 ROOT = Path(__file__).resolve().parent
@@ -33,7 +34,7 @@ DATA_PATH = Path(os.environ.get("SITE_DATA_PATH", ROOT / "data" / "site.json"))
 DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", ROOT / "runtime" / "dlut_cpc.sqlite3"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
-SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/performance", "/elo", "/training", "/resources", "/admin", "/pending"}
+SPA_ROUTES = {"/", "/home", "/honor", "/rating", "/performance", "/elo", "/training", "/resources", "/photos", "/admin", "/pending"}
 
 
 class SubmissionLimiter:
@@ -99,6 +100,8 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if photos_handle(self, Database(DATABASE_PATH)):
+            return
         if cpc_handle(self, Database(DATABASE_PATH)):
             return
         if path == "/api/admin/session":
@@ -219,6 +222,8 @@ class SiteHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if photos_handle(self, Database(DATABASE_PATH), post=True):
+            return
         if cpc_handle(self, Database(DATABASE_PATH), post=True):
             return
         if path in {"/api/roster-submissions", "/api/account-submissions"}:
